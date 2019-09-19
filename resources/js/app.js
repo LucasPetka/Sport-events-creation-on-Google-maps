@@ -1,23 +1,7 @@
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
-
 require('./bootstrap');
 
 window.Vue = require('vue');
 
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
-
-// const files = require.context('./', true, /\.vue$/i);
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
 Vue.component('places', 
 require('./components/Places.vue').default);
@@ -31,16 +15,27 @@ require('./components/Gmap.vue').default);
 Vue.component('calendar', 
 require('./components/Calendar.vue').default);
 
+Vue.component('profile', 
+require('./components/Profile.vue').default);
+
 import Vue from 'vue'
 import * as VueGoogleMaps from 'vue2-google-maps'
 
+import GmapCluster from 'vue2-google-maps/dist/components/cluster' // replace src with dist if you have Babel issues
 
+import Datetime from 'vue-datetime'
+import 'vue-datetime/dist/vue-datetime.css'
+ 
+Vue.use(Datetime)
+ 
+Vue.component('GmapCluster', GmapCluster)
 
 
 Vue.use(VueGoogleMaps, {
   load: {
     key: 'AIzaSyBQxzhnAAV7IpsN2kjtER2X2Je00Lpnmm8',
-    libraries: 'places', // This is required if you use the Autocomplete plugin
+    libraries: 'places, clusters', // This is required if you use the Autocomplete plugin
+
     // OR: libraries: 'places,drawing'
     // OR: libraries: 'places,drawing,visualization'
     // (as you require)
@@ -62,16 +57,6 @@ Vue.use(VueGoogleMaps, {
   // installComponents: true,
 })
 
-
-
-
-
-
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
 
 const app = new Vue({
     el: '#app',

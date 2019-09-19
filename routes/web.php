@@ -17,4 +17,5 @@
 
 Auth::routes();
 Route::get('/', 'PagesController@index');
+Route::get('/home/myevents', 'PagesController@myevents')->middleware('auth');
 Route::get('/home', 'HomeController@index')->name('home');

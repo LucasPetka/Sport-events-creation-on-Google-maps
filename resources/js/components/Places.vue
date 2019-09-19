@@ -2,7 +2,7 @@
     <div>
         <div class="row" style="width:100%; padding:0; margin:0;">
             <div id="map" style="width:100%;">
-                <Gmap v-on:showSpot="showSpot($event)" v-on:openForm="openAdd($event)" ref="gmapp"> </Gmap>
+                <Gmap v-bind:status='status' v-on:showSpot="showSpot($event)" v-on:openForm="openAdd($event)" ref="gmapp"> </Gmap>
             </div>
         </div>
 
@@ -58,7 +58,7 @@
 
 
 
-                    <div id="show" style="display:none; width:100%; height:auto;">
+                    <div id="show" class="show" style="display:none; width:100%; height:auto; padding-bottom:150px;" >
                         
                         <div class="card m-3">
                         <div class="card-header">
@@ -71,22 +71,63 @@
                         <div class="card-footer text-muted">
                             <p>Sport type: {{ type.name }}</p>
                             <p>
-                                <button v-on:click="updatePlace(show.id)" class="btn btn-primary m-2">Update</button>
-                                <button v-on:click="deletePlace(show.id)" class="btn btn-danger m-2">Delete</button>
+                               <!-- <button v-on:click="deletePlace(show.id)" class="btn btn-danger m-2">Delete</button>-->
                             </p>
                         </div>
                         </div>
                     
                         <div class="card m-3 width:100%; height:100%;">
                             <div class="card-header ">
-                                <h6>Events</h6>
+                                <h6>Events
+
+                                    
+                                </h6>
+                                
+                                   
+                                
                             </div>
                             <div class="card-body">
-                                <Calendar ref="calendar"> </Calendar>
+                                <Calendar v-bind:status='status' v-bind:currentUser='currentUser' v-on:getDate="getDate($event)" v-on:closeAdd="closeAddEvent()" ref="calendar"> </Calendar>
+                                 <button v-on:click="openAddEvent()" class="btn btn-outline-danger float-right">Add Event on this day +</button>
 
 
                             </div>
                         </div>
+
+                        <div id="addEvent" class="card m-3 width:100%; height:100%;" style="display:none;">
+                            <div class="card-header ">
+                                <h6>Add Event</h6>
+                            </div>
+                            <div class="card-body">
+                                
+                                <form>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Title</label>
+                                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter title">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="exampleFormControlTextarea1">About</label>
+                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                </div>
+
+                                <datetime  type="time" v-model="start" format="yyyy-MM-dd HH:mm" :value-zone="'local'" ></datetime>
+
+                                <datetime  type="time" v-model="end" format="yyyy-MM-dd HH:mm" :value-zone="'local'" ></datetime>
+
+                                {{ this.currentUser.name  }}
+                                <br>
+
+                                
+
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                                </form>
+
+
+                            </div>
+                        </div>
+
+
                     </div>
                 </div>
             </div>    
@@ -105,14 +146,18 @@
 <script>
 import Gmap from '../components/Gmap.vue';
 import Calendar from '../components/Calendar.vue';
+import { Datetime } from 'vue-datetime';
 
 export default {
 
         components: {
         'Gmap': Gmap,
         'Calendar': Calendar,
+        'datetime': Datetime
     },
 
+    props: ['status','currentUser'],
+    
 
     data(){
         return{
@@ -144,6 +189,8 @@ export default {
             pagination: {},
             edit: false,
             show_new: false,
+            start: new Date().toISOString(),
+            end: new Date().toISOString(),
         }
     },
 
@@ -155,6 +202,8 @@ export default {
 
     methods: { 
 
+
+
     closeShow: function(){
             if($("#createDiv").is(":visible")){
                  $("#show").slideUp("slow");
@@ -165,9 +214,13 @@ export default {
             }
     },
 
+
+
     closeSide: function(){
             $(".popup-content").fadeOut("slow");
     },
+
+
 
     closeAdd: function(){
            if($("#close_show").is(":visible")){
@@ -181,6 +234,8 @@ export default {
             }
     },
 
+
+
     openAdd: function(cord){
         this.place.lat = cord.lat;
         this.place.lng = cord.lng;
@@ -193,6 +248,40 @@ export default {
         }
             
     },
+
+
+
+    closeAddEvent: function(){
+         $("#addEvent").hide("fast");
+    },
+
+
+
+    openAddEvent: function(){
+
+        const create = document.querySelector('#addEvent');
+
+        if (create.style.display === 'none') {
+            $("#addEvent").slideDown("slow");
+            
+            //$("#show").animate({ scrollTop: $("#addEvent").offset().top }, "slow");
+
+            $('.card-body').animate({
+                scrollTop: $('#addEvent').position().top - 40
+            }, 1000);
+        }
+            
+    },
+
+    getDate: function(dateee){
+    
+    this.start= dateee;
+    this.end= dateee;
+
+    },
+
+    
+
 
 
 
@@ -227,6 +316,7 @@ export default {
             })
     },
 
+
     fetchTypes() {
             fetch('api/types')
             .then(res => res.json())
@@ -234,6 +324,7 @@ export default {
                 this.types = res.data;
             })
     },
+
 
     deletePlace: function(id) {
         if(confirm('Are you sure?')){
@@ -301,7 +392,16 @@ export default {
     z-index: 2;
     width: 30%;
     height:75vh;
+    overflow: auto;
 }
+
+.vdatetime-input
+{
+    border-radius:5px;
+    background-color:black;
+    color:red;
+}
+
 
 @media only screen and (max-width: 900px) {
   #map {

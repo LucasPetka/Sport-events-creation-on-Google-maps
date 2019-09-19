@@ -38,3 +38,8 @@ Route::post('event', 'EventController@store');
 Route::put('event', 'EventController@store');
 //Delete Event
 Route::delete('event/{id}', 'EventController@destroy');
+
+//List Events
+Route::get('people_going', 'PeopleGoingController@index');
+
+Route::post('person', 'PeopleGoingController@store');

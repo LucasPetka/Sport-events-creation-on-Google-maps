@@ -25,7 +25,7 @@ import GmapCluster from 'vue2-google-maps/dist/components/cluster' // replace sr
 
 import Datetime from 'vue-datetime'
 import 'vue-datetime/dist/vue-datetime.css'
- 
+
 Vue.use(Datetime)
  
 Vue.component('GmapCluster', GmapCluster)

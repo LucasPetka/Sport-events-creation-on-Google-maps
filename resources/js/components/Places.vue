@@ -88,8 +88,14 @@
                             </div>
                             <div class="card-body">
                                 <Calendar v-bind:status='status' v-bind:currentUser='currentUser' v-on:getDate="getDate($event)" v-on:closeAdd="closeAddEvent()" ref="calendar"> </Calendar>
-                                 <button v-on:click="openAddEvent()" class="btn btn-outline-danger float-right">Add Event on this day +</button>
 
+                            
+                                <div v-if="this.status === 1">
+                                 <button v-on:click="openAddEvent()" class="btn btn-outline-danger float-right">Add Event on this day <i class="fas fa-plus"></i></button>
+                                </div>
+                                <div v-else>
+                                    If you want to join and add events you need to register.
+                                </div>
 
                             </div>
                         </div>
@@ -100,30 +106,26 @@
                             </div>
                             <div class="card-body">
                                 
-                                <form>
+                                <form @submit.prevent="addEvent">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Title</label>
-                                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter title">
+                                    <input v-model="event.title" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter title">
                                 </div>
 
                                 <div class="form-group">
                                     <label for="exampleFormControlTextarea1">About</label>
-                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                    <textarea v-model="event.about" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                                 </div>
 
-                                <datetime  type="time" v-model="start" format="yyyy-MM-dd HH:mm" :value-zone="'local'" ></datetime>
+                                <datetime  type="time" id="start" v-model="start" format="yyyy-MM-dd HH:mm" :value-zone="'local'" :minute-step="10" v-on:input="parseDate(0)" ></datetime>
 
-                                <datetime  type="time" v-model="end" format="yyyy-MM-dd HH:mm" :value-zone="'local'" ></datetime>
-
-                                {{ this.currentUser.name  }}
-                                <br>
+                                <datetime  type="time" id="end" v-model="end" format="yyyy-MM-dd HH:mm" :value-zone="'local'" :minute-step="10" v-on:input="parseDate(1)" ></datetime>
 
                                 
+                                <br>
 
                                 <button type="submit" class="btn btn-primary">Submit</button>
                                 </form>
-
-
                             </div>
                         </div>
 
@@ -183,14 +185,20 @@ export default {
                 lng:'',
                 type:''
             },
+            event:{
+                id:'',
+                place_id:'',
+                title:'',
+                about:'',
+                time_from:'',
+                time_until:'',
+                organizator:''
+            },
             place_id:'',
-            new_id:'',
+            start:new Date().toISOString(),
+            end:new Date().toISOString(),
             coordinates:{lat:0, lng:0},
-            pagination: {},
             edit: false,
-            show_new: false,
-            start: new Date().toISOString(),
-            end: new Date().toISOString(),
         }
     },
 
@@ -259,24 +267,44 @@ export default {
 
     openAddEvent: function(){
 
+        this.event.place_id = this.show.id;
+
+        this.event.organizator = this.currentUser.name;
+
         const create = document.querySelector('#addEvent');
 
         if (create.style.display === 'none') {
             $("#addEvent").slideDown("slow");
-            
-            //$("#show").animate({ scrollTop: $("#addEvent").offset().top }, "slow");
 
             $('.card-body').animate({
                 scrollTop: $('#addEvent').position().top - 40
             }, 1000);
         }
+
+
+        
             
+    },
+
+    parseDate(choose){
+
+        if(choose == 0){
+            var d = new Date(this.start);
+            var n = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds(); 
+            this.event.time_from = n;
+        } 
+        else if(choose == 1){
+            var d = new Date(this.end);
+             var n = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds(); 
+            this.event.time_until = n;
+        }
+
     },
 
     getDate: function(dateee){
     
-    this.start= dateee;
-    this.end= dateee;
+    this.start = dateee;
+    this.end = dateee;
 
     },
 
@@ -302,7 +330,7 @@ export default {
             $("#show").slideDown("slow");
             
         }
-
+        this.closeAddEvent();
 
 
     },
@@ -376,7 +404,61 @@ export default {
         } else{
 
         }
+    },
+
+
+
+    addEvent() {
+        if(this.edit === false){
+            fetch('api/event', {
+                method: 'post',
+                body: JSON.stringify(this.event),
+                headers: {
+                    'content-type': 'application/json'
+                }
+            })
+            .then(res => res.json())
+            .then( data=> {
+                this.event.place_id = '';
+                this.event.title = '';
+                this.event.about = '';
+                this.event.time_from = '';
+                this.event.time_until = '';
+                this.event.organizator = '';
+                this.$refs.calendar.fetchEvents();
+                
+                setTimeout(() => { 
+                    this.$refs.calendar.showEvents();
+                    this.$refs.calendar.setId(this.show.id);
+                 }, 800)
+                
+                
+            })
+            .catch(err =>console.log(err));
+
+        } else{
+
         }
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }
 </script>

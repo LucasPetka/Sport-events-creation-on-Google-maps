@@ -1,16 +1,22 @@
 <template>
         <div>
+            
+            <div class="input-group mb-3 mx-auto">
             <datepicker placeholder="Select Date"  :highlighted="highlighted" :format="format" :value="todays_date" v-model="todays_date" @closed="showEvents()"></datepicker>
+            <div class="input-group-append">
+                <span class="input-group-text" id="basic-addon2"><i class="far fa-calendar-alt"></i></span>
+            </div>
+            </div>
+            
             <div>
 
                 <div v-for="event in show_events" v-bind:key="event.id" class="card mt-3"  style="width: 90%; margin-left:auto; margin-right:auto;">
                 <div class="card-body">
                     <h5 class="card-title">{{ event.title }}</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">{{ event.people_going }} people going</h6>
+                    <h6 class="card-subtitle mb-3 text-muted">{{ countPeopleGoing(event.id) }} people going</h6>
                     <p class="card-text">{{ event.about }}</p>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item">From: {{ event.time_from }} </li>
-                        <li class="list-group-item">To: {{ event.time_until }}</li>
+                        <li class="list-group-item">Start: {{ returnTime(event.time_from)  }} <br> End: {{ returnTime(event.time_until) }}</li>
                         <li class="list-group-item card-subtitle mb-2 text-muted">Event created by {{ event.organizator }}</li>
                     </ul>
 
@@ -63,8 +69,8 @@ export default {
                 about:'',
                 time_from:'',
                 time_until:'',
-                people_going:'',
-                organizator:''
+                organizator:'',
+                people_going:0
             },
             person: {
                 place_id:'',
@@ -101,6 +107,7 @@ export default {
         ifJoined: function(place, event, user){
 
             var ans = 0;
+            
             this.people_going.forEach(myFunction);
             function myFunction(person, index) {
 
@@ -127,9 +134,32 @@ export default {
         const foundEvents = this.events.filter( event => event.place_id == this.place_id);
         this.show_events = foundEvents.filter(event => this.getDate(event.time_from) == this.getDate(this.todays_date));
         this.$emit('getDate', this.todays_date.toISOString());
+        console.log("Todays date: " + this.todays_date);
+        console.log("Place id: " + this.place_id);
         this.$emit('closeAdd');
 
 
+        },
+
+        returnTime: function(time){
+           var timews = time.split(" ");
+           var time =  timews[1].split(":");
+            return time[0] + ":" + time[1];
+        },
+
+        countPeopleGoing(event_id){
+            
+            var people = 0;
+            this.people_going.forEach(myFunction);
+            function myFunction(person, index) {
+
+                if(person.event_id == event_id){
+                   people++;
+                } 
+            
+            }
+
+            return people;
         },
 
 
@@ -216,3 +246,13 @@ export default {
 }
 </script>
 
+<style>
+
+.vdp-datepicker input{
+    border-radius: 5px 0px 0px 5px;
+    box-shadow: none !important;
+    border: solid 1px #b7b7b7;
+    padding: 8px;
+}
+
+</style>

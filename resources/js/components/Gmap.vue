@@ -13,7 +13,7 @@
       </div>
 
       <div id="refresh_button">
-        <button type="button" class="btn btn-success" v-on:click="loadMarkers()">Refresh markers</button>
+        <button type="button" class="btn btn-success" v-on:click="loadMarkers()">Refresh markers <i class="fas fa-redo"></i></button>
       </div>
 
       

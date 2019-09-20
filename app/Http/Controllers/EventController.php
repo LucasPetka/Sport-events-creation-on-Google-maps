@@ -23,16 +23,6 @@ class EventController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -40,7 +30,19 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $event = $request->isMethod('put') ? Event::findOrFail($request->id) : new Event;
+
+        $event->id = $request->input('id');
+        $event->place_id = $request->input('place_id');
+        $event->title = $request->input('title');
+        $event->about = $request->input('about');
+        $event->time_from = $request->input('time_from');
+        $event->time_until = $request->input('time_until');
+        $event->organizator = $request->input('organizator');
+
+        if($event->save()){
+            return new EventResource($event);
+        }
     }
 
     /**
@@ -50,29 +52,6 @@ class EventController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
     {
         //
     }

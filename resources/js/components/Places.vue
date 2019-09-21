@@ -87,16 +87,19 @@
                                 
                             </div>
                             <div class="card-body">
-                                <Calendar v-bind:status='status' v-bind:currentUser='currentUser' v-on:getDate="getDate($event)" v-on:closeAdd="closeAddEvent()" ref="calendar"> </Calendar>
 
-                            
                                 <div v-if="this.status === 1">
-                                 <button v-on:click="openAddEvent()" class="btn btn-outline-danger float-right">Add Event on this day <i class="fas fa-plus"></i></button>
+                                 <button v-on:click="openAddEvent()" class="btn btn-outline-danger float-right">Add Event <i class="fas fa-plus"></i></button>
                                 </div>
                                 <div v-else>
-                                    If you want to join and add events you need to register.
+                                    <div class="alert alert-warning pb-5" role="alert">
+                                    If you want to join or add events you need to login / register.<br>
+                                    <button type="button" class="btn btn-outline-secondary float-right ml-2">Register</button>
+                                    <button type="button" class="btn btn-outline-dark float-right mr-2">Login</button>
+                                    </div>
                                 </div>
 
+                                <Calendar v-bind:status='status' v-bind:currentUser='currentUser' v-on:getDate="getDate($event)" v-on:closeAdd="closeAddEvent()" ref="calendar"> </Calendar>
                             </div>
                         </div>
 
@@ -117,14 +120,34 @@
                                     <textarea v-model="event.about" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                                 </div>
 
-                                <datetime  type="time" id="start" v-model="start" format="yyyy-MM-dd HH:mm" :value-zone="'local'" :minute-step="10" v-on:input="parseDate(0)" ></datetime>
 
-                                <datetime  type="time" id="end" v-model="end" format="yyyy-MM-dd HH:mm" :value-zone="'local'" :minute-step="10" v-on:input="parseDate(1)" ></datetime>
 
+                                <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">{{ date }}</span>
+                                </div>
+                                    <datetime  type="time" id="start" v-model="start" format="HH:mm" :value-zone="'local'" :minute-step="10" v-on:input="parseDate(0)" ></datetime>
+                                <div class="input-group-append">
+                                    <span class="input-group-text" id="basic-addon2"><i class="far fa-clock"></i></span>
+                                </div>
+                                </div>
+
+
+
+                                <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">{{ date }}</span>
+                                </div>
+                                    <datetime  type="time" id="end" v-model="end" format="HH:mm" :value-zone="'local'" :minute-step="10" v-on:input="parseDate(1)" ></datetime>
+                                <div class="input-group-append">
+                                    <span class="input-group-text" id="basic-addon2"><i class="far fa-clock"></i></span>
+                                </div>
+                                </div>
+                                
                                 
                                 <br>
 
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="submit" class="btn btn-success float-right">Add <i class="fas fa-plus"></i></button>
                                 </form>
                             </div>
                         </div>
@@ -192,9 +215,11 @@ export default {
                 about:'',
                 time_from:'',
                 time_until:'',
-                organizator:''
+                organizator:'',
+                person_id:'',
             },
             place_id:'',
+            date:'',
             start:new Date().toISOString(),
             end:new Date().toISOString(),
             coordinates:{lat:0, lng:0},
@@ -268,7 +293,7 @@ export default {
     openAddEvent: function(){
 
         this.event.place_id = this.show.id;
-
+        this.event.person_id = this.currentUser.id;
         this.event.organizator = this.currentUser.name;
 
         const create = document.querySelector('#addEvent');
@@ -287,6 +312,10 @@ export default {
     },
 
     parseDate(choose){
+
+        var d = new Date(this.start);
+
+        this.date =  d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
 
         if(choose == 0){
             var d = new Date(this.start);
@@ -425,6 +454,7 @@ export default {
                 this.event.time_from = '';
                 this.event.time_until = '';
                 this.event.organizator = '';
+                this.event.person_id = '';
                 this.$refs.calendar.fetchEvents();
                 
                 setTimeout(() => { 
@@ -441,30 +471,12 @@ export default {
         }
     },
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
 </script>
 
 
-<style scoped>
+<style>
 
 .popup-content {
     display:none;
@@ -477,12 +489,27 @@ export default {
     overflow: auto;
 }
 
-.vdatetime-input
-{
-    border-radius:5px;
-    background-color:black;
-    color:red;
+.vdatetime-input{
+    border-radius: 0px;
+    box-shadow: none !important;
+    border: solid 1px #b7b7b7;
+    padding: 8px;
+    color:#6C757D;
+
 }
+
+.vdatetime-popup__header {
+    background: #28a745;
+}
+
+.vdatetime-time-picker__item--selected {
+    color: #28a745;
+}
+
+.vdatetime-popup__actions__button {
+    color: #28a745;
+}
+
 
 
 @media only screen and (max-width: 900px) {

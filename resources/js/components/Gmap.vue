@@ -3,7 +3,7 @@
     
       <div id="geoloc_bar">
         <div class="input-group">
-        <gmap-autocomplete class="form-control"
+        <gmap-autocomplete class="form-control" @keyup.enter="addMarker"
           @place_changed="setPlace">
         </gmap-autocomplete>
         <div class="input-group-append">

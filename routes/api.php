@@ -43,3 +43,5 @@ Route::delete('event/{id}', 'EventController@destroy');
 Route::get('people_going', 'PeopleGoingController@index');
 
 Route::post('person', 'PeopleGoingController@store');
+
+Route::delete('person/{id}', 'PeopleGoingController@destroy');

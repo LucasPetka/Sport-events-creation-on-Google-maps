@@ -60,6 +60,10 @@ class PeopleGoingController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $person = PeopleGoing::findOrFail($id);
+
+        if($person->delete()){
+        return new PeopleGoingResource($person);
+        }
     }
 }

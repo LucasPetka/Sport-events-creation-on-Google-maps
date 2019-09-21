@@ -21,10 +21,16 @@
                     </ul>
 
                     <div v-if="ifJoined(event.place_id, event.id, currentUser.id) == 0">
-                        <button id="join_btn" type="button" class="btn btn-success" v-on:click="addPerson(event.place_id, event.id, currentUser.id, $event)">Join</button>
+                        <button id="join_btn" type="button" class="btn btn-success float-left" v-on:click="addPerson(event.place_id, event.id, currentUser.id, $event)"><i class="fas fa-user-plus"></i> Join</button>
                     </div>
                     <div v-else>
-                        <button type="button" class="btn btn-secondary" disabled>Joined</button>
+                        <button type="button" class="btn btn-secondary float-left" v-on:click="deletePerson(event.place_id, event.id, currentUser.id, $event)"><i class="fas fa-check"></i> Joined</button>
+                    </div>
+
+                    <div v-if="currentUser.id == event.person_id">
+                        <button type="button" class="btn btn-danger float-right ml-2" > <i class="fas fa-trash-alt"></i> </button>
+                        <button type="button" class="btn btn-primary float-right" > <i class="far fa-edit"></i> </button>
+                        
                     </div>
                     
                     
@@ -230,17 +236,33 @@ export default {
 
                 this.fetchPeopleGoing();
 
-                var target = $( but.target );
-
-                    target.html('Joined');
-                    target.attr("disabled", true);
-                    if(target.hasClass("btn btn-success"))
-                    target.removeClass("btn btn-success").addClass("btn btn-secondary");;
-
             })
             .catch(err =>console.log(err));
 
-        }
+        },
+
+        
+
+        deletePerson: function(place, event, person, but) {
+
+            const first = this.people_going.filter( oneper => oneper.person_id == person);
+            const second = first.filter( oneper => oneper.event_id == event);
+            const third = second.filter( oneper => oneper.place_id == place);
+
+            var id = third[0].id;
+         
+            fetch('api/person/'+ id, {
+                method: 'delete'
+            })
+                .then(res => res.json())
+                .then(data => {
+
+                    this.fetchPeopleGoing();
+
+                })
+                .catch(err => console.log(err));
+
+        },
 
     }
 }
@@ -254,5 +276,6 @@ export default {
     border: solid 1px #b7b7b7;
     padding: 8px;
 }
+
 
 </style>

@@ -39,6 +39,7 @@ class EventController extends Controller
         $event->time_from = $request->input('time_from');
         $event->time_until = $request->input('time_until');
         $event->organizator = $request->input('organizator');
+        $event->person_id = $request->input('person_id');
 
         if($event->save()){
             return new EventResource($event);

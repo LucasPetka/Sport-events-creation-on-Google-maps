@@ -22,7 +22,8 @@ class Event extends JsonResource
             'time_from' => $this->time_from,
             'time_until' => $this->time_until,
             'people_going' => $this->people_going,
-            'organizator' => $this->organizator
+            'organizator' => $this->organizator,
+            'person_id' => $this->person_id
 
         ];
     }

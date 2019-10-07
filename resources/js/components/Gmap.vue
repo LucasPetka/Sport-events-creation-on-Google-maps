@@ -3,11 +3,11 @@
     
       <div id="geoloc_bar">
         <div class="input-group">
-        <gmap-autocomplete class="form-control" @keyup.enter="addMarker"
+        <gmap-autocomplete class="form-control" @keyup.enter="locate"
           @place_changed="setPlace">
         </gmap-autocomplete>
         <div class="input-group-append">
-          <button class="btn btn-outline-secondary" @click="addMarker">Locate</button>
+          <button class="btn btn-outline-secondary" @click="locate">Locate</button>
         </div>
       </div>
       </div>
@@ -26,7 +26,7 @@
       <gmap-marker v-for="place in places" :visible="place.visible" :key="place.id" :position="getPosition(place)" @click="center=getPosition(place)" v-on:click="showSpot(place.id)" :icon="icon(place.type)" ></gmap-marker>
       
 
-      <gmap-marker :visible="a" :position="getPosition(coordinates)" :icon="{ url: require('../assets/google_maps/new.png')}" ></gmap-marker>
+      <gmap-marker :visible="a" :position="getPosition(addNewmark_coordinates)" :icon="{ url: require('../assets/google_maps/new.png')}" ></gmap-marker>
 
 
     </gmap-map>
@@ -40,7 +40,7 @@
 
 <script>
 
-import json from '../assets/options.json'
+import mapstyle from '../assets/options.json'
 
 export default {
     
@@ -64,25 +64,19 @@ export default {
             type:'',
             visible: true
     }, 
-    place_id:'',
-    coordinates: { lat: 45.508, lng: -73.587 },
+    addNewmark_coordinates: { lat: 0.0, lng: 0.0 },
     zoom_in: 8,
     bounds: null,
-    edit: false,
     currentPlace: null,
-    a: false,
-    read:false,
+    a: false,   //checks if someone loged in to let them add new Marker
     mapStyle: {
-      styles: json,
+      styles: mapstyle,
     }
-
-
 
     };
   },
 
   mounted() {
-    this.geolocate();
     this.fetchPlaces();
     this.a = this.$parent.show_new;
   },
@@ -90,7 +84,7 @@ export default {
   methods: {
 
 
-
+    //smooth zooms in using timeout beetween zoom functions
     smoothZoom(max, cnt) {
         if (cnt >= max) {
             return 100;
@@ -102,13 +96,13 @@ export default {
     },  
 
 
-
+    //update bounds where are the spots are showing
     update_bounds(bounds){
       this.bounds = bounds;
     },
 
 
-
+    //load all sports spots that are in bounds of view to reduce data traffic
     loadMarkers(){
         var ne = this.bounds.getNorthEast();
         var sw = this.bounds.getSouthWest();
@@ -130,14 +124,14 @@ export default {
     },
 
 
-    
+    //updates center
     setPlace(place) {
       this.currentPlace = place;
     },
 
 
-
-    addMarker() {
+    //locates inputed geographic name
+    locate() {
       if (this.currentPlace) {
         const marker = {
           lat: this.currentPlace.geometry.location.lat(),
@@ -146,30 +140,11 @@ export default {
         this.center = marker;
        
         this.currentPlace = null;
-
           this.smoothZoom(13, this.zoom_in);
           setTimeout(() => { this.loadMarkers(); }, 800)
-
       }
 
     },
-
-    geolocate: function() {
-      navigator.geolocation.getCurrentPosition(position => {
-        this.center = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
-      });
-    },
-
-
-
-    hidePointer: function(){
-              this.a = false;
-    },
-
-
 
     icon: function(type){
         if(type=="112" || type=="111"){
@@ -195,7 +170,7 @@ export default {
 
     openMenu: function(loc){
       if(this.status == 1){
-      this.coordinates = {
+      this.addNewmark_coordinates = {
                 lat: loc.latLng.lat(),
                 lng: loc.latLng.lng(),
       };
@@ -209,10 +184,16 @@ export default {
 
 
     creatNewMarker: function(){
-            this.$emit('openForm', this.coordinates);
+            this.$emit('openForm', this.addNewmark_coordinates);
             $("#pointerMenu").hide();
             this.a = true;
       },
+
+
+    hidePointer: function(){
+      this.a = false;
+    },
+
 
 
 

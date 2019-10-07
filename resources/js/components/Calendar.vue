@@ -28,7 +28,7 @@
                     </div>
 
                     <div v-if="currentUser.id == event.person_id">
-                        <button type="button" class="btn btn-danger float-right ml-2" > <i class="fas fa-trash-alt"></i> </button>
+                        <button type="button" class="btn btn-danger float-right ml-2" v-on:click="deleteEvent(event.id)"> <i class="fas fa-trash-alt"></i> </button>
                         <button type="button" class="btn btn-primary float-right" > <i class="far fa-edit"></i> </button>
                         
                     </div>
@@ -95,6 +95,7 @@ export default {
 
     methods: {
 
+        //Create todays date variable
         getDate: function(date){
 
              var new_date = new Date(date);
@@ -102,14 +103,8 @@ export default {
             return new_date.getUTCFullYear(0) +'-'+ new_date.getUTCMonth(0) + '-' +  new_date.getUTCDate(0);
         },
 
-        sendDate: function(date){
 
-             var new_date = new Date(date);
-
-            return new_date.getUTCFullYear() +'-'+ new_date.getUTCMonth() + '-' +  new_date.getUTCDate() + 'T' + new_date.getUTCHours() + ':' + new_date.getUTCMinutes()+ ':' + new_date.getUTCSeconds() + '.' + new_date.getUTCMilliseconds() + 'Z';
-        },
-
-
+        //Check if person already joined to current event
         ifJoined: function(place, event, user){
 
             var ans = 0;
@@ -135,24 +130,24 @@ export default {
         },
 
 
+        //Show all events in exact place and day
         showEvents: function(){
 
         const foundEvents = this.events.filter( event => event.place_id == this.place_id);
         this.show_events = foundEvents.filter(event => this.getDate(event.time_from) == this.getDate(this.todays_date));
         this.$emit('getDate', this.todays_date.toISOString());
-        console.log("Todays date: " + this.todays_date);
-        console.log("Place id: " + this.place_id);
         this.$emit('closeAdd');
-
-
         },
 
+        //Shows fixed format of time
         returnTime: function(time){
            var timews = time.split(" ");
            var time =  timews[1].split(":");
             return time[0] + ":" + time[1];
         },
 
+
+        //Counts how much people joined specific event
         countPeopleGoing(event_id){
             
             var people = 0;
@@ -169,13 +164,14 @@ export default {
         },
 
 
-
+        //Gets id of place and shows information
         setId: function(id){
             this.todays_date = new Date();
 
             this.place_id = id;
-            const foundEvents = this.events.filter( event => event.place_id == this.place_id);
+            var foundEvents = this.events.filter( event => event.place_id == this.place_id);
             this.show_events = foundEvents.filter(event => this.getDate(event.time_from) == this.getDate(this.todays_date));
+            console.log("FOUND EVENTS:  " + foundEvents);
 
             this.highlighted = {
             dates:null,
@@ -186,7 +182,10 @@ export default {
 
                 var date = new Date(event.time_from);
 
+                console.log("data:  " + date);
+
                 highlightedDays.push(date);
+
             });
 
             this.highlighted = {
@@ -202,7 +201,8 @@ export default {
             .then(res => {
                 this.events = res.data;
             })
-    },
+                return this.events;
+        },
 
 
 
@@ -258,6 +258,24 @@ export default {
                 .then(data => {
 
                     this.fetchPeopleGoing();
+
+                })
+                .catch(err => console.log(err));
+
+        },
+
+
+        deleteEvent: function(eventId) {
+         
+            fetch('api/event/'+ eventId, {
+                method: 'delete'
+            })
+                .then(res => res.json())
+                .then(data => {
+
+                    this.fetchEvents();
+                    this.showEvents();
+                    setTimeout(() => {  this.setId(this.place_id); }, 100)
 
                 })
                 .catch(err => console.log(err));

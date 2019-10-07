@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 use App\Event;
 use App\Http\Resources\Event as EventResource;
 
+use Illuminate\Support\Facades\DB;
+
+use App\PeopleGoing;
+use App\Http\Resources\PeopleGoing as PeopleGoingResource;
+
 
 class EventController extends Controller
 {
@@ -65,6 +70,12 @@ class EventController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $event = Event::findOrFail($id);
+
+        DB::table('people_going')->where('event_id', '=', $id)->delete();
+
+        if($event->delete()){
+        return new EventResource($event);
+        }
     }
 }

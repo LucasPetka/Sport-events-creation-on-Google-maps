@@ -1,5 +1,8 @@
 <template>
-    <div>
+<div>
+    <div id="loading-screen">
+    <div id="geras">LetsGo</div>
+    </div>
         <div class="row" style="width:100%; padding:0; margin:0;">
             <div id="map" style="width:100%;">
                 <Gmap v-bind:status='status' v-on:showSpot="showSpot($event)" v-on:openForm="openAdd($event)" ref="gmapp"> </Gmap>
@@ -32,17 +35,17 @@
 
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
-                                        <label class="input-group-text" for="inputGroupSelect01">Options</label>
+                                        <label class="input-group-text" for="inputGroupSelect01">Sport</label>
                                     </div>
 
                                     <select class="custom-select" id="inputGroupSelect01" v-model="place.type">
-                                        <option selected>Sporto šaka...</option>
-                                        <option value="112">Futbolas salėje</option>
-                                        <option value="111">Futbolas lauke</option>
-                                        <option value="223">Krepšinis salėje</option>
-                                        <option value="222">Krepšinis lauke</option>
-                                        <option value="334">Tinklinis salėje</option>
-                                        <option value="333">Tinklinis lauke</option>
+                                        
+                                        <option value="112">Soccer inside</option>
+                                        <option value="111">Soccer</option>
+                                        <option value="223">Basketball inside</option>
+                                        <option value="222">Basketball</option>
+                                        <option value="334">Volleyball inside</option>
+                                        <option value="333">Voleyball</option>
                                     </select>
                                 </div>
                             
@@ -94,14 +97,16 @@
                                 <div v-else>
                                     <div class="alert alert-warning pb-5" role="alert">
                                     If you want to join or add events you need to login / register.<br>
-                                    <button type="button" class="btn btn-outline-secondary float-right ml-2">Register</button>
-                                    <button type="button" class="btn btn-outline-dark float-right mr-2">Login</button>
+                                    <a href ="/register" type="button" class="btn btn-outline-secondary float-right ml-2">Register</a>
+                                    <a href ="/login" type="button" class="btn btn-outline-secondary float-right mr-2">Login</a>
                                     </div>
                                 </div>
 
                                 <Calendar v-bind:status='status' v-bind:currentUser='currentUser' v-on:getDate="getDate($event)" v-on:closeAdd="closeAddEvent()" ref="calendar"> </Calendar>
                             </div>
                         </div>
+
+                        <Alert ref="alert"></Alert>
 
                         <div id="addEvent" class="card m-3 width:100%; height:100%;" style="display:none;">
                             <div class="card-header ">
@@ -171,12 +176,14 @@
 <script>
 import Gmap from '../components/Gmap.vue';
 import Calendar from '../components/Calendar.vue';
+import Alert from '../components/Alert.vue';
 import { Datetime } from 'vue-datetime';
 
 export default {
 
         components: {
         'Gmap': Gmap,
+        'Alert': Alert,
         'Calendar': Calendar,
         'datetime': Datetime
     },
@@ -186,6 +193,7 @@ export default {
 
     data(){
         return{
+            loaded: false,
             places: [],
             types:[],
             type: {
@@ -218,7 +226,6 @@ export default {
                 organizator:'',
                 person_id:'',
             },
-            place_id:'',
             date:'',
             start:new Date().toISOString(),
             end:new Date().toISOString(),
@@ -227,15 +234,27 @@ export default {
         }
     },
 
-    created(){
+     mounted(){
+        $("#geras").animate({left: '45%', opacity: '1', top:'40%', fontSize:'50px'}, 1500, function(){
+            $("#geras").animate({left:'43%',top:'39%', fontSize:'80px'}, 500, function(){
+            $("#loading-screen").animate({opacity:0}, 500, function(){
+            $("#loading-screen").hide();
+        });
+        });
+        });
+
         this.fetchPlaces();
         this.fetchTypes();
+        this.loadingScreen();
+        
         
     },
 
     methods: { 
 
-
+    loadingScreen: function(){
+         setTimeout(() => { this.loaded = true; }, 4000); 
+    },
 
     closeShow: function(){
             if($("#createDiv").is(":visible")){
@@ -435,19 +454,26 @@ export default {
         }
     },
 
-
-
-    addEvent() {
+     addEvent() {
         if(this.edit === false){
-            fetch('api/event', {
-                method: 'post',
+
+        (async () => {
+        const Response = await fetch('api/event', {
+             method: 'post',
                 body: JSON.stringify(this.event),
                 headers: {
+                    'Accept': 'application/json',
                     'content-type': 'application/json'
                 }
-            })
-            .then(res => res.json())
-            .then( data=> {
+        });
+        const content = await Response.json();
+
+        await this.$refs.calendar.fetchEvents();
+        await this.$refs.calendar.showEvents();
+        setTimeout(() => {  this.$refs.calendar.setId(this.show.id); }, 100)
+        
+        })();
+
                 this.event.place_id = '';
                 this.event.title = '';
                 this.event.about = '';
@@ -455,20 +481,27 @@ export default {
                 this.event.time_until = '';
                 this.event.organizator = '';
                 this.event.person_id = '';
-                this.$refs.calendar.fetchEvents();
-                
-                setTimeout(() => { 
-                    this.$refs.calendar.showEvents();
-                    this.$refs.calendar.setId(this.show.id);
-                 }, 800)
-                
-                
-            })
-            .catch(err =>console.log(err));
-
+                this.$refs.alert.eventCreated();
+                 
         } else{
 
         }
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     },
 
     }
@@ -477,6 +510,22 @@ export default {
 
 
 <style>
+
+#geras{
+    position: absolute;
+    color:white;
+    font-size: 25px;
+    opacity: 0.1;
+
+}
+
+#loading-screen {
+    position: fixed;
+    z-index: 100;
+    background-color: #82cc75;
+    height: 100%;
+    width: 100%;
+}
 
 .popup-content {
     display:none;

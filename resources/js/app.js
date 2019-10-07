@@ -12,6 +12,9 @@ require('./components/Navbar.vue').default);
 Vue.component('gmap', 
 require('./components/Gmap.vue').default);
 
+Vue.component('alert', 
+require('./components/Alert.vue').default);
+
 Vue.component('calendar', 
 require('./components/Calendar.vue').default);
 

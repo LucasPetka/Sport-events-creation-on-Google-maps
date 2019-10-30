@@ -2615,7 +2615,7 @@ __webpack_require__.r(__webpack_exports__);
           $('#evSuc').hide();
           $('#alertas').hide();
         });
-      }, 2000);
+      }, 1500);
     }
   }
 });
@@ -2632,6 +2632,10 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuejs_datepicker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuejs-datepicker */ "./node_modules/vuejs-datepicker/dist/vuejs-datepicker.esm.js");
+//
+//
+//
+//
 //
 //
 //
@@ -2747,6 +2751,7 @@ __webpack_require__.r(__webpack_exports__);
     showEvents: function showEvents() {
       var _this = this;
 
+      //this.todays_date =
       var foundEvents = this.events.filter(function (event) {
         return event.place_id == _this.place_id;
       });
@@ -2776,30 +2781,35 @@ __webpack_require__.r(__webpack_exports__);
       return people;
     },
     //Gets id of place and shows information
-    setId: function setId(id) {
+    fetchSpot: function fetchSpot(id) {
       var _this2 = this;
 
-      this.todays_date = new Date();
-      this.place_id = id;
-      var foundEvents = this.events.filter(function (event) {
-        return event.place_id == _this2.place_id;
+      this.place_id = id; // gets the place where we looking at
+
+      fetch('api/events').then(function (res) {
+        return res.json();
+      }).then(function (res) {
+        //Shows all events which are on that spot and and that day
+        _this2.showEvents(); //Highlights all days when events happening
+
+
+        var highlightedDays = [];
+
+        var foundEvents = _this2.events.filter(function (event) {
+          return event.place_id == _this2.place_id;
+        });
+
+        _this2.highlighted = {
+          dates: null
+        };
+        foundEvents.forEach(function (event) {
+          var date = new Date(event.time_from);
+          highlightedDays.push(date);
+        });
+        _this2.highlighted = {
+          dates: highlightedDays
+        };
       });
-      this.show_events = foundEvents.filter(function (event) {
-        return _this2.getDate(event.time_from) == _this2.getDate(_this2.todays_date);
-      });
-      console.log("FOUND EVENTS:  " + foundEvents);
-      this.highlighted = {
-        dates: null
-      };
-      var highlightedDays = [];
-      foundEvents.forEach(function (event) {
-        var date = new Date(event.time_from);
-        console.log("data:  " + date);
-        highlightedDays.push(date);
-      });
-      this.highlighted = {
-        dates: highlightedDays
-      };
     },
     fetchEvents: function fetchEvents() {
       var _this3 = this;
@@ -2875,13 +2885,15 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (res) {
         return res.json();
       }).then(function (data) {
-        _this7.fetchEvents();
+        fetch('api/events').then(function (res) {
+          return res.json();
+        }).then(function (res) {
+          _this7.events = res.data;
 
-        _this7.showEvents();
+          _this7.showEvents();
 
-        setTimeout(function () {
-          _this7.setId(_this7.place_id);
-        }, 100);
+          _this7.fetchSpot(_this7.place_id);
+        });
       })["catch"](function (err) {
         return console.log(err);
       });
@@ -2942,10 +2954,12 @@ var _assets_options_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/_
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "GoogleMap",
   props: ['status'],
+  //checks if someone loged in to let them add new Marker
   data: function data() {
     return {
       // default to Montreal to keep it simple
@@ -2972,8 +2986,7 @@ var _assets_options_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/_
       zoom_in: 8,
       bounds: null,
       currentPlace: null,
-      a: false,
-      //checks if someone loged in to let them add new Marker
+      marker_visibility: false,
       mapStyle: {
         styles: _assets_options_json__WEBPACK_IMPORTED_MODULE_0__
       }
@@ -2981,7 +2994,7 @@ var _assets_options_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/_
   },
   mounted: function mounted() {
     this.fetchPlaces();
-    this.a = this.$parent.show_new;
+    this.marker_visibility = this.$parent.show_new;
   },
   methods: {
     //smooth zooms in using timeout beetween zoom functions
@@ -3040,6 +3053,7 @@ var _assets_options_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/_
         }, 800);
       }
     },
+    //Sets the icon for the place id
     icon: function icon(type) {
       if (type == "112" || type == "111") {
         return {
@@ -3068,19 +3082,24 @@ var _assets_options_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/_
           lat: loc.latLng.lat(),
           lng: loc.latLng.lng()
         };
+        this.marker_visibility = true;
         $("#pointerMenu").css({
           top: event.clientY,
           left: event.clientX
         }).show();
       }
     },
+    closePointerMenu: function closePointerMenu() {
+      $("#pointerMenu").hide();
+      this.marker_visibility = false;
+    },
     creatNewMarker: function creatNewMarker() {
       this.$emit('openForm', this.addNewmark_coordinates);
       $("#pointerMenu").hide();
-      this.a = true;
+      this.marker_visibility = true;
     },
     hidePointer: function hidePointer() {
-      this.a = false;
+      this.marker_visibility = false;
     },
     showSpot: function showSpot(key) {
       var foundPlace = this.places.find(function (place) {
@@ -3377,7 +3396,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         fontSize: '80px'
       }, 500, function () {
         $("#loading-screen").animate({
-          opacity: 0
+          opacity: '0',
+          width: '0%'
         }, 500, function () {
           $("#loading-screen").hide();
         });
@@ -3444,7 +3464,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     },
     parseDate: function parseDate(choose) {
       var d = new Date(this.start);
-      this.date = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
 
       if (choose == 0) {
         var d = new Date(this.start);
@@ -3457,6 +3476,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
     },
     getDate: function getDate(dateee) {
+      var d = new Date(dateee);
+      this.date = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+      d.setMinutes(30);
+      dateee = d.toISOString();
       this.start = dateee;
       this.end = dateee;
     },
@@ -3467,7 +3490,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         return place.id == id;
       });
       this.show = foundPlace;
-      this.$refs.calendar.setId(this.show.id);
+      this.$refs.calendar.fetchSpot(this.show.id);
       var foundType = this.types.find(function (type) {
         return type.id == _this2.show.type;
       });
@@ -3584,14 +3607,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 case 8:
                   _context.next = 10;
-                  return _this7.$refs.calendar.showEvents();
+                  return _this7.$refs.calendar.fetchSpot(_this7.show.id);
 
                 case 10:
-                  setTimeout(function () {
-                    _this7.$refs.calendar.setId(_this7.show.id);
-                  }, 100);
-
-                case 11:
                 case "end":
                   return _context.stop();
               }
@@ -51006,71 +51024,79 @@ var render = function() {
                   )
                 ]),
                 _vm._v(" "),
-                _vm.ifJoined(event.place_id, event.id, _vm.currentUser.id) == 0
+                _vm.status === 1
                   ? _c("div", [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-success float-left",
-                          attrs: { id: "join_btn", type: "button" },
-                          on: {
-                            click: function($event) {
-                              return _vm.addPerson(
-                                event.place_id,
-                                event.id,
-                                _vm.currentUser.id,
-                                $event
-                              )
-                            }
-                          }
-                        },
-                        [
-                          _c("i", { staticClass: "fas fa-user-plus" }),
-                          _vm._v(" Join")
-                        ]
-                      )
-                    ])
-                  : _c("div", [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-secondary float-left",
-                          attrs: { type: "button" },
-                          on: {
-                            click: function($event) {
-                              return _vm.deletePerson(
-                                event.place_id,
-                                event.id,
-                                _vm.currentUser.id,
-                                $event
-                              )
-                            }
-                          }
-                        },
-                        [
-                          _c("i", { staticClass: "fas fa-check" }),
-                          _vm._v(" Joined")
-                        ]
-                      )
-                    ]),
-                _vm._v(" "),
-                _vm.currentUser.id == event.person_id
-                  ? _c("div", [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-danger float-right ml-2",
-                          attrs: { type: "button" },
-                          on: {
-                            click: function($event) {
-                              return _vm.deleteEvent(event.id)
-                            }
-                          }
-                        },
-                        [_c("i", { staticClass: "fas fa-trash-alt" })]
-                      ),
+                      _vm.ifJoined(
+                        event.place_id,
+                        event.id,
+                        _vm.currentUser.id
+                      ) == 0
+                        ? _c("div", [
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-success float-left",
+                                attrs: { id: "join_btn", type: "button" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.addPerson(
+                                      event.place_id,
+                                      event.id,
+                                      _vm.currentUser.id,
+                                      $event
+                                    )
+                                  }
+                                }
+                              },
+                              [
+                                _c("i", { staticClass: "fas fa-user-plus" }),
+                                _vm._v(" Join")
+                              ]
+                            )
+                          ])
+                        : _c("div", [
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-secondary float-left",
+                                attrs: { type: "button" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.deletePerson(
+                                      event.place_id,
+                                      event.id,
+                                      _vm.currentUser.id,
+                                      $event
+                                    )
+                                  }
+                                }
+                              },
+                              [
+                                _c("i", { staticClass: "fas fa-check" }),
+                                _vm._v(" Joined")
+                              ]
+                            )
+                          ]),
                       _vm._v(" "),
-                      _vm._m(1, true)
+                      _vm.currentUser.id == event.person_id
+                        ? _c("div", [
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-danger float-right ml-2",
+                                attrs: { type: "button" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.deleteEvent(event.id)
+                                  }
+                                }
+                              },
+                              [_c("i", { staticClass: "fas fa-trash-alt" })]
+                            ),
+                            _vm._v(" "),
+                            _vm._m(1, true)
+                          ])
+                        : _vm._e()
                     ])
                   : _vm._e()
               ])
@@ -51241,7 +51267,7 @@ var render = function() {
           _vm._v(" "),
           _c("gmap-marker", {
             attrs: {
-              visible: _vm.a,
+              visible: _vm.marker_visibility,
               position: _vm.getPosition(_vm.addNewmark_coordinates),
               icon: { url: __webpack_require__(/*! ../assets/google_maps/new.png */ "./resources/js/assets/google_maps/new.png") }
             }
@@ -51269,6 +51295,19 @@ var render = function() {
               }
             },
             [_vm._v("Add Marker")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "dropdown-item",
+              on: {
+                click: function($event) {
+                  return _vm.closePointerMenu()
+                }
+              }
+            },
+            [_vm._v("Close")]
           )
         ]
       )
@@ -51923,7 +51962,7 @@ var staticRenderFns = [
           "a",
           {
             staticClass: "btn btn-outline-secondary float-right ml-2",
-            attrs: { href: "/register", type: "button" }
+            attrs: { href: "/register" }
           },
           [_vm._v("Register")]
         ),
@@ -51932,7 +51971,7 @@ var staticRenderFns = [
           "a",
           {
             staticClass: "btn btn-outline-secondary float-right mr-2",
-            attrs: { href: "/login", type: "button" }
+            attrs: { href: "/login" }
           },
           [_vm._v("Login")]
         )

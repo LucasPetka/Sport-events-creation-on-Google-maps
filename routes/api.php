@@ -39,9 +39,9 @@ Route::put('event', 'EventController@store');
 //Delete Event
 Route::delete('event/{id}', 'EventController@destroy');
 
-//List Events
+//People Going
 Route::get('people_going', 'PeopleGoingController@index');
-
+//Add person to event
 Route::post('person', 'PeopleGoingController@store');
-
+//Remove person from event
 Route::delete('person/{id}', 'PeopleGoingController@destroy');

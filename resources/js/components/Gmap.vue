@@ -26,13 +26,14 @@
       <gmap-marker v-for="place in places" :visible="place.visible" :key="place.id" :position="getPosition(place)" @click="center=getPosition(place)" v-on:click="showSpot(place.id)" :icon="icon(place.type)" ></gmap-marker>
       
 
-      <gmap-marker :visible="a" :position="getPosition(addNewmark_coordinates)" :icon="{ url: require('../assets/google_maps/new.png')}" ></gmap-marker>
+      <gmap-marker :visible="marker_visibility" :position="getPosition(addNewmark_coordinates)" :icon="{ url: require('../assets/google_maps/new.png')}" ></gmap-marker>
 
 
     </gmap-map>
 
     <div class="dropdown-menu dropdown-menu-sm" id="pointerMenu" style="display:none; position: absolute;">
           <a class="dropdown-item" v-on:click="creatNewMarker()">Add Marker</a>
+          <a class="dropdown-item" v-on:click="closePointerMenu()">Close</a>
     </div>
 
   </div>
@@ -46,7 +47,7 @@ export default {
     
   name: "GoogleMap",
 
-  props: ['status'],
+  props: ['status'],  //checks if someone loged in to let them add new Marker
 
   data() {
     return {
@@ -68,7 +69,7 @@ export default {
     zoom_in: 8,
     bounds: null,
     currentPlace: null,
-    a: false,   //checks if someone loged in to let them add new Marker
+    marker_visibility: false,   
     mapStyle: {
       styles: mapstyle,
     }
@@ -78,7 +79,7 @@ export default {
 
   mounted() {
     this.fetchPlaces();
-    this.a = this.$parent.show_new;
+    this.marker_visibility = this.$parent.show_new;
   },
 
   methods: {
@@ -146,6 +147,8 @@ export default {
 
     },
 
+
+    //Sets the icon for the place id
     icon: function(type){
         if(type=="112" || type=="111"){
             return { url: require('../assets/google_maps/soccerball.png')};
@@ -171,14 +174,17 @@ export default {
     openMenu: function(loc){
       if(this.status == 1){
       this.addNewmark_coordinates = {
-                lat: loc.latLng.lat(),
-                lng: loc.latLng.lng(),
-      };
+      lat: loc.latLng.lat(),
+      lng: loc.latLng.lng(),};
 
+      this.marker_visibility = true;
       $("#pointerMenu").css({top: event.clientY, left: event.clientX}).show();
-
       }
-      
+    },
+
+    closePointerMenu: function(){
+      $("#pointerMenu").hide();
+      this.marker_visibility = false;
     },
 
 
@@ -186,12 +192,12 @@ export default {
     creatNewMarker: function(){
             this.$emit('openForm', this.addNewmark_coordinates);
             $("#pointerMenu").hide();
-            this.a = true;
+            this.marker_visibility = true;
       },
 
 
     hidePointer: function(){
-      this.a = false;
+      this.marker_visibility = false;
     },
 
 

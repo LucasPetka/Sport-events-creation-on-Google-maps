@@ -20,17 +20,21 @@
                         <li class="list-group-item card-subtitle mb-2 text-muted">Event created by {{ event.organizator }}</li>
                     </ul>
 
-                    <div v-if="ifJoined(event.place_id, event.id, currentUser.id) == 0">
-                        <button id="join_btn" type="button" class="btn btn-success float-left" v-on:click="addPerson(event.place_id, event.id, currentUser.id, $event)"><i class="fas fa-user-plus"></i> Join</button>
-                    </div>
-                    <div v-else>
-                        <button type="button" class="btn btn-secondary float-left" v-on:click="deletePerson(event.place_id, event.id, currentUser.id, $event)"><i class="fas fa-check"></i> Joined</button>
-                    </div>
+                    <div v-if="status === 1">
+                        <div v-if="ifJoined(event.place_id, event.id, currentUser.id) == 0">
+                            <button id="join_btn" type="button" class="btn btn-success float-left" v-on:click="addPerson(event.place_id, event.id, currentUser.id, $event)"><i class="fas fa-user-plus"></i> Join</button>
+                        </div>
+                        <div v-else>
+                            <button type="button" class="btn btn-secondary float-left" v-on:click="deletePerson(event.place_id, event.id, currentUser.id, $event)"><i class="fas fa-check"></i> Joined</button>
+                        </div>
+                    
 
-                    <div v-if="currentUser.id == event.person_id">
-                        <button type="button" class="btn btn-danger float-right ml-2" v-on:click="deleteEvent(event.id)"> <i class="fas fa-trash-alt"></i> </button>
-                        <button type="button" class="btn btn-primary float-right" > <i class="far fa-edit"></i> </button>
-                        
+                        <div v-if="currentUser.id == event.person_id">
+                            <button type="button" class="btn btn-danger float-right ml-2" v-on:click="deleteEvent(event.id)"> <i class="fas fa-trash-alt"></i> </button>
+                            <button type="button" class="btn btn-primary float-right" > <i class="far fa-edit"></i> </button>
+                            
+                        </div>
+
                     </div>
                     
                     
@@ -133,6 +137,8 @@ export default {
         //Show all events in exact place and day
         showEvents: function(){
 
+        //this.todays_date =
+
         const foundEvents = this.events.filter( event => event.place_id == this.place_id);
         this.show_events = foundEvents.filter(event => this.getDate(event.time_from) == this.getDate(this.todays_date));
         this.$emit('getDate', this.todays_date.toISOString());
@@ -165,32 +171,36 @@ export default {
 
 
         //Gets id of place and shows information
-        setId: function(id){
-            this.todays_date = new Date();
+        fetchSpot: function(id){
 
-            this.place_id = id;
-            var foundEvents = this.events.filter( event => event.place_id == this.place_id);
-            this.show_events = foundEvents.filter(event => this.getDate(event.time_from) == this.getDate(this.todays_date));
-            console.log("FOUND EVENTS:  " + foundEvents);
+            this.place_id = id; // gets the place where we looking at
 
-            this.highlighted = {
-            dates:null,
-            };
-            var highlightedDays = []; 
+            fetch('api/events')
+            .then(res => res.json())
+            .then(res => {
+            
+                //Shows all events which are on that spot and and that day
+                this.showEvents();
+    
+                //Highlights all days when events happening
+                var highlightedDays = []; 
 
-            foundEvents.forEach(function(event) {
+                var foundEvents = this.events.filter( event => event.place_id == this.place_id);
+                
+                this.highlighted = {
+                dates:null,
+                };
 
-                var date = new Date(event.time_from);
+                foundEvents.forEach(function(event) {
+                    var date = new Date(event.time_from);
+                    highlightedDays.push(date);
+                });
 
-                console.log("data:  " + date);
+                this.highlighted = {
+                dates:highlightedDays,
+                };
+            })
 
-                highlightedDays.push(date);
-
-            });
-
-            this.highlighted = {
-            dates:highlightedDays,
-            };
         },
 
 
@@ -273,9 +283,13 @@ export default {
                 .then(res => res.json())
                 .then(data => {
 
-                    this.fetchEvents();
-                    this.showEvents();
-                    setTimeout(() => {  this.setId(this.place_id); }, 100)
+                    fetch('api/events')
+                    .then(res => res.json())
+                    .then(res => {
+                        this.events = res.data;
+                        this.showEvents();
+                        this.fetchSpot(this.place_id);
+                    })
 
                 })
                 .catch(err => console.log(err));

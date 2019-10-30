@@ -97,8 +97,8 @@
                                 <div v-else>
                                     <div class="alert alert-warning pb-5" role="alert">
                                     If you want to join or add events you need to login / register.<br>
-                                    <a href ="/register" type="button" class="btn btn-outline-secondary float-right ml-2">Register</a>
-                                    <a href ="/login" type="button" class="btn btn-outline-secondary float-right mr-2">Login</a>
+                                    <a href ="/register" class="btn btn-outline-secondary float-right ml-2">Register</a>
+                                    <a href ="/login"  class="btn btn-outline-secondary float-right mr-2">Login</a>
                                     </div>
                                 </div>
 
@@ -237,7 +237,7 @@ export default {
      mounted(){
         $("#geras").animate({left: '45%', opacity: '1', top:'40%', fontSize:'50px'}, 1500, function(){
             $("#geras").animate({left:'43%',top:'39%', fontSize:'80px'}, 500, function(){
-            $("#loading-screen").animate({opacity:0}, 500, function(){
+            $("#loading-screen").animate({opacity:'0', width:'0%'}, 500, function(){
             $("#loading-screen").hide();
         });
         });
@@ -334,7 +334,6 @@ export default {
 
         var d = new Date(this.start);
 
-        this.date =  d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
 
         if(choose == 0){
             var d = new Date(this.start);
@@ -351,8 +350,17 @@ export default {
 
     getDate: function(dateee){
     
+
+    var d = new Date(dateee);
+    this.date =  d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+    d.setMinutes(30);
+    dateee = d.toISOString();
+
+
     this.start = dateee;
     this.end = dateee;
+
+
 
     },
 
@@ -366,7 +374,7 @@ export default {
         const foundPlace = this.places.find( place => place.id == id);
         this.show = foundPlace;
 
-        this.$refs.calendar.setId(this.show.id);
+        this.$refs.calendar.fetchSpot(this.show.id);
 
         const foundType = this.types.find( type => type.id == this.show.type);
         this.type = foundType;
@@ -469,8 +477,7 @@ export default {
         const content = await Response.json();
 
         await this.$refs.calendar.fetchEvents();
-        await this.$refs.calendar.showEvents();
-        setTimeout(() => {  this.$refs.calendar.setId(this.show.id); }, 100)
+        await this.$refs.calendar.fetchSpot(this.show.id);
         
         })();
 

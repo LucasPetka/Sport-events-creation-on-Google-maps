@@ -16,19 +16,9 @@
         <button type="button" class="btn btn-success" v-on:click="loadMarkers()">Refresh markers <i class="fas fa-redo"></i></button>
       </div>
 
-      
-      
-
-
     <gmap-map ref="gmapp" v-on:rightclick="openMenu($event)" v-on:zoom_changed="updateZoom()" v-on:bounds_changed="update_bounds($event)" :center="center" :zoom="zoom_in" v-bind:options="mapStyle"  style="width:100%; height: 94vh;">
-
-      
       <gmap-marker v-for="place in places" :visible="place.visible" :key="place.id" :position="getPosition(place)" @click="center=getPosition(place)" v-on:click="showSpot(place.id)" :icon="icon(place.type)" ></gmap-marker>
-      
-
       <gmap-marker :visible="marker_visibility" :position="getPosition(addNewmark_coordinates)" :icon="{ url: require('../assets/google_maps/new.png')}" ></gmap-marker>
-
-
     </gmap-map>
 
     <div class="dropdown-menu dropdown-menu-sm" id="pointerMenu" style="display:none; position: absolute;">
@@ -56,14 +46,14 @@ export default {
     center: { lat: 55.205448395768826, lng: 23.930382446707117 },
     places: [],
     types: [],
-        place: {
-            id:'',
-            title:'',
-            about:'',
-            lat:'',
-            lng:'',
-            type:'',
-            visible: true
+    place: {
+      id:'',
+      title:'',
+      about:'',
+      lat:'',
+      lng:'',
+      type:'',
+      visible: true
     }, 
     addNewmark_coordinates: { lat: 0.0, lng: 0.0 },
     zoom_in: 8,
@@ -72,6 +62,13 @@ export default {
     marker_visibility: false,   
     mapStyle: {
       styles: mapstyle,
+      options:{
+        fullscreenControl: false,
+        mapTypeControl: false,
+        scaleControl: false,
+        streetViewControl: false,
+        zoomControl: true
+      }
     }
 
     };
@@ -164,9 +161,9 @@ export default {
 
 
     updateZoom: function(){
-        this.$refs.gmapp.$mapPromise.then((map) => {
-                this.zoom_in = map.getZoom();
-            });
+      this.$refs.gmapp.$mapPromise.then((map) => {
+          this.zoom_in = map.getZoom();
+      });
     },
 
 
@@ -187,39 +184,32 @@ export default {
       this.marker_visibility = false;
     },
 
-
-
     creatNewMarker: function(){
-            this.$emit('openForm', this.addNewmark_coordinates);
-            $("#pointerMenu").hide();
-            this.marker_visibility = true;
-      },
+      this.$emit('openForm', this.addNewmark_coordinates);
+      $("#pointerMenu").hide();
+      this.marker_visibility = true;
+    },
 
 
     hidePointer: function(){
       this.marker_visibility = false;
     },
-
-
-
-
         
     showSpot: function(key){
-        const foundPlace = this.places.find( place => place.id == key);
-        this.place = foundPlace;
+      const foundPlace = this.places.find( place => place.id == key);
+      this.place = foundPlace;
 
-        this.smoothZoom(17, this.zoom_in);
+      this.smoothZoom(17, this.zoom_in);
 
-        this.$emit('showSpot', key);
+      this.$emit('showSpot', key);
     },
-
 
 
     getPosition: function(place) {
       return {
         lat: parseFloat(place.lat),
         lng: parseFloat(place.lng)
-    }
+      }
     },
     
 
@@ -241,14 +231,18 @@ export default {
 #refresh_button{
   position: absolute;
   bottom:20px;
-  right:45%;
+  left: 49%;
+  -webkit-transform: translate(-49%, -40%);
+  transform: translate(-49%, -40%);
   z-index: 5;
 }
 
 #geoloc_bar{
   position: absolute;
-  top:70px;
-  right:41%;
+  top:40px;
+  left: 49%;
+  -webkit-transform: translate(-49%, -40%);
+  transform: translate(-49%, -40%);
   z-index: 5;
   background-color: white;
   padding: 10px 15px;
@@ -258,6 +252,7 @@ export default {
 
 #marker {
  display: none;
-  }
+}
+
 
 </style>

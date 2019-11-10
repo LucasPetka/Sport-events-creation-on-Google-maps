@@ -2578,50 +2578,6 @@ module.exports = {
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Alert.vue?vue&type=script&lang=js&":
-/*!****************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Alert.vue?vue&type=script&lang=js& ***!
-  \****************************************************************************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-/* harmony default export */ __webpack_exports__["default"] = ({
-  components: {},
-  data: function data() {
-    return {};
-  },
-  created: function created() {},
-  methods: {
-    eventCreated: function eventCreated() {
-      $('#alertas').show();
-      $('#evSuc').show();
-      setTimeout(function () {
-        $("#evSuc").animate({
-          opacity: 0
-        }, 1500, function () {
-          $('#evSuc').hide();
-          $('#alertas').hide();
-        });
-      }, 1500);
-    }
-  }
-});
-
-/***/ }),
-
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Calendar.vue?vue&type=script&lang=js&":
 /*!*******************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Calendar.vue?vue&type=script&lang=js& ***!
@@ -2945,16 +2901,6 @@ var _assets_options_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/_
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "GoogleMap",
@@ -2988,7 +2934,14 @@ var _assets_options_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/_
       currentPlace: null,
       marker_visibility: false,
       mapStyle: {
-        styles: _assets_options_json__WEBPACK_IMPORTED_MODULE_0__
+        styles: _assets_options_json__WEBPACK_IMPORTED_MODULE_0__,
+        options: {
+          fullscreenControl: false,
+          mapTypeControl: false,
+          scaleControl: false,
+          streetViewControl: false,
+          zoomControl: true
+        }
       }
     };
   },
@@ -3142,14 +3095,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _components_Gmap_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/Gmap.vue */ "./resources/js/components/Gmap.vue");
 /* harmony import */ var _components_Calendar_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/Calendar.vue */ "./resources/js/components/Calendar.vue");
-/* harmony import */ var _components_Alert_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/Alert.vue */ "./resources/js/components/Alert.vue");
-/* harmony import */ var vue_datetime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue-datetime */ "./node_modules/vue-datetime/dist/vue-datetime.js");
-/* harmony import */ var vue_datetime__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(vue_datetime__WEBPACK_IMPORTED_MODULE_4__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+/* harmony import */ var vue_datetime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-datetime */ "./node_modules/vue-datetime/dist/vue-datetime.js");
+/* harmony import */ var vue_datetime__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(vue_datetime__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var vue_notification__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue-notification */ "./node_modules/vue-notification/dist/index.js");
+/* harmony import */ var vue_notification__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(vue_notification__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_5__);
 
 //
 //
@@ -3326,6 +3277,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -3333,9 +3299,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     'Gmap': _components_Gmap_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
-    'Alert': _components_Alert_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
     'Calendar': _components_Calendar_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
-    'datetime': vue_datetime__WEBPACK_IMPORTED_MODULE_4__["Datetime"]
+    'datetime': vue_datetime__WEBPACK_IMPORTED_MODULE_3__["Datetime"],
+    'notifications': vue_notification__WEBPACK_IMPORTED_MODULE_4___default.a
   },
   props: ['status', 'currentUser'],
   data: function data() {
@@ -3416,15 +3382,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, 4000);
     },
     closeShow: function closeShow() {
-      if ($("#createDiv").is(":visible")) {
-        $("#show").slideUp("slow");
-      } else {
-        $("#show").slideUp("slow");
-        $(".popup-content").fadeOut("slow");
-      }
-    },
-    closeSide: function closeSide() {
-      $(".popup-content").fadeOut("slow");
+      $("#map").removeClass("col-lg-8");
+      $("#map").addClass("col-lg-12");
+      $("#side").removeClass("col-lg-4");
+      $('#side').hide();
+      $("#side").addClass("col-lg-0");
     },
     closeAdd: function closeAdd() {
       if ($("#close_show").is(":visible")) {
@@ -3442,7 +3404,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var create = document.querySelector('#createDiv');
 
       if (create.style.display === 'none') {
-        $(".popup-content").fadeIn("slow");
+        $("#map").removeClass("col-lg-12");
+        $("#map").addClass("col-lg-8");
+        $("#side").removeClass("col-lg-0");
+        $('#side').show();
+        $("#side").addClass("col-lg-4");
         $("#createDiv").slideDown("slow");
       }
     },
@@ -3496,9 +3462,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       });
       this.type = foundType;
       var show = document.querySelector('#show');
+      $("#map").removeClass("col-lg-12");
+      $("#map").addClass("col-lg-8");
+      $("#side").removeClass("col-lg-0");
+      $('#side').show();
+      $("#side").addClass("col-lg-4");
 
       if (show.style.display === 'none') {
-        $(".popup-content").fadeIn("slow");
         $("#show").slideDown("slow");
       }
 
@@ -3577,46 +3547,54 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this7 = this;
 
       if (this.edit === false) {
-        _asyncToGenerator(
-        /*#__PURE__*/
-        _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        (function _callee() {
           var Response, content;
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function _callee$(_context) {
             while (1) {
               switch (_context.prev = _context.next) {
                 case 0:
                   _context.next = 2;
-                  return fetch('api/event', {
+                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(fetch('api/event', {
                     method: 'post',
                     body: JSON.stringify(_this7.event),
                     headers: {
                       'Accept': 'application/json',
                       'content-type': 'application/json'
                     }
-                  });
+                  }));
 
                 case 2:
                   Response = _context.sent;
                   _context.next = 5;
-                  return Response.json();
+                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(Response.json());
 
                 case 5:
                   content = _context.sent;
                   _context.next = 8;
-                  return _this7.$refs.calendar.fetchEvents();
+                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(_this7.$refs.calendar.fetchEvents());
 
                 case 8:
                   _context.next = 10;
-                  return _this7.$refs.calendar.fetchSpot(_this7.show.id);
+                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(_this7.$refs.calendar.fetchSpot(_this7.show.id));
 
                 case 10:
                 case "end":
                   return _context.stop();
               }
             }
-          }, _callee);
-        }))();
+          });
+        })();
 
+        this.$notify({
+          group: 'foo',
+          title: 'Important message',
+          text: 'New place has been added!'
+        });
+        vue__WEBPACK_IMPORTED_MODULE_5___default.a.notify({
+          group: 'foo',
+          title: 'Important message',
+          text: 'Hello user! This is a notification!'
+        });
         this.event.place_id = '';
         this.event.title = '';
         this.event.about = '';
@@ -3624,7 +3602,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         this.event.time_until = '';
         this.event.organizator = '';
         this.event.person_id = '';
-        this.$refs.alert.eventCreated();
       } else {}
     }
   }
@@ -8141,7 +8118,7 @@ exports = module.exports = __webpack_require__(/*! ../../css-loader/lib/css-base
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.vdatetime-fade-enter-active,\n.vdatetime-fade-leave-active {\n  transition: opacity .4s;\n}\n\n.vdatetime-fade-enter,\n.vdatetime-fade-leave-to {\n  opacity: 0;\n}\n\n.vdatetime-overlay {\n  z-index: 999;\n  position: fixed;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n  background: rgba(0, 0, 0, .5);\n  transition: opacity .5s;\n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.vdatetime-popup {\n  box-sizing: border-box;\n  z-index: 1000;\n  position: fixed;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  width: 340px;\n  max-width: calc(100% - 30px);\n  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .3);\n  color: #444;\n  font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Roboto\", \"Oxygen\", \"Ubuntu\", \"Cantarell\", \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\", sans-serif;\n  line-height: 1.18;\n  background: #fff;\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0)\n}\n\n.vdatetime-popup * {\n    box-sizing: border-box\n}\n\n.vdatetime-popup__header {\n  padding: 18px 30px;\n  background: #3f51b5;\n  color: #fff;\n  font-size: 32px;\n}\n\n.vdatetime-popup__title {\n  margin-bottom: 8px;\n  font-size: 21px;\n  font-weight: 300;\n}\n\n.vdatetime-popup__year {\n  font-weight: 300;\n  font-size: 14px;\n  opacity: 0.7;\n  cursor: pointer;\n  transition: opacity .3s\n}\n\n.vdatetime-popup__year:hover {\n    opacity: 1\n}\n\n.vdatetime-popup__date {\n  line-height: 1;\n  cursor: pointer;\n}\n\n.vdatetime-popup__actions {\n  padding: 0 20px 10px 30px;\n  text-align: right;\n}\n\n.vdatetime-popup__actions__button {\n  display: inline-block;\n  border: none;\n  padding: 10px 20px;\n  background: transparent;\n  font-size: 16px;\n  color: #3f51b5;\n  cursor: pointer;\n  transition: color .3s\n}\n\n.vdatetime-popup__actions__button:hover {\n    color: #444\n}\n.vdatetime-calendar__navigation--previous:hover svg path, .vdatetime-calendar__navigation--next:hover svg path {\n    stroke: #888;\n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.vdatetime-calendar__navigation,\n.vdatetime-calendar__navigation * {\n  box-sizing: border-box;\n}\n\n.vdatetime-calendar__navigation {\n  position: relative;\n  margin: 15px 0;\n  padding: 0 30px;\n  width: 100%;\n}\n\n.vdatetime-calendar__navigation--previous,\n.vdatetime-calendar__navigation--next {\n  position: absolute;\n  top: 0;\n  padding: 0 5px;\n  width: 18px;\n  cursor: pointer\n}\n\n.vdatetime-calendar__navigation--previous svg, .vdatetime-calendar__navigation--next svg {\n    width: 8px;\n}\n\n.vdatetime-calendar__navigation--previous svg path, .vdatetime-calendar__navigation--next svg path {\n      transition: stroke .3s;\n}\n\n.vdatetime-calendar__navigation--previous {\n  left: 25px;\n}\n\n.vdatetime-calendar__navigation--next {\n  right: 25px;\n  transform: scaleX(-1);\n}\n\n.vdatetime-calendar__current--month {\n  text-align: center;\n  text-transform: capitalize;\n}\n\n.vdatetime-calendar__month {\n  padding: 0 20px;\n  transition: height .2s;\n}\n\n.vdatetime-calendar__month__weekday,\n.vdatetime-calendar__month__day {\n  display: inline-block;\n  width: 14.28571%;\n  line-height: 36px;\n  text-align: center;\n  font-size: 15px;\n  font-weight: 300;\n  cursor: pointer\n}\n\n.vdatetime-calendar__month__weekday > span, .vdatetime-calendar__month__day > span {\n    display: block;\n    width: 100%;\n    position: relative;\n    height: 0;\n    padding: 0 0 100%;\n    overflow: hidden;\n}\n\n.vdatetime-calendar__month__weekday > span > span, .vdatetime-calendar__month__day > span > span {\n      display: flex;\n      justify-content: center;\n      align-items: center;\n      position: absolute;\n      top: 0;\n      right: 0;\n      bottom: 0;\n      left: 0;\n      border: 0;\n      border-radius: 50%;\n      transition: background-color .3s, color .3s;\n}\n\n.vdatetime-calendar__month__weekday {\n  font-weight: bold;\n}\n\n.vdatetime-calendar__month__day:hover > span > span {\n  background: #eee;\n}\n\n.vdatetime-calendar__month__day--selected {\n}\n\n.vdatetime-calendar__month__day--selected > span > span,\n  .vdatetime-calendar__month__day--selected:hover > span > span {\n    color: #fff;\n    background: #3f51b5;\n}\n\n.vdatetime-calendar__month__day--disabled {\n  opacity: 0.4;\n  cursor: default\n}\n\n.vdatetime-calendar__month__day--disabled:hover > span > span {\n    color: inherit;\n    background: transparent;\n}\n.vdatetime-time-picker__list::-webkit-scrollbar-thumb {\n    background: #ccc\n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.vdatetime-time-picker__list::-webkit-scrollbar-track {\n    background: #efefef\n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.vdatetime-time-picker * {\n    box-sizing: border-box\n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.vdatetime-time-picker {\n  box-sizing: border-box\n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.vdatetime-time-picker::after {\n    content: '';\n    display: table;\n    clear: both\n}\n\n.vdatetime-time-picker__list {\n  float: left;\n  width: 50%;\n  height: 305px;\n  overflow-y: scroll\n}\n\n.vdatetime-time-picker__list::-webkit-scrollbar {\n    width: 3px\n}\n\n.vdatetime-time-picker__with-suffix .vdatetime-time-picker__list {\n  width: 33.3%;\n}\n\n.vdatetime-time-picker__item {\n  padding: 10px 0;\n  font-size: 20px;\n  text-align: center;\n  cursor: pointer;\n  transition: font-size .3s;\n}\n\n.vdatetime-time-picker__item:hover {\n  font-size: 32px;\n}\n\n.vdatetime-time-picker__item--selected {\n  color: #3f51b5;\n  font-size: 32px;\n}\n\n.vdatetime-time-picker__item--disabled {\n  opacity: 0.4;\n  cursor: default;\n  font-size: 20px !important;\n}\n.vdatetime-year-picker__list::-webkit-scrollbar-thumb {\n    background: #ccc\n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.vdatetime-year-picker__list::-webkit-scrollbar-track {\n    background: #efefef\n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.vdatetime-year-picker * {\n    box-sizing: border-box\n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.vdatetime-year-picker {\n  box-sizing: border-box\n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.vdatetime-year-picker::after {\n    content: '';\n    display: table;\n    clear: both\n}\n\n.vdatetime-year-picker__list {\n  float: left;\n  width: 100%;\n  height: 305px;\n  overflow-y: scroll\n}\n\n.vdatetime-year-picker__list::-webkit-scrollbar {\n    width: 3px\n}\n\n.vdatetime-year-picker__item {\n  padding: 10px 0;\n  font-size: 20px;\n  text-align: center;\n  cursor: pointer;\n  transition: font-size .3s;\n}\n\n.vdatetime-year-picker__item:hover {\n  font-size: 32px;\n}\n\n.vdatetime-year-picker__item--selected {\n  color: #3f51b5;\n  font-size: 32px;\n}\n\n.vdatetime-year-picker__item--disabled {\n  opacity: 0.4;\n  cursor: default\n}\n\n.vdatetime-year-picker__item--disabled:hover {\n    color: inherit;\n    background: transparent\n}\n.vdatetime-month-picker__list::-webkit-scrollbar-thumb {\n    background: #ccc\n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.vdatetime-month-picker__list::-webkit-scrollbar-track {\n    background: #efefef\n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.vdatetime-month-picker * {\n    box-sizing: border-box\n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.vdatetime-month-picker {\n  box-sizing: border-box\n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.vdatetime-month-picker::after {\n    content: '';\n    display: table;\n    clear: both\n}\n\n.vdatetime-month-picker__list {\n  float: left;\n  width: 100%;\n  height: 305px;\n  overflow-y: scroll\n}\n\n.vdatetime-month-picker__list::-webkit-scrollbar {\n    width: 3px\n}\n\n.vdatetime-month-picker__item {\n  padding: 10px 0;\n  font-size: 20px;\n  text-align: center;\n  cursor: pointer;\n  transition: font-size .3s;\n}\n\n.vdatetime-month-picker__item:hover {\n  font-size: 32px;\n}\n\n.vdatetime-month-picker__item--selected {\n  color: #3f51b5;\n  font-size: 32px;\n}\n\n.vdatetime-month-picker__item--disabled {\n  opacity: 0.4;\n  cursor: default\n}\n\n.vdatetime-month-picker__item--disabled:hover {\n    color: inherit;\n    background: transparent\n}\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.vdatetime-fade-enter-active,\n.vdatetime-fade-leave-active {\n  -webkit-transition: opacity .4s;\n  transition: opacity .4s;\n}\n\n.vdatetime-fade-enter,\n.vdatetime-fade-leave-to {\n  opacity: 0;\n}\n\n.vdatetime-overlay {\n  z-index: 999;\n  position: fixed;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n  background: rgba(0, 0, 0, .5);\n  -webkit-transition: opacity .5s;\n  transition: opacity .5s;\n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.vdatetime-popup {\n  box-sizing: border-box;\n  z-index: 1000;\n  position: fixed;\n  top: 50%;\n  left: 50%;\n  -webkit-transform: translate(-50%, -50%);\n          transform: translate(-50%, -50%);\n  width: 340px;\n  max-width: calc(100% - 30px);\n  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .3);\n  color: #444;\n  font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Roboto\", \"Oxygen\", \"Ubuntu\", \"Cantarell\", \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\", sans-serif;\n  line-height: 1.18;\n  background: #fff;\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0)\n}\n\n.vdatetime-popup * {\n    box-sizing: border-box\n}\n\n.vdatetime-popup__header {\n  padding: 18px 30px;\n  background: #3f51b5;\n  color: #fff;\n  font-size: 32px;\n}\n\n.vdatetime-popup__title {\n  margin-bottom: 8px;\n  font-size: 21px;\n  font-weight: 300;\n}\n\n.vdatetime-popup__year {\n  font-weight: 300;\n  font-size: 14px;\n  opacity: 0.7;\n  cursor: pointer;\n  -webkit-transition: opacity .3s;\n  transition: opacity .3s\n}\n\n.vdatetime-popup__year:hover {\n    opacity: 1\n}\n\n.vdatetime-popup__date {\n  line-height: 1;\n  cursor: pointer;\n}\n\n.vdatetime-popup__actions {\n  padding: 0 20px 10px 30px;\n  text-align: right;\n}\n\n.vdatetime-popup__actions__button {\n  display: inline-block;\n  border: none;\n  padding: 10px 20px;\n  background: transparent;\n  font-size: 16px;\n  color: #3f51b5;\n  cursor: pointer;\n  -webkit-transition: color .3s;\n  transition: color .3s\n}\n\n.vdatetime-popup__actions__button:hover {\n    color: #444\n}\n.vdatetime-calendar__navigation--previous:hover svg path, .vdatetime-calendar__navigation--next:hover svg path {\n    stroke: #888;\n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.vdatetime-calendar__navigation,\n.vdatetime-calendar__navigation * {\n  box-sizing: border-box;\n}\n\n.vdatetime-calendar__navigation {\n  position: relative;\n  margin: 15px 0;\n  padding: 0 30px;\n  width: 100%;\n}\n\n.vdatetime-calendar__navigation--previous,\n.vdatetime-calendar__navigation--next {\n  position: absolute;\n  top: 0;\n  padding: 0 5px;\n  width: 18px;\n  cursor: pointer\n}\n\n.vdatetime-calendar__navigation--previous svg, .vdatetime-calendar__navigation--next svg {\n    width: 8px;\n}\n\n.vdatetime-calendar__navigation--previous svg path, .vdatetime-calendar__navigation--next svg path {\n      -webkit-transition: stroke .3s;\n      transition: stroke .3s;\n}\n\n.vdatetime-calendar__navigation--previous {\n  left: 25px;\n}\n\n.vdatetime-calendar__navigation--next {\n  right: 25px;\n  -webkit-transform: scaleX(-1);\n          transform: scaleX(-1);\n}\n\n.vdatetime-calendar__current--month {\n  text-align: center;\n  text-transform: capitalize;\n}\n\n.vdatetime-calendar__month {\n  padding: 0 20px;\n  -webkit-transition: height .2s;\n  transition: height .2s;\n}\n\n.vdatetime-calendar__month__weekday,\n.vdatetime-calendar__month__day {\n  display: inline-block;\n  width: 14.28571%;\n  line-height: 36px;\n  text-align: center;\n  font-size: 15px;\n  font-weight: 300;\n  cursor: pointer\n}\n\n.vdatetime-calendar__month__weekday > span, .vdatetime-calendar__month__day > span {\n    display: block;\n    width: 100%;\n    position: relative;\n    height: 0;\n    padding: 0 0 100%;\n    overflow: hidden;\n}\n\n.vdatetime-calendar__month__weekday > span > span, .vdatetime-calendar__month__day > span > span {\n      display: -webkit-box;\n      display: flex;\n      -webkit-box-pack: center;\n              justify-content: center;\n      -webkit-box-align: center;\n              align-items: center;\n      position: absolute;\n      top: 0;\n      right: 0;\n      bottom: 0;\n      left: 0;\n      border: 0;\n      border-radius: 50%;\n      -webkit-transition: background-color .3s, color .3s;\n      transition: background-color .3s, color .3s;\n}\n\n.vdatetime-calendar__month__weekday {\n  font-weight: bold;\n}\n\n.vdatetime-calendar__month__day:hover > span > span {\n  background: #eee;\n}\n\n.vdatetime-calendar__month__day--selected {\n}\n\n.vdatetime-calendar__month__day--selected > span > span,\n  .vdatetime-calendar__month__day--selected:hover > span > span {\n    color: #fff;\n    background: #3f51b5;\n}\n\n.vdatetime-calendar__month__day--disabled {\n  opacity: 0.4;\n  cursor: default\n}\n\n.vdatetime-calendar__month__day--disabled:hover > span > span {\n    color: inherit;\n    background: transparent;\n}\n.vdatetime-time-picker__list::-webkit-scrollbar-thumb {\n    background: #ccc\n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.vdatetime-time-picker__list::-webkit-scrollbar-track {\n    background: #efefef\n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.vdatetime-time-picker * {\n    box-sizing: border-box\n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.vdatetime-time-picker {\n  box-sizing: border-box\n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.vdatetime-time-picker::after {\n    content: '';\n    display: table;\n    clear: both\n}\n\n.vdatetime-time-picker__list {\n  float: left;\n  width: 50%;\n  height: 305px;\n  overflow-y: scroll\n}\n\n.vdatetime-time-picker__list::-webkit-scrollbar {\n    width: 3px\n}\n\n.vdatetime-time-picker__with-suffix .vdatetime-time-picker__list {\n  width: 33.3%;\n}\n\n.vdatetime-time-picker__item {\n  padding: 10px 0;\n  font-size: 20px;\n  text-align: center;\n  cursor: pointer;\n  -webkit-transition: font-size .3s;\n  transition: font-size .3s;\n}\n\n.vdatetime-time-picker__item:hover {\n  font-size: 32px;\n}\n\n.vdatetime-time-picker__item--selected {\n  color: #3f51b5;\n  font-size: 32px;\n}\n\n.vdatetime-time-picker__item--disabled {\n  opacity: 0.4;\n  cursor: default;\n  font-size: 20px !important;\n}\n.vdatetime-year-picker__list::-webkit-scrollbar-thumb {\n    background: #ccc\n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.vdatetime-year-picker__list::-webkit-scrollbar-track {\n    background: #efefef\n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.vdatetime-year-picker * {\n    box-sizing: border-box\n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.vdatetime-year-picker {\n  box-sizing: border-box\n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.vdatetime-year-picker::after {\n    content: '';\n    display: table;\n    clear: both\n}\n\n.vdatetime-year-picker__list {\n  float: left;\n  width: 100%;\n  height: 305px;\n  overflow-y: scroll\n}\n\n.vdatetime-year-picker__list::-webkit-scrollbar {\n    width: 3px\n}\n\n.vdatetime-year-picker__item {\n  padding: 10px 0;\n  font-size: 20px;\n  text-align: center;\n  cursor: pointer;\n  -webkit-transition: font-size .3s;\n  transition: font-size .3s;\n}\n\n.vdatetime-year-picker__item:hover {\n  font-size: 32px;\n}\n\n.vdatetime-year-picker__item--selected {\n  color: #3f51b5;\n  font-size: 32px;\n}\n\n.vdatetime-year-picker__item--disabled {\n  opacity: 0.4;\n  cursor: default\n}\n\n.vdatetime-year-picker__item--disabled:hover {\n    color: inherit;\n    background: transparent\n}\n.vdatetime-month-picker__list::-webkit-scrollbar-thumb {\n    background: #ccc\n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.vdatetime-month-picker__list::-webkit-scrollbar-track {\n    background: #efefef\n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.vdatetime-month-picker * {\n    box-sizing: border-box\n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.vdatetime-month-picker {\n  box-sizing: border-box\n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.vdatetime-month-picker::after {\n    content: '';\n    display: table;\n    clear: both\n}\n\n.vdatetime-month-picker__list {\n  float: left;\n  width: 100%;\n  height: 305px;\n  overflow-y: scroll\n}\n\n.vdatetime-month-picker__list::-webkit-scrollbar {\n    width: 3px\n}\n\n.vdatetime-month-picker__item {\n  padding: 10px 0;\n  font-size: 20px;\n  text-align: center;\n  cursor: pointer;\n  -webkit-transition: font-size .3s;\n  transition: font-size .3s;\n}\n\n.vdatetime-month-picker__item:hover {\n  font-size: 32px;\n}\n\n.vdatetime-month-picker__item--selected {\n  color: #3f51b5;\n  font-size: 32px;\n}\n\n.vdatetime-month-picker__item--disabled {\n  opacity: 0.4;\n  cursor: default\n}\n\n.vdatetime-month-picker__item--disabled:hover {\n    color: inherit;\n    background: transparent\n}\n", ""]);
 
 // exports
 
@@ -8217,7 +8194,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n#refresh_button[data-v-bdcfc800]{\n  position: absolute;\n  bottom:20px;\n  right:45%;\n  z-index: 5;\n}\n#geoloc_bar[data-v-bdcfc800]{\n  position: absolute;\n  top:70px;\n  right:41%;\n  z-index: 5;\n  background-color: white;\n  padding: 10px 15px;\n  border-radius: 8px;\n  width: 350px;\n}\n#marker[data-v-bdcfc800] {\n display: none;\n}\n\n", ""]);
+exports.push([module.i, "\n#refresh_button[data-v-bdcfc800]{\n  position: absolute;\n  bottom:20px;\n  left: 49%;\n  -webkit-transform: translate(-49%, -40%);\n  transform: translate(-49%, -40%);\n  z-index: 5;\n}\n#geoloc_bar[data-v-bdcfc800]{\n  position: absolute;\n  top:40px;\n  left: 49%;\n  -webkit-transform: translate(-49%, -40%);\n  transform: translate(-49%, -40%);\n  z-index: 5;\n  background-color: white;\n  padding: 10px 15px;\n  border-radius: 8px;\n  width: 350px;\n}\n#marker[data-v-bdcfc800] {\n display: none;\n}\n\n\n", ""]);
 
 // exports
 
@@ -8236,7 +8213,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n#geras{\n    position: absolute;\n    color:white;\n    font-size: 25px;\n    opacity: 0.1;\n}\n#loading-screen {\n    position: fixed;\n    z-index: 100;\n    background-color: #82cc75;\n    height: 100%;\n    width: 100%;\n}\n.popup-content {\n    display:none;\n    position: fixed;\n    bottom: 110px;\n    right: 25px;\n    z-index: 2;\n    width: 30%;\n    height:75vh;\n    overflow: auto;\n}\n.vdatetime-input{\n    border-radius: 0px;\n    box-shadow: none !important;\n    border: solid 1px #b7b7b7;\n    padding: 8px;\n    color:#6C757D;\n}\n.vdatetime-popup__header {\n    background: #28a745;\n}\n.vdatetime-time-picker__item--selected {\n    color: #28a745;\n}\n.vdatetime-popup__actions__button {\n    color: #28a745;\n}\n@media only screen and (max-width: 900px) {\n#map {\n    width: 100% !important;\n}\n#side_bar{\n    width: 100% !important;\n}\n#show{\n    width: 95% !important;\n}\n#createDiv{\n    width: 95% !important;\n}\n}\n", ""]);
+exports.push([module.i, "\n#sidebar{\n    height: 94vh;\n    overflow-y: auto;\n}\n#geras{\n    position: absolute;\n    color:white;\n    font-size: 25px;\n    opacity: 0.1;\n}\n#loading-screen {\n    position: fixed;\n    z-index: 100;\n    background-color: #82cc75;\n    height: 100%;\n    width: 100%;\n}\n.vdatetime-input{\n    border-radius: 0px;\n    box-shadow: none !important;\n    border: solid 1px #b7b7b7;\n    padding: 8px;\n    color:#6C757D;\n}\n.vdatetime-popup__header {\n    background: #28a745;\n}\n.vdatetime-time-picker__item--selected {\n    color: #28a745;\n}\n.vdatetime-popup__actions__button {\n    color: #28a745;\n}\n@media only screen and (max-width: 900px) {\n#map {\n    width: 100% !important;\n}\n#show{\n    width: 95% !important;\n}\n#createDiv{\n    width: 95% !important;\n}\n#sidebar{\n    height: auto;\n    overflow-y: hidden;\n}\n}\n", ""]);
 
 // exports
 
@@ -36319,6 +36296,174 @@ function (_LuxonError7) {
   return ZoneIsAbstractError;
 }(LuxonError);
 
+/**
+ * @private
+ */
+var n = "numeric",
+    s = "short",
+    l = "long";
+var DATE_SHORT = {
+  year: n,
+  month: n,
+  day: n
+};
+var DATE_MED = {
+  year: n,
+  month: s,
+  day: n
+};
+var DATE_FULL = {
+  year: n,
+  month: l,
+  day: n
+};
+var DATE_HUGE = {
+  year: n,
+  month: l,
+  day: n,
+  weekday: l
+};
+var TIME_SIMPLE = {
+  hour: n,
+  minute: n
+};
+var TIME_WITH_SECONDS = {
+  hour: n,
+  minute: n,
+  second: n
+};
+var TIME_WITH_SHORT_OFFSET = {
+  hour: n,
+  minute: n,
+  second: n,
+  timeZoneName: s
+};
+var TIME_WITH_LONG_OFFSET = {
+  hour: n,
+  minute: n,
+  second: n,
+  timeZoneName: l
+};
+var TIME_24_SIMPLE = {
+  hour: n,
+  minute: n,
+  hour12: false
+};
+/**
+ * {@link toLocaleString}; format like '09:30:23', always 24-hour.
+ */
+
+var TIME_24_WITH_SECONDS = {
+  hour: n,
+  minute: n,
+  second: n,
+  hour12: false
+};
+/**
+ * {@link toLocaleString}; format like '09:30:23 EDT', always 24-hour.
+ */
+
+var TIME_24_WITH_SHORT_OFFSET = {
+  hour: n,
+  minute: n,
+  second: n,
+  hour12: false,
+  timeZoneName: s
+};
+/**
+ * {@link toLocaleString}; format like '09:30:23 Eastern Daylight Time', always 24-hour.
+ */
+
+var TIME_24_WITH_LONG_OFFSET = {
+  hour: n,
+  minute: n,
+  second: n,
+  hour12: false,
+  timeZoneName: l
+};
+/**
+ * {@link toLocaleString}; format like '10/14/1983, 9:30 AM'. Only 12-hour if the locale is.
+ */
+
+var DATETIME_SHORT = {
+  year: n,
+  month: n,
+  day: n,
+  hour: n,
+  minute: n
+};
+/**
+ * {@link toLocaleString}; format like '10/14/1983, 9:30:33 AM'. Only 12-hour if the locale is.
+ */
+
+var DATETIME_SHORT_WITH_SECONDS = {
+  year: n,
+  month: n,
+  day: n,
+  hour: n,
+  minute: n,
+  second: n
+};
+var DATETIME_MED = {
+  year: n,
+  month: s,
+  day: n,
+  hour: n,
+  minute: n
+};
+var DATETIME_MED_WITH_SECONDS = {
+  year: n,
+  month: s,
+  day: n,
+  hour: n,
+  minute: n,
+  second: n
+};
+var DATETIME_MED_WITH_WEEKDAY = {
+  year: n,
+  month: s,
+  day: n,
+  weekday: s,
+  hour: n,
+  minute: n
+};
+var DATETIME_FULL = {
+  year: n,
+  month: l,
+  day: n,
+  hour: n,
+  minute: n,
+  timeZoneName: s
+};
+var DATETIME_FULL_WITH_SECONDS = {
+  year: n,
+  month: l,
+  day: n,
+  hour: n,
+  minute: n,
+  second: n,
+  timeZoneName: s
+};
+var DATETIME_HUGE = {
+  year: n,
+  month: l,
+  day: n,
+  weekday: l,
+  hour: n,
+  minute: n,
+  timeZoneName: l
+};
+var DATETIME_HUGE_WITH_SECONDS = {
+  year: n,
+  month: l,
+  day: n,
+  weekday: l,
+  hour: n,
+  minute: n,
+  second: n,
+  timeZoneName: l
+};
+
 /*
   This is just a junk drawer, containing anything used across multiple classes.
   Because Luxon is small(ish), this should stay small and we won't worry about splitting
@@ -36534,7 +36679,6 @@ function asNumber(value) {
   if (typeof value === "boolean" || value === "" || Number.isNaN(numericValue)) throw new InvalidArgumentError("Invalid unit value " + value);
   return numericValue;
 }
-
 function normalizeObject(obj, normalizer, nonUnitKeys) {
   var normalized = {};
 
@@ -36573,175 +36717,6 @@ function timeObject(obj) {
   return pick(obj, ["hour", "minute", "second", "millisecond"]);
 }
 var ianaRegex = /[A-Za-z_+-]{1,256}(:?\/[A-Za-z_+-]{1,256}(\/[A-Za-z_+-]{1,256})?)?/;
-
-/**
- * @private
- */
-var n = "numeric",
-    s = "short",
-    l = "long",
-    d2 = "2-digit";
-var DATE_SHORT = {
-  year: n,
-  month: n,
-  day: n
-};
-var DATE_MED = {
-  year: n,
-  month: s,
-  day: n
-};
-var DATE_FULL = {
-  year: n,
-  month: l,
-  day: n
-};
-var DATE_HUGE = {
-  year: n,
-  month: l,
-  day: n,
-  weekday: l
-};
-var TIME_SIMPLE = {
-  hour: n,
-  minute: d2
-};
-var TIME_WITH_SECONDS = {
-  hour: n,
-  minute: d2,
-  second: d2
-};
-var TIME_WITH_SHORT_OFFSET = {
-  hour: n,
-  minute: d2,
-  second: d2,
-  timeZoneName: s
-};
-var TIME_WITH_LONG_OFFSET = {
-  hour: n,
-  minute: d2,
-  second: d2,
-  timeZoneName: l
-};
-var TIME_24_SIMPLE = {
-  hour: n,
-  minute: d2,
-  hour12: false
-};
-/**
- * {@link toLocaleString}; format like '09:30:23', always 24-hour.
- */
-
-var TIME_24_WITH_SECONDS = {
-  hour: n,
-  minute: d2,
-  second: d2,
-  hour12: false
-};
-/**
- * {@link toLocaleString}; format like '09:30:23 EDT', always 24-hour.
- */
-
-var TIME_24_WITH_SHORT_OFFSET = {
-  hour: n,
-  minute: d2,
-  second: d2,
-  hour12: false,
-  timeZoneName: s
-};
-/**
- * {@link toLocaleString}; format like '09:30:23 Eastern Daylight Time', always 24-hour.
- */
-
-var TIME_24_WITH_LONG_OFFSET = {
-  hour: n,
-  minute: d2,
-  second: d2,
-  hour12: false,
-  timeZoneName: l
-};
-/**
- * {@link toLocaleString}; format like '10/14/1983, 9:30 AM'. Only 12-hour if the locale is.
- */
-
-var DATETIME_SHORT = {
-  year: n,
-  month: n,
-  day: n,
-  hour: n,
-  minute: d2
-};
-/**
- * {@link toLocaleString}; format like '10/14/1983, 9:30:33 AM'. Only 12-hour if the locale is.
- */
-
-var DATETIME_SHORT_WITH_SECONDS = {
-  year: n,
-  month: n,
-  day: n,
-  hour: n,
-  minute: d2,
-  second: d2
-};
-var DATETIME_MED = {
-  year: n,
-  month: s,
-  day: n,
-  hour: n,
-  minute: d2
-};
-var DATETIME_MED_WITH_SECONDS = {
-  year: n,
-  month: s,
-  day: n,
-  hour: n,
-  minute: d2,
-  second: d2
-};
-var DATETIME_MED_WITH_WEEKDAY = {
-  year: n,
-  month: s,
-  day: n,
-  weekday: s,
-  hour: n,
-  minute: d2
-};
-var DATETIME_FULL = {
-  year: n,
-  month: l,
-  day: n,
-  hour: n,
-  minute: d2,
-  timeZoneName: s
-};
-var DATETIME_FULL_WITH_SECONDS = {
-  year: n,
-  month: l,
-  day: n,
-  hour: n,
-  minute: d2,
-  second: d2,
-  timeZoneName: s
-};
-var DATETIME_HUGE = {
-  year: n,
-  month: l,
-  day: n,
-  weekday: l,
-  hour: n,
-  minute: d2,
-  timeZoneName: l
-};
-var DATETIME_HUGE_WITH_SECONDS = {
-  year: n,
-  month: l,
-  day: n,
-  weekday: l,
-  hour: n,
-  minute: d2,
-  second: d2,
-  timeZoneName: l
-};
 
 function stringify(obj) {
   return JSON.stringify(obj, Object.keys(obj).sort());
@@ -36948,826 +36923,6 @@ function formatString(knownFormat) {
       return dateTimeHuge;
   }
 }
-
-/**
- * @interface
- */
-
-var Zone =
-/*#__PURE__*/
-function () {
-  function Zone() {}
-
-  var _proto = Zone.prototype;
-
-  /**
-   * Returns the offset's common name (such as EST) at the specified timestamp
-   * @abstract
-   * @param {number} ts - Epoch milliseconds for which to get the name
-   * @param {Object} opts - Options to affect the format
-   * @param {string} opts.format - What style of offset to return. Accepts 'long' or 'short'.
-   * @param {string} opts.locale - What locale to return the offset name in.
-   * @return {string}
-   */
-  _proto.offsetName = function offsetName(ts, opts) {
-    throw new ZoneIsAbstractError();
-  }
-  /**
-   * Returns the offset's value as a string
-   * @abstract
-   * @param {number} ts - Epoch milliseconds for which to get the offset
-   * @param {string} format - What style of offset to return.
-   *                          Accepts 'narrow', 'short', or 'techie'. Returning '+6', '+06:00', or '+0600' respectively
-   * @return {string}
-   */
-  ;
-
-  _proto.formatOffset = function formatOffset(ts, format) {
-    throw new ZoneIsAbstractError();
-  }
-  /**
-   * Return the offset in minutes for this zone at the specified timestamp.
-   * @abstract
-   * @param {number} ts - Epoch milliseconds for which to compute the offset
-   * @return {number}
-   */
-  ;
-
-  _proto.offset = function offset(ts) {
-    throw new ZoneIsAbstractError();
-  }
-  /**
-   * Return whether this Zone is equal to another zone
-   * @abstract
-   * @param {Zone} otherZone - the zone to compare
-   * @return {boolean}
-   */
-  ;
-
-  _proto.equals = function equals(otherZone) {
-    throw new ZoneIsAbstractError();
-  }
-  /**
-   * Return whether this Zone is valid.
-   * @abstract
-   * @type {boolean}
-   */
-  ;
-
-  _createClass(Zone, [{
-    key: "type",
-
-    /**
-     * The type of zone
-     * @abstract
-     * @type {string}
-     */
-    get: function get() {
-      throw new ZoneIsAbstractError();
-    }
-    /**
-     * The name of this zone.
-     * @abstract
-     * @type {string}
-     */
-
-  }, {
-    key: "name",
-    get: function get() {
-      throw new ZoneIsAbstractError();
-    }
-    /**
-     * Returns whether the offset is known to be fixed for the whole year.
-     * @abstract
-     * @type {boolean}
-     */
-
-  }, {
-    key: "universal",
-    get: function get() {
-      throw new ZoneIsAbstractError();
-    }
-  }, {
-    key: "isValid",
-    get: function get() {
-      throw new ZoneIsAbstractError();
-    }
-  }]);
-
-  return Zone;
-}();
-
-var singleton = null;
-/**
- * Represents the local zone for this Javascript environment.
- * @implements {Zone}
- */
-
-var LocalZone =
-/*#__PURE__*/
-function (_Zone) {
-  _inheritsLoose(LocalZone, _Zone);
-
-  function LocalZone() {
-    return _Zone.apply(this, arguments) || this;
-  }
-
-  var _proto = LocalZone.prototype;
-
-  /** @override **/
-  _proto.offsetName = function offsetName(ts, _ref) {
-    var format = _ref.format,
-        locale = _ref.locale;
-    return parseZoneInfo(ts, format, locale);
-  }
-  /** @override **/
-  ;
-
-  _proto.formatOffset = function formatOffset$1(ts, format) {
-    return formatOffset(this.offset(ts), format);
-  }
-  /** @override **/
-  ;
-
-  _proto.offset = function offset(ts) {
-    return -new Date(ts).getTimezoneOffset();
-  }
-  /** @override **/
-  ;
-
-  _proto.equals = function equals(otherZone) {
-    return otherZone.type === "local";
-  }
-  /** @override **/
-  ;
-
-  _createClass(LocalZone, [{
-    key: "type",
-
-    /** @override **/
-    get: function get() {
-      return "local";
-    }
-    /** @override **/
-
-  }, {
-    key: "name",
-    get: function get() {
-      if (hasIntl()) {
-        return new Intl.DateTimeFormat().resolvedOptions().timeZone;
-      } else return "local";
-    }
-    /** @override **/
-
-  }, {
-    key: "universal",
-    get: function get() {
-      return false;
-    }
-  }, {
-    key: "isValid",
-    get: function get() {
-      return true;
-    }
-  }], [{
-    key: "instance",
-
-    /**
-     * Get a singleton instance of the local zone
-     * @return {LocalZone}
-     */
-    get: function get() {
-      if (singleton === null) {
-        singleton = new LocalZone();
-      }
-
-      return singleton;
-    }
-  }]);
-
-  return LocalZone;
-}(Zone);
-
-var matchingRegex = RegExp("^" + ianaRegex.source + "$");
-var dtfCache = {};
-
-function makeDTF(zone) {
-  if (!dtfCache[zone]) {
-    dtfCache[zone] = new Intl.DateTimeFormat("en-US", {
-      hour12: false,
-      timeZone: zone,
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit"
-    });
-  }
-
-  return dtfCache[zone];
-}
-
-var typeToPos = {
-  year: 0,
-  month: 1,
-  day: 2,
-  hour: 3,
-  minute: 4,
-  second: 5
-};
-
-function hackyOffset(dtf, date) {
-  var formatted = dtf.format(date).replace(/\u200E/g, ""),
-      parsed = /(\d+)\/(\d+)\/(\d+),? (\d+):(\d+):(\d+)/.exec(formatted),
-      fMonth = parsed[1],
-      fDay = parsed[2],
-      fYear = parsed[3],
-      fHour = parsed[4],
-      fMinute = parsed[5],
-      fSecond = parsed[6];
-  return [fYear, fMonth, fDay, fHour, fMinute, fSecond];
-}
-
-function partsOffset(dtf, date) {
-  var formatted = dtf.formatToParts(date),
-      filled = [];
-
-  for (var i = 0; i < formatted.length; i++) {
-    var _formatted$i = formatted[i],
-        type = _formatted$i.type,
-        value = _formatted$i.value,
-        pos = typeToPos[type];
-
-    if (!isUndefined(pos)) {
-      filled[pos] = parseInt(value, 10);
-    }
-  }
-
-  return filled;
-}
-
-var ianaZoneCache = {};
-/**
- * A zone identified by an IANA identifier, like America/New_York
- * @implements {Zone}
- */
-
-var IANAZone =
-/*#__PURE__*/
-function (_Zone) {
-  _inheritsLoose(IANAZone, _Zone);
-
-  /**
-   * @param {string} name - Zone name
-   * @return {IANAZone}
-   */
-  IANAZone.create = function create(name) {
-    if (!ianaZoneCache[name]) {
-      ianaZoneCache[name] = new IANAZone(name);
-    }
-
-    return ianaZoneCache[name];
-  }
-  /**
-   * Reset local caches. Should only be necessary in testing scenarios.
-   * @return {void}
-   */
-  ;
-
-  IANAZone.resetCache = function resetCache() {
-    ianaZoneCache = {};
-    dtfCache = {};
-  }
-  /**
-   * Returns whether the provided string is a valid specifier. This only checks the string's format, not that the specifier identifies a known zone; see isValidZone for that.
-   * @param {string} s - The string to check validity on
-   * @example IANAZone.isValidSpecifier("America/New_York") //=> true
-   * @example IANAZone.isValidSpecifier("Fantasia/Castle") //=> true
-   * @example IANAZone.isValidSpecifier("Sport~~blorp") //=> false
-   * @return {boolean}
-   */
-  ;
-
-  IANAZone.isValidSpecifier = function isValidSpecifier(s) {
-    return !!(s && s.match(matchingRegex));
-  }
-  /**
-   * Returns whether the provided string identifies a real zone
-   * @param {string} zone - The string to check
-   * @example IANAZone.isValidZone("America/New_York") //=> true
-   * @example IANAZone.isValidZone("Fantasia/Castle") //=> false
-   * @example IANAZone.isValidZone("Sport~~blorp") //=> false
-   * @return {boolean}
-   */
-  ;
-
-  IANAZone.isValidZone = function isValidZone(zone) {
-    try {
-      new Intl.DateTimeFormat("en-US", {
-        timeZone: zone
-      }).format();
-      return true;
-    } catch (e) {
-      return false;
-    }
-  } // Etc/GMT+8 -> -480
-
-  /** @ignore */
-  ;
-
-  IANAZone.parseGMTOffset = function parseGMTOffset(specifier) {
-    if (specifier) {
-      var match = specifier.match(/^Etc\/GMT([+-]\d{1,2})$/i);
-
-      if (match) {
-        return -60 * parseInt(match[1]);
-      }
-    }
-
-    return null;
-  };
-
-  function IANAZone(name) {
-    var _this;
-
-    _this = _Zone.call(this) || this;
-    /** @private **/
-
-    _this.zoneName = name;
-    /** @private **/
-
-    _this.valid = IANAZone.isValidZone(name);
-    return _this;
-  }
-  /** @override **/
-
-
-  var _proto = IANAZone.prototype;
-
-  /** @override **/
-  _proto.offsetName = function offsetName(ts, _ref) {
-    var format = _ref.format,
-        locale = _ref.locale;
-    return parseZoneInfo(ts, format, locale, this.name);
-  }
-  /** @override **/
-  ;
-
-  _proto.formatOffset = function formatOffset$1(ts, format) {
-    return formatOffset(this.offset(ts), format);
-  }
-  /** @override **/
-  ;
-
-  _proto.offset = function offset(ts) {
-    var date = new Date(ts),
-        dtf = makeDTF(this.name),
-        _ref2 = dtf.formatToParts ? partsOffset(dtf, date) : hackyOffset(dtf, date),
-        year = _ref2[0],
-        month = _ref2[1],
-        day = _ref2[2],
-        hour = _ref2[3],
-        minute = _ref2[4],
-        second = _ref2[5];
-
-    var asUTC = objToLocalTS({
-      year: year,
-      month: month,
-      day: day,
-      hour: hour,
-      minute: minute,
-      second: second,
-      millisecond: 0
-    });
-    var asTS = date.valueOf();
-    asTS -= asTS % 1000;
-    return (asUTC - asTS) / (60 * 1000);
-  }
-  /** @override **/
-  ;
-
-  _proto.equals = function equals(otherZone) {
-    return otherZone.type === "iana" && otherZone.name === this.name;
-  }
-  /** @override **/
-  ;
-
-  _createClass(IANAZone, [{
-    key: "type",
-    get: function get() {
-      return "iana";
-    }
-    /** @override **/
-
-  }, {
-    key: "name",
-    get: function get() {
-      return this.zoneName;
-    }
-    /** @override **/
-
-  }, {
-    key: "universal",
-    get: function get() {
-      return false;
-    }
-  }, {
-    key: "isValid",
-    get: function get() {
-      return this.valid;
-    }
-  }]);
-
-  return IANAZone;
-}(Zone);
-
-var singleton$1 = null;
-/**
- * A zone with a fixed offset (i.e. no DST)
- * @implements {Zone}
- */
-
-var FixedOffsetZone =
-/*#__PURE__*/
-function (_Zone) {
-  _inheritsLoose(FixedOffsetZone, _Zone);
-
-  /**
-   * Get an instance with a specified offset
-   * @param {number} offset - The offset in minutes
-   * @return {FixedOffsetZone}
-   */
-  FixedOffsetZone.instance = function instance(offset) {
-    return offset === 0 ? FixedOffsetZone.utcInstance : new FixedOffsetZone(offset);
-  }
-  /**
-   * Get an instance of FixedOffsetZone from a UTC offset string, like "UTC+6"
-   * @param {string} s - The offset string to parse
-   * @example FixedOffsetZone.parseSpecifier("UTC+6")
-   * @example FixedOffsetZone.parseSpecifier("UTC+06")
-   * @example FixedOffsetZone.parseSpecifier("UTC-6:00")
-   * @return {FixedOffsetZone}
-   */
-  ;
-
-  FixedOffsetZone.parseSpecifier = function parseSpecifier(s) {
-    if (s) {
-      var r = s.match(/^utc(?:([+-]\d{1,2})(?::(\d{2}))?)?$/i);
-
-      if (r) {
-        return new FixedOffsetZone(signedOffset(r[1], r[2]));
-      }
-    }
-
-    return null;
-  };
-
-  _createClass(FixedOffsetZone, null, [{
-    key: "utcInstance",
-
-    /**
-     * Get a singleton instance of UTC
-     * @return {FixedOffsetZone}
-     */
-    get: function get() {
-      if (singleton$1 === null) {
-        singleton$1 = new FixedOffsetZone(0);
-      }
-
-      return singleton$1;
-    }
-  }]);
-
-  function FixedOffsetZone(offset) {
-    var _this;
-
-    _this = _Zone.call(this) || this;
-    /** @private **/
-
-    _this.fixed = offset;
-    return _this;
-  }
-  /** @override **/
-
-
-  var _proto = FixedOffsetZone.prototype;
-
-  /** @override **/
-  _proto.offsetName = function offsetName() {
-    return this.name;
-  }
-  /** @override **/
-  ;
-
-  _proto.formatOffset = function formatOffset$1(ts, format) {
-    return formatOffset(this.fixed, format);
-  }
-  /** @override **/
-  ;
-
-  /** @override **/
-  _proto.offset = function offset() {
-    return this.fixed;
-  }
-  /** @override **/
-  ;
-
-  _proto.equals = function equals(otherZone) {
-    return otherZone.type === "fixed" && otherZone.fixed === this.fixed;
-  }
-  /** @override **/
-  ;
-
-  _createClass(FixedOffsetZone, [{
-    key: "type",
-    get: function get() {
-      return "fixed";
-    }
-    /** @override **/
-
-  }, {
-    key: "name",
-    get: function get() {
-      return this.fixed === 0 ? "UTC" : "UTC" + formatOffset(this.fixed, "narrow");
-    }
-  }, {
-    key: "universal",
-    get: function get() {
-      return true;
-    }
-  }, {
-    key: "isValid",
-    get: function get() {
-      return true;
-    }
-  }]);
-
-  return FixedOffsetZone;
-}(Zone);
-
-/**
- * A zone that failed to parse. You should never need to instantiate this.
- * @implements {Zone}
- */
-
-var InvalidZone =
-/*#__PURE__*/
-function (_Zone) {
-  _inheritsLoose(InvalidZone, _Zone);
-
-  function InvalidZone(zoneName) {
-    var _this;
-
-    _this = _Zone.call(this) || this;
-    /**  @private */
-
-    _this.zoneName = zoneName;
-    return _this;
-  }
-  /** @override **/
-
-
-  var _proto = InvalidZone.prototype;
-
-  /** @override **/
-  _proto.offsetName = function offsetName() {
-    return null;
-  }
-  /** @override **/
-  ;
-
-  _proto.formatOffset = function formatOffset() {
-    return "";
-  }
-  /** @override **/
-  ;
-
-  _proto.offset = function offset() {
-    return NaN;
-  }
-  /** @override **/
-  ;
-
-  _proto.equals = function equals() {
-    return false;
-  }
-  /** @override **/
-  ;
-
-  _createClass(InvalidZone, [{
-    key: "type",
-    get: function get() {
-      return "invalid";
-    }
-    /** @override **/
-
-  }, {
-    key: "name",
-    get: function get() {
-      return this.zoneName;
-    }
-    /** @override **/
-
-  }, {
-    key: "universal",
-    get: function get() {
-      return false;
-    }
-  }, {
-    key: "isValid",
-    get: function get() {
-      return false;
-    }
-  }]);
-
-  return InvalidZone;
-}(Zone);
-
-/**
- * @private
- */
-function normalizeZone(input, defaultZone) {
-  var offset;
-
-  if (isUndefined(input) || input === null) {
-    return defaultZone;
-  } else if (input instanceof Zone) {
-    return input;
-  } else if (isString(input)) {
-    var lowered = input.toLowerCase();
-    if (lowered === "local") return defaultZone;else if (lowered === "utc" || lowered === "gmt") return FixedOffsetZone.utcInstance;else if ((offset = IANAZone.parseGMTOffset(input)) != null) {
-      // handle Etc/GMT-4, which V8 chokes on
-      return FixedOffsetZone.instance(offset);
-    } else if (IANAZone.isValidSpecifier(lowered)) return IANAZone.create(input);else return FixedOffsetZone.parseSpecifier(lowered) || new InvalidZone(input);
-  } else if (isNumber(input)) {
-    return FixedOffsetZone.instance(input);
-  } else if (typeof input === "object" && input.offset && typeof input.offset === "number") {
-    // This is dumb, but the instanceof check above doesn't seem to really work
-    // so we're duck checking it
-    return input;
-  } else {
-    return new InvalidZone(input);
-  }
-}
-
-var now = function now() {
-  return Date.now();
-},
-    defaultZone = null,
-    // not setting this directly to LocalZone.instance bc loading order issues
-defaultLocale = null,
-    defaultNumberingSystem = null,
-    defaultOutputCalendar = null,
-    throwOnInvalid = false;
-/**
- * Settings contains static getters and setters that control Luxon's overall behavior. Luxon is a simple library with few options, but the ones it does have live here.
- */
-
-
-var Settings =
-/*#__PURE__*/
-function () {
-  function Settings() {}
-
-  /**
-   * Reset Luxon's global caches. Should only be necessary in testing scenarios.
-   * @return {void}
-   */
-  Settings.resetCaches = function resetCaches() {
-    Locale.resetCache();
-    IANAZone.resetCache();
-  };
-
-  _createClass(Settings, null, [{
-    key: "now",
-
-    /**
-     * Get the callback for returning the current timestamp.
-     * @type {function}
-     */
-    get: function get() {
-      return now;
-    }
-    /**
-     * Set the callback for returning the current timestamp.
-     * The function should return a number, which will be interpreted as an Epoch millisecond count
-     * @type {function}
-     * @example Settings.now = () => Date.now() + 3000 // pretend it is 3 seconds in the future
-     * @example Settings.now = () => 0 // always pretend it's Jan 1, 1970 at midnight in UTC time
-     */
-    ,
-    set: function set(n) {
-      now = n;
-    }
-    /**
-     * Get the default time zone to create DateTimes in.
-     * @type {string}
-     */
-
-  }, {
-    key: "defaultZoneName",
-    get: function get() {
-      return Settings.defaultZone.name;
-    }
-    /**
-     * Set the default time zone to create DateTimes in. Does not affect existing instances.
-     * @type {string}
-     */
-    ,
-    set: function set(z) {
-      if (!z) {
-        defaultZone = null;
-      } else {
-        defaultZone = normalizeZone(z);
-      }
-    }
-    /**
-     * Get the default time zone object to create DateTimes in. Does not affect existing instances.
-     * @type {Zone}
-     */
-
-  }, {
-    key: "defaultZone",
-    get: function get() {
-      return defaultZone || LocalZone.instance;
-    }
-    /**
-     * Get the default locale to create DateTimes with. Does not affect existing instances.
-     * @type {string}
-     */
-
-  }, {
-    key: "defaultLocale",
-    get: function get() {
-      return defaultLocale;
-    }
-    /**
-     * Set the default locale to create DateTimes with. Does not affect existing instances.
-     * @type {string}
-     */
-    ,
-    set: function set(locale) {
-      defaultLocale = locale;
-    }
-    /**
-     * Get the default numbering system to create DateTimes with. Does not affect existing instances.
-     * @type {string}
-     */
-
-  }, {
-    key: "defaultNumberingSystem",
-    get: function get() {
-      return defaultNumberingSystem;
-    }
-    /**
-     * Set the default numbering system to create DateTimes with. Does not affect existing instances.
-     * @type {string}
-     */
-    ,
-    set: function set(numberingSystem) {
-      defaultNumberingSystem = numberingSystem;
-    }
-    /**
-     * Get the default output calendar to create DateTimes with. Does not affect existing instances.
-     * @type {string}
-     */
-
-  }, {
-    key: "defaultOutputCalendar",
-    get: function get() {
-      return defaultOutputCalendar;
-    }
-    /**
-     * Set the default output calendar to create DateTimes with. Does not affect existing instances.
-     * @type {string}
-     */
-    ,
-    set: function set(outputCalendar) {
-      defaultOutputCalendar = outputCalendar;
-    }
-    /**
-     * Get whether Luxon will throw when it encounters invalid DateTimes, Durations, or Intervals
-     * @type {boolean}
-     */
-
-  }, {
-    key: "throwOnInvalid",
-    get: function get() {
-      return throwOnInvalid;
-    }
-    /**
-     * Set whether Luxon will throw when it encounters invalid DateTimes, Durations, or Intervals
-     * @type {boolean}
-     */
-    ,
-    set: function set(t) {
-      throwOnInvalid = t;
-    }
-  }]);
-
-  return Settings;
-}();
 
 function stringifyTokens(splits, tokenToString) {
   var s = "";
@@ -38314,6 +37469,847 @@ function () {
   return Formatter;
 }();
 
+var Invalid =
+/*#__PURE__*/
+function () {
+  function Invalid(reason, explanation) {
+    this.reason = reason;
+    this.explanation = explanation;
+  }
+
+  var _proto = Invalid.prototype;
+
+  _proto.toMessage = function toMessage() {
+    if (this.explanation) {
+      return this.reason + ": " + this.explanation;
+    } else {
+      return this.reason;
+    }
+  };
+
+  return Invalid;
+}();
+
+/**
+ * @interface
+ */
+
+var Zone =
+/*#__PURE__*/
+function () {
+  function Zone() {}
+
+  var _proto = Zone.prototype;
+
+  /**
+   * Returns the offset's common name (such as EST) at the specified timestamp
+   * @abstract
+   * @param {number} ts - Epoch milliseconds for which to get the name
+   * @param {Object} opts - Options to affect the format
+   * @param {string} opts.format - What style of offset to return. Accepts 'long' or 'short'.
+   * @param {string} opts.locale - What locale to return the offset name in.
+   * @return {string}
+   */
+  _proto.offsetName = function offsetName(ts, opts) {
+    throw new ZoneIsAbstractError();
+  }
+  /**
+   * Returns the offset's value as a string
+   * @abstract
+   * @param {number} ts - Epoch milliseconds for which to get the offset
+   * @param {string} format - What style of offset to return.
+   *                          Accepts 'narrow', 'short', or 'techie'. Returning '+6', '+06:00', or '+0600' respectively
+   * @return {string}
+   */
+  ;
+
+  _proto.formatOffset = function formatOffset(ts, format) {
+    throw new ZoneIsAbstractError();
+  }
+  /**
+   * Return the offset in minutes for this zone at the specified timestamp.
+   * @abstract
+   * @param {number} ts - Epoch milliseconds for which to compute the offset
+   * @return {number}
+   */
+  ;
+
+  _proto.offset = function offset(ts) {
+    throw new ZoneIsAbstractError();
+  }
+  /**
+   * Return whether this Zone is equal to another zone
+   * @abstract
+   * @param {Zone} otherZone - the zone to compare
+   * @return {boolean}
+   */
+  ;
+
+  _proto.equals = function equals(otherZone) {
+    throw new ZoneIsAbstractError();
+  }
+  /**
+   * Return whether this Zone is valid.
+   * @abstract
+   * @type {boolean}
+   */
+  ;
+
+  _createClass(Zone, [{
+    key: "type",
+
+    /**
+     * The type of zone
+     * @abstract
+     * @type {string}
+     */
+    get: function get() {
+      throw new ZoneIsAbstractError();
+    }
+    /**
+     * The name of this zone.
+     * @abstract
+     * @type {string}
+     */
+
+  }, {
+    key: "name",
+    get: function get() {
+      throw new ZoneIsAbstractError();
+    }
+    /**
+     * Returns whether the offset is known to be fixed for the whole year.
+     * @abstract
+     * @type {boolean}
+     */
+
+  }, {
+    key: "universal",
+    get: function get() {
+      throw new ZoneIsAbstractError();
+    }
+  }, {
+    key: "isValid",
+    get: function get() {
+      throw new ZoneIsAbstractError();
+    }
+  }]);
+
+  return Zone;
+}();
+
+var singleton = null;
+/**
+ * Represents the local zone for this Javascript environment.
+ * @implements {Zone}
+ */
+
+var LocalZone =
+/*#__PURE__*/
+function (_Zone) {
+  _inheritsLoose(LocalZone, _Zone);
+
+  function LocalZone() {
+    return _Zone.apply(this, arguments) || this;
+  }
+
+  var _proto = LocalZone.prototype;
+
+  /** @override **/
+  _proto.offsetName = function offsetName(ts, _ref) {
+    var format = _ref.format,
+        locale = _ref.locale;
+    return parseZoneInfo(ts, format, locale);
+  }
+  /** @override **/
+  ;
+
+  _proto.formatOffset = function formatOffset$1(ts, format) {
+    return formatOffset(this.offset(ts), format);
+  }
+  /** @override **/
+  ;
+
+  _proto.offset = function offset(ts) {
+    return -new Date(ts).getTimezoneOffset();
+  }
+  /** @override **/
+  ;
+
+  _proto.equals = function equals(otherZone) {
+    return otherZone.type === "local";
+  }
+  /** @override **/
+  ;
+
+  _createClass(LocalZone, [{
+    key: "type",
+
+    /** @override **/
+    get: function get() {
+      return "local";
+    }
+    /** @override **/
+
+  }, {
+    key: "name",
+    get: function get() {
+      if (hasIntl()) {
+        return new Intl.DateTimeFormat().resolvedOptions().timeZone;
+      } else return "local";
+    }
+    /** @override **/
+
+  }, {
+    key: "universal",
+    get: function get() {
+      return false;
+    }
+  }, {
+    key: "isValid",
+    get: function get() {
+      return true;
+    }
+  }], [{
+    key: "instance",
+
+    /**
+     * Get a singleton instance of the local zone
+     * @return {LocalZone}
+     */
+    get: function get() {
+      if (singleton === null) {
+        singleton = new LocalZone();
+      }
+
+      return singleton;
+    }
+  }]);
+
+  return LocalZone;
+}(Zone);
+
+var matchingRegex = RegExp("^" + ianaRegex.source + "$");
+var dtfCache = {};
+
+function makeDTF(zone) {
+  if (!dtfCache[zone]) {
+    dtfCache[zone] = new Intl.DateTimeFormat("en-US", {
+      hour12: false,
+      timeZone: zone,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit"
+    });
+  }
+
+  return dtfCache[zone];
+}
+
+var typeToPos = {
+  year: 0,
+  month: 1,
+  day: 2,
+  hour: 3,
+  minute: 4,
+  second: 5
+};
+
+function hackyOffset(dtf, date) {
+  var formatted = dtf.format(date).replace(/\u200E/g, ""),
+      parsed = /(\d+)\/(\d+)\/(\d+),? (\d+):(\d+):(\d+)/.exec(formatted),
+      fMonth = parsed[1],
+      fDay = parsed[2],
+      fYear = parsed[3],
+      fHour = parsed[4],
+      fMinute = parsed[5],
+      fSecond = parsed[6];
+  return [fYear, fMonth, fDay, fHour, fMinute, fSecond];
+}
+
+function partsOffset(dtf, date) {
+  var formatted = dtf.formatToParts(date),
+      filled = [];
+
+  for (var i = 0; i < formatted.length; i++) {
+    var _formatted$i = formatted[i],
+        type = _formatted$i.type,
+        value = _formatted$i.value,
+        pos = typeToPos[type];
+
+    if (!isUndefined(pos)) {
+      filled[pos] = parseInt(value, 10);
+    }
+  }
+
+  return filled;
+}
+
+var ianaZoneCache = {};
+/**
+ * A zone identified by an IANA identifier, like America/New_York
+ * @implements {Zone}
+ */
+
+var IANAZone =
+/*#__PURE__*/
+function (_Zone) {
+  _inheritsLoose(IANAZone, _Zone);
+
+  /**
+   * @param {string} name - Zone name
+   * @return {IANAZone}
+   */
+  IANAZone.create = function create(name) {
+    if (!ianaZoneCache[name]) {
+      ianaZoneCache[name] = new IANAZone(name);
+    }
+
+    return ianaZoneCache[name];
+  }
+  /**
+   * Reset local caches. Should only be necessary in testing scenarios.
+   * @return {void}
+   */
+  ;
+
+  IANAZone.resetCache = function resetCache() {
+    ianaZoneCache = {};
+    dtfCache = {};
+  }
+  /**
+   * Returns whether the provided string is a valid specifier. This only checks the string's format, not that the specifier identifies a known zone; see isValidZone for that.
+   * @param {string} s - The string to check validity on
+   * @example IANAZone.isValidSpecifier("America/New_York") //=> true
+   * @example IANAZone.isValidSpecifier("Fantasia/Castle") //=> true
+   * @example IANAZone.isValidSpecifier("Sport~~blorp") //=> false
+   * @return {boolean}
+   */
+  ;
+
+  IANAZone.isValidSpecifier = function isValidSpecifier(s) {
+    return !!(s && s.match(matchingRegex));
+  }
+  /**
+   * Returns whether the provided string identifies a real zone
+   * @param {string} zone - The string to check
+   * @example IANAZone.isValidZone("America/New_York") //=> true
+   * @example IANAZone.isValidZone("Fantasia/Castle") //=> false
+   * @example IANAZone.isValidZone("Sport~~blorp") //=> false
+   * @return {boolean}
+   */
+  ;
+
+  IANAZone.isValidZone = function isValidZone(zone) {
+    try {
+      new Intl.DateTimeFormat("en-US", {
+        timeZone: zone
+      }).format();
+      return true;
+    } catch (e) {
+      return false;
+    }
+  } // Etc/GMT+8 -> -480
+
+  /** @ignore */
+  ;
+
+  IANAZone.parseGMTOffset = function parseGMTOffset(specifier) {
+    if (specifier) {
+      var match = specifier.match(/^Etc\/GMT([+-]\d{1,2})$/i);
+
+      if (match) {
+        return -60 * parseInt(match[1]);
+      }
+    }
+
+    return null;
+  };
+
+  function IANAZone(name) {
+    var _this;
+
+    _this = _Zone.call(this) || this;
+    /** @private **/
+
+    _this.zoneName = name;
+    /** @private **/
+
+    _this.valid = IANAZone.isValidZone(name);
+    return _this;
+  }
+  /** @override **/
+
+
+  var _proto = IANAZone.prototype;
+
+  /** @override **/
+  _proto.offsetName = function offsetName(ts, _ref) {
+    var format = _ref.format,
+        locale = _ref.locale;
+    return parseZoneInfo(ts, format, locale, this.name);
+  }
+  /** @override **/
+  ;
+
+  _proto.formatOffset = function formatOffset$1(ts, format) {
+    return formatOffset(this.offset(ts), format);
+  }
+  /** @override **/
+  ;
+
+  _proto.offset = function offset(ts) {
+    var date = new Date(ts),
+        dtf = makeDTF(this.name),
+        _ref2 = dtf.formatToParts ? partsOffset(dtf, date) : hackyOffset(dtf, date),
+        year = _ref2[0],
+        month = _ref2[1],
+        day = _ref2[2],
+        hour = _ref2[3],
+        minute = _ref2[4],
+        second = _ref2[5];
+
+    var asUTC = objToLocalTS({
+      year: year,
+      month: month,
+      day: day,
+      hour: hour,
+      minute: minute,
+      second: second,
+      millisecond: 0
+    });
+    var asTS = date.valueOf();
+    asTS -= asTS % 1000;
+    return (asUTC - asTS) / (60 * 1000);
+  }
+  /** @override **/
+  ;
+
+  _proto.equals = function equals(otherZone) {
+    return otherZone.type === "iana" && otherZone.name === this.name;
+  }
+  /** @override **/
+  ;
+
+  _createClass(IANAZone, [{
+    key: "type",
+    get: function get() {
+      return "iana";
+    }
+    /** @override **/
+
+  }, {
+    key: "name",
+    get: function get() {
+      return this.zoneName;
+    }
+    /** @override **/
+
+  }, {
+    key: "universal",
+    get: function get() {
+      return false;
+    }
+  }, {
+    key: "isValid",
+    get: function get() {
+      return this.valid;
+    }
+  }]);
+
+  return IANAZone;
+}(Zone);
+
+var singleton$1 = null;
+/**
+ * A zone with a fixed offset (meaning no DST)
+ * @implements {Zone}
+ */
+
+var FixedOffsetZone =
+/*#__PURE__*/
+function (_Zone) {
+  _inheritsLoose(FixedOffsetZone, _Zone);
+
+  /**
+   * Get an instance with a specified offset
+   * @param {number} offset - The offset in minutes
+   * @return {FixedOffsetZone}
+   */
+  FixedOffsetZone.instance = function instance(offset) {
+    return offset === 0 ? FixedOffsetZone.utcInstance : new FixedOffsetZone(offset);
+  }
+  /**
+   * Get an instance of FixedOffsetZone from a UTC offset string, like "UTC+6"
+   * @param {string} s - The offset string to parse
+   * @example FixedOffsetZone.parseSpecifier("UTC+6")
+   * @example FixedOffsetZone.parseSpecifier("UTC+06")
+   * @example FixedOffsetZone.parseSpecifier("UTC-6:00")
+   * @return {FixedOffsetZone}
+   */
+  ;
+
+  FixedOffsetZone.parseSpecifier = function parseSpecifier(s) {
+    if (s) {
+      var r = s.match(/^utc(?:([+-]\d{1,2})(?::(\d{2}))?)?$/i);
+
+      if (r) {
+        return new FixedOffsetZone(signedOffset(r[1], r[2]));
+      }
+    }
+
+    return null;
+  };
+
+  _createClass(FixedOffsetZone, null, [{
+    key: "utcInstance",
+
+    /**
+     * Get a singleton instance of UTC
+     * @return {FixedOffsetZone}
+     */
+    get: function get() {
+      if (singleton$1 === null) {
+        singleton$1 = new FixedOffsetZone(0);
+      }
+
+      return singleton$1;
+    }
+  }]);
+
+  function FixedOffsetZone(offset) {
+    var _this;
+
+    _this = _Zone.call(this) || this;
+    /** @private **/
+
+    _this.fixed = offset;
+    return _this;
+  }
+  /** @override **/
+
+
+  var _proto = FixedOffsetZone.prototype;
+
+  /** @override **/
+  _proto.offsetName = function offsetName() {
+    return this.name;
+  }
+  /** @override **/
+  ;
+
+  _proto.formatOffset = function formatOffset$1(ts, format) {
+    return formatOffset(this.fixed, format);
+  }
+  /** @override **/
+  ;
+
+  /** @override **/
+  _proto.offset = function offset() {
+    return this.fixed;
+  }
+  /** @override **/
+  ;
+
+  _proto.equals = function equals(otherZone) {
+    return otherZone.type === "fixed" && otherZone.fixed === this.fixed;
+  }
+  /** @override **/
+  ;
+
+  _createClass(FixedOffsetZone, [{
+    key: "type",
+    get: function get() {
+      return "fixed";
+    }
+    /** @override **/
+
+  }, {
+    key: "name",
+    get: function get() {
+      return this.fixed === 0 ? "UTC" : "UTC" + formatOffset(this.fixed, "narrow");
+    }
+  }, {
+    key: "universal",
+    get: function get() {
+      return true;
+    }
+  }, {
+    key: "isValid",
+    get: function get() {
+      return true;
+    }
+  }]);
+
+  return FixedOffsetZone;
+}(Zone);
+
+/**
+ * A zone that failed to parse. You should never need to instantiate this.
+ * @implements {Zone}
+ */
+
+var InvalidZone =
+/*#__PURE__*/
+function (_Zone) {
+  _inheritsLoose(InvalidZone, _Zone);
+
+  function InvalidZone(zoneName) {
+    var _this;
+
+    _this = _Zone.call(this) || this;
+    /**  @private */
+
+    _this.zoneName = zoneName;
+    return _this;
+  }
+  /** @override **/
+
+
+  var _proto = InvalidZone.prototype;
+
+  /** @override **/
+  _proto.offsetName = function offsetName() {
+    return null;
+  }
+  /** @override **/
+  ;
+
+  _proto.formatOffset = function formatOffset() {
+    return "";
+  }
+  /** @override **/
+  ;
+
+  _proto.offset = function offset() {
+    return NaN;
+  }
+  /** @override **/
+  ;
+
+  _proto.equals = function equals() {
+    return false;
+  }
+  /** @override **/
+  ;
+
+  _createClass(InvalidZone, [{
+    key: "type",
+    get: function get() {
+      return "invalid";
+    }
+    /** @override **/
+
+  }, {
+    key: "name",
+    get: function get() {
+      return this.zoneName;
+    }
+    /** @override **/
+
+  }, {
+    key: "universal",
+    get: function get() {
+      return false;
+    }
+  }, {
+    key: "isValid",
+    get: function get() {
+      return false;
+    }
+  }]);
+
+  return InvalidZone;
+}(Zone);
+
+/**
+ * @private
+ */
+function normalizeZone(input, defaultZone) {
+  var offset;
+
+  if (isUndefined(input) || input === null) {
+    return defaultZone;
+  } else if (input instanceof Zone) {
+    return input;
+  } else if (isString(input)) {
+    var lowered = input.toLowerCase();
+    if (lowered === "local") return defaultZone;else if (lowered === "utc" || lowered === "gmt") return FixedOffsetZone.utcInstance;else if ((offset = IANAZone.parseGMTOffset(input)) != null) {
+      // handle Etc/GMT-4, which V8 chokes on
+      return FixedOffsetZone.instance(offset);
+    } else if (IANAZone.isValidSpecifier(lowered)) return IANAZone.create(input);else return FixedOffsetZone.parseSpecifier(lowered) || new InvalidZone(input);
+  } else if (isNumber(input)) {
+    return FixedOffsetZone.instance(input);
+  } else if (typeof input === "object" && input.offset && typeof input.offset === "number") {
+    // This is dumb, but the instanceof check above doesn't seem to really work
+    // so we're duck checking it
+    return input;
+  } else {
+    return new InvalidZone(input);
+  }
+}
+
+var now = function now() {
+  return Date.now();
+},
+    defaultZone = null,
+    // not setting this directly to LocalZone.instance bc loading order issues
+defaultLocale = null,
+    defaultNumberingSystem = null,
+    defaultOutputCalendar = null,
+    throwOnInvalid = false;
+/**
+ * Settings contains static getters and setters that control Luxon's overall behavior. Luxon is a simple library with few options, but the ones it does have live here.
+ */
+
+
+var Settings =
+/*#__PURE__*/
+function () {
+  function Settings() {}
+
+  /**
+   * Reset Luxon's global caches. Should only be necessary in testing scenarios.
+   * @return {void}
+   */
+  Settings.resetCaches = function resetCaches() {
+    Locale.resetCache();
+    IANAZone.resetCache();
+  };
+
+  _createClass(Settings, null, [{
+    key: "now",
+
+    /**
+     * Get the callback for returning the current timestamp.
+     * @type {function}
+     */
+    get: function get() {
+      return now;
+    }
+    /**
+     * Set the callback for returning the current timestamp.
+     * The function should return a number, which will be interpreted as an Epoch millisecond count
+     * @type {function}
+     * @example Settings.now = () => Date.now() + 3000 // pretend it is 3 seconds in the future
+     * @example Settings.now = () => 0 // always pretend it's Jan 1, 1970 at midnight in UTC time
+     */
+    ,
+    set: function set(n) {
+      now = n;
+    }
+    /**
+     * Get the default time zone to create DateTimes in.
+     * @type {string}
+     */
+
+  }, {
+    key: "defaultZoneName",
+    get: function get() {
+      return Settings.defaultZone.name;
+    }
+    /**
+     * Set the default time zone to create DateTimes in. Does not affect existing instances.
+     * @type {string}
+     */
+    ,
+    set: function set(z) {
+      if (!z) {
+        defaultZone = null;
+      } else {
+        defaultZone = normalizeZone(z);
+      }
+    }
+    /**
+     * Get the default time zone object to create DateTimes in. Does not affect existing instances.
+     * @type {Zone}
+     */
+
+  }, {
+    key: "defaultZone",
+    get: function get() {
+      return defaultZone || LocalZone.instance;
+    }
+    /**
+     * Get the default locale to create DateTimes with. Does not affect existing instances.
+     * @type {string}
+     */
+
+  }, {
+    key: "defaultLocale",
+    get: function get() {
+      return defaultLocale;
+    }
+    /**
+     * Set the default locale to create DateTimes with. Does not affect existing instances.
+     * @type {string}
+     */
+    ,
+    set: function set(locale) {
+      defaultLocale = locale;
+    }
+    /**
+     * Get the default numbering system to create DateTimes with. Does not affect existing instances.
+     * @type {string}
+     */
+
+  }, {
+    key: "defaultNumberingSystem",
+    get: function get() {
+      return defaultNumberingSystem;
+    }
+    /**
+     * Set the default numbering system to create DateTimes with. Does not affect existing instances.
+     * @type {string}
+     */
+    ,
+    set: function set(numberingSystem) {
+      defaultNumberingSystem = numberingSystem;
+    }
+    /**
+     * Get the default output calendar to create DateTimes with. Does not affect existing instances.
+     * @type {string}
+     */
+
+  }, {
+    key: "defaultOutputCalendar",
+    get: function get() {
+      return defaultOutputCalendar;
+    }
+    /**
+     * Set the default output calendar to create DateTimes with. Does not affect existing instances.
+     * @type {string}
+     */
+    ,
+    set: function set(outputCalendar) {
+      defaultOutputCalendar = outputCalendar;
+    }
+    /**
+     * Get whether Luxon will throw when it encounters invalid DateTimes, Durations, or Intervals
+     * @type {boolean}
+     */
+
+  }, {
+    key: "throwOnInvalid",
+    get: function get() {
+      return throwOnInvalid;
+    }
+    /**
+     * Set whether Luxon will throw when it encounters invalid DateTimes, Durations, or Intervals
+     * @type {boolean}
+     */
+    ,
+    set: function set(t) {
+      throwOnInvalid = t;
+    }
+  }]);
+
+  return Settings;
+}();
+
 var intlDTCache = {};
 
 function getCachedDTF(locString, opts) {
@@ -38334,7 +38330,7 @@ function getCachedDTF(locString, opts) {
 
 var intlNumCache = {};
 
-function getCachendINF(locString, opts) {
+function getCachedINF(locString, opts) {
   if (opts === void 0) {
     opts = {};
   }
@@ -38352,7 +38348,7 @@ function getCachendINF(locString, opts) {
 
 var intlRelCache = {};
 
-function getCachendRTF(locString, opts) {
+function getCachedRTF(locString, opts) {
   if (opts === void 0) {
     opts = {};
   }
@@ -38493,7 +38489,7 @@ function () {
         useGrouping: false
       };
       if (opts.padTo > 0) intlOpts.minimumIntegerDigits = opts.padTo;
-      this.inf = getCachendINF(intl, intlOpts);
+      this.inf = getCachedINF(intl, intlOpts);
     }
   }
 
@@ -38611,7 +38607,7 @@ function () {
     }, opts);
 
     if (!isEnglish && hasRelative()) {
-      this.rtf = getCachendRTF(intl, opts);
+      this.rtf = getCachedRTF(intl, opts);
     }
   }
 
@@ -39201,27 +39197,6 @@ function parseSQL(s) {
   return parse(s, [sqlYmdWithTimeExtensionRegex, extractISOYmdTimeOffsetAndIANAZone], [sqlTimeCombinedRegex, extractISOTimeOffsetAndIANAZone]);
 }
 
-var Invalid =
-/*#__PURE__*/
-function () {
-  function Invalid(reason, explanation) {
-    this.reason = reason;
-    this.explanation = explanation;
-  }
-
-  var _proto = Invalid.prototype;
-
-  _proto.toMessage = function toMessage() {
-    if (this.explanation) {
-      return this.reason + ": " + this.explanation;
-    } else {
-      return this.reason;
-    }
-  };
-
-  return Invalid;
-}();
-
 var INVALID = "Invalid Duration"; // unit conversion constants
 
 var lowOrderMatrix = {
@@ -39636,7 +39611,9 @@ function () {
     if (this.hours !== 0 || this.minutes !== 0 || this.seconds !== 0 || this.milliseconds !== 0) s += "T";
     if (this.hours !== 0) s += this.hours + "H";
     if (this.minutes !== 0) s += this.minutes + "M";
-    if (this.seconds !== 0 || this.milliseconds !== 0) s += this.seconds + this.milliseconds / 1000 + "S";
+    if (this.seconds !== 0 || this.milliseconds !== 0) // this will handle "floating point madness" by removing extra decimal places
+      // https://stackoverflow.com/questions/588004/is-floating-point-math-broken
+      s += roundTo(this.seconds + this.milliseconds / 1000, 3) + "S";
     if (s === "P") s += "T0S";
     return s;
   }
@@ -39679,8 +39656,19 @@ function () {
     var dur = friendlyDuration(duration),
         result = {};
 
-    for (var _i = 0, _orderedUnits = orderedUnits; _i < _orderedUnits.length; _i++) {
-      var k = _orderedUnits[_i];
+    for (var _iterator = orderedUnits, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
+      var _ref;
+
+      if (_isArray) {
+        if (_i >= _iterator.length) break;
+        _ref = _iterator[_i++];
+      } else {
+        _i = _iterator.next();
+        if (_i.done) break;
+        _ref = _i.value;
+      }
+
+      var k = _ref;
 
       if (hasOwnProperty(dur.values, k) || hasOwnProperty(this.values, k)) {
         result[k] = dur.get(k) + this.get(k);
@@ -39702,6 +39690,28 @@ function () {
     if (!this.isValid) return this;
     var dur = friendlyDuration(duration);
     return this.plus(dur.negate());
+  }
+  /**
+   * Scale this Duration by the specified amount. Return a newly-constructed Duration.
+   * @param {function} fn - The function to apply to each unit. Arity is 1 or 2: the value of the unit and, optionally, the unit name. Must return a number.
+   * @example Duration.fromObject({ hours: 1, minutes: 30 }).mapUnit(x => x * 2) //=> { hours: 2, minutes: 60 }
+   * @example Duration.fromObject({ hours: 1, minutes: 30 }).mapUnit((x, u) => u === "hour" ? x * 2 : x) //=> { hours: 2, minutes: 30 }
+   * @return {Duration}
+   */
+  ;
+
+  _proto.mapUnits = function mapUnits(fn) {
+    if (!this.isValid) return this;
+    var result = {};
+
+    for (var _i2 = 0, _Object$keys = Object.keys(this.values); _i2 < _Object$keys.length; _i2++) {
+      var k = _Object$keys[_i2];
+      result[k] = asNumber(fn(this.values[k], k));
+    }
+
+    return clone(this, {
+      values: result
+    }, true);
   }
   /**
    * Get the value of unit.
@@ -39740,10 +39750,10 @@ function () {
   ;
 
   _proto.reconfigure = function reconfigure(_temp) {
-    var _ref = _temp === void 0 ? {} : _temp,
-        locale = _ref.locale,
-        numberingSystem = _ref.numberingSystem,
-        conversionAccuracy = _ref.conversionAccuracy;
+    var _ref2 = _temp === void 0 ? {} : _temp,
+        locale = _ref2.locale,
+        numberingSystem = _ref2.numberingSystem,
+        conversionAccuracy = _ref2.conversionAccuracy;
 
     var loc = this.loc.clone({
       locale: locale,
@@ -39815,8 +39825,19 @@ function () {
     var lastUnit;
     normalizeValues(this.matrix, vals);
 
-    for (var _i2 = 0, _orderedUnits2 = orderedUnits; _i2 < _orderedUnits2.length; _i2++) {
-      var k = _orderedUnits2[_i2];
+    for (var _iterator2 = orderedUnits, _isArray2 = Array.isArray(_iterator2), _i3 = 0, _iterator2 = _isArray2 ? _iterator2 : _iterator2[Symbol.iterator]();;) {
+      var _ref3;
+
+      if (_isArray2) {
+        if (_i3 >= _iterator2.length) break;
+        _ref3 = _iterator2[_i3++];
+      } else {
+        _i3 = _iterator2.next();
+        if (_i3.done) break;
+        _ref3 = _i3.value;
+      }
+
+      var k = _ref3;
 
       if (units.indexOf(k) >= 0) {
         lastUnit = k;
@@ -39871,8 +39892,8 @@ function () {
     if (!this.isValid) return this;
     var negated = {};
 
-    for (var _i3 = 0, _Object$keys = Object.keys(this.values); _i3 < _Object$keys.length; _i3++) {
-      var k = _Object$keys[_i3];
+    for (var _i4 = 0, _Object$keys2 = Object.keys(this.values); _i4 < _Object$keys2.length; _i4++) {
+      var k = _Object$keys2[_i4];
       negated[k] = -this.values[k];
     }
 
@@ -39901,8 +39922,19 @@ function () {
       return false;
     }
 
-    for (var _i4 = 0, _orderedUnits3 = orderedUnits; _i4 < _orderedUnits3.length; _i4++) {
-      var u = _orderedUnits3[_i4];
+    for (var _iterator3 = orderedUnits, _isArray3 = Array.isArray(_iterator3), _i5 = 0, _iterator3 = _isArray3 ? _iterator3 : _iterator3[Symbol.iterator]();;) {
+      var _ref4;
+
+      if (_isArray3) {
+        if (_i5 >= _iterator3.length) break;
+        _ref4 = _iterator3[_i5++];
+      } else {
+        _i5 = _iterator3.next();
+        if (_i5.done) break;
+        _ref4 = _i5.value;
+      }
+
+      var u = _ref4;
 
       if (this.values[u] !== other.values[u]) {
         return false;
@@ -40083,7 +40115,7 @@ function validateStartEnd(start, end) {
  * * **Interrogation** To analyze the Interval, use {@link count}, {@link length}, {@link hasSame}, {@link contains}, {@link isAfter}, or {@link isBefore}.
  * * **Transformation** To create other Intervals out of this one, use {@link set}, {@link splitAt}, {@link splitBy}, {@link divideEqually}, {@link merge}, {@link xor}, {@link union}, {@link intersection}, or {@link difference}.
  * * **Comparison** To compare this Interval to another one, use {@link equals}, {@link overlaps}, {@link abutsStart}, {@link abutsEnd}, {@link engulfs}
- * * **Output*** To convert the Interval into other representations, see {@link toString}, {@link toISO}, {@link toFormat}, and {@link toDuration}.
+ * * **Output** To convert the Interval into other representations, see {@link toString}, {@link toISO}, {@link toISODate}, {@link toISOTime}, {@link toFormat}, and {@link toDuration}.
  */
 
 
@@ -40480,7 +40512,7 @@ function () {
   /**
    * Return an Interval representing the intersection of this Interval and the specified Interval.
    * Specifically, the resulting Interval has the maximum start time and the minimum end time of the two Intervals.
-   * Returns null if the intersection is empty, i.e., the intervals don't intersect.
+   * Returns null if the intersection is empty, meaning, the intervals don't intersect.
    * @param {Interval} other
    * @return {Interval}
    */
@@ -40642,6 +40674,31 @@ function () {
     return this.s.toISO(opts) + "/" + this.e.toISO(opts);
   }
   /**
+   * Returns an ISO 8601-compliant string representation of date of this Interval.
+   * The time components are ignored.
+   * @see https://en.wikipedia.org/wiki/ISO_8601#Time_intervals
+   * @return {string}
+   */
+  ;
+
+  _proto.toISODate = function toISODate() {
+    if (!this.isValid) return INVALID$1;
+    return this.s.toISODate() + "/" + this.e.toISODate();
+  }
+  /**
+   * Returns an ISO 8601-compliant string representation of time of this Interval.
+   * The date components are ignored.
+   * @see https://en.wikipedia.org/wiki/ISO_8601#Time_intervals
+   * @param {Object} opts - The same options as {@link DateTime.toISO}
+   * @return {string}
+   */
+  ;
+
+  _proto.toISOTime = function toISOTime(opts) {
+    if (!this.isValid) return INVALID$1;
+    return this.s.toISOTime(opts) + "/" + this.e.toISOTime(opts);
+  }
+  /**
    * Returns a string representation of this Interval formatted according to the specified format string.
    * @param {string} dateFormat - the format string. This string formats the start and end time. See {@link DateTime.toFormat} for details.
    * @param {Object} opts - options
@@ -40708,7 +40765,7 @@ function () {
       return this.isValid ? this.e : null;
     }
     /**
-     * Returns whether this Interval's end is at least its start, i.e. that the Interval isn't 'backwards'.
+     * Returns whether this Interval's end is at least its start, meaning that the Interval isn't 'backwards'.
      * @type {boolean}
      */
 
@@ -41347,6 +41404,12 @@ function unitForToken(token, loc) {
       case "m":
         return intUnit(oneOrTwo);
 
+      case "q":
+        return intUnit(oneOrTwo);
+
+      case "qq":
+        return intUnit(two);
+
       case "s":
         return intUnit(oneOrTwo);
 
@@ -41558,6 +41621,9 @@ function dateTimeFromMatches(matches) {
       case "k":
         return "weekYear";
 
+      case "q":
+        return "quarter";
+
       default:
         return null;
     }
@@ -41571,6 +41637,10 @@ function dateTimeFromMatches(matches) {
     zone = IANAZone.create(matches.z);
   } else {
     zone = null;
+  }
+
+  if (!isUndefined(matches.q)) {
+    matches.M = (matches.q - 1) * 3 + 1;
   }
 
   if (!isUndefined(matches.h)) {
@@ -42084,6 +42154,8 @@ function normalizeUnit(unit) {
     hours: "hour",
     minute: "minute",
     minutes: "minute",
+    quarter: "quarter",
+    quarters: "quarter",
     second: "second",
     seconds: "second",
     millisecond: "millisecond",
@@ -42106,8 +42178,19 @@ function normalizeUnit(unit) {
 
 function quickDT(obj, zone) {
   // assume we have the higher-order units
-  for (var _i = 0, _orderedUnits = orderedUnits$1; _i < _orderedUnits.length; _i++) {
-    var u = _orderedUnits[_i];
+  for (var _iterator = orderedUnits$1, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
+    var _ref2;
+
+    if (_isArray) {
+      if (_i >= _iterator.length) break;
+      _ref2 = _iterator[_i++];
+    } else {
+      _i = _iterator.next();
+      if (_i.done) break;
+      _ref2 = _i.value;
+    }
+
+    var u = _ref2;
 
     if (isUndefined(obj[u])) {
       obj[u] = defaultUnitValues[u];
@@ -42154,19 +42237,19 @@ function diffRelative(start, end, opts) {
     return format(differ(opts.unit), opts.unit);
   }
 
-  for (var _iterator = opts.units, _isArray = Array.isArray(_iterator), _i2 = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
-    var _ref2;
+  for (var _iterator2 = opts.units, _isArray2 = Array.isArray(_iterator2), _i2 = 0, _iterator2 = _isArray2 ? _iterator2 : _iterator2[Symbol.iterator]();;) {
+    var _ref3;
 
-    if (_isArray) {
-      if (_i2 >= _iterator.length) break;
-      _ref2 = _iterator[_i2++];
+    if (_isArray2) {
+      if (_i2 >= _iterator2.length) break;
+      _ref3 = _iterator2[_i2++];
     } else {
-      _i2 = _iterator.next();
+      _i2 = _iterator2.next();
       if (_i2.done) break;
-      _ref2 = _i2.value;
+      _ref3 = _i2.value;
     }
 
-    var unit = _ref2;
+    var unit = _ref3;
     var count = differ(unit);
 
     if (Math.abs(count) >= 1) {
@@ -42219,9 +42302,9 @@ function () {
       var unchanged = config.old && config.old.ts === this.ts && config.old.zone.equals(zone);
 
       if (unchanged) {
-        var _ref3 = [config.old.c, config.old.o];
-        c = _ref3[0];
-        o = _ref3[1];
+        var _ref4 = [config.old.c, config.old.o];
+        c = _ref4[0];
+        o = _ref4[1];
       } else {
         c = tsToObj(this.ts, zone.offset(this.ts));
         invalid = Number.isNaN(c.year) ? new Invalid("invalid input") : null;
@@ -42273,9 +42356,9 @@ function () {
    * @param {number} [month=1] - The month, 1-indexed
    * @param {number} [day=1] - The day of the month
    * @param {number} [hour=0] - The hour of the day, in 24-hour time
-   * @param {number} [minute=0] - The minute of the hour, i.e. a number between 0 and 59
-   * @param {number} [second=0] - The second of the minute, i.e. a number between 0 and 59
-   * @param {number} [millisecond=0] - The millisecond of the second, i.e. a number between 0 and 999
+   * @param {number} [minute=0] - The minute of the hour, meaning a number between 0 and 59
+   * @param {number} [second=0] - The second of the minute, meaning a number between 0 and 59
+   * @param {number} [millisecond=0] - The millisecond of the second, meaning a number between 0 and 999
    * @example DateTime.local()                            //~> now
    * @example DateTime.local(2017)                        //~> 2017-01-01T00:00:00
    * @example DateTime.local(2017, 3)                     //~> 2017-03-01T00:00:00
@@ -42311,9 +42394,9 @@ function () {
    * @param {number} [month=1] - The month, 1-indexed
    * @param {number} [day=1] - The day of the month
    * @param {number} [hour=0] - The hour of the day, in 24-hour time
-   * @param {number} [minute=0] - The minute of the hour, i.e. a number between 0 and 59
-   * @param {number} [second=0] - The second of the minute, i.e. a number between 0 and 59
-   * @param {number} [millisecond=0] - The millisecond of the second, i.e. a number between 0 and 999
+   * @param {number} [minute=0] - The minute of the hour, meaning a number between 0 and 59
+   * @param {number} [second=0] - The second of the minute, meaning a number between 0 and 59
+   * @param {number} [millisecond=0] - The millisecond of the second, meaning a number between 0 and 999
    * @example DateTime.utc()                            //~> now
    * @example DateTime.utc(2017)                        //~> 2017-01-01T00:00:00Z
    * @example DateTime.utc(2017, 3)                     //~> 2017-03-01T00:00:00Z
@@ -42377,7 +42460,7 @@ function () {
     });
   }
   /**
-   * Create a DateTime from a number of milliseconds since the epoch (i.e. since 1 January 1970 00:00:00 UTC). Uses the default zone.
+   * Create a DateTime from a number of milliseconds since the epoch (meaning since 1 January 1970 00:00:00 UTC). Uses the default zone.
    * @param {number} milliseconds - a number of milliseconds since 1970 UTC
    * @param {Object} options - configuration options for the DateTime
    * @param {string|Zone} [options.zone='local'] - the zone to place the DateTime into
@@ -42407,7 +42490,7 @@ function () {
     }
   }
   /**
-   * Create a DateTime from a number of seconds since the epoch (i.e. since 1 January 1970 00:00:00 UTC). Uses the default zone.
+   * Create a DateTime from a number of seconds since the epoch (meaning since 1 January 1970 00:00:00 UTC). Uses the default zone.
    * @param {number} seconds - a number of seconds since 1970 UTC
    * @param {Object} options - configuration options for the DateTime
    * @param {string|Zone} [options.zone='local'] - the zone to place the DateTime into
@@ -42513,19 +42596,19 @@ function () {
 
     var foundFirst = false;
 
-    for (var _iterator2 = units, _isArray2 = Array.isArray(_iterator2), _i3 = 0, _iterator2 = _isArray2 ? _iterator2 : _iterator2[Symbol.iterator]();;) {
-      var _ref4;
+    for (var _iterator3 = units, _isArray3 = Array.isArray(_iterator3), _i3 = 0, _iterator3 = _isArray3 ? _iterator3 : _iterator3[Symbol.iterator]();;) {
+      var _ref5;
 
-      if (_isArray2) {
-        if (_i3 >= _iterator2.length) break;
-        _ref4 = _iterator2[_i3++];
+      if (_isArray3) {
+        if (_i3 >= _iterator3.length) break;
+        _ref5 = _iterator3[_i3++];
       } else {
-        _i3 = _iterator2.next();
+        _i3 = _iterator3.next();
         if (_i3.done) break;
-        _ref4 = _i3.value;
+        _ref5 = _i3.value;
       }
 
-      var u = _ref4;
+      var u = _ref5;
       var v = normalized[u];
 
       if (!isUndefined(v)) {
@@ -42866,11 +42949,11 @@ function () {
   ;
 
   _proto.setZone = function setZone(zone, _temp) {
-    var _ref5 = _temp === void 0 ? {} : _temp,
-        _ref5$keepLocalTime = _ref5.keepLocalTime,
-        keepLocalTime = _ref5$keepLocalTime === void 0 ? false : _ref5$keepLocalTime,
-        _ref5$keepCalendarTim = _ref5.keepCalendarTime,
-        keepCalendarTime = _ref5$keepCalendarTim === void 0 ? false : _ref5$keepCalendarTim;
+    var _ref6 = _temp === void 0 ? {} : _temp,
+        _ref6$keepLocalTime = _ref6.keepLocalTime,
+        keepLocalTime = _ref6$keepLocalTime === void 0 ? false : _ref6$keepLocalTime,
+        _ref6$keepCalendarTim = _ref6.keepCalendarTime,
+        keepCalendarTime = _ref6$keepCalendarTim === void 0 ? false : _ref6$keepCalendarTim;
 
     zone = normalizeZone(zone, Settings.defaultZone);
 
@@ -42905,10 +42988,10 @@ function () {
   ;
 
   _proto.reconfigure = function reconfigure(_temp2) {
-    var _ref6 = _temp2 === void 0 ? {} : _temp2,
-        locale = _ref6.locale,
-        numberingSystem = _ref6.numberingSystem,
-        outputCalendar = _ref6.outputCalendar;
+    var _ref7 = _temp2 === void 0 ? {} : _temp2,
+        locale = _ref7.locale,
+        numberingSystem = _ref7.numberingSystem,
+        outputCalendar = _ref7.outputCalendar;
 
     var loc = this.loc.clone({
       locale: locale,
@@ -43065,7 +43148,7 @@ function () {
     return this.set(o);
   }
   /**
-   * "Set" this DateTime to the end (i.e. the last millisecond) of a unit of time
+   * "Set" this DateTime to the end (meaning the last millisecond) of a unit of time
    * @param {string} unit - The unit to go to the end of. Can be 'year', 'month', 'day', 'hour', 'minute', 'second', or 'millisecond'.
    * @example DateTime.local(2014, 3, 3).endOf('month').toISO(); //=> '2014-03-31T23:59:59.999-05:00'
    * @example DateTime.local(2014, 3, 3).endOf('year').toISO(); //=> '2014-12-31T23:59:59.999-05:00'
@@ -43131,7 +43214,7 @@ function () {
     return this.isValid ? Formatter.create(this.loc.clone(opts), opts).formatDateTime(this) : INVALID$2;
   }
   /**
-   * Returns an array of format "parts", i.e. individual tokens along with metadata. This is allows callers to post-process individual sections of the formatted output.
+   * Returns an array of format "parts", meaning individual tokens along with metadata. This is allows callers to post-process individual sections of the formatted output.
    * Defaults to the system's locale if no locale has been specified
    * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat/formatToParts
    * @param opts {Object} - Intl.DateTimeFormat constructor options, same as `toLocaleString`.
@@ -43215,13 +43298,13 @@ function () {
   ;
 
   _proto.toISOTime = function toISOTime(_temp3) {
-    var _ref7 = _temp3 === void 0 ? {} : _temp3,
-        _ref7$suppressMillise = _ref7.suppressMilliseconds,
-        suppressMilliseconds = _ref7$suppressMillise === void 0 ? false : _ref7$suppressMillise,
-        _ref7$suppressSeconds = _ref7.suppressSeconds,
-        suppressSeconds = _ref7$suppressSeconds === void 0 ? false : _ref7$suppressSeconds,
-        _ref7$includeOffset = _ref7.includeOffset,
-        includeOffset = _ref7$includeOffset === void 0 ? true : _ref7$includeOffset;
+    var _ref8 = _temp3 === void 0 ? {} : _temp3,
+        _ref8$suppressMillise = _ref8.suppressMilliseconds,
+        suppressMilliseconds = _ref8$suppressMillise === void 0 ? false : _ref8$suppressMillise,
+        _ref8$suppressSeconds = _ref8.suppressSeconds,
+        suppressSeconds = _ref8$suppressSeconds === void 0 ? false : _ref8$suppressSeconds,
+        _ref8$includeOffset = _ref8.includeOffset,
+        includeOffset = _ref8$includeOffset === void 0 ? true : _ref8$includeOffset;
 
     return toTechTimeFormat(this, {
       suppressSeconds: suppressSeconds,
@@ -43277,11 +43360,11 @@ function () {
   ;
 
   _proto.toSQLTime = function toSQLTime(_temp4) {
-    var _ref8 = _temp4 === void 0 ? {} : _temp4,
-        _ref8$includeOffset = _ref8.includeOffset,
-        includeOffset = _ref8$includeOffset === void 0 ? true : _ref8$includeOffset,
-        _ref8$includeZone = _ref8.includeZone,
-        includeZone = _ref8$includeZone === void 0 ? false : _ref8$includeZone;
+    var _ref9 = _temp4 === void 0 ? {} : _temp4,
+        _ref9$includeOffset = _ref9.includeOffset,
+        includeOffset = _ref9$includeOffset === void 0 ? true : _ref9$includeOffset,
+        _ref9$includeZone = _ref9.includeZone,
+        includeZone = _ref9$includeZone === void 0 ? false : _ref9$includeZone;
 
     return toTechTimeFormat(this, {
       includeOffset: includeOffset,
@@ -43861,7 +43944,7 @@ function () {
       return this.isValid ? possiblyCachedWeekData(this).weekday : NaN;
     }
     /**
-     * Get the ordinal (i.e. the day of the year)
+     * Get the ordinal (meaning the day of the year)
      * @example DateTime.local(2017, 5, 25).ordinal //=> 145
      * @type {number|DateTime}
      */
@@ -45944,7 +46027,7 @@ module.exports = MarkerClusterer
 __webpack_require__.r(__webpack_exports__);
 /* WEBPACK VAR INJECTION */(function(global) {/**!
  * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 1.15.0
+ * @version 1.16.0
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -45966,16 +46049,17 @@ __webpack_require__.r(__webpack_exports__);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined';
+var isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined' && typeof navigator !== 'undefined';
 
-var longerTimeoutBrowsers = ['Edge', 'Trident', 'Firefox'];
-var timeoutDuration = 0;
-for (var i = 0; i < longerTimeoutBrowsers.length; i += 1) {
-  if (isBrowser && navigator.userAgent.indexOf(longerTimeoutBrowsers[i]) >= 0) {
-    timeoutDuration = 1;
-    break;
+var timeoutDuration = function () {
+  var longerTimeoutBrowsers = ['Edge', 'Trident', 'Firefox'];
+  for (var i = 0; i < longerTimeoutBrowsers.length; i += 1) {
+    if (isBrowser && navigator.userAgent.indexOf(longerTimeoutBrowsers[i]) >= 0) {
+      return 1;
+    }
   }
-}
+  return 0;
+}();
 
 function microtaskDebounce(fn) {
   var called = false;
@@ -46093,6 +46177,17 @@ function getScrollParent(element) {
   }
 
   return getScrollParent(getParentNode(element));
+}
+
+/**
+ * Returns the reference node of the reference object, or the reference object itself.
+ * @method
+ * @memberof Popper.Utils
+ * @param {Element|Object} reference - the reference element (the popper will be relative to this)
+ * @returns {Element} parent
+ */
+function getReferenceNode(reference) {
+  return reference && reference.referenceNode ? reference.referenceNode : reference;
 }
 
 var isIE11 = isBrowser && !!(window.MSInputMethodContext && document.documentMode);
@@ -46403,8 +46498,8 @@ function getBoundingClientRect(element) {
 
   // subtract scrollbar size from sizes
   var sizes = element.nodeName === 'HTML' ? getWindowSizes(element.ownerDocument) : {};
-  var width = sizes.width || element.clientWidth || result.right - result.left;
-  var height = sizes.height || element.clientHeight || result.bottom - result.top;
+  var width = sizes.width || element.clientWidth || result.width;
+  var height = sizes.height || element.clientHeight || result.height;
 
   var horizScrollbar = element.offsetWidth - width;
   var vertScrollbar = element.offsetHeight - height;
@@ -46556,7 +46651,7 @@ function getBoundaries(popper, reference, padding, boundariesElement) {
   // NOTE: 1 DOM access here
 
   var boundaries = { top: 0, left: 0 };
-  var offsetParent = fixedPosition ? getFixedPositionOffsetParent(popper) : findCommonOffsetParent(popper, reference);
+  var offsetParent = fixedPosition ? getFixedPositionOffsetParent(popper) : findCommonOffsetParent(popper, getReferenceNode(reference));
 
   // Handle viewport case
   if (boundariesElement === 'viewport') {
@@ -46684,7 +46779,7 @@ function computeAutoPlacement(placement, refRect, popper, reference, boundariesE
 function getReferenceOffsets(state, popper, reference) {
   var fixedPosition = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
 
-  var commonOffsetParent = fixedPosition ? getFixedPositionOffsetParent(popper) : findCommonOffsetParent(popper, reference);
+  var commonOffsetParent = fixedPosition ? getFixedPositionOffsetParent(popper) : findCommonOffsetParent(popper, getReferenceNode(reference));
   return getOffsetRectRelativeToArbitraryNode(reference, commonOffsetParent, fixedPosition);
 }
 
@@ -46946,7 +47041,7 @@ function destroy() {
 
   this.disableEventListeners();
 
-  // remove the popper if user explicity asked for the deletion on destroy
+  // remove the popper if user explicitly asked for the deletion on destroy
   // do not use `remove` because IE11 doesn't support it
   if (this.options.removeOnDestroy) {
     this.popper.parentNode.removeChild(this.popper);
@@ -50887,47 +50982,6 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Alert.vue?vue&type=template&id=7b2bf401&":
-/*!********************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Alert.vue?vue&type=template&id=7b2bf401& ***!
-  \********************************************************************************************************************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { attrs: { id: "alertas" } }, [
-      _c(
-        "div",
-        {
-          staticClass: "alert alert-success m-4",
-          staticStyle: { display: "none" },
-          attrs: { id: "evSuc", role: "alert" }
-        },
-        [_vm._v("\n  Event was successfuly created !\n")]
-      )
-    ])
-  }
-]
-render._withStripped = true
-
-
-
-/***/ }),
-
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Calendar.vue?vue&type=template&id=052a41a9&":
 /*!***********************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Calendar.vue?vue&type=template&id=052a41a9& ***!
@@ -51322,47 +51376,6 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Navbar.vue?vue&type=template&id=6dde423b&":
-/*!*********************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Navbar.vue?vue&type=template&id=6dde423b& ***!
-  \*********************************************************************************************************************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "nav",
-      { staticClass: "navbar navbar-expand-sm navbar-dark bg-info" },
-      [
-        _c("div", { staticClass: "container" }, [
-          _c("a", { staticClass: "navbar-brand", attrs: { href: "#" } }, [
-            _vm._v("LetsGo Admin")
-          ])
-        ])
-      ]
-    )
-  }
-]
-render._withStripped = true
-
-
-
-/***/ }),
-
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Places.vue?vue&type=template&id=6bb0f077&":
 /*!*********************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Places.vue?vue&type=template&id=6bb0f077& ***!
@@ -51378,522 +51391,584 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _vm._m(0),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        staticClass: "row",
-        staticStyle: { width: "100%", padding: "0", margin: "0" }
-      },
-      [
-        _c(
-          "div",
-          { staticStyle: { width: "100%" }, attrs: { id: "map" } },
-          [
-            _c("Gmap", {
-              ref: "gmapp",
-              attrs: { status: _vm.status },
-              on: {
-                showSpot: function($event) {
-                  return _vm.showSpot($event)
-                },
-                openForm: function($event) {
-                  return _vm.openAdd($event)
-                }
-              }
-            })
-          ],
-          1
-        )
-      ]
-    ),
-    _vm._v(" "),
-    _c("div", { staticClass: "card popup-content" }, [
-      _c("div", { staticClass: "card-header" }, [
-        _c(
-          "button",
-          {
-            staticClass: "close",
-            attrs: {
-              type: "button",
-              id: "close_createDiv",
-              "aria-label": "Close"
-            },
-            on: {
-              click: function($event) {
-                return _vm.closeSide()
-              }
-            }
-          },
-          [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
-        ),
-        _vm._v(" "),
-        _c("h6", [_vm._v("Controls")])
-      ]),
+  return _c(
+    "div",
+    [
+      _vm._m(0),
+      _vm._v(" "),
+      _c("notifications", { attrs: { position: "bottom left" } }),
       _vm._v(" "),
       _c(
         "div",
         {
-          staticClass: "card-body",
-          staticStyle: { height: "92%", "overflow-y": "auto" }
+          staticClass: "row",
+          staticStyle: { width: "100%", padding: "0", margin: "0" }
         },
         [
           _c(
             "div",
-            {
-              staticClass: "card m-3",
-              staticStyle: { display: "none", width: "90%" },
-              attrs: { id: "createDiv" }
-            },
+            { staticClass: "col-lg-12 p-0", attrs: { id: "map" } },
             [
-              _c("div", { staticClass: "card-header" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "close",
-                    attrs: {
-                      type: "button",
-                      id: "close_createDiv",
-                      "aria-label": "Close"
-                    },
-                    on: {
-                      click: function($event) {
-                        return _vm.closeAdd()
-                      }
-                    }
+              _c("Gmap", {
+                ref: "gmapp",
+                attrs: { status: _vm.status },
+                on: {
+                  showSpot: function($event) {
+                    return _vm.showSpot($event)
                   },
-                  [
-                    _c("span", { attrs: { "aria-hidden": "true" } }, [
-                      _vm._v("×")
-                    ])
-                  ]
-                ),
-                _vm._v(" "),
-                _c("h6", [_vm._v("Create new Marker")])
-              ]),
-              _vm._v(" "),
-              _c(
-                "form",
-                {
-                  on: {
-                    submit: function($event) {
-                      $event.preventDefault()
-                      return _vm.addPlace($event)
-                    }
+                  openForm: function($event) {
+                    return _vm.openAdd($event)
                   }
-                },
-                [
-                  _c("div", { staticClass: "card-body" }, [
-                    _c("div", { staticClass: "input-group mb-3" }, [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.place.title,
-                            expression: "place.title"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: { type: "text", placeholder: "Title" },
-                        domProps: { value: _vm.place.title },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(_vm.place, "title", $event.target.value)
-                          }
-                        }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "input-group mb-3" }, [
-                      _c("textarea", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.place.about,
-                            expression: "place.about"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: { placeholder: "About..." },
-                        domProps: { value: _vm.place.about },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(_vm.place, "about", $event.target.value)
-                          }
-                        }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "input-group mb-3" }, [
-                      _vm._m(1),
-                      _vm._v(" "),
-                      _c(
-                        "select",
-                        {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.place.type,
-                              expression: "place.type"
-                            }
-                          ],
-                          staticClass: "custom-select",
-                          attrs: { id: "inputGroupSelect01" },
-                          on: {
-                            change: function($event) {
-                              var $$selectedVal = Array.prototype.filter
-                                .call($event.target.options, function(o) {
-                                  return o.selected
-                                })
-                                .map(function(o) {
-                                  var val = "_value" in o ? o._value : o.value
-                                  return val
-                                })
-                              _vm.$set(
-                                _vm.place,
-                                "type",
-                                $event.target.multiple
-                                  ? $$selectedVal
-                                  : $$selectedVal[0]
-                              )
-                            }
-                          }
-                        },
-                        [
-                          _c("option", { attrs: { value: "112" } }, [
-                            _vm._v("Soccer inside")
-                          ]),
-                          _vm._v(" "),
-                          _c("option", { attrs: { value: "111" } }, [
-                            _vm._v("Soccer")
-                          ]),
-                          _vm._v(" "),
-                          _c("option", { attrs: { value: "223" } }, [
-                            _vm._v("Basketball inside")
-                          ]),
-                          _vm._v(" "),
-                          _c("option", { attrs: { value: "222" } }, [
-                            _vm._v("Basketball")
-                          ]),
-                          _vm._v(" "),
-                          _c("option", { attrs: { value: "334" } }, [
-                            _vm._v("Volleyball inside")
-                          ]),
-                          _vm._v(" "),
-                          _c("option", { attrs: { value: "333" } }, [
-                            _vm._v("Voleyball")
-                          ])
-                        ]
-                      )
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _vm._m(2)
-                ]
-              )
-            ]
+                }
+              })
+            ],
+            1
           ),
           _vm._v(" "),
           _c(
             "div",
             {
-              staticClass: "show",
-              staticStyle: {
-                display: "none",
-                width: "100%",
-                height: "auto",
-                "padding-bottom": "150px"
-              },
-              attrs: { id: "show" }
+              staticClass: "col-lg-0 p-0",
+              staticStyle: { display: "none" },
+              attrs: { id: "side" }
             },
             [
-              _c("div", { staticClass: "card m-3" }, [
-                _c("div", { staticClass: "card-header" }, [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "close",
-                      attrs: {
-                        type: "button",
-                        id: "close_show",
-                        "aria-label": "Close"
-                      },
-                      on: {
-                        click: function($event) {
-                          return _vm.closeShow()
-                        }
-                      }
-                    },
-                    [
-                      _c("span", { attrs: { "aria-hidden": "true" } }, [
-                        _vm._v("×")
-                      ])
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c("h6", [_vm._v(_vm._s(_vm.show.title))])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "card-body" }, [
-                  _c("p", { staticClass: "card-text" }, [
-                    _vm._v(_vm._s(_vm.show.about))
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "card-footer text-muted" }, [
-                  _c("p", [_vm._v("Sport type: " + _vm._s(_vm.type.name))]),
-                  _vm._v(" "),
-                  _c("p")
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "card m-3 width:100%; height:100%;" }, [
-                _vm._m(3),
-                _vm._v(" "),
+              _c("div", { attrs: { id: "sidebar" } }, [
                 _c(
                   "div",
-                  { staticClass: "card-body" },
+                  {
+                    staticClass: "card m-3",
+                    staticStyle: { display: "none", width: "90%" },
+                    attrs: { id: "createDiv" }
+                  },
                   [
-                    this.status === 1
-                      ? _c("div", [
-                          _c(
-                            "button",
-                            {
-                              staticClass: "btn btn-outline-danger float-right",
-                              on: {
-                                click: function($event) {
-                                  return _vm.openAddEvent()
-                                }
-                              }
-                            },
-                            [
-                              _vm._v("Add Event "),
-                              _c("i", { staticClass: "fas fa-plus" })
-                            ]
-                          )
-                        ])
-                      : _c("div", [_vm._m(4)]),
-                    _vm._v(" "),
-                    _c("Calendar", {
-                      ref: "calendar",
-                      attrs: {
-                        status: _vm.status,
-                        currentUser: _vm.currentUser
-                      },
-                      on: {
-                        getDate: function($event) {
-                          return _vm.getDate($event)
+                    _c("div", { staticClass: "card-header" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "close",
+                          attrs: {
+                            type: "button",
+                            id: "close_createDiv",
+                            "aria-label": "Close"
+                          },
+                          on: {
+                            click: function($event) {
+                              return _vm.closeAdd()
+                            }
+                          }
                         },
-                        closeAdd: function($event) {
-                          return _vm.closeAddEvent()
-                        }
-                      }
-                    })
-                  ],
-                  1
-                )
-              ]),
-              _vm._v(" "),
-              _c("Alert", { ref: "alert" }),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticClass: "card m-3 width:100%; height:100%;",
-                  staticStyle: { display: "none" },
-                  attrs: { id: "addEvent" }
-                },
-                [
-                  _vm._m(5),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "card-body" }, [
+                        [
+                          _c("span", { attrs: { "aria-hidden": "true" } }, [
+                            _vm._v("×")
+                          ])
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c("h6", [_vm._v("Create new Marker")])
+                    ]),
+                    _vm._v(" "),
                     _c(
                       "form",
                       {
                         on: {
                           submit: function($event) {
                             $event.preventDefault()
-                            return _vm.addEvent($event)
+                            return _vm.addPlace($event)
                           }
                         }
                       },
                       [
-                        _c("div", { staticClass: "form-group" }, [
-                          _c(
-                            "label",
-                            { attrs: { for: "exampleInputEmail1" } },
-                            [_vm._v("Title")]
-                          ),
-                          _vm._v(" "),
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.event.title,
-                                expression: "event.title"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            attrs: {
-                              type: "text",
-                              id: "exampleInputEmail1",
-                              "aria-describedby": "emailHelp",
-                              placeholder: "Enter title"
-                            },
-                            domProps: { value: _vm.event.title },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
+                        _c("div", { staticClass: "card-body" }, [
+                          _c("div", { staticClass: "input-group mb-3" }, [
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.place.title,
+                                  expression: "place.title"
                                 }
-                                _vm.$set(
-                                  _vm.event,
-                                  "title",
-                                  $event.target.value
-                                )
-                              }
-                            }
-                          })
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "form-group" }, [
-                          _c(
-                            "label",
-                            { attrs: { for: "exampleFormControlTextarea1" } },
-                            [_vm._v("About")]
-                          ),
-                          _vm._v(" "),
-                          _c("textarea", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.event.about,
-                                expression: "event.about"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            attrs: {
-                              id: "exampleFormControlTextarea1",
-                              rows: "3"
-                            },
-                            domProps: { value: _vm.event.about },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.$set(
-                                  _vm.event,
-                                  "about",
-                                  $event.target.value
-                                )
-                              }
-                            }
-                          })
-                        ]),
-                        _vm._v(" "),
-                        _c(
-                          "div",
-                          { staticClass: "input-group mb-3" },
-                          [
-                            _c("div", { staticClass: "input-group-prepend" }, [
-                              _c("span", { staticClass: "input-group-text" }, [
-                                _vm._v(_vm._s(_vm.date))
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("datetime", {
-                              attrs: {
-                                type: "time",
-                                id: "start",
-                                format: "HH:mm",
-                                "value-zone": "local",
-                                "minute-step": 10
-                              },
+                              ],
+                              staticClass: "form-control",
+                              attrs: { type: "text", placeholder: "Title" },
+                              domProps: { value: _vm.place.title },
                               on: {
                                 input: function($event) {
-                                  return _vm.parseDate(0)
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.place,
+                                    "title",
+                                    $event.target.value
+                                  )
                                 }
-                              },
-                              model: {
-                                value: _vm.start,
-                                callback: function($$v) {
-                                  _vm.start = $$v
-                                },
-                                expression: "start"
                               }
-                            }),
-                            _vm._v(" "),
-                            _vm._m(6)
-                          ],
-                          1
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "div",
-                          { staticClass: "input-group mb-3" },
-                          [
-                            _c("div", { staticClass: "input-group-prepend" }, [
-                              _c("span", { staticClass: "input-group-text" }, [
-                                _vm._v(_vm._s(_vm.date))
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("datetime", {
-                              attrs: {
-                                type: "time",
-                                id: "end",
-                                format: "HH:mm",
-                                "value-zone": "local",
-                                "minute-step": 10
-                              },
+                            })
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "input-group mb-3" }, [
+                            _c("textarea", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.place.about,
+                                  expression: "place.about"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: { placeholder: "About..." },
+                              domProps: { value: _vm.place.about },
                               on: {
                                 input: function($event) {
-                                  return _vm.parseDate(1)
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.place,
+                                    "about",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            })
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "input-group mb-3" }, [
+                            _vm._m(1),
+                            _vm._v(" "),
+                            _c(
+                              "select",
+                              {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.place.type,
+                                    expression: "place.type"
+                                  }
+                                ],
+                                staticClass: "custom-select",
+                                attrs: { id: "inputGroupSelect01" },
+                                on: {
+                                  change: function($event) {
+                                    var $$selectedVal = Array.prototype.filter
+                                      .call($event.target.options, function(o) {
+                                        return o.selected
+                                      })
+                                      .map(function(o) {
+                                        var val =
+                                          "_value" in o ? o._value : o.value
+                                        return val
+                                      })
+                                    _vm.$set(
+                                      _vm.place,
+                                      "type",
+                                      $event.target.multiple
+                                        ? $$selectedVal
+                                        : $$selectedVal[0]
+                                    )
+                                  }
                                 }
                               },
-                              model: {
-                                value: _vm.end,
-                                callback: function($$v) {
-                                  _vm.end = $$v
-                                },
-                                expression: "end"
-                              }
-                            }),
-                            _vm._v(" "),
-                            _vm._m(7)
-                          ],
-                          1
-                        ),
+                              [
+                                _c("option", { attrs: { value: "112" } }, [
+                                  _vm._v("Soccer inside")
+                                ]),
+                                _vm._v(" "),
+                                _c("option", { attrs: { value: "111" } }, [
+                                  _vm._v("Soccer")
+                                ]),
+                                _vm._v(" "),
+                                _c("option", { attrs: { value: "223" } }, [
+                                  _vm._v("Basketball inside")
+                                ]),
+                                _vm._v(" "),
+                                _c("option", { attrs: { value: "222" } }, [
+                                  _vm._v("Basketball")
+                                ]),
+                                _vm._v(" "),
+                                _c("option", { attrs: { value: "334" } }, [
+                                  _vm._v("Volleyball inside")
+                                ]),
+                                _vm._v(" "),
+                                _c("option", { attrs: { value: "333" } }, [
+                                  _vm._v("Voleyball")
+                                ])
+                              ]
+                            )
+                          ])
+                        ]),
                         _vm._v(" "),
-                        _c("br"),
-                        _vm._v(" "),
-                        _vm._m(8)
+                        _vm._m(2)
                       ]
                     )
-                  ])
-                ]
-              )
-            ],
-            1
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "show",
+                    staticStyle: {
+                      display: "none",
+                      width: "100%",
+                      height: "auto",
+                      "padding-bottom": "150px"
+                    },
+                    attrs: { id: "show" }
+                  },
+                  [
+                    _c(
+                      "div",
+                      { staticClass: "d-flex flex-column bd-highlight mb-3" },
+                      [
+                        _c("div", { staticClass: "p-4 bd-highlight" }, [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "close",
+                              attrs: {
+                                type: "button",
+                                id: "close_show",
+                                "aria-label": "Close"
+                              },
+                              on: {
+                                click: function($event) {
+                                  return _vm.closeShow()
+                                }
+                              }
+                            },
+                            [
+                              _c("span", { attrs: { "aria-hidden": "true" } }, [
+                                _vm._v("×")
+                              ])
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _vm.type.id == "111" || _vm.type.id == "112"
+                            ? _c("div", [
+                                _c("h3", [
+                                  _c("img", {
+                                    attrs: {
+                                      src: __webpack_require__(/*! ../assets/google_maps/soccerball.png */ "./resources/js/assets/google_maps/soccerball.png")
+                                    }
+                                  }),
+                                  _vm._v(" " + _vm._s(_vm.show.title))
+                                ])
+                              ])
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _vm.type.id == "222" || _vm.type.id == "223"
+                            ? _c("div", [
+                                _c("h3", [
+                                  _c("img", {
+                                    attrs: {
+                                      src: __webpack_require__(/*! ../assets/google_maps/basketball.png */ "./resources/js/assets/google_maps/basketball.png")
+                                    }
+                                  }),
+                                  _vm._v(" " + _vm._s(_vm.show.title))
+                                ])
+                              ])
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _vm.type.id == "333" || _vm.type.id == "334"
+                            ? _c("div", [
+                                _c("h3", [
+                                  _c("img", {
+                                    attrs: {
+                                      src: __webpack_require__(/*! ../assets/google_maps/volleyball.png */ "./resources/js/assets/google_maps/volleyball.png")
+                                    }
+                                  }),
+                                  _vm._v(" " + _vm._s(_vm.show.title))
+                                ])
+                              ])
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _c("hr"),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "card-body" }, [
+                            _c("p", { staticClass: "card-text" }, [
+                              _vm._v(_vm._s(_vm.show.about))
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-danger m-2",
+                              on: {
+                                click: function($event) {
+                                  return _vm.deletePlace(_vm.show.id)
+                                }
+                              }
+                            },
+                            [_vm._v("Delete")]
+                          )
+                        ])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "card m-3 width:100%; height:100%;" },
+                      [
+                        _vm._m(3),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "card-body" },
+                          [
+                            this.status === 1
+                              ? _c("div", [
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass:
+                                        "btn btn-outline-danger float-right",
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.openAddEvent()
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _vm._v("Add Event "),
+                                      _c("i", { staticClass: "fas fa-plus" })
+                                    ]
+                                  )
+                                ])
+                              : _c("div", [_vm._m(4)]),
+                            _vm._v(" "),
+                            _c("Calendar", {
+                              ref: "calendar",
+                              attrs: {
+                                status: _vm.status,
+                                currentUser: _vm.currentUser
+                              },
+                              on: {
+                                getDate: function($event) {
+                                  return _vm.getDate($event)
+                                },
+                                closeAdd: function($event) {
+                                  return _vm.closeAddEvent()
+                                }
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass: "card m-3 width:100%; height:100%;",
+                        staticStyle: { display: "none" },
+                        attrs: { id: "addEvent" }
+                      },
+                      [
+                        _vm._m(5),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "card-body" }, [
+                          _c(
+                            "form",
+                            {
+                              on: {
+                                submit: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.addEvent($event)
+                                }
+                              }
+                            },
+                            [
+                              _c("div", { staticClass: "form-group" }, [
+                                _c(
+                                  "label",
+                                  { attrs: { for: "exampleInputEmail1" } },
+                                  [_vm._v("Title")]
+                                ),
+                                _vm._v(" "),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.event.title,
+                                      expression: "event.title"
+                                    }
+                                  ],
+                                  staticClass: "form-control",
+                                  attrs: {
+                                    type: "text",
+                                    id: "exampleInputEmail1",
+                                    "aria-describedby": "emailHelp",
+                                    placeholder: "Enter title"
+                                  },
+                                  domProps: { value: _vm.event.title },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        _vm.event,
+                                        "title",
+                                        $event.target.value
+                                      )
+                                    }
+                                  }
+                                })
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "form-group" }, [
+                                _c(
+                                  "label",
+                                  {
+                                    attrs: {
+                                      for: "exampleFormControlTextarea1"
+                                    }
+                                  },
+                                  [_vm._v("About")]
+                                ),
+                                _vm._v(" "),
+                                _c("textarea", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.event.about,
+                                      expression: "event.about"
+                                    }
+                                  ],
+                                  staticClass: "form-control",
+                                  attrs: {
+                                    id: "exampleFormControlTextarea1",
+                                    rows: "3"
+                                  },
+                                  domProps: { value: _vm.event.about },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        _vm.event,
+                                        "about",
+                                        $event.target.value
+                                      )
+                                    }
+                                  }
+                                })
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                { staticClass: "input-group mb-3" },
+                                [
+                                  _c(
+                                    "div",
+                                    { staticClass: "input-group-prepend" },
+                                    [
+                                      _c(
+                                        "span",
+                                        { staticClass: "input-group-text" },
+                                        [_vm._v(_vm._s(_vm.date))]
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c("datetime", {
+                                    attrs: {
+                                      type: "time",
+                                      id: "start",
+                                      format: "HH:mm",
+                                      "value-zone": "local",
+                                      "minute-step": 10
+                                    },
+                                    on: {
+                                      input: function($event) {
+                                        return _vm.parseDate(0)
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.start,
+                                      callback: function($$v) {
+                                        _vm.start = $$v
+                                      },
+                                      expression: "start"
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _vm._m(6)
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                { staticClass: "input-group mb-3" },
+                                [
+                                  _c(
+                                    "div",
+                                    { staticClass: "input-group-prepend" },
+                                    [
+                                      _c(
+                                        "span",
+                                        { staticClass: "input-group-text" },
+                                        [_vm._v(_vm._s(_vm.date))]
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c("datetime", {
+                                    attrs: {
+                                      type: "time",
+                                      id: "end",
+                                      format: "HH:mm",
+                                      "value-zone": "local",
+                                      "minute-step": 10
+                                    },
+                                    on: {
+                                      input: function($event) {
+                                        return _vm.parseDate(1)
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.end,
+                                      callback: function($$v) {
+                                        _vm.end = $$v
+                                      },
+                                      expression: "end"
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _vm._m(7)
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c("br"),
+                              _vm._v(" "),
+                              _vm._m(8)
+                            ]
+                          )
+                        ])
+                      ]
+                    )
+                  ]
+                )
+              ])
+            ]
           )
         ]
       )
-    ])
-  ])
+    ],
+    1
+  )
 }
 var staticRenderFns = [
   function() {
@@ -51901,7 +51976,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { attrs: { id: "loading-screen" } }, [
-      _c("div", { attrs: { id: "geras" } }, [_vm._v("LetsGo")])
+      _c("div", { attrs: { id: "geras" } }, [_vm._v("MoSi")])
     ])
   },
   function() {
@@ -51938,11 +52013,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "card-header " }, [
-      _c("h6", [
-        _vm._v(
-          "Events\n\n                                    \n                                "
-        )
-      ])
+      _c("h6", [_vm._v("Events")])
     ])
   },
   function() {
@@ -52162,6 +52233,1174 @@ function normalizeComponent (
   }
 }
 
+
+/***/ }),
+
+/***/ "./node_modules/vue-notification/dist/index.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/vue-notification/dist/index.js ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(true)
+		module.exports = factory(__webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js"));
+	else {}
+})(this, function(__WEBPACK_EXTERNAL_MODULE_20__) {
+return /******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// identity function for calling harmony imports with the correct context
+/******/ 	__webpack_require__.i = function(value) { return value; };
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "/dist/";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, exports) {
+
+// this module is a runtime utility for cleaner component module output and will
+// be included in the final webpack user bundle
+
+module.exports = function normalizeComponent (
+  rawScriptExports,
+  compiledTemplate,
+  scopeId,
+  cssModules
+) {
+  var esModule
+  var scriptExports = rawScriptExports = rawScriptExports || {}
+
+  // ES6 modules interop
+  var type = typeof rawScriptExports.default
+  if (type === 'object' || type === 'function') {
+    esModule = rawScriptExports
+    scriptExports = rawScriptExports.default
+  }
+
+  // Vue.extend constructor export interop
+  var options = typeof scriptExports === 'function'
+    ? scriptExports.options
+    : scriptExports
+
+  // render functions
+  if (compiledTemplate) {
+    options.render = compiledTemplate.render
+    options.staticRenderFns = compiledTemplate.staticRenderFns
+  }
+
+  // scopedId
+  if (scopeId) {
+    options._scopeId = scopeId
+  }
+
+  // inject cssModules
+  if (cssModules) {
+    var computed = Object.create(options.computed || null)
+    Object.keys(cssModules).forEach(function (key) {
+      var module = cssModules[key]
+      computed[key] = function () { return module }
+    })
+    options.computed = computed
+  }
+
+  return {
+    esModule: esModule,
+    exports: scriptExports,
+    options: options
+  }
+}
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return events; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
+
+
+var events = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({ name: 'vue-notification' });
+
+/***/ }),
+/* 2 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Notifications_vue__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Notifications_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Notifications_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__events__ = __webpack_require__(1);
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+
+
+
+var Notify = {
+  install: function install(Vue) {
+    var args = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+    if (this.installed) {
+      return;
+    }
+
+    this.installed = true;
+    this.params = args;
+
+    Vue.component(args.componentName || 'notifications', __WEBPACK_IMPORTED_MODULE_0__Notifications_vue___default.a);
+
+    var notify = function notify(params) {
+      if (typeof params === 'string') {
+        params = { title: '', text: params };
+      }
+
+      if ((typeof params === 'undefined' ? 'undefined' : _typeof(params)) === 'object') {
+        __WEBPACK_IMPORTED_MODULE_1__events__["a" /* events */].$emit('add', params);
+      }
+    };
+
+    notify.close = function (id) {
+      __WEBPACK_IMPORTED_MODULE_1__events__["a" /* events */].$emit('close', id);
+    };
+
+    var name = args.name || 'notify';
+
+    Vue.prototype['$' + name] = notify;
+    Vue[name] = notify;
+  }
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Notify);
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+/* styles */
+__webpack_require__(17)
+
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(5),
+  /* template */
+  __webpack_require__(15),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'CssGroup',
+  props: ['name']
+});
+
+/***/ }),
+/* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__index__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__events__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__util__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__defaults__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__VelocityGroup_vue__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__VelocityGroup_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__VelocityGroup_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__CssGroup_vue__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__CssGroup_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__CssGroup_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__parser__ = __webpack_require__(8);
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+
+
+
+
+
+
+var STATE = {
+  IDLE: 0,
+  DESTROYED: 2
+};
+
+var Component = {
+  name: 'Notifications',
+  components: {
+    VelocityGroup: __WEBPACK_IMPORTED_MODULE_4__VelocityGroup_vue___default.a,
+    CssGroup: __WEBPACK_IMPORTED_MODULE_5__CssGroup_vue___default.a
+  },
+  props: {
+    group: {
+      type: String,
+      default: ''
+    },
+
+    width: {
+      type: [Number, String],
+      default: 300
+    },
+
+    reverse: {
+      type: Boolean,
+      default: false
+    },
+
+    position: {
+      type: [String, Array],
+      default: function _default() {
+        return __WEBPACK_IMPORTED_MODULE_3__defaults__["a" /* default */].position;
+      }
+    },
+
+    classes: {
+      type: String,
+      default: 'vue-notification'
+    },
+
+    animationType: {
+      type: String,
+      default: 'css',
+      validator: function validator(value) {
+        return value === 'css' || value === 'velocity';
+      }
+    },
+
+    animation: {
+      type: Object,
+      default: function _default() {
+        return __WEBPACK_IMPORTED_MODULE_3__defaults__["a" /* default */].velocityAnimation;
+      }
+    },
+
+    animationName: {
+      type: String,
+      default: __WEBPACK_IMPORTED_MODULE_3__defaults__["a" /* default */].cssAnimation
+    },
+
+    speed: {
+      type: Number,
+      default: 300
+    },
+
+    cooldown: {
+      type: Number,
+      default: 0
+    },
+
+    duration: {
+      type: Number,
+      default: 3000
+    },
+
+    delay: {
+      type: Number,
+      default: 0
+    },
+
+    max: {
+      type: Number,
+      default: Infinity
+    },
+
+    ignoreDuplicates: {
+      type: Boolean,
+      default: false
+    },
+
+    closeOnClick: {
+      type: Boolean,
+      default: true
+    }
+  },
+  data: function data() {
+    return {
+      list: [],
+      velocity: __WEBPACK_IMPORTED_MODULE_0__index__["default"].params.velocity
+    };
+  },
+  mounted: function mounted() {
+    __WEBPACK_IMPORTED_MODULE_1__events__["a" /* events */].$on('add', this.addItem);
+    __WEBPACK_IMPORTED_MODULE_1__events__["a" /* events */].$on('close', this.closeItem);
+  },
+
+  computed: {
+    actualWidth: function actualWidth() {
+      return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_6__parser__["a" /* default */])(this.width);
+    },
+    isVA: function isVA() {
+      return this.animationType === 'velocity';
+    },
+    componentName: function componentName() {
+      return this.isVA ? 'VelocityGroup' : 'CssGroup';
+    },
+    styles: function styles() {
+      var _listToDirection = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__util__["a" /* listToDirection */])(this.position),
+          x = _listToDirection.x,
+          y = _listToDirection.y;
+
+      var width = this.actualWidth.value;
+      var suffix = this.actualWidth.type;
+
+      var styles = _defineProperty({
+        width: width + suffix
+      }, y, '0px');
+
+      if (x === 'center') {
+        styles['left'] = 'calc(50% - ' + width / 2 + suffix + ')';
+      } else {
+        styles[x] = '0px';
+      }
+
+      return styles;
+    },
+    active: function active() {
+      return this.list.filter(function (v) {
+        return v.state !== STATE.DESTROYED;
+      });
+    },
+    botToTop: function botToTop() {
+      return this.styles.hasOwnProperty('bottom');
+    }
+  },
+  methods: {
+    destroyIfNecessary: function destroyIfNecessary(item) {
+      if (this.closeOnClick) {
+        this.destroy(item);
+      }
+    },
+    addItem: function addItem(event) {
+      var _this = this;
+
+      event.group = event.group || '';
+
+      if (this.group !== event.group) {
+        return;
+      }
+
+      if (event.clean || event.clear) {
+        this.destroyAll();
+        return;
+      }
+
+      var duration = typeof event.duration === 'number' ? event.duration : this.duration;
+
+      var speed = typeof event.speed === 'number' ? event.speed : this.speed;
+
+      var ignoreDuplicates = typeof event.ignoreDuplicates === 'boolean' ? event.ignoreDuplicates : this.ignoreDuplicates;
+
+      var title = event.title,
+          text = event.text,
+          type = event.type,
+          data = event.data,
+          id = event.id;
+
+
+      var item = {
+        id: id || __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__util__["b" /* Id */])(),
+        title: title,
+        text: text,
+        type: type,
+        state: STATE.IDLE,
+        speed: speed,
+        length: duration + 2 * speed,
+        data: data
+      };
+
+      if (duration >= 0) {
+        item.timer = setTimeout(function () {
+          _this.destroy(item);
+        }, item.length);
+      }
+
+      var direction = this.reverse ? !this.botToTop : this.botToTop;
+
+      var indexToDestroy = -1;
+
+      var isDuplicate = this.active.some(function (item) {
+        return item.title === event.title && item.text === event.text;
+      });
+
+      var canAdd = ignoreDuplicates ? !isDuplicate : true;
+
+      if (!canAdd) return;
+
+      if (direction) {
+        this.list.push(item);
+
+        if (this.active.length > this.max) {
+          indexToDestroy = 0;
+        }
+      } else {
+        this.list.unshift(item);
+
+        if (this.active.length > this.max) {
+          indexToDestroy = this.active.length - 1;
+        }
+      }
+
+      if (indexToDestroy !== -1) {
+        this.destroy(this.active[indexToDestroy]);
+      }
+    },
+    closeItem: function closeItem(id) {
+      this.destroyById(id);
+    },
+    notifyClass: function notifyClass(item) {
+      return ['vue-notification-template', this.classes, item.type];
+    },
+    notifyWrapperStyle: function notifyWrapperStyle(item) {
+      return this.isVA ? null : { transition: 'all ' + item.speed + 'ms' };
+    },
+    destroy: function destroy(item) {
+      clearTimeout(item.timer);
+      item.state = STATE.DESTROYED;
+
+      if (!this.isVA) {
+        this.clean();
+      }
+    },
+    destroyById: function destroyById(id) {
+      var item = this.list.find(function (v) {
+        return v.id === id;
+      });
+
+      if (item) {
+        this.destroy(item);
+      }
+    },
+    destroyAll: function destroyAll() {
+      this.active.forEach(this.destroy);
+    },
+    getAnimation: function getAnimation(index, el) {
+      var animation = this.animation[index];
+
+      return typeof animation === 'function' ? animation.call(this, el) : animation;
+    },
+    enter: function enter(_ref) {
+      var el = _ref.el,
+          complete = _ref.complete;
+
+      var animation = this.getAnimation('enter', el);
+
+      this.velocity(el, animation, {
+        duration: this.speed,
+        complete: complete
+      });
+    },
+    leave: function leave(_ref2) {
+      var el = _ref2.el,
+          complete = _ref2.complete;
+
+      var animation = this.getAnimation('leave', el);
+
+      this.velocity(el, animation, {
+        duration: this.speed,
+        complete: complete
+      });
+    },
+    clean: function clean() {
+      this.list = this.list.filter(function (v) {
+        return v.state !== STATE.DESTROYED;
+      });
+    }
+  }
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Component);
+
+/***/ }),
+/* 6 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'VelocityGroup',
+  methods: {
+    enter: function enter(el, complete) {
+      this.$emit('enter', { el: el, complete: complete });
+    },
+    leave: function leave(el, complete) {
+      this.$emit('leave', { el: el, complete: complete });
+    },
+    afterLeave: function afterLeave() {
+      this.$emit('afterLeave');
+    }
+  }
+});
+
+/***/ }),
+/* 7 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = ({
+  position: ['top', 'right'],
+  cssAnimation: 'vn-fade',
+  velocityAnimation: {
+    enter: function enter(el) {
+      var height = el.clientHeight;
+
+      return {
+        height: [height, 0],
+        opacity: [1, 0]
+      };
+    },
+    leave: {
+      height: 0,
+      opacity: [0, 1]
+    }
+  }
+});
+
+/***/ }),
+/* 8 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export parse */
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var floatRegexp = '[-+]?[0-9]*.?[0-9]+';
+
+var types = [{
+  name: 'px',
+  regexp: new RegExp('^' + floatRegexp + 'px$')
+}, {
+  name: '%',
+  regexp: new RegExp('^' + floatRegexp + '%$')
+}, {
+  name: 'px',
+  regexp: new RegExp('^' + floatRegexp + '$')
+}];
+
+var getType = function getType(value) {
+  if (value === 'auto') {
+    return {
+      type: value,
+      value: 0
+    };
+  }
+
+  for (var i = 0; i < types.length; i++) {
+    var type = types[i];
+    if (type.regexp.test(value)) {
+      return {
+        type: type.name,
+        value: parseFloat(value)
+      };
+    }
+  }
+
+  return {
+    type: '',
+    value: value
+  };
+};
+
+var parse = function parse(value) {
+  switch (typeof value === 'undefined' ? 'undefined' : _typeof(value)) {
+    case 'number':
+      return { type: 'px', value: value };
+    case 'string':
+      return getType(value);
+    default:
+      return { type: '', value: value };
+  }
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (parse);
+
+/***/ }),
+/* 9 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return Id; });
+/* unused harmony export split */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return listToDirection; });
+var directions = {
+  x: ['left', 'center', 'right'],
+  y: ['top', 'bottom']
+};
+
+var Id = function (i) {
+  return function () {
+    return i++;
+  };
+}(0);
+
+var split = function split(value) {
+  if (typeof value !== 'string') {
+    return [];
+  }
+
+  return value.split(/\s+/gi).filter(function (v) {
+    return v;
+  });
+};
+
+var listToDirection = function listToDirection(value) {
+  if (typeof value === 'string') {
+    value = split(value);
+  }
+
+  var x = null;
+  var y = null;
+
+  value.forEach(function (v) {
+    if (directions.y.indexOf(v) !== -1) {
+      y = v;
+    }
+    if (directions.x.indexOf(v) !== -1) {
+      x = v;
+    }
+  });
+
+  return { x: x, y: y };
+};
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(11)();
+// imports
+
+
+// module
+exports.push([module.i, ".vue-notification-group{display:block;position:fixed;z-index:5000}.vue-notification-wrapper{display:block;overflow:hidden;width:100%;margin:0;padding:0}.notification-title{font-weight:600}.vue-notification-template{background:#fff}.vue-notification,.vue-notification-template{display:block;box-sizing:border-box;text-align:left}.vue-notification{font-size:12px;padding:10px;margin:0 5px 5px;color:#fff;background:#44a4fc;border-left:5px solid #187fe7}.vue-notification.warn{background:#ffb648;border-left-color:#f48a06}.vue-notification.error{background:#e54d42;border-left-color:#b82e24}.vue-notification.success{background:#68cd86;border-left-color:#42a85f}.vn-fade-enter-active,.vn-fade-leave-active,.vn-fade-move{transition:all .5s}.vn-fade-enter,.vn-fade-leave-to{opacity:0}", ""]);
+
+// exports
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function() {
+	var list = [];
+
+	// return the list of modules as css string
+	list.toString = function toString() {
+		var result = [];
+		for(var i = 0; i < this.length; i++) {
+			var item = this[i];
+			if(item[2]) {
+				result.push("@media " + item[2] + "{" + item[1] + "}");
+			} else {
+				result.push(item[1]);
+			}
+		}
+		return result.join("");
+	};
+
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
+};
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(4),
+  /* template */
+  __webpack_require__(16),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(6),
+  /* template */
+  __webpack_require__(14),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('transition-group', {
+    attrs: {
+      "css": false
+    },
+    on: {
+      "enter": _vm.enter,
+      "leave": _vm.leave,
+      "after-leave": _vm.afterLeave
+    }
+  }, [_vm._t("default")], 2)
+},staticRenderFns: []}
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "vue-notification-group",
+    style: (_vm.styles)
+  }, [_c(_vm.componentName, {
+    tag: "component",
+    attrs: {
+      "name": _vm.animationName
+    },
+    on: {
+      "enter": _vm.enter,
+      "leave": _vm.leave,
+      "after-leave": _vm.clean
+    }
+  }, _vm._l((_vm.active), function(item) {
+    return _c('div', {
+      key: item.id,
+      staticClass: "vue-notification-wrapper",
+      style: (_vm.notifyWrapperStyle(item)),
+      attrs: {
+        "data-id": item.id
+      }
+    }, [_vm._t("body", [_c('div', {
+      class: _vm.notifyClass(item),
+      on: {
+        "click": function($event) {
+          return _vm.destroyIfNecessary(item)
+        }
+      }
+    }, [(item.title) ? _c('div', {
+      staticClass: "notification-title",
+      domProps: {
+        "innerHTML": _vm._s(item.title)
+      }
+    }) : _vm._e(), _vm._v(" "), _c('div', {
+      staticClass: "notification-content",
+      domProps: {
+        "innerHTML": _vm._s(item.text)
+      }
+    })])], {
+      "item": item,
+      "close": function () { return _vm.destroy(item); }
+    })], 2)
+  }), 0)], 1)
+},staticRenderFns: []}
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('transition-group', {
+    attrs: {
+      "name": _vm.name
+    }
+  }, [_vm._t("default")], 2)
+},staticRenderFns: []}
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(10);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(18)("2901aeae", content, true);
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+  MIT License http://www.opensource.org/licenses/mit-license.php
+  Author Tobias Koppers @sokra
+  Modified by Evan You @yyx990803
+*/
+
+var hasDocument = typeof document !== 'undefined'
+
+if (typeof DEBUG !== 'undefined' && DEBUG) {
+  if (!hasDocument) {
+    throw new Error(
+    'vue-style-loader cannot be used in a non-browser environment. ' +
+    "Use { target: 'node' } in your Webpack config to indicate a server-rendering environment."
+  ) }
+}
+
+var listToStyles = __webpack_require__(19)
+
+/*
+type StyleObject = {
+  id: number;
+  parts: Array<StyleObjectPart>
+}
+
+type StyleObjectPart = {
+  css: string;
+  media: string;
+  sourceMap: ?string
+}
+*/
+
+var stylesInDom = {/*
+  [id: number]: {
+    id: number,
+    refs: number,
+    parts: Array<(obj?: StyleObjectPart) => void>
+  }
+*/}
+
+var head = hasDocument && (document.head || document.getElementsByTagName('head')[0])
+var singletonElement = null
+var singletonCounter = 0
+var isProduction = false
+var noop = function () {}
+
+// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+// tags it will allow on a page
+var isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase())
+
+module.exports = function (parentId, list, _isProduction) {
+  isProduction = _isProduction
+
+  var styles = listToStyles(parentId, list)
+  addStylesToDom(styles)
+
+  return function update (newList) {
+    var mayRemove = []
+    for (var i = 0; i < styles.length; i++) {
+      var item = styles[i]
+      var domStyle = stylesInDom[item.id]
+      domStyle.refs--
+      mayRemove.push(domStyle)
+    }
+    if (newList) {
+      styles = listToStyles(parentId, newList)
+      addStylesToDom(styles)
+    } else {
+      styles = []
+    }
+    for (var i = 0; i < mayRemove.length; i++) {
+      var domStyle = mayRemove[i]
+      if (domStyle.refs === 0) {
+        for (var j = 0; j < domStyle.parts.length; j++) {
+          domStyle.parts[j]()
+        }
+        delete stylesInDom[domStyle.id]
+      }
+    }
+  }
+}
+
+function addStylesToDom (styles /* Array<StyleObject> */) {
+  for (var i = 0; i < styles.length; i++) {
+    var item = styles[i]
+    var domStyle = stylesInDom[item.id]
+    if (domStyle) {
+      domStyle.refs++
+      for (var j = 0; j < domStyle.parts.length; j++) {
+        domStyle.parts[j](item.parts[j])
+      }
+      for (; j < item.parts.length; j++) {
+        domStyle.parts.push(addStyle(item.parts[j]))
+      }
+      if (domStyle.parts.length > item.parts.length) {
+        domStyle.parts.length = item.parts.length
+      }
+    } else {
+      var parts = []
+      for (var j = 0; j < item.parts.length; j++) {
+        parts.push(addStyle(item.parts[j]))
+      }
+      stylesInDom[item.id] = { id: item.id, refs: 1, parts: parts }
+    }
+  }
+}
+
+function createStyleElement () {
+  var styleElement = document.createElement('style')
+  styleElement.type = 'text/css'
+  head.appendChild(styleElement)
+  return styleElement
+}
+
+function addStyle (obj /* StyleObjectPart */) {
+  var update, remove
+  var styleElement = document.querySelector('style[data-vue-ssr-id~="' + obj.id + '"]')
+
+  if (styleElement) {
+    if (isProduction) {
+      // has SSR styles and in production mode.
+      // simply do nothing.
+      return noop
+    } else {
+      // has SSR styles but in dev mode.
+      // for some reason Chrome can't handle source map in server-rendered
+      // style tags - source maps in <style> only works if the style tag is
+      // created and inserted dynamically. So we remove the server rendered
+      // styles and inject new ones.
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  if (isOldIE) {
+    // use singleton mode for IE9.
+    var styleIndex = singletonCounter++
+    styleElement = singletonElement || (singletonElement = createStyleElement())
+    update = applyToSingletonTag.bind(null, styleElement, styleIndex, false)
+    remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true)
+  } else {
+    // use multi-style-tag mode in all other cases
+    styleElement = createStyleElement()
+    update = applyToTag.bind(null, styleElement)
+    remove = function () {
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  update(obj)
+
+  return function updateStyle (newObj /* StyleObjectPart */) {
+    if (newObj) {
+      if (newObj.css === obj.css &&
+          newObj.media === obj.media &&
+          newObj.sourceMap === obj.sourceMap) {
+        return
+      }
+      update(obj = newObj)
+    } else {
+      remove()
+    }
+  }
+}
+
+var replaceText = (function () {
+  var textStore = []
+
+  return function (index, replacement) {
+    textStore[index] = replacement
+    return textStore.filter(Boolean).join('\n')
+  }
+})()
+
+function applyToSingletonTag (styleElement, index, remove, obj) {
+  var css = remove ? '' : obj.css
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = replaceText(index, css)
+  } else {
+    var cssNode = document.createTextNode(css)
+    var childNodes = styleElement.childNodes
+    if (childNodes[index]) styleElement.removeChild(childNodes[index])
+    if (childNodes.length) {
+      styleElement.insertBefore(cssNode, childNodes[index])
+    } else {
+      styleElement.appendChild(cssNode)
+    }
+  }
+}
+
+function applyToTag (styleElement, obj) {
+  var css = obj.css
+  var media = obj.media
+  var sourceMap = obj.sourceMap
+
+  if (media) {
+    styleElement.setAttribute('media', media)
+  }
+
+  if (sourceMap) {
+    // https://developer.chrome.com/devtools/docs/javascript-debugging
+    // this makes source maps inside style tags work properly in Chrome
+    css += '\n/*# sourceURL=' + sourceMap.sources[0] + ' */'
+    // http://stackoverflow.com/a/26603875
+    css += '\n/*# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + ' */'
+  }
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = css
+  } else {
+    while (styleElement.firstChild) {
+      styleElement.removeChild(styleElement.firstChild)
+    }
+    styleElement.appendChild(document.createTextNode(css))
+  }
+}
+
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports) {
+
+/**
+ * Translates the list format produced by css-loader into something
+ * easier to manipulate.
+ */
+module.exports = function listToStyles (parentId, list) {
+  var styles = []
+  var newStyles = {}
+  for (var i = 0; i < list.length; i++) {
+    var item = list[i]
+    var id = item[0]
+    var css = item[1]
+    var media = item[2]
+    var sourceMap = item[3]
+    var part = {
+      id: parentId + ':' + i,
+      css: css,
+      media: media,
+      sourceMap: sourceMap
+    }
+    if (!newStyles[id]) {
+      styles.push(newStyles[id] = { id: id, parts: [part] })
+    } else {
+      newStyles[id].parts.push(part)
+    }
+  }
+  return styles
+}
+
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_20__;
+
+/***/ })
+/******/ ]);
+});
+//# sourceMappingURL=index.js.map
 
 /***/ }),
 
@@ -69758,50 +70997,36 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vue2_google_maps__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue2-google-maps */ "./node_modules/vue2-google-maps/dist/main.js");
 /* harmony import */ var vue2_google_maps__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue2_google_maps__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var vue2_google_maps_dist_components_cluster__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue2-google-maps/dist/components/cluster */ "./node_modules/vue2-google-maps/dist/components/cluster.js");
-/* harmony import */ var vue2_google_maps_dist_components_cluster__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vue2_google_maps_dist_components_cluster__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var vue_datetime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-datetime */ "./node_modules/vue-datetime/dist/vue-datetime.js");
-/* harmony import */ var vue_datetime__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(vue_datetime__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var vue_datetime_dist_vue_datetime_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue-datetime/dist/vue-datetime.css */ "./node_modules/vue-datetime/dist/vue-datetime.css");
-/* harmony import */ var vue_datetime_dist_vue_datetime_css__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(vue_datetime_dist_vue_datetime_css__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var vue_notification__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-notification */ "./node_modules/vue-notification/dist/index.js");
+/* harmony import */ var vue_notification__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vue_notification__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var vue2_google_maps_dist_components_cluster__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue2-google-maps/dist/components/cluster */ "./node_modules/vue2-google-maps/dist/components/cluster.js");
+/* harmony import */ var vue2_google_maps_dist_components_cluster__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(vue2_google_maps_dist_components_cluster__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var vue_datetime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue-datetime */ "./node_modules/vue-datetime/dist/vue-datetime.js");
+/* harmony import */ var vue_datetime__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(vue_datetime__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var vue_datetime_dist_vue_datetime_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue-datetime/dist/vue-datetime.css */ "./node_modules/vue-datetime/dist/vue-datetime.css");
+/* harmony import */ var vue_datetime_dist_vue_datetime_css__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(vue_datetime_dist_vue_datetime_css__WEBPACK_IMPORTED_MODULE_5__);
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('places', __webpack_require__(/*! ./components/Places.vue */ "./resources/js/components/Places.vue")["default"]);
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('navbar', __webpack_require__(/*! ./components/Navbar.vue */ "./resources/js/components/Navbar.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('gmap', __webpack_require__(/*! ./components/Gmap.vue */ "./resources/js/components/Gmap.vue")["default"]);
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('alert', __webpack_require__(/*! ./components/Alert.vue */ "./resources/js/components/Alert.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('calendar', __webpack_require__(/*! ./components/Calendar.vue */ "./resources/js/components/Calendar.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('profile', __webpack_require__(/*! ./components/Profile.vue */ "./resources/js/components/Profile.vue")["default"]);
 
 
- // replace src with dist if you have Babel issues
 
 
 
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_datetime__WEBPACK_IMPORTED_MODULE_3___default.a);
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('GmapCluster', vue2_google_maps_dist_components_cluster__WEBPACK_IMPORTED_MODULE_2___default.a);
+
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_datetime__WEBPACK_IMPORTED_MODULE_4___default.a);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_notification__WEBPACK_IMPORTED_MODULE_2___default.a);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('GmapCluster', vue2_google_maps_dist_components_cluster__WEBPACK_IMPORTED_MODULE_3___default.a);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue2_google_maps__WEBPACK_IMPORTED_MODULE_1__, {
   load: {
     key: 'AIzaSyBQxzhnAAV7IpsN2kjtER2X2Je00Lpnmm8',
-    libraries: 'places, clusters' // This is required if you use the Autocomplete plugin
-    // OR: libraries: 'places,drawing'
-    // OR: libraries: 'places,drawing,visualization'
-    // (as you require)
-    //// If you want to set the version, you can do so:
-    // v: '3.26',
-
+    libraries: 'places, clusters'
   },
-  //// If you intend to programmatically custom event listener code
-  //// (e.g. `this.$refs.gmap.$on('zoom_changed', someFunc)`)
-  //// instead of going through Vue templates (e.g. `<GmapMap @zoom_changed="someFunc">`)
-  //// you might need to turn this on.
-  autobindAllEvents: false //// If you want to manually install components, e.g.
-  //// import {GmapMarker} from 'vue2-google-maps/src/components/marker'
-  //// Vue.component('GmapMarker', GmapMarker)
-  //// then disable the following:
-  // installComponents: true,
-
+  autobindAllEvents: false
 });
 var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   el: '#app'
@@ -69919,75 +71144,6 @@ if (token) {
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     encrypted: true
 // });
-
-/***/ }),
-
-/***/ "./resources/js/components/Alert.vue":
-/*!*******************************************!*\
-  !*** ./resources/js/components/Alert.vue ***!
-  \*******************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Alert_vue_vue_type_template_id_7b2bf401___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Alert.vue?vue&type=template&id=7b2bf401& */ "./resources/js/components/Alert.vue?vue&type=template&id=7b2bf401&");
-/* harmony import */ var _Alert_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Alert.vue?vue&type=script&lang=js& */ "./resources/js/components/Alert.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
-
-
-
-
-/* normalize component */
-
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _Alert_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Alert_vue_vue_type_template_id_7b2bf401___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Alert_vue_vue_type_template_id_7b2bf401___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "resources/js/components/Alert.vue"
-/* harmony default export */ __webpack_exports__["default"] = (component.exports);
-
-/***/ }),
-
-/***/ "./resources/js/components/Alert.vue?vue&type=script&lang=js&":
-/*!********************************************************************!*\
-  !*** ./resources/js/components/Alert.vue?vue&type=script&lang=js& ***!
-  \********************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Alert_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./Alert.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Alert.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Alert_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
-
-/***/ }),
-
-/***/ "./resources/js/components/Alert.vue?vue&type=template&id=7b2bf401&":
-/*!**************************************************************************!*\
-  !*** ./resources/js/components/Alert.vue?vue&type=template&id=7b2bf401& ***!
-  \**************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Alert_vue_vue_type_template_id_7b2bf401___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./Alert.vue?vue&type=template&id=7b2bf401& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Alert.vue?vue&type=template&id=7b2bf401&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Alert_vue_vue_type_template_id_7b2bf401___WEBPACK_IMPORTED_MODULE_0__["render"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Alert_vue_vue_type_template_id_7b2bf401___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
-
-
 
 /***/ }),
 
@@ -70160,59 +71316,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Gmap_vue_vue_type_template_id_bdcfc800_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Gmap_vue_vue_type_template_id_bdcfc800_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
-
-
-
-/***/ }),
-
-/***/ "./resources/js/components/Navbar.vue":
-/*!********************************************!*\
-  !*** ./resources/js/components/Navbar.vue ***!
-  \********************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Navbar_vue_vue_type_template_id_6dde423b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Navbar.vue?vue&type=template&id=6dde423b& */ "./resources/js/components/Navbar.vue?vue&type=template&id=6dde423b&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
-var script = {}
-
-
-/* normalize component */
-
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__["default"])(
-  script,
-  _Navbar_vue_vue_type_template_id_6dde423b___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Navbar_vue_vue_type_template_id_6dde423b___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "resources/js/components/Navbar.vue"
-/* harmony default export */ __webpack_exports__["default"] = (component.exports);
-
-/***/ }),
-
-/***/ "./resources/js/components/Navbar.vue?vue&type=template&id=6dde423b&":
-/*!***************************************************************************!*\
-  !*** ./resources/js/components/Navbar.vue?vue&type=template&id=6dde423b& ***!
-  \***************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Navbar_vue_vue_type_template_id_6dde423b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./Navbar.vue?vue&type=template&id=6dde423b& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Navbar.vue?vue&type=template&id=6dde423b&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Navbar_vue_vue_type_template_id_6dde423b___WEBPACK_IMPORTED_MODULE_0__["render"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Navbar_vue_vue_type_template_id_6dde423b___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
@@ -70392,8 +71495,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/lukaspetka/Desktop/letsgo/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /home/lukaspetka/Desktop/letsgo/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /home/lukaspetka/Desktop/MoSi/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /home/lukaspetka/Desktop/MoSi/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

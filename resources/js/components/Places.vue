@@ -1,98 +1,111 @@
 <template>
 <div>
     <div id="loading-screen">
-    <div id="geras">LetsGo</div>
+    <div id="geras">MoSi</div>
     </div>
+
+    <notifications position="bottom left"/>
+
         <div class="row" style="width:100%; padding:0; margin:0;">
-            <div id="map" style="width:100%;">
+            <div id="map" class="col-lg-12 p-0">
                 <Gmap v-bind:status='status' v-on:showSpot="showSpot($event)" v-on:openForm="openAdd($event)" ref="gmapp"> </Gmap>
+
+                
             </div>
-        </div>
+            <div id="side" class="col-lg-0 p-0" style="display:none;">
+                <div id="sidebar">
+                    <div class="card m-3" id="createDiv" style="display:none; width:90%;">
+                        <div class="card-header">
 
-        <div class="card popup-content">
-            <div class="card-header">
-                        <button type="button" id="close_createDiv" v-on:click="closeSide()" class="close" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
-                        <h6>Controls</h6>
-            </div>
-            <div class="card-body" style=" height:92%; overflow-y: auto;">
-                <div class="card m-3" id="createDiv" style="display:none; width:90%;">
-                    <div class="card-header">
+                            <button type="button" id="close_createDiv" v-on:click="closeAdd()" class="close" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
 
-                        <button type="button" id="close_createDiv" v-on:click="closeAdd()" class="close" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                            <h6>Create new Marker</h6>
 
-                        <h6>Create new Marker</h6>
-                    </div>
-                    <form @submit.prevent="addPlace">
-                        <div class="card-body">
-                            
-                                <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="Title" v-model="place.title">
-                                </div>
+                        </div>
 
-                                <div class="input-group mb-3">
-                                <textarea class="form-control" placeholder="About..." v-model="place.about" ></textarea>
-                                </div>
-
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <label class="input-group-text" for="inputGroupSelect01">Sport</label>
+                        <form @submit.prevent="addPlace">
+                            <div class="card-body">
+                                
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control" placeholder="Title" v-model="place.title">
                                     </div>
 
-                                    <select class="custom-select" id="inputGroupSelect01" v-model="place.type">
-                                        
-                                        <option value="112">Soccer inside</option>
-                                        <option value="111">Soccer</option>
-                                        <option value="223">Basketball inside</option>
-                                        <option value="222">Basketball</option>
-                                        <option value="334">Volleyball inside</option>
-                                        <option value="333">Voleyball</option>
-                                    </select>
+                                    <div class="input-group mb-3">
+                                        <textarea class="form-control" placeholder="About..." v-model="place.about" ></textarea>
+                                    </div>
+
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <label class="input-group-text" for="inputGroupSelect01">Sport</label>
+                                        </div>
+
+                                        <select class="custom-select" id="inputGroupSelect01" v-model="place.type">
+                                            
+                                            <option value="112">Soccer inside</option>
+                                            <option value="111">Soccer</option>
+                                            <option value="223">Basketball inside</option>
+                                            <option value="222">Basketball</option>
+                                            <option value="334">Volleyball inside</option>
+                                            <option value="333">Voleyball</option>
+                                        </select>
+                                    </div>
+                                
+                            </div>
+
+                            <div class="card-footer text-muted">
+                                <p>
+                                    <button type="submit" class="btn btn-danger m-2">Create</button>
+                                </p>
+                            </div>
+
+                        </form>
+                    </div>
+
+
+
+                <!-- ================================================================================================================= -->
+                <!-- =====================================SHOW SPOT INFO=======================================START================== -->
+                <!-- ================================================================================================================= -->
+                    <div id="show" class="show" style="display:none; width:100%; height:auto; padding-bottom:150px;" >
+                            
+                        <div class="d-flex flex-column bd-highlight mb-3">
+                            
+                            <div class="p-4 bd-highlight">
+                                <button type="button" id="close_show" v-on:click="closeShow()" class="close" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                                
+                                <div v-if="type.id == '111' || type.id == '112'">
+                                    <h3> <img src="../assets/google_maps/soccerball.png"> {{ show.title }}</h3>
                                 </div>
+                                <div v-if="type.id == '222' || type.id == '223'">
+                                    <h3> <img src="../assets/google_maps/basketball.png"> {{ show.title }}</h3>
+                                </div>
+                                <div v-if="type.id == '333' || type.id == '334'">
+                                    <h3> <img src="../assets/google_maps/volleyball.png"> {{ show.title }}</h3>
+                                </div>
+
+                                <hr>
+
+                                <div class="card-body">
+                                    <p class="card-text">{{ show.about }}</p>
+                                </div>
+
+                                <button v-on:click="deletePlace(show.id)" class="btn btn-danger m-2">Delete</button>
+
+                            </div>
+
+
                             
                         </div>
-                        <div class="card-footer text-muted">
-                            <p>
-                                <button type="submit" class="btn btn-danger m-2">Create</button>
-                            </p>
-                        </div>
-                    </form>
-                </div>
-
-
-
-
-                    <div id="show" class="show" style="display:none; width:100%; height:auto; padding-bottom:150px;" >
                         
-                        <div class="card m-3">
-                        <div class="card-header">
-                            <button type="button" id="close_show" v-on:click="closeShow()" class="close" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
-                            <h6>{{ show.title }}</h6>
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text">{{ show.about }}</p>
-                        </div>
-                        <div class="card-footer text-muted">
-                            <p>Sport type: {{ type.name }}</p>
-                            <p>
-                               <!-- <button v-on:click="deletePlace(show.id)" class="btn btn-danger m-2">Delete</button>-->
-                            </p>
-                        </div>
-                        </div>
-                    
+                        
                         <div class="card m-3 width:100%; height:100%;">
                             <div class="card-header ">
-                                <h6>Events
-
-                                    
-                                </h6>
-                                
-                                   
-                                
+                                <h6>Events</h6>  
                             </div>
                             <div class="card-body">
 
                                 <div v-if="this.status === 1">
-                                 <button v-on:click="openAddEvent()" class="btn btn-outline-danger float-right">Add Event <i class="fas fa-plus"></i></button>
+                                    <button v-on:click="openAddEvent()" class="btn btn-outline-danger float-right">Add Event <i class="fas fa-plus"></i></button>
                                 </div>
                                 <div v-else>
                                     <div class="alert alert-warning pb-5" role="alert">
@@ -105,8 +118,6 @@
                                 <Calendar v-bind:status='status' v-bind:currentUser='currentUser' v-on:getDate="getDate($event)" v-on:closeAdd="closeAddEvent()" ref="calendar"> </Calendar>
                             </div>
                         </div>
-
-                        <Alert ref="alert"></Alert>
 
                         <div id="addEvent" class="card m-3 width:100%; height:100%;" style="display:none;">
                             <div class="card-header ">
@@ -159,15 +170,18 @@
 
 
                     </div>
+                    <!-- ================================================================================================================= -->
+                    <!-- =====================================SHOW SPOT INFO=======================================END==================== -->
+                    <!-- ================================================================================================================= -->
                 </div>
-            </div>    
+            </div>
+            
+        </div>
 
 
-            
-            
+    
+               
 
-         
-            
          
     </div>
 </template>
@@ -176,16 +190,19 @@
 <script>
 import Gmap from '../components/Gmap.vue';
 import Calendar from '../components/Calendar.vue';
-import Alert from '../components/Alert.vue';
 import { Datetime } from 'vue-datetime';
+import Notifications from 'vue-notification';
+import Vue from 'vue';
+ 
+
 
 export default {
 
         components: {
         'Gmap': Gmap,
-        'Alert': Alert,
         'Calendar': Calendar,
-        'datetime': Datetime
+        'datetime': Datetime,
+        'notifications': Notifications
     },
 
     props: ['status','currentUser'],
@@ -257,22 +274,13 @@ export default {
     },
 
     closeShow: function(){
-            if($("#createDiv").is(":visible")){
-                 $("#show").slideUp("slow");
-            }
-            else{
-                $("#show").slideUp("slow");
-                $(".popup-content").fadeOut("slow");
-            }
+        $("#map").removeClass("col-lg-8");
+        $("#map").addClass("col-lg-12");
+        $("#side").removeClass("col-lg-4");
+        $('#side').hide();
+        $("#side").addClass("col-lg-0");
+
     },
-
-
-
-    closeSide: function(){
-            $(".popup-content").fadeOut("slow");
-    },
-
-
 
     closeAdd: function(){
            if($("#close_show").is(":visible")){
@@ -295,7 +303,13 @@ export default {
         const create = document.querySelector('#createDiv');
 
         if (create.style.display === 'none') {
-            $(".popup-content").fadeIn( "slow" );
+            
+            $("#map").removeClass("col-lg-12");
+            $("#map").addClass("col-lg-8");
+            $("#side").removeClass("col-lg-0");
+            $('#side').show();
+            $("#side").addClass("col-lg-4");
+
             $("#createDiv").slideDown("slow");
         }
             
@@ -324,10 +338,7 @@ export default {
                 scrollTop: $('#addEvent').position().top - 40
             }, 1000);
         }
-
-
-        
-            
+       
     },
 
     parseDate(choose){
@@ -364,11 +375,6 @@ export default {
 
     },
 
-    
-
-
-
-
     showSpot: function(id){
 
         const foundPlace = this.places.find( place => place.id == id);
@@ -381,14 +387,19 @@ export default {
 
         const show = document.querySelector('#show');
 
+        
+        $("#map").removeClass("col-lg-12");
+        $("#map").addClass("col-lg-8");
+        $("#side").removeClass("col-lg-0");
+        $('#side').show();
+        $("#side").addClass("col-lg-4");
+
+
         if (show.style.display === 'none') {
-            $(".popup-content").fadeIn( "slow" );
             $("#show").slideDown("slow");
-            
         }
+
         this.closeAddEvent();
-
-
     },
 
 
@@ -481,6 +492,18 @@ export default {
         
         })();
 
+        this.$notify({
+            group: 'foo',
+            title: 'Important message',
+            text: 'New place has been added!'
+        });
+
+        Vue.notify({
+            group: 'foo',
+            title: 'Important message',
+            text: 'Hello user! This is a notification!'
+            });
+
                 this.event.place_id = '';
                 this.event.title = '';
                 this.event.about = '';
@@ -488,7 +511,6 @@ export default {
                 this.event.time_until = '';
                 this.event.organizator = '';
                 this.event.person_id = '';
-                this.$refs.alert.eventCreated();
                  
         } else{
 
@@ -518,6 +540,11 @@ export default {
 
 <style>
 
+#sidebar{
+    height: 94vh;
+    overflow-y: auto;
+}
+
 #geras{
     position: absolute;
     color:white;
@@ -534,16 +561,6 @@ export default {
     width: 100%;
 }
 
-.popup-content {
-    display:none;
-    position: fixed;
-    bottom: 110px;
-    right: 25px;
-    z-index: 2;
-    width: 30%;
-    height:75vh;
-    overflow: auto;
-}
 
 .vdatetime-input{
     border-radius: 0px;
@@ -569,18 +586,20 @@ export default {
 
 
 @media only screen and (max-width: 900px) {
-  #map {
+
+#map {
     width: 100% !important; 
-  }
-  #side_bar{
-    width: 100% !important; 
-  }
-  #show{
+}
+#show{
     width: 95% !important; 
-  }
-  #createDiv{
+}
+#createDiv{
     width: 95% !important;   
-  }
+}
+#sidebar{
+    height: auto;
+    overflow-y: hidden;
+}
 
 }
 </style>

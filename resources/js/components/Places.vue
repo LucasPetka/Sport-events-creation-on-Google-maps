@@ -4,7 +4,7 @@
     <div id="geras">MoSi</div>
     </div>
 
-    <notifications position="bottom left"/>
+    <notifications group="foo" classes="my-style" ignoreDuplicates position="top center" />
 
         <div class="row" style="width:100%; padding:0; margin:0;">
             <div id="map" class="col-lg-12 p-0">
@@ -14,6 +14,13 @@
             </div>
             <div id="side" class="col-lg-0 p-0" style="display:none;">
                 <div id="sidebar">
+
+
+
+                <!-- ================================================================================================================= -->
+                <!-- =====================================ADD NEW PLACE========================================START================== -->
+                <!-- ================================================================================================================= -->
+
                     <div class="card m-3" id="createDiv" style="display:none; width:90%;">
                         <div class="card-header">
 
@@ -38,7 +45,7 @@
                                         <div class="input-group-prepend">
                                             <label class="input-group-text" for="inputGroupSelect01">Sport</label>
                                         </div>
-
+                        
                                         <select class="custom-select" id="inputGroupSelect01" v-model="place.type">
                                             
                                             <option value="112">Soccer inside</option>
@@ -170,12 +177,8 @@
 
 
                     </div>
-                    <!-- ================================================================================================================= -->
-                    <!-- =====================================SHOW SPOT INFO=======================================END==================== -->
-                    <!-- ================================================================================================================= -->
                 </div>
             </div>
-            
         </div>
 
 
@@ -191,26 +194,20 @@
 import Gmap from '../components/Gmap.vue';
 import Calendar from '../components/Calendar.vue';
 import { Datetime } from 'vue-datetime';
-import Notifications from 'vue-notification';
 import Vue from 'vue';
- 
-
 
 export default {
-
         components: {
         'Gmap': Gmap,
         'Calendar': Calendar,
         'datetime': Datetime,
-        'notifications': Notifications
     },
 
-    props: ['status','currentUser'],
+    props: ['status','currentUser'], //checks if someone loged in and gets all information about user
     
 
     data(){
         return{
-            loaded: false,
             places: [],
             types:[],
             type: {
@@ -225,7 +222,7 @@ export default {
                 lng:'',
                 type:''
             },
-            show: {
+            show: {         
                 id:'',
                 title:'',
                 about:'',
@@ -248,40 +245,63 @@ export default {
             end:new Date().toISOString(),
             coordinates:{lat:0, lng:0},
             edit: false,
+            truee: true,
         }
     },
 
-     mounted(){
+    //==============================ON LOAD FUNCTION==============================================
+    mounted(){
+        
+        //animation
         $("#geras").animate({left: '45%', opacity: '1', top:'40%', fontSize:'50px'}, 1500, function(){
             $("#geras").animate({left:'43%',top:'39%', fontSize:'80px'}, 500, function(){
             $("#loading-screen").animate({opacity:'0', width:'0%'}, 500, function(){
-            $("#loading-screen").hide();
-        });
-        });
-        });
+            $("#loading-screen").hide();});});});
 
-        this.fetchPlaces();
-        this.fetchTypes();
-        this.loadingScreen();
-        
-        
+        this.fetchPlaces(); //fetcing all places
+        this.fetchTypes();  //fething all sport types
     },
 
+
+
+    //===============================METHODS=======================================================
     methods: { 
 
-    loadingScreen: function(){
-         setTimeout(() => { this.loaded = true; }, 4000); 
+    
+    //Closes sidebar
+    openShow: function(){
+        $("#map").removeClass("col-lg-12");
+        $("#map").addClass("col-lg-8");
+        $("#side").removeClass("col-lg-0");
+        $('#side').show();
+        $("#side").addClass("col-lg-4");
     },
 
+    //Closes sidebar
     closeShow: function(){
         $("#map").removeClass("col-lg-8");
         $("#map").addClass("col-lg-12");
         $("#side").removeClass("col-lg-4");
         $('#side').hide();
         $("#side").addClass("col-lg-0");
-
     },
 
+    //Opens place addition label
+    openAdd: function(cord){
+        this.place.lat = cord.lat;
+        this.place.lng = cord.lng;
+
+        const create = document.querySelector('#createDiv');
+
+        if (create.style.display === 'none') {
+
+            this.openShow();
+            $("#createDiv").slideDown("slow");
+        }
+            
+    },
+
+    //Closes place adition label
     closeAdd: function(){
            if($("#close_show").is(":visible")){
                  $("#createDiv").slideUp("slow");
@@ -292,37 +312,11 @@ export default {
                 this.$refs.gmapp.hidePointer();
                 $(".popup-content").fadeOut("slow");
             }
+            this.closeShow();
     },
 
 
-
-    openAdd: function(cord){
-        this.place.lat = cord.lat;
-        this.place.lng = cord.lng;
-
-        const create = document.querySelector('#createDiv');
-
-        if (create.style.display === 'none') {
-            
-            $("#map").removeClass("col-lg-12");
-            $("#map").addClass("col-lg-8");
-            $("#side").removeClass("col-lg-0");
-            $('#side').show();
-            $("#side").addClass("col-lg-4");
-
-            $("#createDiv").slideDown("slow");
-        }
-            
-    },
-
-
-
-    closeAddEvent: function(){
-         $("#addEvent").hide("fast");
-    },
-
-
-
+    //Opens event creation label
     openAddEvent: function(){
 
         this.event.place_id = this.show.id;
@@ -337,14 +331,17 @@ export default {
             $('.card-body').animate({
                 scrollTop: $('#addEvent').position().top - 40
             }, 1000);
-        }
-       
+        } 
     },
 
+    //Closes event creation label
+    closeAddEvent: function(){
+         $("#addEvent").hide("fast");
+    },
+
+    //Parse data in right format to choose when event starts and when ends
     parseDate(choose){
-
         var d = new Date(this.start);
-
 
         if(choose == 0){
             var d = new Date(this.start);
@@ -356,27 +353,20 @@ export default {
              var n = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds(); 
             this.event.time_until = n;
         }
-
     },
 
+    //Gets date in day chooser
     getDate: function(dateee){
-    
-
     var d = new Date(dateee);
     this.date =  d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
     d.setMinutes(30);
     dateee = d.toISOString();
-
-
     this.start = dateee;
     this.end = dateee;
-
-
-
     },
 
+    //Show spot all info with all events happening in there
     showSpot: function(id){
-
         const foundPlace = this.places.find( place => place.id == id);
         this.show = foundPlace;
 
@@ -387,13 +377,7 @@ export default {
 
         const show = document.querySelector('#show');
 
-        
-        $("#map").removeClass("col-lg-12");
-        $("#map").addClass("col-lg-8");
-        $("#side").removeClass("col-lg-0");
-        $('#side').show();
-        $("#side").addClass("col-lg-4");
-
+        this.openShow();
 
         if (show.style.display === 'none') {
             $("#show").slideDown("slow");
@@ -421,9 +405,11 @@ export default {
     },
 
 
+    //Deletes place
     deletePlace: function(id) {
+
         if(confirm('Are you sure?')){
-            fetch('api/place/'+ id, {
+            fetch('api/place/'+ id + '?api_token=' + this.$props.currentUser.api_token, {
                 method: 'delete'
             })
                 .then(res => res.json())
@@ -439,14 +425,22 @@ export default {
                 this.show.type = '';
                 this.type.name = '';
 
-                this.closeShow();
-                
+                Vue.notify({
+                group: 'foo',
+                title: 'Notification',
+                type: 'error',
+                text: 'The place has been deleted!'
+                });
+
+                $("#show").hide();
+                this.closeShow(); 
         }
     },
 
+    //Adds new place
     addPlace() {
         if(this.edit === false){
-            fetch('api/place', {
+            fetch('api/place?api_token=' + this.$props.currentUser.api_token, {
                 method: 'post',
                 body: JSON.stringify(this.place),
                 headers: {
@@ -464,45 +458,50 @@ export default {
             })
             .catch(err =>console.log(err));
 
+            Vue.notify({
+                group: 'foo',
+                title: 'Congrats!!',
+                type: 'success',
+                text: 'The new place has been added!'
+                });
+
                 this.$refs.gmapp.fetchPlaces();
                 this.$refs.gmapp.hidePointer();
                 this.closeAdd();
+                this.closeShow();
+
 
         } else{
 
         }
     },
 
+    //Create event
      addEvent() {
         if(this.edit === false){
 
         (async () => {
-        const Response = await fetch('api/event', {
+        const Response = await fetch('api/event?api_token=' + this.$props.currentUser.api_token, {
              method: 'post',
                 body: JSON.stringify(this.event),
                 headers: {
                     'Accept': 'application/json',
                     'content-type': 'application/json'
-                }
+                }     
         });
-        const content = await Response.json();
 
+        const content = await Response.json();
         await this.$refs.calendar.fetchEvents();
         await this.$refs.calendar.fetchSpot(this.show.id);
-        
         })();
 
-        this.$notify({
-            group: 'foo',
-            title: 'Important message',
-            text: 'New place has been added!'
-        });
 
         Vue.notify({
-            group: 'foo',
-            title: 'Important message',
-            text: 'Hello user! This is a notification!'
-            });
+                group: 'foo',
+                title: 'Congrats!!',
+                type: 'success',
+                text: 'You have created an event !'
+                });
 
                 this.event.place_id = '';
                 this.event.title = '';
@@ -510,27 +509,10 @@ export default {
                 this.event.time_from = '';
                 this.event.time_until = '';
                 this.event.organizator = '';
-                this.event.person_id = '';
-                 
+                this.event.person_id = '';      
         } else{
 
         }
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     },
 
     }
@@ -539,6 +521,28 @@ export default {
 
 
 <style>
+
+.my-style {
+    padding: 15px;
+    margin-top: 0px;
+    width: 300px;
+ 
+    font-size: 14px;
+    border-radius: 0px 0px 10px 10px;
+
+
+    color: #ffffff;
+    background: #82CC75;
+}
+
+.success {
+    background: #82CC75;
+}
+
+.error {
+    background: #DC4146;
+}
+
 
 #sidebar{
     height: 94vh;

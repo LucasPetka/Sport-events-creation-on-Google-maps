@@ -51,6 +51,7 @@
 
 <script>
 import Datepicker from 'vuejs-datepicker';
+import Vue from 'vue';
 
 export default {
 
@@ -58,7 +59,8 @@ export default {
     Datepicker
     },
 
-    props: ['status', 'currentUser'],
+    props: ['status', 'currentUser'], //checks if someone loged in and gets all information about user
+
     
     data(){
         return{
@@ -91,12 +93,13 @@ export default {
         }
     },
 
-    created(){
-        this.fetchEvents();
-        this.fetchPeopleGoing();
-
+    //ONLOAD PAGE DO THIS
+    mounted(){
+        this.fetchEvents(); // get all events from data base
+        this.fetchPeopleGoing(); // get all people going from data base
     },
 
+    //================================METHODS========================================
     methods: {
 
         //Create todays date variable
@@ -204,7 +207,7 @@ export default {
         },
 
 
-
+        //Get all events from database
         fetchEvents() {
             fetch('api/events')
             .then(res => res.json())
@@ -215,23 +218,23 @@ export default {
         },
 
 
+        //Get all people that going to events
+        fetchPeopleGoing() {
+                fetch('api/people_going')
+                .then(res => res.json())
+                .then(res => {
+                    this.people_going = res.data;
+                })
+        },
 
-    fetchPeopleGoing() {
-            fetch('api/people_going')
-            .then(res => res.json())
-            .then(res => {
-                this.people_going = res.data;
-            })
-    },
 
-
-
+        //Add person to the event
         addPerson(place, event, person, but) {
             this.person.place_id = place;
             this.person.event_id = event;
             this.person.person_id = person;
         
-            fetch('api/person', {
+            fetch('api/person?api_token=' + this.$props.currentUser.api_token, {
                 method: 'post',
                 body: JSON.stringify(this.person),
                 headers: {
@@ -249,10 +252,17 @@ export default {
             })
             .catch(err =>console.log(err));
 
+            Vue.notify({
+                group: 'foo',
+                title: 'Congrats!!',
+                type: 'success',
+                text: 'You have joined an event !'
+                });
+
         },
 
         
-
+        //Delete person from event
         deletePerson: function(place, event, person, but) {
 
             const first = this.people_going.filter( oneper => oneper.person_id == person);
@@ -261,7 +271,7 @@ export default {
 
             var id = third[0].id;
          
-            fetch('api/person/'+ id, {
+            fetch('api/person/'+ id + '?api_token=' + this.$props.currentUser.api_token, {
                 method: 'delete'
             })
                 .then(res => res.json())
@@ -272,12 +282,19 @@ export default {
                 })
                 .catch(err => console.log(err));
 
+                Vue.notify({
+                group: 'foo',
+                title: 'Notification',
+                type: 'error',
+                text: 'You left the event !'
+                });
+
         },
 
-
+        //Delete event from database
         deleteEvent: function(eventId) {
          
-            fetch('api/event/'+ eventId, {
+            fetch('api/event/'+ eventId + '?api_token=' + this.$props.currentUser.api_token, {
                 method: 'delete'
             })
                 .then(res => res.json())
@@ -293,6 +310,13 @@ export default {
 
                 })
                 .catch(err => console.log(err));
+
+                Vue.notify({
+                group: 'foo',
+                title: 'Notification',
+                type: 'error',
+                text: 'You have deleted an event'
+                });
 
         },
 

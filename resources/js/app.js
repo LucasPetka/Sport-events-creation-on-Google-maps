@@ -22,9 +22,9 @@ import GmapCluster from 'vue2-google-maps/dist/components/cluster'
 import Datetime from 'vue-datetime'
 import 'vue-datetime/dist/vue-datetime.css'
 
-Vue.use(Datetime)
-Vue.use(Notifications)
-Vue.component('GmapCluster', GmapCluster)
+Vue.use(Notifications);
+Vue.use(Datetime);
+Vue.component('GmapCluster', GmapCluster);
 
 
 Vue.use(VueGoogleMaps, {

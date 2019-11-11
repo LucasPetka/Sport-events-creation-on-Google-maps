@@ -2588,6 +2588,8 @@ module.exports = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuejs_datepicker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuejs-datepicker */ "./node_modules/vuejs-datepicker/dist/vuejs-datepicker.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_1__);
 //
 //
 //
@@ -2640,11 +2642,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     Datepicker: vuejs_datepicker__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   props: ['status', 'currentUser'],
+  //checks if someone loged in and gets all information about user
   data: function data() {
     return {
       format: 'yyyy-MM-dd',
@@ -2674,10 +2678,13 @@ __webpack_require__.r(__webpack_exports__);
       }
     };
   },
-  created: function created() {
-    this.fetchEvents();
-    this.fetchPeopleGoing();
+  //ONLOAD PAGE DO THIS
+  mounted: function mounted() {
+    this.fetchEvents(); // get all events from data base
+
+    this.fetchPeopleGoing(); // get all people going from data base
   },
+  //================================METHODS========================================
   methods: {
     //Create todays date variable
     getDate: function getDate(date) {
@@ -2767,6 +2774,7 @@ __webpack_require__.r(__webpack_exports__);
         };
       });
     },
+    //Get all events from database
     fetchEvents: function fetchEvents() {
       var _this3 = this;
 
@@ -2777,6 +2785,7 @@ __webpack_require__.r(__webpack_exports__);
       });
       return this.events;
     },
+    //Get all people that going to events
     fetchPeopleGoing: function fetchPeopleGoing() {
       var _this4 = this;
 
@@ -2786,13 +2795,14 @@ __webpack_require__.r(__webpack_exports__);
         _this4.people_going = res.data;
       });
     },
+    //Add person to the event
     addPerson: function addPerson(place, event, person, but) {
       var _this5 = this;
 
       this.person.place_id = place;
       this.person.event_id = event;
       this.person.person_id = person;
-      fetch('api/person', {
+      fetch('api/person?api_token=' + this.$props.currentUser.api_token, {
         method: 'post',
         body: JSON.stringify(this.person),
         headers: {
@@ -2809,7 +2819,14 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (err) {
         return console.log(err);
       });
+      vue__WEBPACK_IMPORTED_MODULE_1___default.a.notify({
+        group: 'foo',
+        title: 'Congrats!!',
+        type: 'success',
+        text: 'You have joined an event !'
+      });
     },
+    //Delete person from event
     deletePerson: function deletePerson(place, event, person, but) {
       var _this6 = this;
 
@@ -2823,7 +2840,7 @@ __webpack_require__.r(__webpack_exports__);
         return oneper.place_id == place;
       });
       var id = third[0].id;
-      fetch('api/person/' + id, {
+      fetch('api/person/' + id + '?api_token=' + this.$props.currentUser.api_token, {
         method: 'delete'
       }).then(function (res) {
         return res.json();
@@ -2832,11 +2849,18 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (err) {
         return console.log(err);
       });
+      vue__WEBPACK_IMPORTED_MODULE_1___default.a.notify({
+        group: 'foo',
+        title: 'Notification',
+        type: 'error',
+        text: 'You left the event !'
+      });
     },
+    //Delete event from database
     deleteEvent: function deleteEvent(eventId) {
       var _this7 = this;
 
-      fetch('api/event/' + eventId, {
+      fetch('api/event/' + eventId + '?api_token=' + this.$props.currentUser.api_token, {
         method: 'delete'
       }).then(function (res) {
         return res.json();
@@ -2852,6 +2876,12 @@ __webpack_require__.r(__webpack_exports__);
         });
       })["catch"](function (err) {
         return console.log(err);
+      });
+      vue__WEBPACK_IMPORTED_MODULE_1___default.a.notify({
+        group: 'foo',
+        title: 'Notification',
+        type: 'error',
+        text: 'You have deleted an event'
       });
     }
   }
@@ -2908,12 +2938,11 @@ var _assets_options_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/_
   //checks if someone loged in to let them add new Marker
   data: function data() {
     return {
-      // default to Montreal to keep it simple
-      // change this to whatever makes sense
       center: {
         lat: 55.205448395768826,
         lng: 23.930382446707117
       },
+      //the center of the map "LITHUANIA"
       places: [],
       types: [],
       place: {
@@ -3022,6 +3051,7 @@ var _assets_options_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/_
         };
       }
     },
+    //knows the zoom in level of map
     updateZoom: function updateZoom() {
       var _this3 = this;
 
@@ -3029,6 +3059,7 @@ var _assets_options_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/_
         _this3.zoom_in = map.getZoom();
       });
     },
+    //Opens right click menu
     openMenu: function openMenu(loc) {
       if (this.status == 1) {
         this.addNewmark_coordinates = {
@@ -3037,11 +3068,12 @@ var _assets_options_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/_
         };
         this.marker_visibility = true;
         $("#pointerMenu").css({
-          top: event.clientY,
+          top: event.clientY - 55,
           left: event.clientX
         }).show();
       }
     },
+    //Closes right click menu
     closePointerMenu: function closePointerMenu() {
       $("#pointerMenu").hide();
       this.marker_visibility = false;
@@ -3051,9 +3083,11 @@ var _assets_options_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/_
       $("#pointerMenu").hide();
       this.marker_visibility = true;
     },
+    //hides new place marker
     hidePointer: function hidePointer() {
       this.marker_visibility = false;
     },
+    //on click show information about this place
     showSpot: function showSpot(key) {
       var foundPlace = this.places.find(function (place) {
         return place.id == key;
@@ -3068,6 +3102,7 @@ var _assets_options_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/_
         lng: parseFloat(place.lng)
       };
     },
+    //gets all places from data base
     fetchPlaces: function fetchPlaces() {
       var _this4 = this;
 
@@ -3097,10 +3132,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Calendar_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/Calendar.vue */ "./resources/js/components/Calendar.vue");
 /* harmony import */ var vue_datetime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-datetime */ "./node_modules/vue-datetime/dist/vue-datetime.js");
 /* harmony import */ var vue_datetime__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(vue_datetime__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var vue_notification__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue-notification */ "./node_modules/vue-notification/dist/index.js");
-/* harmony import */ var vue_notification__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(vue_notification__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_4__);
 
 //
 //
@@ -3291,7 +3324,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
+//
+//
+//
 
 
 
@@ -3300,13 +3335,12 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     'Gmap': _components_Gmap_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
     'Calendar': _components_Calendar_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
-    'datetime': vue_datetime__WEBPACK_IMPORTED_MODULE_3__["Datetime"],
-    'notifications': vue_notification__WEBPACK_IMPORTED_MODULE_4___default.a
+    'datetime': vue_datetime__WEBPACK_IMPORTED_MODULE_3__["Datetime"]
   },
   props: ['status', 'currentUser'],
+  //checks if someone loged in and gets all information about user
   data: function data() {
     return {
-      loaded: false,
       places: [],
       types: [],
       type: {
@@ -3346,10 +3380,13 @@ __webpack_require__.r(__webpack_exports__);
         lat: 0,
         lng: 0
       },
-      edit: false
+      edit: false,
+      truee: true
     };
   },
+  //==============================ON LOAD FUNCTION==============================================
   mounted: function mounted() {
+    //animation
     $("#geras").animate({
       left: '45%',
       opacity: '1',
@@ -3369,18 +3406,21 @@ __webpack_require__.r(__webpack_exports__);
         });
       });
     });
-    this.fetchPlaces();
-    this.fetchTypes();
-    this.loadingScreen();
-  },
-  methods: {
-    loadingScreen: function loadingScreen() {
-      var _this = this;
+    this.fetchPlaces(); //fetcing all places
 
-      setTimeout(function () {
-        _this.loaded = true;
-      }, 4000);
+    this.fetchTypes(); //fething all sport types
+  },
+  //===============================METHODS=======================================================
+  methods: {
+    //Closes sidebar
+    openShow: function openShow() {
+      $("#map").removeClass("col-lg-12");
+      $("#map").addClass("col-lg-8");
+      $("#side").removeClass("col-lg-0");
+      $('#side').show();
+      $("#side").addClass("col-lg-4");
     },
+    //Closes sidebar
     closeShow: function closeShow() {
       $("#map").removeClass("col-lg-8");
       $("#map").addClass("col-lg-12");
@@ -3388,6 +3428,18 @@ __webpack_require__.r(__webpack_exports__);
       $('#side').hide();
       $("#side").addClass("col-lg-0");
     },
+    //Opens place addition label
+    openAdd: function openAdd(cord) {
+      this.place.lat = cord.lat;
+      this.place.lng = cord.lng;
+      var create = document.querySelector('#createDiv');
+
+      if (create.style.display === 'none') {
+        this.openShow();
+        $("#createDiv").slideDown("slow");
+      }
+    },
+    //Closes place adition label
     closeAdd: function closeAdd() {
       if ($("#close_show").is(":visible")) {
         $("#createDiv").slideUp("slow");
@@ -3397,24 +3449,10 @@ __webpack_require__.r(__webpack_exports__);
         this.$refs.gmapp.hidePointer();
         $(".popup-content").fadeOut("slow");
       }
-    },
-    openAdd: function openAdd(cord) {
-      this.place.lat = cord.lat;
-      this.place.lng = cord.lng;
-      var create = document.querySelector('#createDiv');
 
-      if (create.style.display === 'none') {
-        $("#map").removeClass("col-lg-12");
-        $("#map").addClass("col-lg-8");
-        $("#side").removeClass("col-lg-0");
-        $('#side').show();
-        $("#side").addClass("col-lg-4");
-        $("#createDiv").slideDown("slow");
-      }
+      this.closeShow();
     },
-    closeAddEvent: function closeAddEvent() {
-      $("#addEvent").hide("fast");
-    },
+    //Opens event creation label
     openAddEvent: function openAddEvent() {
       this.event.place_id = this.show.id;
       this.event.person_id = this.currentUser.id;
@@ -3428,6 +3466,11 @@ __webpack_require__.r(__webpack_exports__);
         }, 1000);
       }
     },
+    //Closes event creation label
+    closeAddEvent: function closeAddEvent() {
+      $("#addEvent").hide("fast");
+    },
+    //Parse data in right format to choose when event starts and when ends
     parseDate: function parseDate(choose) {
       var d = new Date(this.start);
 
@@ -3441,6 +3484,7 @@ __webpack_require__.r(__webpack_exports__);
         this.event.time_until = n;
       }
     },
+    //Gets date in day chooser
     getDate: function getDate(dateee) {
       var d = new Date(dateee);
       this.date = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
@@ -3449,8 +3493,9 @@ __webpack_require__.r(__webpack_exports__);
       this.start = dateee;
       this.end = dateee;
     },
+    //Show spot all info with all events happening in there
     showSpot: function showSpot(id) {
-      var _this2 = this;
+      var _this = this;
 
       var foundPlace = this.places.find(function (place) {
         return place.id == id;
@@ -3458,15 +3503,11 @@ __webpack_require__.r(__webpack_exports__);
       this.show = foundPlace;
       this.$refs.calendar.fetchSpot(this.show.id);
       var foundType = this.types.find(function (type) {
-        return type.id == _this2.show.type;
+        return type.id == _this.show.type;
       });
       this.type = foundType;
       var show = document.querySelector('#show');
-      $("#map").removeClass("col-lg-12");
-      $("#map").addClass("col-lg-8");
-      $("#side").removeClass("col-lg-0");
-      $('#side').show();
-      $("#side").addClass("col-lg-4");
+      this.openShow();
 
       if (show.style.display === 'none') {
         $("#show").slideDown("slow");
@@ -3475,33 +3516,34 @@ __webpack_require__.r(__webpack_exports__);
       this.closeAddEvent();
     },
     fetchPlaces: function fetchPlaces() {
-      var _this3 = this;
+      var _this2 = this;
 
       fetch('api/places').then(function (res) {
         return res.json();
       }).then(function (res) {
-        _this3.places = res.data;
+        _this2.places = res.data;
       });
     },
     fetchTypes: function fetchTypes() {
-      var _this4 = this;
+      var _this3 = this;
 
       fetch('api/types').then(function (res) {
         return res.json();
       }).then(function (res) {
-        _this4.types = res.data;
+        _this3.types = res.data;
       });
     },
+    //Deletes place
     deletePlace: function deletePlace(id) {
-      var _this5 = this;
+      var _this4 = this;
 
       if (confirm('Are you sure?')) {
-        fetch('api/place/' + id, {
+        fetch('api/place/' + id + '?api_token=' + this.$props.currentUser.api_token, {
           method: 'delete'
         }).then(function (res) {
           return res.json();
         }).then(function (data) {
-          _this5.fetchPlaces();
+          _this4.fetchPlaces();
         })["catch"](function (err) {
           return console.log(err);
         });
@@ -3512,14 +3554,22 @@ __webpack_require__.r(__webpack_exports__);
         this.show.lng = '';
         this.show.type = '';
         this.type.name = '';
+        vue__WEBPACK_IMPORTED_MODULE_4___default.a.notify({
+          group: 'foo',
+          title: 'Notification',
+          type: 'error',
+          text: 'The place has been deleted!'
+        });
+        $("#show").hide();
         this.closeShow();
       }
     },
+    //Adds new place
     addPlace: function addPlace() {
-      var _this6 = this;
+      var _this5 = this;
 
       if (this.edit === false) {
-        fetch('api/place', {
+        fetch('api/place?api_token=' + this.$props.currentUser.api_token, {
           method: 'post',
           body: JSON.stringify(this.place),
           headers: {
@@ -3528,23 +3578,31 @@ __webpack_require__.r(__webpack_exports__);
         }).then(function (res) {
           return res.json();
         }).then(function (data) {
-          _this6.place.title = '';
-          _this6.place.about = '';
-          _this6.place.lat = '';
-          _this6.place.lng = '';
-          _this6.place.type = '';
+          _this5.place.title = '';
+          _this5.place.about = '';
+          _this5.place.lat = '';
+          _this5.place.lng = '';
+          _this5.place.type = '';
 
-          _this6.fetchPlaces();
+          _this5.fetchPlaces();
         })["catch"](function (err) {
           return console.log(err);
+        });
+        vue__WEBPACK_IMPORTED_MODULE_4___default.a.notify({
+          group: 'foo',
+          title: 'Congrats!!',
+          type: 'success',
+          text: 'The new place has been added!'
         });
         this.$refs.gmapp.fetchPlaces();
         this.$refs.gmapp.hidePointer();
         this.closeAdd();
+        this.closeShow();
       } else {}
     },
+    //Create event
     addEvent: function addEvent() {
-      var _this7 = this;
+      var _this6 = this;
 
       if (this.edit === false) {
         (function _callee() {
@@ -3554,9 +3612,9 @@ __webpack_require__.r(__webpack_exports__);
               switch (_context.prev = _context.next) {
                 case 0:
                   _context.next = 2;
-                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(fetch('api/event', {
+                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(fetch('api/event?api_token=' + _this6.$props.currentUser.api_token, {
                     method: 'post',
-                    body: JSON.stringify(_this7.event),
+                    body: JSON.stringify(_this6.event),
                     headers: {
                       'Accept': 'application/json',
                       'content-type': 'application/json'
@@ -3571,11 +3629,11 @@ __webpack_require__.r(__webpack_exports__);
                 case 5:
                   content = _context.sent;
                   _context.next = 8;
-                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(_this7.$refs.calendar.fetchEvents());
+                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(_this6.$refs.calendar.fetchEvents());
 
                 case 8:
                   _context.next = 10;
-                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(_this7.$refs.calendar.fetchSpot(_this7.show.id));
+                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(_this6.$refs.calendar.fetchSpot(_this6.show.id));
 
                 case 10:
                 case "end":
@@ -3585,15 +3643,11 @@ __webpack_require__.r(__webpack_exports__);
           });
         })();
 
-        this.$notify({
+        vue__WEBPACK_IMPORTED_MODULE_4___default.a.notify({
           group: 'foo',
-          title: 'Important message',
-          text: 'New place has been added!'
-        });
-        vue__WEBPACK_IMPORTED_MODULE_5___default.a.notify({
-          group: 'foo',
-          title: 'Important message',
-          text: 'Hello user! This is a notification!'
+          title: 'Congrats!!',
+          type: 'success',
+          text: 'You have created an event !'
         });
         this.event.place_id = '';
         this.event.title = '';
@@ -8194,7 +8248,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n#refresh_button[data-v-bdcfc800]{\n  position: absolute;\n  bottom:20px;\n  left: 49%;\n  -webkit-transform: translate(-49%, -40%);\n  transform: translate(-49%, -40%);\n  z-index: 5;\n}\n#geoloc_bar[data-v-bdcfc800]{\n  position: absolute;\n  top:40px;\n  left: 49%;\n  -webkit-transform: translate(-49%, -40%);\n  transform: translate(-49%, -40%);\n  z-index: 5;\n  background-color: white;\n  padding: 10px 15px;\n  border-radius: 8px;\n  width: 350px;\n}\n#marker[data-v-bdcfc800] {\n display: none;\n}\n\n\n", ""]);
+exports.push([module.i, "\n#refresh_button[data-v-bdcfc800]{\n  position: absolute;\n  bottom:20px;\n  left: 49%;\n  -webkit-transform: translate(-49%, -40%);\n  transform: translate(-49%, -40%);\n  z-index: 5;\n}\n#geoloc_bar[data-v-bdcfc800]{\n  position: absolute;\n  top:80px;\n  left: 49%;\n  -webkit-transform: translate(-49%, -40%);\n  transform: translate(-49%, -40%);\n  z-index: 5;\n  background-color: white;\n  padding: 10px 15px;\n  border-radius: 8px;\n  width: 350px;\n}\n#marker[data-v-bdcfc800] {\n display: none;\n}\n\n\n", ""]);
 
 // exports
 
@@ -8213,7 +8267,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n#sidebar{\n    height: 94vh;\n    overflow-y: auto;\n}\n#geras{\n    position: absolute;\n    color:white;\n    font-size: 25px;\n    opacity: 0.1;\n}\n#loading-screen {\n    position: fixed;\n    z-index: 100;\n    background-color: #82cc75;\n    height: 100%;\n    width: 100%;\n}\n.vdatetime-input{\n    border-radius: 0px;\n    box-shadow: none !important;\n    border: solid 1px #b7b7b7;\n    padding: 8px;\n    color:#6C757D;\n}\n.vdatetime-popup__header {\n    background: #28a745;\n}\n.vdatetime-time-picker__item--selected {\n    color: #28a745;\n}\n.vdatetime-popup__actions__button {\n    color: #28a745;\n}\n@media only screen and (max-width: 900px) {\n#map {\n    width: 100% !important;\n}\n#show{\n    width: 95% !important;\n}\n#createDiv{\n    width: 95% !important;\n}\n#sidebar{\n    height: auto;\n    overflow-y: hidden;\n}\n}\n", ""]);
+exports.push([module.i, "\n.my-style {\n    padding: 15px;\n    margin-top: 0px;\n    width: 300px;\n \n    font-size: 14px;\n    border-radius: 0px 0px 10px 10px;\n\n\n    color: #ffffff;\n    background: #82CC75;\n}\n.success {\n    background: #82CC75;\n}\n.error {\n    background: #DC4146;\n}\n#sidebar{\n    height: 94vh;\n    overflow-y: auto;\n}\n#geras{\n    position: absolute;\n    color:white;\n    font-size: 25px;\n    opacity: 0.1;\n}\n#loading-screen {\n    position: fixed;\n    z-index: 100;\n    background-color: #82cc75;\n    height: 100%;\n    width: 100%;\n}\n.vdatetime-input{\n    border-radius: 0px;\n    box-shadow: none !important;\n    border: solid 1px #b7b7b7;\n    padding: 8px;\n    color:#6C757D;\n}\n.vdatetime-popup__header {\n    background: #28a745;\n}\n.vdatetime-time-picker__item--selected {\n    color: #28a745;\n}\n.vdatetime-popup__actions__button {\n    color: #28a745;\n}\n@media only screen and (max-width: 900px) {\n#map {\n    width: 100% !important;\n}\n#show{\n    width: 95% !important;\n}\n#createDiv{\n    width: 95% !important;\n}\n#sidebar{\n    height: auto;\n    overflow-y: hidden;\n}\n}\n", ""]);
 
 // exports
 
@@ -51396,7 +51450,14 @@ var render = function() {
     [
       _vm._m(0),
       _vm._v(" "),
-      _c("notifications", { attrs: { position: "bottom left" } }),
+      _c("notifications", {
+        attrs: {
+          group: "foo",
+          classes: "my-style",
+          ignoreDuplicates: "",
+          position: "top center"
+        }
+      }),
       _vm._v(" "),
       _c(
         "div",
@@ -71018,8 +71079,8 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('profile', __webpack_requir
 
 
 
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_datetime__WEBPACK_IMPORTED_MODULE_4___default.a);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_notification__WEBPACK_IMPORTED_MODULE_2___default.a);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_datetime__WEBPACK_IMPORTED_MODULE_4___default.a);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('GmapCluster', vue2_google_maps_dist_components_cluster__WEBPACK_IMPORTED_MODULE_3___default.a);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue2_google_maps__WEBPACK_IMPORTED_MODULE_1__, {
   load: {

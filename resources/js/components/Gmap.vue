@@ -41,9 +41,7 @@ export default {
 
   data() {
     return {
-      // default to Montreal to keep it simple
-      // change this to whatever makes sense
-    center: { lat: 55.205448395768826, lng: 23.930382446707117 },
+    center: { lat: 55.205448395768826, lng: 23.930382446707117 }, //the center of the map "LITHUANIA"
     places: [],
     types: [],
     place: {
@@ -80,7 +78,6 @@ export default {
   },
 
   methods: {
-
 
     //smooth zooms in using timeout beetween zoom functions
     smoothZoom(max, cnt) {
@@ -158,16 +155,14 @@ export default {
         }
     },
 
-
-
+    //knows the zoom in level of map
     updateZoom: function(){
       this.$refs.gmapp.$mapPromise.then((map) => {
           this.zoom_in = map.getZoom();
       });
     },
 
-
-
+    //Opens right click menu
     openMenu: function(loc){
       if(this.status == 1){
       this.addNewmark_coordinates = {
@@ -175,14 +170,16 @@ export default {
       lng: loc.latLng.lng(),};
 
       this.marker_visibility = true;
-      $("#pointerMenu").css({top: event.clientY, left: event.clientX}).show();
+      $("#pointerMenu").css({top: event.clientY-55, left: event.clientX}).show();
       }
     },
 
+    //Closes right click menu
     closePointerMenu: function(){
       $("#pointerMenu").hide();
       this.marker_visibility = false;
     },
+
 
     creatNewMarker: function(){
       this.$emit('openForm', this.addNewmark_coordinates);
@@ -190,11 +187,12 @@ export default {
       this.marker_visibility = true;
     },
 
-
+    //hides new place marker
     hidePointer: function(){
       this.marker_visibility = false;
     },
         
+    //on click show information about this place
     showSpot: function(key){
       const foundPlace = this.places.find( place => place.id == key);
       this.place = foundPlace;
@@ -212,7 +210,7 @@ export default {
       }
     },
     
-
+    //gets all places from data base
     fetchPlaces() {
             fetch('api/places')
             .then(res => res.json())
@@ -239,7 +237,7 @@ export default {
 
 #geoloc_bar{
   position: absolute;
-  top:40px;
+  top:80px;
   left: 49%;
   -webkit-transform: translate(-49%, -40%);
   transform: translate(-49%, -40%);

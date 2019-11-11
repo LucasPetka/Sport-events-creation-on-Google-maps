@@ -18,30 +18,38 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-//List Types
-Route::get('types', 'TypeController@index');
+    //List Types
+    Route::get('types', 'TypeController@index');
+    //List Places
+    Route::get('places', 'PlaceController@index');
 
-//List Places
-Route::get('places', 'PlaceController@index');
-//Create new Place
-Route::post('place', 'PlaceController@store');
-//Update place
-Route::put('place', 'PlaceController@store');
-//Delete place
-Route::delete('place/{id}', 'PlaceController@destroy');
+Route::group(['middleware' => 'auth:api'], function() {
+    //Create new Place
+    Route::post('place', 'PlaceController@store');
+    //Update place
+    Route::put('place', 'PlaceController@store');
+    //Delete place
+    Route::delete('place/{id}', 'PlaceController@destroy');
+});
 
-//List Events
-Route::get('events', 'EventController@index');
-//Create new Event
-Route::post('event', 'EventController@store');
-//Update Event
-Route::put('event', 'EventController@store');
-//Delete Event
-Route::delete('event/{id}', 'EventController@destroy');
+    //List Events
+    Route::get('events', 'EventController@index');
 
-//People Going
-Route::get('people_going', 'PeopleGoingController@index');
-//Add person to event
-Route::post('person', 'PeopleGoingController@store');
-//Remove person from event
-Route::delete('person/{id}', 'PeopleGoingController@destroy');
+Route::group(['middleware' => 'auth:api'], function() {
+    //Create new Event
+    Route::post('event', 'EventController@store');
+    //Update Event
+    Route::put('event', 'EventController@store');
+    //Delete Event
+    Route::delete('event/{id}', 'EventController@destroy');
+});
+
+    //People Going
+    Route::get('people_going', 'PeopleGoingController@index');
+
+Route::group(['middleware' => 'auth:api'], function() {
+    //Add person to event
+    Route::post('person', 'PeopleGoingController@store');
+    //Remove person from event
+    Route::delete('person/{id}', 'PeopleGoingController@destroy');
+});

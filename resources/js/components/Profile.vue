@@ -4,6 +4,7 @@
             Username: {{ currentUser.name }}<br>
             E-mail: {{ currentUser.email }}  <br>
             Joined: {{ currentUser.created_at }}  <br>
+            {{ currentUser.api_token }}
 
         </div>    
 </template>

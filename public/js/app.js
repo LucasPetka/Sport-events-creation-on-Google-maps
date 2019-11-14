@@ -3682,6 +3682,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {},
   props: ['currentUser'],
@@ -52180,7 +52181,8 @@ var render = function() {
     _vm._v("\n    E-mail: " + _vm._s(_vm.currentUser.email) + "  "),
     _c("br"),
     _vm._v("\n    Joined: " + _vm._s(_vm.currentUser.created_at) + "  "),
-    _c("br")
+    _c("br"),
+    _vm._v("\n    " + _vm._s(_vm.currentUser.api_token) + "\n\n")
   ])
 }
 var staticRenderFns = []

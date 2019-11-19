@@ -30,7 +30,7 @@ Vue.component('GmapCluster', GmapCluster);
 Vue.use(VueGoogleMaps, {
   load: {
     key: 'AIzaSyBQxzhnAAV7IpsN2kjtER2X2Je00Lpnmm8',
-    libraries: 'places, clusters', 
+    libraries: ['places','geometry'],
   },
    autobindAllEvents: false,
 })

@@ -16,7 +16,7 @@
         <button type="button" class="btn btn-success" v-on:click="loadMarkers()">Refresh markers <i class="fas fa-redo"></i></button>
       </div>
 
-    <gmap-map ref="gmapp" v-on:rightclick="openMenu($event)" v-on:zoom_changed="updateZoom()" v-on:bounds_changed="update_bounds($event)" :center="center" :zoom="zoom_in" v-bind:options="mapStyle"  style="width:100%; height: 94vh;">
+    <gmap-map ref="gmapp" v-on:rightclick="openMenu($event)" v-on:zoom_changed="updateZoom()" :center="geolocation()" v-on:bounds_changed="update_bounds($event)" :zoom="zoom_in" v-bind:options="mapStyle"  style="width:100%; height: 94vh;">
       <gmap-marker v-for="place in places" :visible="place.visible" :key="place.id" :position="getPosition(place)" @click="center=getPosition(place)" v-on:click="showSpot(place.id)" :icon="icon(place.type)" ></gmap-marker>
       <gmap-marker :visible="marker_visibility" :position="getPosition(addNewmark_coordinates)" :icon="{ url: require('../assets/google_maps/new.png')}" ></gmap-marker>
     </gmap-map>
@@ -42,6 +42,8 @@ export default {
   data() {
     return {
     center: { lat: 55.205448395768826, lng: 23.930382446707117 }, //the center of the map "LITHUANIA"
+    user_location: {lat: 0, lng: 0},
+    user_loc_set: false,
     places: [],
     types: [],
     place: {
@@ -54,7 +56,7 @@ export default {
       visible: true
     }, 
     addNewmark_coordinates: { lat: 0.0, lng: 0.0 },
-    zoom_in: 8,
+    zoom_in: 13,
     bounds: null,
     currentPlace: null,
     marker_visibility: false,   
@@ -78,6 +80,58 @@ export default {
   },
 
   methods: {
+
+    checkVariable()
+    {
+      if ( this.bounds != null )
+      {
+          this.loadMarkers();
+      }
+      else
+      {
+          window.setTimeout(this.checkVariable, 500);
+      }
+    },
+
+    //sets map center, main location LITHUANIA, but if person has location ON then it shows person location
+    geolocation : function() {
+
+      if(!this.user_loc_set){
+        if (navigator.geolocation) { //if location tracking is ON
+          navigator.geolocation.getCurrentPosition((position) => {
+
+            this.center = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+
+            this.user_location = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+            this.user_loc_set = true;
+
+            this.checkVariable();
+
+          }, err =>{    //if something goes wrong when locating just set map center
+            this.center = {
+              lat: 55.205448395768826, 
+              lng: 23.930382446707117
+            };
+            this.zoom_in = 8;
+          });
+        }
+        else{           //if tracking is OFF when just locate set map center
+          this.center = {
+            lat: 55.205448395768826, 
+            lng: 23.930382446707117
+          };
+          this.zoom_in = 8;
+        }
+      }
+      return this.center;
+    },
+
 
     //smooth zooms in using timeout beetween zoom functions
     smoothZoom(max, cnt) {
@@ -110,11 +164,27 @@ export default {
           }
           else{
             place.visible = false;
+
           }
         }
 
       this.zoom_in = this.zoom_in - 1;
       this.zoom_in = this.zoom_in + 1;
+
+    },
+
+
+    measure_distance(){
+    // Obtain the distance in meters by the computeDistanceBetween method
+    // From the Google Maps extension
+    var distanceInMeters = google.maps.geometry.spherical.computeDistanceBetween(
+        new google.maps.LatLng(this.getPosition(this.place)),
+        new google.maps.LatLng(this.getPosition(this.user_location))
+    );
+    var distanceInKilometers = distanceInMeters * 0.001;
+    console.log(distanceInKilometers);
+    return  distanceInKilometers.toFixed(2);
+
 
     },
 
@@ -197,9 +267,11 @@ export default {
       const foundPlace = this.places.find( place => place.id == key);
       this.place = foundPlace;
 
+      var arg = [key, this.measure_distance()];
+
       this.smoothZoom(17, this.zoom_in);
 
-      this.$emit('showSpot', key);
+      this.$emit('showSpot', arg);
     },
 
 

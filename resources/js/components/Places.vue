@@ -94,9 +94,15 @@
 
                                 <div class="card-body">
                                     <p class="card-text">{{ show.about }}</p>
+
+                                    <hr class="mt-4">
+                                    <p class="float-right"><small>This place is {{ measured_distance }} km from you</small></p>
+
                                 </div>
 
-                                <button v-on:click="deletePlace(show.id)" class="btn btn-danger m-2">Delete</button>
+
+
+                                <!--<button v-on:click="deletePlace(show.id)" class="btn btn-danger m-2">Delete</button>-->
 
                             </div>
 
@@ -241,6 +247,7 @@ export default {
                 person_id:'',
             },
             date:'',
+            measured_distance:null,
             start:new Date().toISOString(),
             end:new Date().toISOString(),
             coordinates:{lat:0, lng:0},
@@ -357,17 +364,18 @@ export default {
 
     //Gets date in day chooser
     getDate: function(dateee){
-    var d = new Date(dateee);
-    this.date =  d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
-    d.setMinutes(30);
-    dateee = d.toISOString();
-    this.start = dateee;
-    this.end = dateee;
+        var d = new Date(dateee);
+        this.date =  d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+        d.setMinutes(30);
+        dateee = d.toISOString();
+        this.start = dateee;
+        this.end = dateee;
     },
 
     //Show spot all info with all events happening in there
-    showSpot: function(id){
-        const foundPlace = this.places.find( place => place.id == id);
+    showSpot: function(arg){
+
+        const foundPlace = this.places.find( place => place.id == arg[0]);
         this.show = foundPlace;
 
         this.$refs.calendar.fetchSpot(this.show.id);
@@ -376,6 +384,8 @@ export default {
         this.type = foundType;
 
         const show = document.querySelector('#show');
+
+        this.measured_distance = arg[1];
 
         this.openShow();
 

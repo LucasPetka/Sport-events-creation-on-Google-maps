@@ -20,6 +20,7 @@ class CreatePlacequeueTable extends Migration
             $table->string('lat');
             $table->string('lng');
             $table->string('type');
+            $table->string('personid');
             $table->timestamps();
         });
     }

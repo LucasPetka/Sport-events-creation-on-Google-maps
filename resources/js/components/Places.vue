@@ -227,7 +227,8 @@ export default {
                 about:'',
                 lat:'',
                 lng:'',
-                type:''
+                type:'',
+                personid:''
             },
             show: {         
                 id:'',
@@ -458,6 +459,8 @@ export default {
 
     //Adds new place
     addPlace() {
+        this.place.personid = this.$props.currentUser.id;
+
         if(this.edit === false){
             fetch('api/placequeue?api_token=' + this.getCookie("api_token"), {
                 method: 'post',

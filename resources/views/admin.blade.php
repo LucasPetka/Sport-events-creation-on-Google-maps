@@ -2,8 +2,8 @@
 
 @section('content')
 
-  <div class="container-fluid vh-100">
-    <div class="row h-100">
+  <div class="container-fluid" style="height:94vh;">
+    <div class="row" style="height:100%;">
       <nav class="col-md-2 d-none d-md-block bg-light sidebar">
         <div class="sidebar-sticky">
 
@@ -16,13 +16,13 @@
 
           <ul class="nav flex-column">
             <li class="nav-item">
-              <a class="nav-link active" href="#">
+              <a class="nav-link active" href="/admin">
                 <i class="fas fa-map-marked-alt"></i>
                 Places to confirm ({{ count($places) }}) <span class="sr-only">(current)</span>
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">
+              <a class="nav-link" href="/admin/users">
                 <i class="fas fa-user"></i>
                 Users
               </a>
@@ -52,8 +52,8 @@
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Title</th>
-                <th scope="col">About</th>
                 <th scope="col">Sport type</th>
+                <th scope="col">User</th>
                 <th scope="col"></th>
               </tr>
             </thead>
@@ -64,13 +64,21 @@
                 <tr>
                   <th scope="row">{{ ++$key }}</th>
                   <td>{{ $place->title }}</td>
-                  <td>{{ $place->about }}</td>
-                    @foreach ($types as $type)
-                      @if($type->id == $place->type)
+
+                  @foreach ($types as $type)
+                    @if($type->id == $place->type)
                       <td>{{ $type->name }}</td>
-                      @endif
-                    @endforeach
+                    @endif
+                  @endforeach
+
+                  @foreach ($users as $user)
+                    @if($user->id == $place->personid)
+                      <td>{{ $user->name }}</td>
+                    @endif
+                  @endforeach
+
                   <td>
+                      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#placeid{{ $place->id }}"> Open </button>
                       <a href ="/admin/accplace/{{ $place->id }}"  class="btn btn-success mr-2"><i class="fas fa-check"></i></a>
                       <a href ="/admin/decplace/{{ $place->id }}"  class="btn btn-danger mr-2"><i class="fas fa-times"></i></a>
                   </td>
@@ -79,7 +87,57 @@
               @endif
 
             </tbody>
+          </table>
         </div>
+
+        @if(count($places) > 0)
+          @foreach ($places as $key => $place)
+            <div class="modal fade" id="placeid{{ $place->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">{{ $place->title }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <SmallMap v-bind:place='{{ $place }}'> </SmallMap>
+                        </div>
+                        <div class="col-lg-5">
+                            {{ $place->about }}
+                            <hr>
+                            @foreach ($types as $type)
+                              @if($type->id == $place->type)
+                              <small>Sport type: {{ $type->name }}</small>
+                              @endif
+                            @endforeach
+                            <br>
+                            @foreach ($users as $user)
+                              @if($user->id == $place->personid)
+                                <small>Created by: {{ $user->name }}</small>
+                              @endif
+                            @endforeach
+                            <hr>
+                            <a href ="/admin/accplace/{{ $place->id }}"  class="btn btn-success mr-2"> Accept <i class="fas fa-check"></i></a>
+                            <a href ="/admin/decplace/{{ $place->id }}"  class="btn btn-danger mr-2"> Decline <i class="fas fa-times"></i></a>
+                        </div>
+
+                    </div>
+                    
+
+
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          @endforeach
+        @endif
 
 
       </main>

@@ -39,6 +39,7 @@ class PlaceQueueController extends Controller
         $place->lat = $request->input('lat');
         $place->lng = $request->input('lng');
         $place->type = $request->input('type');
+        $place->personid = $request->input('personid');
 
         if($place->save()){
             return new PlaceResource($place);

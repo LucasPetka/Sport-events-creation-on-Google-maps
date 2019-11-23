@@ -15,6 +15,9 @@ require('./components/Calendar.vue').default);
 Vue.component('profile', 
 require('./components/Profile.vue').default);
 
+Vue.component('smallmap', 
+require('./components/SmallMap.vue').default);
+
 import Vue from 'vue'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import Notifications from 'vue-notification'

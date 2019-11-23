@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\PlaceQueue;
 use App\Place;
 use App\Type;
+use App\User;
 
 class AdminController extends Controller
 {
@@ -13,9 +14,19 @@ class AdminController extends Controller
     { 
         $places = PlaceQueue::all();
         $types = Type::all();
+        $users = User::all();
 
-        return view('admin')->with(compact('places', 'types'));
+        return view('admin')->with(compact('places', 'types', 'users'));
     }
+
+    public function users()
+    { 
+        $users = User::all();
+        $places = PlaceQueue::all();
+
+        return view('admin.users')->with(compact('users', 'places'));
+    }
+
 
     public function acceptPlace($id)
     { 

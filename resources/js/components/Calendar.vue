@@ -227,6 +227,11 @@ export default {
                 })
         },
 
+        getCookie(name) {
+            var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+            return v ? v[2] : null;
+        },
+
 
         //Add person to the event
         addPerson(place, event, person, but) {
@@ -234,7 +239,7 @@ export default {
             this.person.event_id = event;
             this.person.person_id = person;
         
-            fetch('api/person?api_token=' + this.$props.currentUser.api_token, {
+            fetch('api/person?api_token=' + this.getCookie("api_token"), {
                 method: 'post',
                 body: JSON.stringify(this.person),
                 headers: {
@@ -271,7 +276,7 @@ export default {
 
             var id = third[0].id;
          
-            fetch('api/person/'+ id + '?api_token=' + this.$props.currentUser.api_token, {
+            fetch('api/person/'+ id + '?api_token=' + this.getCookie("api_token"), {
                 method: 'delete'
             })
                 .then(res => res.json())
@@ -294,7 +299,7 @@ export default {
         //Delete event from database
         deleteEvent: function(eventId) {
          
-            fetch('api/event/'+ eventId + '?api_token=' + this.$props.currentUser.api_token, {
+            fetch('api/event/'+ eventId + '?api_token=' + this.getCookie("api_token"), {
                 method: 'delete'
             })
                 .then(res => res.json())

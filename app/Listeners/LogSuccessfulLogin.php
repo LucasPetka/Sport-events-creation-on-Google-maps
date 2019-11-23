@@ -33,7 +33,8 @@ class LogSuccessfulLogin
         $user = User::find($event->user->id);
         $token = Str::random(60);
         $user->api_token = $token;
-        Cookie::queue(Cookie::make('api_token', $token, $minutes));
+        
+        Cookie::queue(Cookie::make('api_token', $token, $minutes, null, null, false, false));
         $user->save();
     }
 }

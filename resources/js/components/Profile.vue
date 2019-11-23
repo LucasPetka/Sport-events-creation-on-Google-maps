@@ -4,7 +4,9 @@
             Username: {{ currentUser.name }}<br>
             E-mail: {{ currentUser.email }}  <br>
             Joined: {{ currentUser.created_at }}  <br>
-            {{ currentUser.api_token }}
+            Role: <span v-if="currentUser.isAdmin == 1"> Admin</span> <span v-else> User</span><br>
+
+            <a v-if="currentUser.isAdmin == 1" class="btn btn-dark float-right" href="/admin" role="button">Admin panel</a>
 
         </div>    
 </template>

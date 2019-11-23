@@ -101,8 +101,9 @@
                                 </div>
 
 
-
-                                <!--<button v-on:click="deletePlace(show.id)" class="btn btn-danger m-2">Delete</button>-->
+                                <span v-if="currentUser">
+                                <button v-if="currentUser.isAdmin == 1" v-on:click="deletePlace(show.id)" class="btn btn-danger m-2">Delete</button>
+                                </span>
 
                             </div>
 
@@ -415,11 +416,19 @@ export default {
     },
 
 
+    getCookie(name) {
+    var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+    return v ? v[2] : null;
+    },
+
+
     //Deletes place
     deletePlace: function(id) {
 
+        console.log(this.getCookie("api_token"));
+
         if(confirm('Are you sure?')){
-            fetch('api/place/'+ id + '?api_token=' + this.$props.currentUser.api_token, {
+            fetch('api/place/'+ id + '?api_token=' + this.getCookie("api_token"), {
                 method: 'delete'
             })
                 .then(res => res.json())
@@ -450,7 +459,7 @@ export default {
     //Adds new place
     addPlace() {
         if(this.edit === false){
-            fetch('api/place?api_token=' + this.$props.currentUser.api_token, {
+            fetch('api/placequeue?api_token=' + this.getCookie("api_token"), {
                 method: 'post',
                 body: JSON.stringify(this.place),
                 headers: {
@@ -472,7 +481,7 @@ export default {
                 group: 'foo',
                 title: 'Congrats!!',
                 type: 'success',
-                text: 'The new place has been added!'
+                text: 'The new place has been sent for inspection and if everything is okay will be uploaded'
                 });
 
                 this.$refs.gmapp.fetchPlaces();
@@ -491,7 +500,7 @@ export default {
         if(this.edit === false){
 
         (async () => {
-        const Response = await fetch('api/event?api_token=' + this.$props.currentUser.api_token, {
+        const Response = await fetch('api/event?api_token=' + this.getCookie("api_token"), {
              method: 'post',
                 body: JSON.stringify(this.event),
                 headers: {

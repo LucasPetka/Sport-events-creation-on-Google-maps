@@ -30,7 +30,15 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::put('place', 'PlaceController@store');
     //Delete place
     Route::delete('place/{id}', 'PlaceController@destroy');
+
+    //Create new Place
+    Route::post('placequeue', 'PlaceQueueController@store');
+
+
 });
+
+
+
 
     //List Events
     Route::get('events', 'EventController@index');

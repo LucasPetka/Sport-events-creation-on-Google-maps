@@ -3,11 +3,10 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Register') }}</div>
-
-                <div class="card-body">
+        <div class="col-md-8 mt-5">
+            
+                <h3><img class="mb-4 ml-5" src="/images/logo.png" alt=""> Register</h3>
+              
                     <form method="POST" action="{{ route('register') }}">
                         @csrf
 
@@ -63,14 +62,14 @@
 
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-success btn-block">
                                     {{ __('Register') }}
                                 </button>
                             </div>
                         </div>
                     </form>
-                </div>
-            </div>
+            
+            
         </div>
     </div>
 </div>

@@ -26,6 +26,7 @@
         <nav class="navbar navbar-expand-md navbar-dark shadow-sm" style="background-color: #313638;">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
+                    <img src="/images/logonotext.png" height="25px" weight="100%">
                     MoSi
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">

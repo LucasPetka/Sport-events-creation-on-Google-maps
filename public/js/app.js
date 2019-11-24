@@ -2985,6 +2985,7 @@ var _assets_options_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/_
   },
   mounted: function mounted() {
     this.fetchPlaces();
+    this.geolocation();
     this.marker_visibility = this.$parent.show_new;
   },
   methods: {
@@ -3031,8 +3032,6 @@ var _assets_options_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/_
           this.zoom_in = 8;
         }
       }
-
-      return this.center;
     },
     //smooth zooms in using timeout beetween zoom functions
     smoothZoom: function smoothZoom(max, cnt) {
@@ -3398,6 +3397,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 
@@ -3538,6 +3539,9 @@ __webpack_require__.r(__webpack_exports__);
           scrollTop: $('#addEvent').position().top - 40
         }, 1000);
       }
+
+      this.parseDate(0);
+      this.parseDate(1);
     },
     //Closes event creation label
     closeAddEvent: function closeAddEvent() {
@@ -3546,6 +3550,17 @@ __webpack_require__.r(__webpack_exports__);
     //Parse data in right format to choose when event starts and when ends
     parseDate: function parseDate(choose) {
       var d = new Date(this.start);
+
+      if (this.start == this.end) {
+        $("#time_error").html("<span class='text-danger'><small>Times should not be equal!</small></span>");
+        $("#add_event_btn").attr("disabled", true);
+      } else if (this.start > this.end) {
+        $("#time_error").html("<span class='text-danger'><small>Second time should be later!</small></span>");
+        $("#add_event_btn").attr("disabled", true);
+      } else {
+        $("#time_error").html("");
+        $('#add_event_btn').removeAttr("disabled");
+      }
 
       if (choose == 0) {
         var d = new Date(this.start);
@@ -3560,10 +3575,14 @@ __webpack_require__.r(__webpack_exports__);
     //Gets date in day chooser
     getDate: function getDate(dateee) {
       var d = new Date(dateee);
+      var dat = new Date(dateee);
       this.date = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
       d.setMinutes(30);
+      dat.setMinutes(30);
+      dat.setHours(d.getHours() + 1);
       dateee = d.toISOString();
       this.start = dateee;
+      dateee = dat.toISOString();
       this.end = dateee;
     },
     //Show spot all info with all events happening in there
@@ -8387,7 +8406,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n#refresh_button[data-v-bdcfc800]{\n  position: absolute;\n  bottom:20px;\n  left: 49%;\n  -webkit-transform: translate(-49%, -40%);\n  transform: translate(-49%, -40%);\n  z-index: 5;\n}\n#geoloc_bar[data-v-bdcfc800]{\n  position: absolute;\n  top:80px;\n  left: 49%;\n  -webkit-transform: translate(-49%, -40%);\n  transform: translate(-49%, -40%);\n  z-index: 5;\n  background-color: white;\n  padding: 10px 15px;\n  border-radius: 8px;\n  width: 350px;\n}\n#marker[data-v-bdcfc800] {\n display: none;\n}\n\n\n", ""]);
+exports.push([module.i, "\n#refresh_button[data-v-bdcfc800]{\n  position: absolute;\n  bottom:20px;\n  left: 49%;\n  -webkit-transform: translate(-49%, -40%);\n  transform: translate(-49%, -40%);\n  z-index: 5;\n}\n#geoloc_bar[data-v-bdcfc800]{\n  position: absolute;\n  top:80px;\n  left: 49%;\n  -webkit-transform: translate(-49%, -40%);\n  transform: translate(-49%, -40%);\n  z-index: 5;\n  background-color: white;\n  padding: 10px 15px;\n  border-radius: 8px;\n  width: 400px;\n}\n#marker[data-v-bdcfc800] {\n display: none;\n}\n\n\n", ""]);
 
 // exports
 
@@ -8406,7 +8425,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.my-style {\n    padding: 15px;\n    margin-top: 0px;\n    width: 300px;\n \n    font-size: 14px;\n    border-radius: 0px 0px 10px 10px;\n\n\n    color: #ffffff;\n    background: #82CC75;\n}\n.success {\n    background: #82CC75;\n}\n.error {\n    background: #DC4146;\n}\n#sidebar{\n    height: 94vh;\n    overflow-y: auto;\n}\n#geras{\n    position: absolute;\n    color:white;\n    font-size: 25px;\n    opacity: 0.1;\n}\n#loading-screen {\n    position: fixed;\n    z-index: 100;\n    background-color: #82cc75;\n    height: 100%;\n    width: 100%;\n}\n.vdatetime-input{\n    border-radius: 0px;\n    box-shadow: none !important;\n    border: solid 1px #b7b7b7;\n    padding: 8px;\n    color:#6C757D;\n}\n.vdatetime-popup__header {\n    background: #28a745;\n}\n.vdatetime-time-picker__item--selected {\n    color: #28a745;\n}\n.vdatetime-popup__actions__button {\n    color: #28a745;\n}\n@media only screen and (max-width: 900px) {\n#map {\n    width: 100% !important;\n}\n#show{\n    width: 95% !important;\n}\n#createDiv{\n    width: 95% !important;\n}\n#sidebar{\n    height: auto;\n    overflow-y: hidden;\n}\n}\n", ""]);
+exports.push([module.i, "\n#time_error{\n    margin-top: -15px;\n    margin-left: 110px;\n}\n.my-style {\n    padding: 15px;\n    margin-top: 0px;\n    width: 300px;\n \n    font-size: 14px;\n    border-radius: 0px 0px 10px 10px;\n\n\n    color: #ffffff;\n    background: #82CC75;\n}\n.success {\n    background: #82CC75;\n}\n.error {\n    background: #DC4146;\n}\n#sidebar{\n    height: 94vh;\n    overflow-y: auto;\n}\n#geras{\n    position: absolute;\n    color:white;\n    font-size: 25px;\n    opacity: 0.1;\n}\n#loading-screen {\n    position: fixed;\n    z-index: 100;\n    background-color: #82cc75;\n    height: 100%;\n    width: 100%;\n}\n.vdatetime-input{\n    border-radius: 0px;\n    box-shadow: none !important;\n    border: solid 1px #b7b7b7;\n    padding: 8px;\n    color:#6C757D;\n}\n.vdatetime-popup__header {\n    background: #28a745;\n}\n.vdatetime-time-picker__item--selected {\n    color: #28a745;\n}\n.vdatetime-popup__actions__button {\n    color: #28a745;\n}\n@media only screen and (max-width: 900px) {\n#map {\n    width: 100% !important;\n}\n#show{\n    width: 95% !important;\n}\n#createDiv{\n    width: 95% !important;\n}\n#sidebar{\n    height: auto;\n    overflow-y: hidden;\n}\n}\n", ""]);
 
 // exports
 
@@ -51474,7 +51493,7 @@ var render = function() {
           ref: "gmapp",
           staticStyle: { width: "100%", height: "94vh" },
           attrs: {
-            center: _vm.geolocation(),
+            center: _vm.center,
             zoom: _vm.zoom_in,
             options: _vm.mapStyle
           },
@@ -51637,7 +51656,7 @@ var render = function() {
                 _c(
                   "div",
                   {
-                    staticClass: "card m-3",
+                    staticClass: "card m-3 mt-5",
                     staticStyle: { display: "none", width: "90%" },
                     attrs: { id: "createDiv" }
                   },
@@ -51816,7 +51835,7 @@ var render = function() {
                       display: "none",
                       width: "100%",
                       height: "auto",
-                      "padding-bottom": "150px"
+                      "padding-bottom": "270px"
                     },
                     attrs: { id: "show" }
                   },
@@ -51897,6 +51916,8 @@ var render = function() {
                             _c("hr", { staticClass: "mt-4" }),
                             _vm._v(" "),
                             _c("p", { staticClass: "float-right" }, [
+                              _c("i", { staticClass: "fas fa-road" }),
+                              _vm._v(" "),
                               _c("small", [
                                 _vm._v(
                                   "This place is " +
@@ -51920,7 +51941,12 @@ var render = function() {
                                           }
                                         }
                                       },
-                                      [_vm._v("Delete")]
+                                      [
+                                        _c("i", {
+                                          staticClass: "fas fa-times"
+                                        }),
+                                        _vm._v(" Delete place")
+                                      ]
                                     )
                                   : _vm._e()
                               ])
@@ -52024,7 +52050,8 @@ var render = function() {
                                     type: "text",
                                     id: "exampleInputEmail1",
                                     "aria-describedby": "emailHelp",
-                                    placeholder: "Enter title"
+                                    placeholder: "Enter title",
+                                    required: ""
                                   },
                                   domProps: { value: _vm.event.title },
                                   on: {
@@ -52065,7 +52092,8 @@ var render = function() {
                                   staticClass: "form-control",
                                   attrs: {
                                     id: "exampleFormControlTextarea1",
-                                    rows: "3"
+                                    rows: "3",
+                                    required: ""
                                   },
                                   domProps: { value: _vm.event.about },
                                   on: {
@@ -52105,7 +52133,8 @@ var render = function() {
                                       id: "start",
                                       format: "HH:mm",
                                       "value-zone": "local",
-                                      "minute-step": 10
+                                      "minute-step": 10,
+                                      required: ""
                                     },
                                     on: {
                                       input: function($event) {
@@ -52148,7 +52177,8 @@ var render = function() {
                                       id: "end",
                                       format: "HH:mm",
                                       "value-zone": "local",
-                                      "minute-step": 10
+                                      "minute-step": 10,
+                                      required: ""
                                     },
                                     on: {
                                       input: function($event) {
@@ -52168,6 +52198,8 @@ var render = function() {
                                 ],
                                 1
                               ),
+                              _vm._v(" "),
+                              _c("div", { attrs: { id: "time_error" } }),
                               _vm._v(" "),
                               _c("br"),
                               _vm._v(" "),
@@ -52305,7 +52337,10 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c(
       "button",
-      { staticClass: "btn btn-success float-right", attrs: { type: "submit" } },
+      {
+        staticClass: "btn btn-success float-right",
+        attrs: { id: "add_event_btn", type: "submit" }
+      },
       [_vm._v("Add "), _c("i", { staticClass: "fas fa-plus" })]
     )
   }

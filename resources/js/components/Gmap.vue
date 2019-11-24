@@ -3,20 +3,20 @@
     
       <div id="geoloc_bar">
         <div class="input-group">
-        <gmap-autocomplete class="form-control" @keyup.enter="locate"
-          @place_changed="setPlace">
-        </gmap-autocomplete>
-        <div class="input-group-append">
-          <button class="btn btn-outline-secondary" @click="locate">Locate</button>
+          <gmap-autocomplete class="form-control" @keyup.enter="locate" @place_changed="setPlace"></gmap-autocomplete> 
+
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary" @click="locate">Locate</button>
+          </div>
+
         </div>
-      </div>
       </div>
 
       <div id="refresh_button">
         <button type="button" class="btn btn-success" v-on:click="loadMarkers()">Refresh markers <i class="fas fa-redo"></i></button>
       </div>
 
-    <gmap-map ref="gmapp" v-on:rightclick="openMenu($event)" v-on:zoom_changed="updateZoom()" :center="geolocation()" v-on:bounds_changed="update_bounds($event)" :zoom="zoom_in" v-bind:options="mapStyle"  style="width:100%; height: 94vh;">
+    <gmap-map ref="gmapp" v-on:rightclick="openMenu($event)" v-on:zoom_changed="updateZoom()" :center="center" v-on:bounds_changed="update_bounds($event)" :zoom="zoom_in" v-bind:options="mapStyle"  style="width:100%; height: 94vh;">
       <gmap-marker v-for="place in places" :visible="place.visible" :key="place.id" :position="getPosition(place)" @click="center=getPosition(place)" v-on:click="showSpot(place.id)" :icon="icon(place.type)" ></gmap-marker>
       <gmap-marker :visible="marker_visibility" :position="getPosition(addNewmark_coordinates)" :icon="{ url: require('../assets/google_maps/new.png')}" ></gmap-marker>
     </gmap-map>
@@ -76,6 +76,7 @@ export default {
 
   mounted() {
     this.fetchPlaces();
+    this.geolocation();
     this.marker_visibility = this.$parent.show_new;
   },
 
@@ -129,7 +130,8 @@ export default {
           this.zoom_in = 8;
         }
       }
-      return this.center;
+
+      
     },
 
 
@@ -317,7 +319,7 @@ export default {
   background-color: white;
   padding: 10px 15px;
   border-radius: 8px;
-  width: 350px;
+  width: 400px;
 }
 
 #marker {

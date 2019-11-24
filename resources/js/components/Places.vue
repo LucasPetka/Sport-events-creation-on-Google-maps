@@ -21,7 +21,7 @@
                 <!-- =====================================ADD NEW PLACE========================================START================== -->
                 <!-- ================================================================================================================= -->
 
-                    <div class="card m-3" id="createDiv" style="display:none; width:90%;">
+                    <div class="card m-3 mt-5" id="createDiv" style="display:none; width:90%;">
                         <div class="card-header">
 
                             <button type="button" id="close_createDiv" v-on:click="closeAdd()" class="close" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
@@ -73,7 +73,7 @@
                 <!-- ================================================================================================================= -->
                 <!-- =====================================SHOW SPOT INFO=======================================START================== -->
                 <!-- ================================================================================================================= -->
-                    <div id="show" class="show" style="display:none; width:100%; height:auto; padding-bottom:150px;" >
+                    <div id="show" class="show" style="display:none; width:100%; height:auto; padding-bottom:270px;" >
                             
                         <div class="d-flex flex-column bd-highlight mb-3">
                             
@@ -96,13 +96,13 @@
                                     <p class="card-text">{{ show.about }}</p>
 
                                     <hr class="mt-4">
-                                    <p class="float-right"><small>This place is {{ measured_distance }} km from you</small></p>
+                                    <p class="float-right"> <i class="fas fa-road"></i> <small>This place is {{ measured_distance }} km from you</small></p>
 
                                 </div>
 
 
                                 <span v-if="currentUser">
-                                <button v-if="currentUser.isAdmin == 1" v-on:click="deletePlace(show.id)" class="btn btn-danger m-2">Delete</button>
+                                <button v-if="currentUser.isAdmin == 1" v-on:click="deletePlace(show.id)" class="btn btn-danger m-2"> <i class="fas fa-times"></i> Delete place</button>
                                 </span>
 
                             </div>
@@ -142,21 +142,21 @@
                                 <form @submit.prevent="addEvent">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Title</label>
-                                    <input v-model="event.title" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter title">
+                                    <input v-model="event.title" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter title" required>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="exampleFormControlTextarea1">About</label>
-                                    <textarea v-model="event.about" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                    <textarea v-model="event.about" class="form-control" id="exampleFormControlTextarea1" rows="3" required></textarea>
                                 </div>
 
 
 
                                 <div class="input-group mb-3">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text">{{ date }}</span>
+                                     <span class="input-group-text">{{ date }}</span>
                                 </div>
-                                    <datetime  type="time" id="start" v-model="start" format="HH:mm" :value-zone="'local'" :minute-step="10" v-on:input="parseDate(0)" ></datetime>
+                                    <datetime  type="time" id="start" v-model="start" format="HH:mm" :value-zone="'local'" :minute-step="10" v-on:input="parseDate(0)" required></datetime>
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="basic-addon2"><i class="far fa-clock"></i></span>
                                 </div>
@@ -166,18 +166,20 @@
 
                                 <div class="input-group mb-3">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text">{{ date }}</span>
+                                 <span class="input-group-text">{{ date }}</span>
                                 </div>
-                                    <datetime  type="time" id="end" v-model="end" format="HH:mm" :value-zone="'local'" :minute-step="10" v-on:input="parseDate(1)" ></datetime>
+                                    <datetime  type="time" id="end" v-model="end" format="HH:mm" :value-zone="'local'" :minute-step="10" v-on:input="parseDate(1)" required></datetime>
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="basic-addon2"><i class="far fa-clock"></i></span>
                                 </div>
                                 </div>
+
+                                <div id="time_error"></div>
                                 
                                 
                                 <br>
 
-                                <button type="submit" class="btn btn-success float-right">Add <i class="fas fa-plus"></i></button>
+                                <button id="add_event_btn" type="submit" class="btn btn-success float-right">Add <i class="fas fa-plus"></i></button>
                                 </form>
                             </div>
                         </div>
@@ -260,6 +262,8 @@ export default {
 
     //==============================ON LOAD FUNCTION==============================================
     mounted(){
+
+        
         
         //animation
         $("#geras").animate({left: '45%', opacity: '1', top:'40%', fontSize:'50px'}, 1500, function(){
@@ -341,6 +345,8 @@ export default {
                 scrollTop: $('#addEvent').position().top - 40
             }, 1000);
         } 
+
+        this.parseDate(0); this.parseDate(1);
     },
 
     //Closes event creation label
@@ -351,6 +357,19 @@ export default {
     //Parse data in right format to choose when event starts and when ends
     parseDate(choose){
         var d = new Date(this.start);
+
+        if(this.start == this.end){
+            $("#time_error").html("<span class='text-danger'><small>Times should not be equal!</small></span>");
+            $("#add_event_btn").attr("disabled", true);
+        }
+        else if(this.start > this.end) {
+            $("#time_error").html("<span class='text-danger'><small>Second time should be later!</small></span>");
+            $("#add_event_btn").attr("disabled", true);
+        }
+        else{
+            $("#time_error").html("");
+            $('#add_event_btn').removeAttr("disabled");
+        }
 
         if(choose == 0){
             var d = new Date(this.start);
@@ -367,10 +386,15 @@ export default {
     //Gets date in day chooser
     getDate: function(dateee){
         var d = new Date(dateee);
+        var dat = new Date(dateee);
         this.date =  d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
         d.setMinutes(30);
+        dat.setMinutes(30);
+        dat.setHours(d.getHours() + 1);
+
         dateee = d.toISOString();
         this.start = dateee;
+        dateee = dat.toISOString();
         this.end = dateee;
     },
 
@@ -543,6 +567,11 @@ export default {
 
 
 <style>
+
+#time_error{
+    margin-top: -15px;
+    margin-left: 110px;
+}
 
 .my-style {
     padding: 15px;

@@ -90,7 +90,7 @@ export default {
 
   mounted() {
     this.geolocation();
-    this.fetchPlaces();
+    this.checkVariable();
     //this.marker_visibility = this.$parent.show_new;
   },
 
@@ -114,6 +114,7 @@ export default {
       if ( this.bounds != null )
       {
           this.loadMarkers();
+          this.fetchPlaces();
       }
       else
       {
@@ -176,34 +177,17 @@ export default {
     update_bounds(bounds){
       this.bounds = bounds;
 
-      // if(this.bounds != null){
-      // var ne = this.bounds.getNorthEast();
-      // var sw = this.bounds.getSouthWest();
-      // window.history.replaceState(null, null, '?nelat='+ ne.lat() +'&swlat='+ sw.lat() +'&nelng='+ ne.lng() +'&swlng='+ sw.lng());
-      // const queryString = window.location.search;
-      // const urlParams = new URLSearchParams(queryString);
-      // const product = urlParams.get('nelat')
-      // console.log(product);
-      // }
+      if(this.bounds != null){
+      var ne = this.bounds.getNorthEast();
+      var sw = this.bounds.getSouthWest();
+      window.history.replaceState(null, null, '?nelat='+ ne.lat() +'&swlat='+ sw.lat() +'&nelng='+ ne.lng() +'&swlng='+ sw.lng());
+      }
     },
 
 
     //load all sports spots that are in bounds of view to reduce data traffic
     loadMarkers(){
-        var ne = this.bounds.getNorthEast();
-        var sw = this.bounds.getSouthWest();
-
-        this.places.forEach(myFunction);
-        
-        function myFunction(place) {
-          if(place.lat < ne.lat() && place.lat > sw.lat() && place.lng < ne.lng() && place.lng > sw.lng()){ 
-            place.visible = true;
-          }
-          else{
-            place.visible = false;
-
-          }
-        }
+      this.fetchPlaces();
 
       this.zoom_in = this.zoom_in - 1;
       this.zoom_in = this.zoom_in + 1;
@@ -314,7 +298,14 @@ export default {
     //gets all places from data base
     fetchPlaces() {
 
-            fetch('api/places')
+      const urlParams = new URLSearchParams(window.location.search);
+      const nelat = urlParams.get('nelat')
+      const swlat = urlParams.get('swlat')
+      const nelng = urlParams.get('nelng')
+      const swlng = urlParams.get('swlng')
+      console.log('api/places/'+nelat+'/'+swlat+'/'+nelng+'/'+swlng);
+
+            fetch('api/places/'+nelat+'/'+swlat+'/'+nelng+'/'+swlng)
             .then(res => res.json())
             .then(res => {
                 this.places = res.data;

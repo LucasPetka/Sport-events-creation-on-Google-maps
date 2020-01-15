@@ -21,8 +21,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     //List Types
     Route::get('types', 'TypeController@index');
     //List Places
-    Route::get('places', 'PlaceController@index');
-    //Route::get('places/{nelat}/{swlat}/{nelng}/{swlng}', 'PlaceController@index');
+    Route::get('places/{nelat}/{swlat}/{nelng}/{swlng}', 'PlaceController@index');
+    //Route::get('placescord/{nelat}/{swlat}/{nelng}/{swlng}', 'PlaceController@placesCord');
 
 
 Route::group(['middleware' => 'auth:api'], function() {

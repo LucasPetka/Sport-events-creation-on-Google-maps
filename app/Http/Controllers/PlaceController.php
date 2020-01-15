@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Place;
 use App\Http\Resources\Place as PlaceResource;
+use DB;
 
 class PlaceController extends Controller
 {
@@ -13,13 +14,43 @@ class PlaceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($nelat, $swlat, $nelng, $swlng)
     {
         //Get places
-        $places = Place::all();
+        $places = DB::table('places')
+            ->select('*')
+            ->where('lat','<',$nelat)
+            ->where('lat','>',$swlat)
+            ->where('lng','<',$nelng)
+            ->where('lng','>',$swlng)
+            ->get();
 
         //Return collection as a resource
         return PlaceResource::collection($places);
+    }
+
+    public function placesCord($nelat, $swlat, $nelng, $swlng)
+    {
+        //Get places
+        $places = [$nelat, $swlat, $nelng, $swlng];
+
+        //DB::enableQueryLog();
+
+        $places = DB::table('places')
+            ->select('*')
+            ->where('lat','<',$nelat)
+            ->where('lat','>',$swlat)
+            ->where('lng','<',$nelng)
+            ->where('lng','>',$swlng)
+            ->get();
+
+        //$rs = DB::select('select lng from places where lat < ? AND lat > ? AND lng < ? AND lng > ?', [$nelat, $swlat, $nelng, $swlng]);
+
+        //dd(DB::getQueryLog());
+            
+
+        //Return collection as a resource
+        return PlaceResource::collection($rs);
     }
 
 

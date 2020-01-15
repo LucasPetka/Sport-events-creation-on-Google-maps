@@ -3002,7 +3002,7 @@ var _assets_options_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/_
   },
   mounted: function mounted() {
     this.geolocation();
-    this.fetchPlaces(); //this.marker_visibility = this.$parent.show_new;
+    this.checkVariable(); //this.marker_visibility = this.$parent.show_new;
   },
   methods: {
     //Opens info window above marker and sets the position and text
@@ -3023,6 +3023,7 @@ var _assets_options_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/_
     checkVariable: function checkVariable() {
       if (this.bounds != null) {
         this.loadMarkers();
+        this.fetchPlaces();
       } else {
         window.setTimeout(this.checkVariable, 500);
       }
@@ -3080,30 +3081,17 @@ var _assets_options_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/_
     },
     //update bounds where are the spots are showing
     update_bounds: function update_bounds(bounds) {
-      this.bounds = bounds; // if(this.bounds != null){
-      // var ne = this.bounds.getNorthEast();
-      // var sw = this.bounds.getSouthWest();
-      // window.history.replaceState(null, null, '?nelat='+ ne.lat() +'&swlat='+ sw.lat() +'&nelng='+ ne.lng() +'&swlng='+ sw.lng());
-      // const queryString = window.location.search;
-      // const urlParams = new URLSearchParams(queryString);
-      // const product = urlParams.get('nelat')
-      // console.log(product);
-      // }
+      this.bounds = bounds;
+
+      if (this.bounds != null) {
+        var ne = this.bounds.getNorthEast();
+        var sw = this.bounds.getSouthWest();
+        window.history.replaceState(null, null, '?nelat=' + ne.lat() + '&swlat=' + sw.lat() + '&nelng=' + ne.lng() + '&swlng=' + sw.lng());
+      }
     },
     //load all sports spots that are in bounds of view to reduce data traffic
     loadMarkers: function loadMarkers() {
-      var ne = this.bounds.getNorthEast();
-      var sw = this.bounds.getSouthWest();
-      this.places.forEach(myFunction);
-
-      function myFunction(place) {
-        if (place.lat < ne.lat() && place.lat > sw.lat() && place.lng < ne.lng() && place.lng > sw.lng()) {
-          place.visible = true;
-        } else {
-          place.visible = false;
-        }
-      }
-
+      this.fetchPlaces();
       this.zoom_in = this.zoom_in - 1;
       this.zoom_in = this.zoom_in + 1;
     },
@@ -3209,7 +3197,13 @@ var _assets_options_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/_
     fetchPlaces: function fetchPlaces() {
       var _this5 = this;
 
-      fetch('api/places').then(function (res) {
+      var urlParams = new URLSearchParams(window.location.search);
+      var nelat = urlParams.get('nelat');
+      var swlat = urlParams.get('swlat');
+      var nelng = urlParams.get('nelng');
+      var swlng = urlParams.get('swlng');
+      console.log('api/places/' + nelat + '/' + swlat + '/' + nelng + '/' + swlng);
+      fetch('api/places/' + nelat + '/' + swlat + '/' + nelng + '/' + swlng).then(function (res) {
         return res.json();
       }).then(function (res) {
         _this5.places = res.data;
@@ -3621,7 +3615,12 @@ __webpack_require__.r(__webpack_exports__);
     fetchPlaces: function fetchPlaces() {
       var _this3 = this;
 
-      fetch('api/places').then(function (res) {
+      var urlParams = new URLSearchParams(window.location.search);
+      var nelat = urlParams.get('nelat');
+      var swlat = urlParams.get('swlat');
+      var nelng = urlParams.get('nelng');
+      var swlng = urlParams.get('swlng');
+      fetch('api/places/' + nelat + '/' + swlat + '/' + nelng + '/' + swlng).then(function (res) {
         return res.json();
       }).then(function (res) {
         _this3.places = res.data;

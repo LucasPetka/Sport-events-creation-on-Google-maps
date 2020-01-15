@@ -389,7 +389,14 @@ export default {
 
     //------------------------Fetch sport places---------------------------------
     fetchPlaces() {
-            fetch('api/places')
+            const urlParams = new URLSearchParams(window.location.search);
+            const nelat = urlParams.get('nelat')
+            const swlat = urlParams.get('swlat')
+            const nelng = urlParams.get('nelng')
+            const swlng = urlParams.get('swlng')
+
+
+            fetch('api/places/'+nelat+'/'+swlat+'/'+nelng+'/'+swlng)
             .then(res => res.json())
             .then(res => {
                 this.places = res.data;

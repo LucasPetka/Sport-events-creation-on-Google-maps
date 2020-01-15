@@ -10,7 +10,7 @@
         <script>window.laravel = { csrfToken: '{{ csrf_token() }}'} </script>
 
 
-        <title>LetsGo</title>
+        <title>{{ config('app.name') }}</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">

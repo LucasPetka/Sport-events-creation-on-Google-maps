@@ -22,6 +22,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     Route::get('types', 'TypeController@index');
     //List Places
     Route::get('places', 'PlaceController@index');
+    //Route::get('places/{nelat}/{swlat}/{nelng}/{swlng}', 'PlaceController@index');
+
 
 Route::group(['middleware' => 'auth:api'], function() {
     //Create new Place

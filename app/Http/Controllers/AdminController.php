@@ -27,6 +27,15 @@ class AdminController extends Controller
         return view('admin.users')->with(compact('users', 'places'));
     }
 
+    public function deleteUser($id)
+    { 
+        $user = User::find($id);
+        $user->delete();
+
+        return redirect('admin/users');
+    }
+    
+
 
     public function acceptPlace($id)
     { 

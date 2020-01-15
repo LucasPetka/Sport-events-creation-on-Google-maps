@@ -45,7 +45,7 @@
   
       <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
 
-        <h3 class="mt-4">Places waiting for confirmation</h3>
+        <h3 class="mt-4"><i class="fas fa-map-marked-alt"></i> Places waiting for confirmation</h3>
         <div class="table-responsive">
           <table class="table table-striped">
             <thead>

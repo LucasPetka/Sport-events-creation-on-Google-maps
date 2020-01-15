@@ -5,7 +5,9 @@
             E-mail: {{ currentUser.email }}  <br>
             Joined: {{ currentUser.created_at }}  <br>
             Role: <span v-if="currentUser.isAdmin == 1"> Admin</span> <span v-else> User</span><br>
+             <i v-if="currentUser.email_verified_at != 'undefined'" > {{ currentUser.email_verified_at }} </i>
 
+            {{ currentUser.email_verified_at }}
             <a v-if="currentUser.isAdmin == 1" class="btn btn-dark float-right" href="/admin" role="button">Admin panel</a>
 
         </div>    

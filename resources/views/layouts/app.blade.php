@@ -10,7 +10,7 @@
         <script>window.laravel = { csrfToken: '{{ csrf_token() }}'} </script>
 
 
-        <title>LetsGo</title>
+        <title>{{ config('app.name') }}</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
@@ -22,8 +22,8 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-dark shadow-sm" style="background-color: #313638;">
+    <div id="app" class="mh-100">
+        <nav class="navbar navbar-expand-md fixed-top navbar-dark shadow-sm" style="background-color: #313638;">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     <img src="/images/logonotext.png" height="25px" weight="100%">

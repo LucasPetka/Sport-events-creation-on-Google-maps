@@ -16,8 +16,17 @@
         <button type="button" class="btn btn-success" v-on:click="loadMarkers()">Refresh markers <i class="fas fa-redo"></i></button>
       </div>
 
-    <gmap-map ref="gmapp" v-on:rightclick="openMenu($event)" v-on:zoom_changed="updateZoom()" :center="center" v-on:bounds_changed="update_bounds($event)" :zoom="zoom_in" v-bind:options="mapStyle"  style="width:100%; height: 94vh;">
-      <gmap-marker v-for="place in places" :visible="place.visible" :key="place.id" :position="getPosition(place)" @click="center=getPosition(place)" v-on:click="showSpot(place.id)" :icon="icon(place.type)" ></gmap-marker>
+    <gmap-map ref="gmapp" v-on:rightclick="openMenu($event)" v-on:zoom_changed="updateZoom()" :center="center" v-on:bounds_changed="update_bounds($event)" :zoom="zoom_in" v-bind:options="mapStyle"  style="width:100%; height: 100vh;">
+      <gmap-marker v-for="place in places" :visible="place.visible" :key="place.id" :position="getPosition(place)" @click="center=getPosition(place)" v-on:click="showSpot(place.id)" :icon="icon(place.type)" v-on:mouseover="openInfoWindowTemplate(place)" v-on:mouseout="infoWindow.open=false"></gmap-marker>
+     
+      <gmap-info-window
+          :options="{maxWidth:300, pixelOffset:{width:0, height:-25}}"
+          :position="infoWindow.position"
+          :opened="infoWindow.open"
+          v-on:mouseout="infoWindow.open=false">
+          <div v-html="infoWindow.template"></div>
+      </gmap-info-window>
+
       <gmap-marker :visible="marker_visibility" :position="getPosition(addNewmark_coordinates)" :icon="{ url: require('../assets/google_maps/new.png')}" ></gmap-marker>
     </gmap-map>
 
@@ -54,12 +63,18 @@ export default {
       lng:'',
       type:'',
       visible: true
+    },
+    infoWindow: {
+      position: {lat: 0, lng: 0},
+      open: false,
+      template: ''
     }, 
     addNewmark_coordinates: { lat: 0.0, lng: 0.0 },
     zoom_in: 13,
     bounds: null,
     currentPlace: null,
     marker_visibility: false,   
+    
     mapStyle: {
       styles: mapstyle,
       options:{
@@ -70,20 +85,32 @@ export default {
         zoomControl: true
       }
     }
-
     };
   },
 
   mounted() {
-    this.fetchPlaces();
     this.geolocation();
-    this.marker_visibility = this.$parent.show_new;
+    this.fetchPlaces();
+    //this.marker_visibility = this.$parent.show_new;
   },
 
   methods: {
 
-    checkVariable()
-    {
+    //Opens info window above marker and sets the position and text
+    openInfoWindowTemplate: function(place) {
+      var res = "";
+       if(place.about.length > 100){
+          res = place.about.slice(0, 100) + "...";
+       }else{
+          res = place.about;
+       }
+        this.infoWindow.template = '<h6>'+place.title+'</h6>'+res+'<hr> <i class="fas fa-road"></i> <small>This place is '+this.measure_distance(place, this.user_location)+' km from you</small>';
+        this.infoWindow.position = this.getPosition(place);
+        this.infoWindow.open = true;
+   },
+   
+   //Waits for variable BOUNDS and then fetches places in those bounds from DB
+    checkVariable: function(){
       if ( this.bounds != null )
       {
           this.loadMarkers();
@@ -130,8 +157,6 @@ export default {
           this.zoom_in = 8;
         }
       }
-
-      
     },
 
 
@@ -150,6 +175,16 @@ export default {
     //update bounds where are the spots are showing
     update_bounds(bounds){
       this.bounds = bounds;
+
+      // if(this.bounds != null){
+      // var ne = this.bounds.getNorthEast();
+      // var sw = this.bounds.getSouthWest();
+      // window.history.replaceState(null, null, '?nelat='+ ne.lat() +'&swlat='+ sw.lat() +'&nelng='+ ne.lng() +'&swlng='+ sw.lng());
+      // const queryString = window.location.search;
+      // const urlParams = new URLSearchParams(queryString);
+      // const product = urlParams.get('nelat')
+      // console.log(product);
+      // }
     },
 
 
@@ -175,19 +210,15 @@ export default {
 
     },
 
-
-    measure_distance(){
-    // Obtain the distance in meters by the computeDistanceBetween method
-    // From the Google Maps extension
+    //Measures distance between two markers
+    measure_distance(from, to){
     var distanceInMeters = google.maps.geometry.spherical.computeDistanceBetween(
-        new google.maps.LatLng(this.getPosition(this.place)),
-        new google.maps.LatLng(this.getPosition(this.user_location))
+        new google.maps.LatLng(this.getPosition(from)),
+        new google.maps.LatLng(this.getPosition(to))
     );
     var distanceInKilometers = distanceInMeters * 0.001;
     console.log(distanceInKilometers);
     return  distanceInKilometers.toFixed(2);
-
-
     },
 
 
@@ -212,7 +243,6 @@ export default {
       }
 
     },
-
 
     //Sets the icon for the place id
     icon: function(type){
@@ -242,7 +272,7 @@ export default {
       lng: loc.latLng.lng(),};
 
       this.marker_visibility = true;
-      $("#pointerMenu").css({top: event.clientY-55, left: event.clientX}).show();
+      $("#pointerMenu").css({top: event.clientY, left: event.clientX}).show();
       }
     },
 
@@ -252,7 +282,7 @@ export default {
       this.marker_visibility = false;
     },
 
-
+    //Opens create new marker box
     creatNewMarker: function(){
       this.$emit('openForm', this.addNewmark_coordinates);
       $("#pointerMenu").hide();
@@ -268,15 +298,12 @@ export default {
     showSpot: function(key){
       const foundPlace = this.places.find( place => place.id == key);
       this.place = foundPlace;
-
-      var arg = [key, this.measure_distance()];
-
+      var arg = [key, this.measure_distance(this.place,this.user_location)];
       this.smoothZoom(17, this.zoom_in);
-
       this.$emit('showSpot', arg);
     },
 
-
+    //Gets position of the marker
     getPosition: function(place) {
       return {
         lat: parseFloat(place.lat),
@@ -286,6 +313,7 @@ export default {
     
     //gets all places from data base
     fetchPlaces() {
+
             fetch('api/places')
             .then(res => res.json())
             .then(res => {
@@ -311,7 +339,7 @@ export default {
 
 #geoloc_bar{
   position: absolute;
-  top:80px;
+  top:120px;
   left: 49%;
   -webkit-transform: translate(-49%, -40%);
   transform: translate(-49%, -40%);

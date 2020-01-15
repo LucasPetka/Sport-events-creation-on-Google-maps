@@ -2935,6 +2935,15 @@ var _assets_options_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/_
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "GoogleMap",
@@ -2963,6 +2972,14 @@ var _assets_options_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/_
         type: '',
         visible: true
       },
+      infoWindow: {
+        position: {
+          lat: 0,
+          lng: 0
+        },
+        open: false,
+        template: ''
+      },
       addNewmark_coordinates: {
         lat: 0.0,
         lng: 0.0
@@ -2984,11 +3001,25 @@ var _assets_options_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/_
     };
   },
   mounted: function mounted() {
-    this.fetchPlaces();
     this.geolocation();
-    this.marker_visibility = this.$parent.show_new;
+    this.fetchPlaces(); //this.marker_visibility = this.$parent.show_new;
   },
   methods: {
+    //Opens info window above marker and sets the position and text
+    openInfoWindowTemplate: function openInfoWindowTemplate(place) {
+      var res = "";
+
+      if (place.about.length > 100) {
+        res = place.about.slice(0, 100) + "...";
+      } else {
+        res = place.about;
+      }
+
+      this.infoWindow.template = '<h6>' + place.title + '</h6>' + res + '<hr> <i class="fas fa-road"></i> <small>This place is ' + this.measure_distance(place, this.user_location) + ' km from you</small>';
+      this.infoWindow.position = this.getPosition(place);
+      this.infoWindow.open = true;
+    },
+    //Waits for variable BOUNDS and then fetches places in those bounds from DB
     checkVariable: function checkVariable() {
       if (this.bounds != null) {
         this.loadMarkers();
@@ -3049,7 +3080,15 @@ var _assets_options_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/_
     },
     //update bounds where are the spots are showing
     update_bounds: function update_bounds(bounds) {
-      this.bounds = bounds;
+      this.bounds = bounds; // if(this.bounds != null){
+      // var ne = this.bounds.getNorthEast();
+      // var sw = this.bounds.getSouthWest();
+      // window.history.replaceState(null, null, '?nelat='+ ne.lat() +'&swlat='+ sw.lat() +'&nelng='+ ne.lng() +'&swlng='+ sw.lng());
+      // const queryString = window.location.search;
+      // const urlParams = new URLSearchParams(queryString);
+      // const product = urlParams.get('nelat')
+      // console.log(product);
+      // }
     },
     //load all sports spots that are in bounds of view to reduce data traffic
     loadMarkers: function loadMarkers() {
@@ -3068,10 +3107,9 @@ var _assets_options_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/_
       this.zoom_in = this.zoom_in - 1;
       this.zoom_in = this.zoom_in + 1;
     },
-    measure_distance: function measure_distance() {
-      // Obtain the distance in meters by the computeDistanceBetween method
-      // From the Google Maps extension
-      var distanceInMeters = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(this.getPosition(this.place)), new google.maps.LatLng(this.getPosition(this.user_location)));
+    //Measures distance between two markers
+    measure_distance: function measure_distance(from, to) {
+      var distanceInMeters = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(this.getPosition(from)), new google.maps.LatLng(this.getPosition(to)));
       var distanceInKilometers = distanceInMeters * 0.001;
       console.log(distanceInKilometers);
       return distanceInKilometers.toFixed(2);
@@ -3130,7 +3168,7 @@ var _assets_options_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/_
         };
         this.marker_visibility = true;
         $("#pointerMenu").css({
-          top: event.clientY - 55,
+          top: event.clientY,
           left: event.clientX
         }).show();
       }
@@ -3140,6 +3178,7 @@ var _assets_options_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/_
       $("#pointerMenu").hide();
       this.marker_visibility = false;
     },
+    //Opens create new marker box
     creatNewMarker: function creatNewMarker() {
       this.$emit('openForm', this.addNewmark_coordinates);
       $("#pointerMenu").hide();
@@ -3155,10 +3194,11 @@ var _assets_options_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/_
         return place.id == key;
       });
       this.place = foundPlace;
-      var arg = [key, this.measure_distance()];
+      var arg = [key, this.measure_distance(this.place, this.user_location)];
       this.smoothZoom(17, this.zoom_in);
       this.$emit('showSpot', arg);
     },
+    //Gets position of the marker
     getPosition: function getPosition(place) {
       return {
         lat: parseFloat(place.lat),
@@ -3198,20 +3238,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_4__);
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -3460,6 +3486,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   //==============================ON LOAD FUNCTION==============================================
   mounted: function mounted() {
+    var _this = this;
+
     //animation
     $("#geras").animate({
       left: '45%',
@@ -3479,6 +3507,9 @@ __webpack_require__.r(__webpack_exports__);
           $("#loading-screen").hide();
         });
       });
+    });
+    $('#addPlace').on('hide.bs.modal', function (e) {
+      _this.$refs.gmapp.hidePointer();
     });
     this.fetchPlaces(); //fetcing all places
 
@@ -3502,52 +3533,30 @@ __webpack_require__.r(__webpack_exports__);
       $('#side').hide();
       $("#side").addClass("col-lg-0");
     },
-    //Opens place addition label
+    //------------------------Opens PLACE ADD label-----------------------------
     openAdd: function openAdd(cord) {
       this.place.lat = cord.lat;
       this.place.lng = cord.lng;
-      var create = document.querySelector('#createDiv');
-
-      if (create.style.display === 'none') {
-        this.openShow();
-        $("#createDiv").slideDown("slow");
-      }
+      $('#addPlace').modal('show');
     },
-    //Closes place adition label
+    //-------------------------Closes PLACE ADD label-------------------------------
     closeAdd: function closeAdd() {
-      if ($("#close_show").is(":visible")) {
-        $("#createDiv").slideUp("slow");
-        this.$refs.gmapp.hidePointer();
-      } else {
-        $("#createDiv").slideUp("slow");
-        this.$refs.gmapp.hidePointer();
-        $(".popup-content").fadeOut("slow");
-      }
-
-      this.closeShow();
+      $('#addPlace').modal('hide');
     },
-    //Opens event creation label
+    //------------------------Opens add event creation label-------------------
     openAddEvent: function openAddEvent() {
       this.event.place_id = this.show.id;
       this.event.person_id = this.currentUser.id;
       this.event.organizator = this.currentUser.name;
-      var create = document.querySelector('#addEvent');
-
-      if (create.style.display === 'none') {
-        $("#addEvent").slideDown("slow");
-        $('.card-body').animate({
-          scrollTop: $('#addEvent').position().top - 40
-        }, 1000);
-      }
-
+      $('#addEvent').modal('show');
       this.parseDate(0);
       this.parseDate(1);
     },
-    //Closes event creation label
+    //-----------------Closes event creation label---------------------------
     closeAddEvent: function closeAddEvent() {
-      $("#addEvent").hide("fast");
+      $('#addEvent').modal('hide');
     },
-    //Parse data in right format to choose when event starts and when ends
+    //---------------------Parse data in right format to choose when event starts and when ends--------------------
     parseDate: function parseDate(choose) {
       var d = new Date(this.start);
 
@@ -3572,7 +3581,7 @@ __webpack_require__.r(__webpack_exports__);
         this.event.time_until = n;
       }
     },
-    //Gets date in day chooser
+    //---------------------Gets date in day chooser--------------------------------
     getDate: function getDate(dateee) {
       var d = new Date(dateee);
       var dat = new Date(dateee);
@@ -3585,9 +3594,9 @@ __webpack_require__.r(__webpack_exports__);
       dateee = dat.toISOString();
       this.end = dateee;
     },
-    //Show spot all info with all events happening in there
+    //-----------------Show spot all info with all events happening in there--------------------
     showSpot: function showSpot(arg) {
-      var _this = this;
+      var _this2 = this;
 
       var foundPlace = this.places.find(function (place) {
         return place.id == arg[0];
@@ -3595,7 +3604,7 @@ __webpack_require__.r(__webpack_exports__);
       this.show = foundPlace;
       this.$refs.calendar.fetchSpot(this.show.id);
       var foundType = this.types.find(function (type) {
-        return type.id == _this.show.type;
+        return type.id == _this2.show.type;
       });
       this.type = foundType;
       var show = document.querySelector('#show');
@@ -3608,31 +3617,34 @@ __webpack_require__.r(__webpack_exports__);
 
       this.closeAddEvent();
     },
+    //------------------------Fetch sport places---------------------------------
     fetchPlaces: function fetchPlaces() {
-      var _this2 = this;
+      var _this3 = this;
 
       fetch('api/places').then(function (res) {
         return res.json();
       }).then(function (res) {
-        _this2.places = res.data;
+        _this3.places = res.data;
       });
     },
+    //------------------------Fetch sport types---------------------------------
     fetchTypes: function fetchTypes() {
-      var _this3 = this;
+      var _this4 = this;
 
       fetch('api/types').then(function (res) {
         return res.json();
       }).then(function (res) {
-        _this3.types = res.data;
+        _this4.types = res.data;
       });
     },
+    //---------------------------Get Cookie-------------------------------------
     getCookie: function getCookie(name) {
       var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
       return v ? v[2] : null;
     },
-    //Deletes place
+    //---------------------------------------Deletes place-------------------------------------------------
     deletePlace: function deletePlace(id) {
-      var _this4 = this;
+      var _this5 = this;
 
       console.log(this.getCookie("api_token"));
 
@@ -3642,7 +3654,7 @@ __webpack_require__.r(__webpack_exports__);
         }).then(function (res) {
           return res.json();
         }).then(function (data) {
-          _this4.fetchPlaces();
+          _this5.fetchPlaces();
         })["catch"](function (err) {
           return console.log(err);
         });
@@ -3663,9 +3675,9 @@ __webpack_require__.r(__webpack_exports__);
         this.closeShow();
       }
     },
-    //Adds new place
+    //------------------------------------------Adds new place--------------------------------------------
     addPlace: function addPlace() {
-      var _this5 = this;
+      var _this6 = this;
 
       this.place.personid = this.$props.currentUser.id;
 
@@ -3679,13 +3691,13 @@ __webpack_require__.r(__webpack_exports__);
         }).then(function (res) {
           return res.json();
         }).then(function (data) {
-          _this5.place.title = '';
-          _this5.place.about = '';
-          _this5.place.lat = '';
-          _this5.place.lng = '';
-          _this5.place.type = '';
+          _this6.place.title = '';
+          _this6.place.about = '';
+          _this6.place.lat = '';
+          _this6.place.lng = '';
+          _this6.place.type = '';
 
-          _this5.fetchPlaces();
+          _this6.fetchPlaces();
         })["catch"](function (err) {
           return console.log(err);
         });
@@ -3701,9 +3713,9 @@ __webpack_require__.r(__webpack_exports__);
         this.closeShow();
       } else {}
     },
-    //Create event
+    //-----------------------------------------Create new event-----------------------------------------------
     addEvent: function addEvent() {
-      var _this6 = this;
+      var _this7 = this;
 
       if (this.edit === false) {
         (function _callee() {
@@ -3713,9 +3725,9 @@ __webpack_require__.r(__webpack_exports__);
               switch (_context.prev = _context.next) {
                 case 0:
                   _context.next = 2;
-                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(fetch('api/event?api_token=' + _this6.getCookie("api_token"), {
+                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(fetch('api/event?api_token=' + _this7.getCookie("api_token"), {
                     method: 'post',
-                    body: JSON.stringify(_this6.event),
+                    body: JSON.stringify(_this7.event),
                     headers: {
                       'Accept': 'application/json',
                       'content-type': 'application/json'
@@ -3730,11 +3742,11 @@ __webpack_require__.r(__webpack_exports__);
                 case 5:
                   content = _context.sent;
                   _context.next = 8;
-                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(_this6.$refs.calendar.fetchEvents());
+                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(_this7.$refs.calendar.fetchEvents());
 
                 case 8:
                   _context.next = 10;
-                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(_this6.$refs.calendar.fetchSpot(_this6.show.id));
+                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(_this7.$refs.calendar.fetchSpot(_this7.show.id));
 
                 case 10:
                 case "end":
@@ -3773,6 +3785,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
 //
 //
 //
@@ -8406,7 +8420,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n#refresh_button[data-v-bdcfc800]{\n  position: absolute;\n  bottom:20px;\n  left: 49%;\n  -webkit-transform: translate(-49%, -40%);\n  transform: translate(-49%, -40%);\n  z-index: 5;\n}\n#geoloc_bar[data-v-bdcfc800]{\n  position: absolute;\n  top:80px;\n  left: 49%;\n  -webkit-transform: translate(-49%, -40%);\n  transform: translate(-49%, -40%);\n  z-index: 5;\n  background-color: white;\n  padding: 10px 15px;\n  border-radius: 8px;\n  width: 400px;\n}\n#marker[data-v-bdcfc800] {\n display: none;\n}\n\n\n", ""]);
+exports.push([module.i, "\n#refresh_button[data-v-bdcfc800]{\n  position: absolute;\n  bottom:20px;\n  left: 49%;\n  -webkit-transform: translate(-49%, -40%);\n  transform: translate(-49%, -40%);\n  z-index: 5;\n}\n#geoloc_bar[data-v-bdcfc800]{\n  position: absolute;\n  top:120px;\n  left: 49%;\n  -webkit-transform: translate(-49%, -40%);\n  transform: translate(-49%, -40%);\n  z-index: 5;\n  background-color: white;\n  padding: 10px 15px;\n  border-radius: 8px;\n  width: 400px;\n}\n#marker[data-v-bdcfc800] {\n display: none;\n}\n\n\n", ""]);
 
 // exports
 
@@ -51491,7 +51505,7 @@ var render = function() {
         "gmap-map",
         {
           ref: "gmapp",
-          staticStyle: { width: "100%", height: "94vh" },
+          staticStyle: { width: "100%", height: "100vh" },
           attrs: {
             center: _vm.center,
             zoom: _vm.zoom_in,
@@ -51526,10 +51540,40 @@ var render = function() {
                   function($event) {
                     return _vm.showSpot(place.id)
                   }
-                ]
+                ],
+                mouseover: function($event) {
+                  return _vm.openInfoWindowTemplate(place)
+                },
+                mouseout: function($event) {
+                  _vm.infoWindow.open = false
+                }
               }
             })
           }),
+          _vm._v(" "),
+          _c(
+            "gmap-info-window",
+            {
+              attrs: {
+                options: {
+                  maxWidth: 300,
+                  pixelOffset: { width: 0, height: -25 }
+                },
+                position: _vm.infoWindow.position,
+                opened: _vm.infoWindow.open
+              },
+              on: {
+                mouseout: function($event) {
+                  _vm.infoWindow.open = false
+                }
+              }
+            },
+            [
+              _c("div", {
+                domProps: { innerHTML: _vm._s(_vm.infoWindow.template) }
+              })
+            ]
+          ),
           _vm._v(" "),
           _c("gmap-marker", {
             attrs: {
@@ -51618,6 +51662,163 @@ var render = function() {
       }),
       _vm._v(" "),
       _c(
+        "form",
+        {
+          on: {
+            submit: function($event) {
+              $event.preventDefault()
+              return _vm.addPlace($event)
+            }
+          }
+        },
+        [
+          _c(
+            "div",
+            {
+              staticClass: "modal fade",
+              attrs: {
+                id: "addPlace",
+                tabindex: "-1",
+                role: "dialog",
+                "aria-labelledby": "addPlaceCenterTitle",
+                "aria-hidden": "true"
+              }
+            },
+            [
+              _c(
+                "div",
+                {
+                  staticClass: "modal-dialog modal-dialog-centered",
+                  attrs: { role: "document" }
+                },
+                [
+                  _c("div", { staticClass: "modal-content" }, [
+                    _vm._m(1),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "modal-body" }, [
+                      _c("div", { staticClass: "input-group mb-3" }, [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.place.title,
+                              expression: "place.title"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: { type: "text", placeholder: "Title" },
+                          domProps: { value: _vm.place.title },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(_vm.place, "title", $event.target.value)
+                            }
+                          }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "input-group mb-3" }, [
+                        _c("textarea", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.place.about,
+                              expression: "place.about"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: { placeholder: "About..." },
+                          domProps: { value: _vm.place.about },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(_vm.place, "about", $event.target.value)
+                            }
+                          }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "input-group mb-3" }, [
+                        _vm._m(2),
+                        _vm._v(" "),
+                        _c(
+                          "select",
+                          {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.place.type,
+                                expression: "place.type"
+                              }
+                            ],
+                            staticClass: "custom-select",
+                            attrs: { id: "inputGroupSelect01" },
+                            on: {
+                              change: function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.place,
+                                  "type",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              }
+                            }
+                          },
+                          [
+                            _c("option", { attrs: { value: "112" } }, [
+                              _vm._v("Soccer inside")
+                            ]),
+                            _vm._v(" "),
+                            _c("option", { attrs: { value: "111" } }, [
+                              _vm._v("Soccer")
+                            ]),
+                            _vm._v(" "),
+                            _c("option", { attrs: { value: "223" } }, [
+                              _vm._v("Basketball inside")
+                            ]),
+                            _vm._v(" "),
+                            _c("option", { attrs: { value: "222" } }, [
+                              _vm._v("Basketball")
+                            ]),
+                            _vm._v(" "),
+                            _c("option", { attrs: { value: "334" } }, [
+                              _vm._v("Volleyball inside")
+                            ]),
+                            _vm._v(" "),
+                            _c("option", { attrs: { value: "333" } }, [
+                              _vm._v("Voleyball")
+                            ])
+                          ]
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _vm._m(3)
+                  ])
+                ]
+              )
+            ]
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _c(
         "div",
         {
           staticClass: "row",
@@ -51647,186 +51848,12 @@ var render = function() {
           _c(
             "div",
             {
-              staticClass: "col-lg-0 p-0",
+              staticClass: "col-lg-0 p-0 mt-5",
               staticStyle: { display: "none" },
               attrs: { id: "side" }
             },
             [
               _c("div", { attrs: { id: "sidebar" } }, [
-                _c(
-                  "div",
-                  {
-                    staticClass: "card m-3 mt-5",
-                    staticStyle: { display: "none", width: "90%" },
-                    attrs: { id: "createDiv" }
-                  },
-                  [
-                    _c("div", { staticClass: "card-header" }, [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "close",
-                          attrs: {
-                            type: "button",
-                            id: "close_createDiv",
-                            "aria-label": "Close"
-                          },
-                          on: {
-                            click: function($event) {
-                              return _vm.closeAdd()
-                            }
-                          }
-                        },
-                        [
-                          _c("span", { attrs: { "aria-hidden": "true" } }, [
-                            _vm._v("×")
-                          ])
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c("h6", [_vm._v("Create new Marker")])
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "form",
-                      {
-                        on: {
-                          submit: function($event) {
-                            $event.preventDefault()
-                            return _vm.addPlace($event)
-                          }
-                        }
-                      },
-                      [
-                        _c("div", { staticClass: "card-body" }, [
-                          _c("div", { staticClass: "input-group mb-3" }, [
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.place.title,
-                                  expression: "place.title"
-                                }
-                              ],
-                              staticClass: "form-control",
-                              attrs: { type: "text", placeholder: "Title" },
-                              domProps: { value: _vm.place.title },
-                              on: {
-                                input: function($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.$set(
-                                    _vm.place,
-                                    "title",
-                                    $event.target.value
-                                  )
-                                }
-                              }
-                            })
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "input-group mb-3" }, [
-                            _c("textarea", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.place.about,
-                                  expression: "place.about"
-                                }
-                              ],
-                              staticClass: "form-control",
-                              attrs: { placeholder: "About..." },
-                              domProps: { value: _vm.place.about },
-                              on: {
-                                input: function($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.$set(
-                                    _vm.place,
-                                    "about",
-                                    $event.target.value
-                                  )
-                                }
-                              }
-                            })
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "input-group mb-3" }, [
-                            _vm._m(1),
-                            _vm._v(" "),
-                            _c(
-                              "select",
-                              {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.place.type,
-                                    expression: "place.type"
-                                  }
-                                ],
-                                staticClass: "custom-select",
-                                attrs: { id: "inputGroupSelect01" },
-                                on: {
-                                  change: function($event) {
-                                    var $$selectedVal = Array.prototype.filter
-                                      .call($event.target.options, function(o) {
-                                        return o.selected
-                                      })
-                                      .map(function(o) {
-                                        var val =
-                                          "_value" in o ? o._value : o.value
-                                        return val
-                                      })
-                                    _vm.$set(
-                                      _vm.place,
-                                      "type",
-                                      $event.target.multiple
-                                        ? $$selectedVal
-                                        : $$selectedVal[0]
-                                    )
-                                  }
-                                }
-                              },
-                              [
-                                _c("option", { attrs: { value: "112" } }, [
-                                  _vm._v("Soccer inside")
-                                ]),
-                                _vm._v(" "),
-                                _c("option", { attrs: { value: "111" } }, [
-                                  _vm._v("Soccer")
-                                ]),
-                                _vm._v(" "),
-                                _c("option", { attrs: { value: "223" } }, [
-                                  _vm._v("Basketball inside")
-                                ]),
-                                _vm._v(" "),
-                                _c("option", { attrs: { value: "222" } }, [
-                                  _vm._v("Basketball")
-                                ]),
-                                _vm._v(" "),
-                                _c("option", { attrs: { value: "334" } }, [
-                                  _vm._v("Volleyball inside")
-                                ]),
-                                _vm._v(" "),
-                                _c("option", { attrs: { value: "333" } }, [
-                                  _vm._v("Voleyball")
-                                ])
-                              ]
-                            )
-                          ])
-                        ]),
-                        _vm._v(" "),
-                        _vm._m(2)
-                      ]
-                    )
-                  ]
-                ),
-                _vm._v(" "),
                 _c(
                   "div",
                   {
@@ -51959,7 +51986,7 @@ var render = function() {
                       "div",
                       { staticClass: "card m-3 width:100%; height:100%;" },
                       [
-                        _vm._m(3),
+                        _vm._m(4),
                         _vm._v(" "),
                         _c(
                           "div",
@@ -51984,7 +52011,7 @@ var render = function() {
                                     ]
                                   )
                                 ])
-                              : _c("div", [_vm._m(4)]),
+                              : _c("div", [_vm._m(5)]),
                             _vm._v(" "),
                             _c("Calendar", {
                               ref: "calendar",
@@ -52008,205 +52035,230 @@ var render = function() {
                     ),
                     _vm._v(" "),
                     _c(
-                      "div",
+                      "form",
                       {
-                        staticClass: "card m-3 width:100%; height:100%;",
-                        staticStyle: { display: "none" },
-                        attrs: { id: "addEvent" }
+                        on: {
+                          submit: function($event) {
+                            $event.preventDefault()
+                            return _vm.addEvent($event)
+                          }
+                        }
                       },
                       [
-                        _vm._m(5),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "card-body" }, [
-                          _c(
-                            "form",
-                            {
-                              on: {
-                                submit: function($event) {
-                                  $event.preventDefault()
-                                  return _vm.addEvent($event)
-                                }
-                              }
-                            },
-                            [
-                              _c("div", { staticClass: "form-group" }, [
-                                _c(
-                                  "label",
-                                  { attrs: { for: "exampleInputEmail1" } },
-                                  [_vm._v("Title")]
-                                ),
-                                _vm._v(" "),
-                                _c("input", {
-                                  directives: [
-                                    {
-                                      name: "model",
-                                      rawName: "v-model",
-                                      value: _vm.event.title,
-                                      expression: "event.title"
-                                    }
-                                  ],
-                                  staticClass: "form-control",
-                                  attrs: {
-                                    type: "text",
-                                    id: "exampleInputEmail1",
-                                    "aria-describedby": "emailHelp",
-                                    placeholder: "Enter title",
-                                    required: ""
-                                  },
-                                  domProps: { value: _vm.event.title },
-                                  on: {
-                                    input: function($event) {
-                                      if ($event.target.composing) {
-                                        return
-                                      }
-                                      _vm.$set(
-                                        _vm.event,
-                                        "title",
-                                        $event.target.value
-                                      )
-                                    }
-                                  }
-                                })
-                              ]),
-                              _vm._v(" "),
-                              _c("div", { staticClass: "form-group" }, [
-                                _c(
-                                  "label",
-                                  {
-                                    attrs: {
-                                      for: "exampleFormControlTextarea1"
-                                    }
-                                  },
-                                  [_vm._v("About")]
-                                ),
-                                _vm._v(" "),
-                                _c("textarea", {
-                                  directives: [
-                                    {
-                                      name: "model",
-                                      rawName: "v-model",
-                                      value: _vm.event.about,
-                                      expression: "event.about"
-                                    }
-                                  ],
-                                  staticClass: "form-control",
-                                  attrs: {
-                                    id: "exampleFormControlTextarea1",
-                                    rows: "3",
-                                    required: ""
-                                  },
-                                  domProps: { value: _vm.event.about },
-                                  on: {
-                                    input: function($event) {
-                                      if ($event.target.composing) {
-                                        return
-                                      }
-                                      _vm.$set(
-                                        _vm.event,
-                                        "about",
-                                        $event.target.value
-                                      )
-                                    }
-                                  }
-                                })
-                              ]),
-                              _vm._v(" "),
-                              _c(
-                                "div",
-                                { staticClass: "input-group mb-3" },
-                                [
-                                  _c(
-                                    "div",
-                                    { staticClass: "input-group-prepend" },
-                                    [
+                        _c(
+                          "div",
+                          {
+                            staticClass: "modal fade",
+                            attrs: {
+                              id: "addEvent",
+                              tabindex: "-1",
+                              role: "dialog",
+                              "aria-labelledby": "addEventCenterTitle",
+                              "aria-hidden": "true"
+                            }
+                          },
+                          [
+                            _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "modal-dialog modal-dialog-centered",
+                                attrs: { role: "document" }
+                              },
+                              [
+                                _c("div", { staticClass: "modal-content" }, [
+                                  _vm._m(6),
+                                  _vm._v(" "),
+                                  _c("div", { staticClass: "modal-body" }, [
+                                    _c("div", { staticClass: "form-group" }, [
                                       _c(
-                                        "span",
-                                        { staticClass: "input-group-text" },
-                                        [_vm._v(_vm._s(_vm.date))]
-                                      )
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _c("datetime", {
-                                    attrs: {
-                                      type: "time",
-                                      id: "start",
-                                      format: "HH:mm",
-                                      "value-zone": "local",
-                                      "minute-step": 10,
-                                      required: ""
-                                    },
-                                    on: {
-                                      input: function($event) {
-                                        return _vm.parseDate(0)
-                                      }
-                                    },
-                                    model: {
-                                      value: _vm.start,
-                                      callback: function($$v) {
-                                        _vm.start = $$v
-                                      },
-                                      expression: "start"
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _vm._m(6)
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "div",
-                                { staticClass: "input-group mb-3" },
-                                [
-                                  _c(
-                                    "div",
-                                    { staticClass: "input-group-prepend" },
-                                    [
+                                        "label",
+                                        {
+                                          attrs: { for: "exampleInputEmail1" }
+                                        },
+                                        [_vm._v("Title")]
+                                      ),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.event.title,
+                                            expression: "event.title"
+                                          }
+                                        ],
+                                        staticClass: "form-control",
+                                        attrs: {
+                                          type: "text",
+                                          id: "exampleInputEmail1",
+                                          "aria-describedby": "emailHelp",
+                                          placeholder: "Enter title",
+                                          required: ""
+                                        },
+                                        domProps: { value: _vm.event.title },
+                                        on: {
+                                          input: function($event) {
+                                            if ($event.target.composing) {
+                                              return
+                                            }
+                                            _vm.$set(
+                                              _vm.event,
+                                              "title",
+                                              $event.target.value
+                                            )
+                                          }
+                                        }
+                                      })
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("div", { staticClass: "form-group" }, [
                                       _c(
-                                        "span",
-                                        { staticClass: "input-group-text" },
-                                        [_vm._v(_vm._s(_vm.date))]
-                                      )
-                                    ]
-                                  ),
+                                        "label",
+                                        {
+                                          attrs: {
+                                            for: "exampleFormControlTextarea1"
+                                          }
+                                        },
+                                        [_vm._v("About")]
+                                      ),
+                                      _vm._v(" "),
+                                      _c("textarea", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.event.about,
+                                            expression: "event.about"
+                                          }
+                                        ],
+                                        staticClass: "form-control",
+                                        attrs: {
+                                          id: "exampleFormControlTextarea1",
+                                          rows: "3",
+                                          required: ""
+                                        },
+                                        domProps: { value: _vm.event.about },
+                                        on: {
+                                          input: function($event) {
+                                            if ($event.target.composing) {
+                                              return
+                                            }
+                                            _vm.$set(
+                                              _vm.event,
+                                              "about",
+                                              $event.target.value
+                                            )
+                                          }
+                                        }
+                                      })
+                                    ]),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      { staticClass: "input-group mb-3" },
+                                      [
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass: "input-group-prepend"
+                                          },
+                                          [
+                                            _c(
+                                              "span",
+                                              {
+                                                staticClass: "input-group-text"
+                                              },
+                                              [_vm._v(_vm._s(_vm.date))]
+                                            )
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c("datetime", {
+                                          attrs: {
+                                            type: "time",
+                                            id: "start",
+                                            format: "HH:mm",
+                                            "value-zone": "local",
+                                            "minute-step": 10,
+                                            required: ""
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              return _vm.parseDate(0)
+                                            }
+                                          },
+                                          model: {
+                                            value: _vm.start,
+                                            callback: function($$v) {
+                                              _vm.start = $$v
+                                            },
+                                            expression: "start"
+                                          }
+                                        }),
+                                        _vm._v(" "),
+                                        _vm._m(7)
+                                      ],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      { staticClass: "input-group mb-3" },
+                                      [
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass: "input-group-prepend"
+                                          },
+                                          [
+                                            _c(
+                                              "span",
+                                              {
+                                                staticClass: "input-group-text"
+                                              },
+                                              [_vm._v(_vm._s(_vm.date))]
+                                            )
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c("datetime", {
+                                          attrs: {
+                                            type: "time",
+                                            id: "end",
+                                            format: "HH:mm",
+                                            "value-zone": "local",
+                                            "minute-step": 10,
+                                            required: ""
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              return _vm.parseDate(1)
+                                            }
+                                          },
+                                          model: {
+                                            value: _vm.end,
+                                            callback: function($$v) {
+                                              _vm.end = $$v
+                                            },
+                                            expression: "end"
+                                          }
+                                        }),
+                                        _vm._v(" "),
+                                        _vm._m(8)
+                                      ],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c("div", { attrs: { id: "time_error" } })
+                                  ]),
                                   _vm._v(" "),
-                                  _c("datetime", {
-                                    attrs: {
-                                      type: "time",
-                                      id: "end",
-                                      format: "HH:mm",
-                                      "value-zone": "local",
-                                      "minute-step": 10,
-                                      required: ""
-                                    },
-                                    on: {
-                                      input: function($event) {
-                                        return _vm.parseDate(1)
-                                      }
-                                    },
-                                    model: {
-                                      value: _vm.end,
-                                      callback: function($$v) {
-                                        _vm.end = $$v
-                                      },
-                                      expression: "end"
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _vm._m(7)
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c("div", { attrs: { id: "time_error" } }),
-                              _vm._v(" "),
-                              _c("br"),
-                              _vm._v(" "),
-                              _vm._m(8)
-                            ]
-                          )
-                        ])
+                                  _vm._m(9)
+                                ])
+                              ]
+                            )
+                          ]
+                        )
                       ]
                     )
                   ]
@@ -52233,6 +52285,31 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "h5",
+        { staticClass: "modal-title", attrs: { id: "addPlaceLongTitle" } },
+        [_vm._v("Add new sport spot")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "input-group-prepend" }, [
       _c(
         "label",
@@ -52248,14 +52325,24 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-footer text-muted" }, [
-      _c("p", [
-        _c(
-          "button",
-          { staticClass: "btn btn-danger m-2", attrs: { type: "submit" } },
-          [_vm._v("Create")]
-        )
-      ])
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-secondary",
+          attrs: { type: "button", "data-dismiss": "modal" }
+        },
+        [_vm._v("Close")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-success float-right",
+          attrs: { type: "submit" }
+        },
+        [_vm._v("Add "), _c("i", { staticClass: "fas fa-plus" })]
+      )
     ])
   },
   function() {
@@ -52303,19 +52390,24 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-header " }, [
-      _c("h6", [_vm._v("Add Event")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "input-group-append" }, [
+    return _c("div", { staticClass: "modal-header" }, [
       _c(
-        "span",
-        { staticClass: "input-group-text", attrs: { id: "basic-addon2" } },
-        [_c("i", { staticClass: "far fa-clock" })]
+        "h5",
+        { staticClass: "modal-title", attrs: { id: "addEventLongTitle" } },
+        [_vm._v("Add Event")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
       )
     ])
   },
@@ -52335,14 +52427,37 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "button",
-      {
-        staticClass: "btn btn-success float-right",
-        attrs: { id: "add_event_btn", type: "submit" }
-      },
-      [_vm._v("Add "), _c("i", { staticClass: "fas fa-plus" })]
-    )
+    return _c("div", { staticClass: "input-group-append" }, [
+      _c(
+        "span",
+        { staticClass: "input-group-text", attrs: { id: "basic-addon2" } },
+        [_c("i", { staticClass: "far fa-clock" })]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-secondary",
+          attrs: { type: "button", "data-dismiss": "modal" }
+        },
+        [_vm._v("Close")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-success float-right",
+          attrs: { id: "add_event_btn", type: "submit" }
+        },
+        [_vm._v("Add "), _c("i", { staticClass: "fas fa-plus" })]
+      )
+    ])
   }
 ]
 render._withStripped = true
@@ -52379,6 +52494,10 @@ var render = function() {
       : _c("span", [_vm._v(" User")]),
     _c("br"),
     _vm._v(" "),
+    _vm.currentUser.email_verified_at != "undefined"
+      ? _c("i", [_vm._v(" " + _vm._s(_vm.currentUser.email_verified_at) + " ")])
+      : _vm._e(),
+    _vm._v("\n\n    " + _vm._s(_vm.currentUser.email_verified_at) + "\n    "),
     _vm.currentUser.isAdmin == 1
       ? _c(
           "a",

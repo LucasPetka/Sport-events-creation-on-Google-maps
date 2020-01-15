@@ -6,73 +6,64 @@
 
     <notifications group="foo" classes="my-style" ignoreDuplicates position="top center" />
 
+
+    <!-- =====================================ADD NEW PLACE======================================================== -->
+                    <form @submit.prevent="addPlace">
+                        <div class="modal fade" id="addPlace" tabindex="-1" role="dialog" aria-labelledby="addPlaceCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="addPlaceLongTitle">Add new sport spot</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="input-group mb-3">
+                                        <input type="text" class="form-control" placeholder="Title" v-model="place.title">
+                                        </div>
+
+                                        <div class="input-group mb-3">
+                                            <textarea class="form-control" placeholder="About..." v-model="place.about" ></textarea>
+                                        </div>
+
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <label class="input-group-text" for="inputGroupSelect01">Sport</label>
+                                            </div>
+                            
+                                            <select class="custom-select" id="inputGroupSelect01" v-model="place.type">
+                                                <option value="112">Soccer inside</option>
+                                                <option value="111">Soccer</option>
+                                                <option value="223">Basketball inside</option>
+                                                <option value="222">Basketball</option>
+                                                <option value="334">Volleyball inside</option>
+                                                <option value="333">Voleyball</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-success float-right">Add <i class="fas fa-plus"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </form>
+    <!--=======================================================================================================================================-->
+
+
         <div class="row" style="width:100%; padding:0; margin:0;">
             <div id="map" class="col-lg-12 p-0">
-                <Gmap v-bind:status='status' v-on:showSpot="showSpot($event)" v-on:openForm="openAdd($event)" ref="gmapp"> </Gmap>
-
-                
+                <Gmap v-bind:status='status' v-on:showSpot="showSpot($event)" v-on:openForm="openAdd($event)" ref="gmapp"> </Gmap>  
             </div>
-            <div id="side" class="col-lg-0 p-0" style="display:none;">
+
+            <div id="side" class="col-lg-0 p-0 mt-5" style="display:none;">
                 <div id="sidebar">
 
-
-
-                <!-- ================================================================================================================= -->
-                <!-- =====================================ADD NEW PLACE========================================START================== -->
-                <!-- ================================================================================================================= -->
-
-                    <div class="card m-3 mt-5" id="createDiv" style="display:none; width:90%;">
-                        <div class="card-header">
-
-                            <button type="button" id="close_createDiv" v-on:click="closeAdd()" class="close" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
-
-                            <h6>Create new Marker</h6>
-
-                        </div>
-
-                        <form @submit.prevent="addPlace">
-                            <div class="card-body">
-                                
-                                    <div class="input-group mb-3">
-                                        <input type="text" class="form-control" placeholder="Title" v-model="place.title">
-                                    </div>
-
-                                    <div class="input-group mb-3">
-                                        <textarea class="form-control" placeholder="About..." v-model="place.about" ></textarea>
-                                    </div>
-
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                            <label class="input-group-text" for="inputGroupSelect01">Sport</label>
-                                        </div>
-                        
-                                        <select class="custom-select" id="inputGroupSelect01" v-model="place.type">
-                                            
-                                            <option value="112">Soccer inside</option>
-                                            <option value="111">Soccer</option>
-                                            <option value="223">Basketball inside</option>
-                                            <option value="222">Basketball</option>
-                                            <option value="334">Volleyball inside</option>
-                                            <option value="333">Voleyball</option>
-                                        </select>
-                                    </div>
-                                
-                            </div>
-
-                            <div class="card-footer text-muted">
-                                <p>
-                                    <button type="submit" class="btn btn-danger m-2">Create</button>
-                                </p>
-                            </div>
-
-                        </form>
-                    </div>
-
-
-
-                <!-- ================================================================================================================= -->
-                <!-- =====================================SHOW SPOT INFO=======================================START================== -->
-                <!-- ================================================================================================================= -->
+                <!-- ==========================================SHOW SPOT INFO========================================================= -->
+               
                     <div id="show" class="show" style="display:none; width:100%; height:auto; padding-bottom:270px;" >
                             
                         <div class="d-flex flex-column bd-highlight mb-3">
@@ -94,21 +85,14 @@
 
                                 <div class="card-body">
                                     <p class="card-text">{{ show.about }}</p>
-
                                     <hr class="mt-4">
                                     <p class="float-right"> <i class="fas fa-road"></i> <small>This place is {{ measured_distance }} km from you</small></p>
-
                                 </div>
 
-
                                 <span v-if="currentUser">
-                                <button v-if="currentUser.isAdmin == 1" v-on:click="deletePlace(show.id)" class="btn btn-danger m-2"> <i class="fas fa-times"></i> Delete place</button>
+                                    <button v-if="currentUser.isAdmin == 1" v-on:click="deletePlace(show.id)" class="btn btn-danger m-2"> <i class="fas fa-times"></i> Delete place</button>
                                 </span>
-
                             </div>
-
-
-                            
                         </div>
                         
                         
@@ -117,7 +101,6 @@
                                 <h6>Events</h6>  
                             </div>
                             <div class="card-body">
-
                                 <div v-if="this.status === 1">
                                     <button v-on:click="openAddEvent()" class="btn btn-outline-danger float-right">Add Event <i class="fas fa-plus"></i></button>
                                 </div>
@@ -128,73 +111,76 @@
                                     <a href ="/login"  class="btn btn-outline-secondary float-right mr-2">Login</a>
                                     </div>
                                 </div>
-
                                 <Calendar v-bind:status='status' v-bind:currentUser='currentUser' v-on:getDate="getDate($event)" v-on:closeAdd="closeAddEvent()" ref="calendar"> </Calendar>
                             </div>
                         </div>
 
-                        <div id="addEvent" class="card m-3 width:100%; height:100%;" style="display:none;">
-                            <div class="card-header ">
-                                <h6>Add Event</h6>
-                            </div>
-                            <div class="card-body">
-                                
-                                <form @submit.prevent="addEvent">
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">Title</label>
-                                    <input v-model="event.title" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter title" required>
+
+
+                        <!--===================================================Add event Modal==================================================-->
+                        <form @submit.prevent="addEvent">
+                        <div class="modal fade" id="addEvent" tabindex="-1" role="dialog" aria-labelledby="addEventCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="addEventLongTitle">Add Event</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Title</label>
+                                            <input v-model="event.title" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter title" required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="exampleFormControlTextarea1">About</label>
+                                            <textarea v-model="event.about" class="form-control" id="exampleFormControlTextarea1" rows="3" required></textarea>
+                                        </div>
+
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">{{ date }}</span>
+                                            </div>
+
+                                            <datetime type="time" id="start" v-model="start" format="HH:mm" :value-zone="'local'" :minute-step="10" v-on:input="parseDate(0)" required></datetime>
+                                        
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" id="basic-addon2"><i class="far fa-clock"></i></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">{{ date }}</span>
+                                            </div>
+
+                                            <datetime  type="time" id="end" v-model="end" format="HH:mm" :value-zone="'local'" :minute-step="10" v-on:input="parseDate(1)" required></datetime>
+                                            
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" id="basic-addon2"><i class="far fa-clock"></i></span>
+                                            </div>
+                                        </div>
+
+                                        <div id="time_error"></div>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button id="add_event_btn" type="submit" class="btn btn-success float-right">Add <i class="fas fa-plus"></i></button>
+                                    </div>
                                 </div>
-
-                                <div class="form-group">
-                                    <label for="exampleFormControlTextarea1">About</label>
-                                    <textarea v-model="event.about" class="form-control" id="exampleFormControlTextarea1" rows="3" required></textarea>
-                                </div>
-
-
-
-                                <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                     <span class="input-group-text">{{ date }}</span>
-                                </div>
-                                    <datetime  type="time" id="start" v-model="start" format="HH:mm" :value-zone="'local'" :minute-step="10" v-on:input="parseDate(0)" required></datetime>
-                                <div class="input-group-append">
-                                    <span class="input-group-text" id="basic-addon2"><i class="far fa-clock"></i></span>
-                                </div>
-                                </div>
-
-
-
-                                <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                 <span class="input-group-text">{{ date }}</span>
-                                </div>
-                                    <datetime  type="time" id="end" v-model="end" format="HH:mm" :value-zone="'local'" :minute-step="10" v-on:input="parseDate(1)" required></datetime>
-                                <div class="input-group-append">
-                                    <span class="input-group-text" id="basic-addon2"><i class="far fa-clock"></i></span>
-                                </div>
-                                </div>
-
-                                <div id="time_error"></div>
-                                
-                                
-                                <br>
-
-                                <button id="add_event_btn" type="submit" class="btn btn-success float-right">Add <i class="fas fa-plus"></i></button>
-                                </form>
                             </div>
                         </div>
-
+                        </form>
 
                     </div>
                 </div>
             </div>
         </div>
 
-
-    
-               
-
-         
+   
     </div>
 </template>
 
@@ -262,14 +248,17 @@ export default {
 
     //==============================ON LOAD FUNCTION==============================================
     mounted(){
-
-        
-        
         //animation
         $("#geras").animate({left: '45%', opacity: '1', top:'40%', fontSize:'50px'}, 1500, function(){
             $("#geras").animate({left:'43%',top:'39%', fontSize:'80px'}, 500, function(){
             $("#loading-screen").animate({opacity:'0', width:'0%'}, 500, function(){
             $("#loading-screen").hide();});});});
+
+            
+
+         $('#addPlace').on('hide.bs.modal', (e) => {
+           this.$refs.gmapp.hidePointer();
+        });
 
         this.fetchPlaces(); //fetcing all places
         this.fetchTypes();  //fething all sport types
@@ -299,62 +288,38 @@ export default {
         $("#side").addClass("col-lg-0");
     },
 
-    //Opens place addition label
+    //------------------------Opens PLACE ADD label-----------------------------
     openAdd: function(cord){
         this.place.lat = cord.lat;
         this.place.lng = cord.lng;
 
-        const create = document.querySelector('#createDiv');
-
-        if (create.style.display === 'none') {
-
-            this.openShow();
-            $("#createDiv").slideDown("slow");
-        }
-            
+        $('#addPlace').modal('show');  
     },
 
-    //Closes place adition label
+    //-------------------------Closes PLACE ADD label-------------------------------
     closeAdd: function(){
-           if($("#close_show").is(":visible")){
-                 $("#createDiv").slideUp("slow");
-                 this.$refs.gmapp.hidePointer();
-            }
-            else{
-                $("#createDiv").slideUp("slow");
-                this.$refs.gmapp.hidePointer();
-                $(".popup-content").fadeOut("slow");
-            }
-            this.closeShow();
+           $('#addPlace').modal('hide'); 
     },
 
 
-    //Opens event creation label
+    //------------------------Opens add event creation label-------------------
     openAddEvent: function(){
 
         this.event.place_id = this.show.id;
         this.event.person_id = this.currentUser.id;
         this.event.organizator = this.currentUser.name;
 
-        const create = document.querySelector('#addEvent');
-
-        if (create.style.display === 'none') {
-            $("#addEvent").slideDown("slow");
-
-            $('.card-body').animate({
-                scrollTop: $('#addEvent').position().top - 40
-            }, 1000);
-        } 
+        $('#addEvent').modal('show');
 
         this.parseDate(0); this.parseDate(1);
     },
 
-    //Closes event creation label
+    //-----------------Closes event creation label---------------------------
     closeAddEvent: function(){
-         $("#addEvent").hide("fast");
+         $('#addEvent').modal('hide');
     },
 
-    //Parse data in right format to choose when event starts and when ends
+    //---------------------Parse data in right format to choose when event starts and when ends--------------------
     parseDate(choose){
         var d = new Date(this.start);
 
@@ -383,7 +348,7 @@ export default {
         }
     },
 
-    //Gets date in day chooser
+    //---------------------Gets date in day chooser--------------------------------
     getDate: function(dateee){
         var d = new Date(dateee);
         var dat = new Date(dateee);
@@ -398,7 +363,7 @@ export default {
         this.end = dateee;
     },
 
-    //Show spot all info with all events happening in there
+    //-----------------Show spot all info with all events happening in there--------------------
     showSpot: function(arg){
 
         const foundPlace = this.places.find( place => place.id == arg[0]);
@@ -422,7 +387,7 @@ export default {
         this.closeAddEvent();
     },
 
-
+    //------------------------Fetch sport places---------------------------------
     fetchPlaces() {
             fetch('api/places')
             .then(res => res.json())
@@ -431,7 +396,7 @@ export default {
             })
     },
 
-
+    //------------------------Fetch sport types---------------------------------
     fetchTypes() {
             fetch('api/types')
             .then(res => res.json())
@@ -441,13 +406,14 @@ export default {
     },
 
 
+    //---------------------------Get Cookie-------------------------------------
     getCookie(name) {
     var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
     return v ? v[2] : null;
     },
 
 
-    //Deletes place
+    //---------------------------------------Deletes place-------------------------------------------------
     deletePlace: function(id) {
 
         console.log(this.getCookie("api_token"));
@@ -481,7 +447,7 @@ export default {
         }
     },
 
-    //Adds new place
+    //------------------------------------------Adds new place--------------------------------------------
     addPlace() {
         this.place.personid = this.$props.currentUser.id;
 
@@ -522,7 +488,7 @@ export default {
         }
     },
 
-    //Create event
+    //-----------------------------------------Create new event-----------------------------------------------
      addEvent() {
         if(this.edit === false){
 

@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid">
-                <gmap-map :center="getPosition()" v-bind:options="mapStyle" :zoom="14"  style="width:auto; height: 500px;">
+                <gmap-map :center="getPosition()" v-bind:options="mapStyle" :zoom="14" :style="size">
                     <gmap-marker :position="getPosition()"></gmap-marker>
                 </gmap-map>
     </div>
@@ -12,7 +12,7 @@ import mapstyle from '../assets/options.json'
 
 export default {
 
-    props: ['place'],
+    props: ['place', 'size'],
 
     data() {
         return {
@@ -21,8 +21,8 @@ export default {
         mapStyle: {
         styles: mapstyle,
         options:{
-            fullscreenControl: false,
-            mapTypeControl: true,
+            fullscreenControl: true,
+            mapTypeControl: false,
             scaleControl: false,
             streetViewControl: false,
             zoomControl: true

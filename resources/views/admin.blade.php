@@ -104,7 +104,7 @@
                   <div class="modal-body">
                     <div class="row">
                         <div class="col-lg-7">
-                            <SmallMap v-bind:place='{{ $place }}'> </SmallMap>
+                            <SmallMap v-bind:place='{{ $place }}' v-bind:size='"width:auto; height: 500px;"'> </SmallMap>
                         </div>
                         <div class="col-lg-5">
                             {{ $place->about }}

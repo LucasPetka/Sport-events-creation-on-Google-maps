@@ -298,6 +298,7 @@ export default {
     //gets all places from data base
     fetchPlaces() {
 
+      this.$emit('fetch');
       const urlParams = new URLSearchParams(window.location.search);
       const nelat = urlParams.get('nelat')
       const swlat = urlParams.get('swlat')

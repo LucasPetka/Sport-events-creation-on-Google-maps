@@ -34,8 +34,6 @@ class PlaceController extends Controller
         //Get places
         $places = [$nelat, $swlat, $nelng, $swlng];
 
-        //DB::enableQueryLog();
-
         $places = DB::table('places')
             ->select('*')
             ->where('lat','<',$nelat)
@@ -43,11 +41,6 @@ class PlaceController extends Controller
             ->where('lng','<',$nelng)
             ->where('lng','>',$swlng)
             ->get();
-
-        //$rs = DB::select('select lng from places where lat < ? AND lat > ? AND lng < ? AND lng > ?', [$nelat, $swlat, $nelng, $swlng]);
-
-        //dd(DB::getQueryLog());
-            
 
         //Return collection as a resource
         return PlaceResource::collection($rs);

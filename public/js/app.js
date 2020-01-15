@@ -3197,6 +3197,7 @@ var _assets_options_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/_
     fetchPlaces: function fetchPlaces() {
       var _this5 = this;
 
+      this.$emit('fetch');
       var urlParams = new URLSearchParams(window.location.search);
       var nelat = urlParams.get('nelat');
       var swlat = urlParams.get('swlat');
@@ -3504,9 +3505,9 @@ __webpack_require__.r(__webpack_exports__);
     });
     $('#addPlace').on('hide.bs.modal', function (e) {
       _this.$refs.gmapp.hidePointer();
-    });
-    this.fetchPlaces(); //fetcing all places
+    }); //this.fetchPlaces(); //fetcing all places
 
+    this.fetchPlaces();
     this.fetchTypes(); //fething all sport types
   },
   //===============================METHODS=======================================================
@@ -3596,6 +3597,7 @@ __webpack_require__.r(__webpack_exports__);
         return place.id == arg[0];
       });
       this.show = foundPlace;
+      console.log("opas: " + this.show);
       this.$refs.calendar.fetchSpot(this.show.id);
       var foundType = this.types.find(function (type) {
         return type.id == _this2.show.type;
@@ -3620,6 +3622,7 @@ __webpack_require__.r(__webpack_exports__);
       var swlat = urlParams.get('swlat');
       var nelng = urlParams.get('nelng');
       var swlng = urlParams.get('swlng');
+      console.log('places: api/places/' + nelat + '/' + swlat + '/' + nelng + '/' + swlng);
       fetch('api/places/' + nelat + '/' + swlat + '/' + nelng + '/' + swlng).then(function (res) {
         return res.json();
       }).then(function (res) {
@@ -3853,7 +3856,7 @@ var _assets_options_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/_
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['place'],
+  props: ['place', 'size'],
   data: function data() {
     return {
       center: {
@@ -3864,8 +3867,8 @@ var _assets_options_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/_
       mapStyle: {
         styles: _assets_options_json__WEBPACK_IMPORTED_MODULE_0__,
         options: {
-          fullscreenControl: false,
-          mapTypeControl: true,
+          fullscreenControl: true,
+          mapTypeControl: false,
           scaleControl: false,
           streetViewControl: false,
           zoomControl: true
@@ -51832,6 +51835,9 @@ var render = function() {
                 ref: "gmapp",
                 attrs: { status: _vm.status },
                 on: {
+                  fetch: function($event) {
+                    return _vm.fetchPlaces()
+                  },
                   showSpot: function($event) {
                     return _vm.showSpot($event)
                   },
@@ -52538,7 +52544,7 @@ var render = function() {
       _c(
         "gmap-map",
         {
-          staticStyle: { width: "auto", height: "500px" },
+          style: _vm.size,
           attrs: { center: _vm.getPosition(), options: _vm.mapStyle, zoom: 14 }
         },
         [_c("gmap-marker", { attrs: { position: _vm.getPosition() } })],

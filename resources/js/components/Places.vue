@@ -56,7 +56,7 @@
 
         <div class="row" style="width:100%; padding:0; margin:0;">
             <div id="map" class="col-lg-12 p-0">
-                <Gmap v-bind:status='status' v-on:showSpot="showSpot($event)" v-on:openForm="openAdd($event)" ref="gmapp"> </Gmap>  
+                <Gmap v-bind:status='status' v-on:fetch="fetchPlaces()" v-on:showSpot="showSpot($event)" v-on:openForm="openAdd($event)" ref="gmapp"> </Gmap>  
             </div>
 
             <div id="side" class="col-lg-0 p-0 mt-5" style="display:none;">
@@ -254,13 +254,12 @@ export default {
             $("#loading-screen").animate({opacity:'0', width:'0%'}, 500, function(){
             $("#loading-screen").hide();});});});
 
-            
-
          $('#addPlace').on('hide.bs.modal', (e) => {
            this.$refs.gmapp.hidePointer();
         });
 
-        this.fetchPlaces(); //fetcing all places
+        //this.fetchPlaces(); //fetcing all places
+        this.fetchPlaces();
         this.fetchTypes();  //fething all sport types
     },
 
@@ -368,6 +367,7 @@ export default {
 
         const foundPlace = this.places.find( place => place.id == arg[0]);
         this.show = foundPlace;
+        console.log("opas: "+this.show);
 
         this.$refs.calendar.fetchSpot(this.show.id);
 
@@ -396,6 +396,7 @@ export default {
             const swlng = urlParams.get('swlng')
 
 
+        console.log('places: api/places/'+nelat+'/'+swlat+'/'+nelng+'/'+swlng);
             fetch('api/places/'+nelat+'/'+swlat+'/'+nelng+'/'+swlng)
             .then(res => res.json())
             .then(res => {

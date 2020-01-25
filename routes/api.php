@@ -44,6 +44,8 @@ Route::group(['middleware' => 'auth:api'], function() {
 
     //List Events
     Route::get('events', 'EventController@index');
+    //Get Event
+    Route::get('event/{id}', 'EventController@show');
 
 Route::group(['middleware' => 'auth:api'], function() {
     //Create new Event

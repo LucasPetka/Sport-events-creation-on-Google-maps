@@ -31,8 +31,7 @@
 
                         <div v-if="currentUser.id == event.person_id">
                             <button type="button" class="btn btn-danger float-right ml-2" v-on:click="deleteEvent(event.id)"> <i class="fas fa-trash-alt"></i> </button>
-                            <button type="button" class="btn btn-primary float-right" > <i class="far fa-edit"></i> </button>
-                            
+                            <button type="button" class="btn btn-primary float-right" v-on:click="editEvent(event.id)" > <i class="far fa-edit"></i> </button>
                         </div>
 
                     </div>
@@ -45,6 +44,7 @@
                 Sorry, but there are no events on this day... 
                 </div>
 
+
             </div>
         </div>    
 </template>
@@ -52,6 +52,8 @@
 <script>
 import Datepicker from 'vuejs-datepicker';
 import Vue from 'vue';
+import { mapGetters, mapActions } from 'vuex';
+
 
 export default {
 
@@ -99,8 +101,14 @@ export default {
         this.fetchPeopleGoing(); // get all people going from data base
     },
 
+    computed: mapGetters(['allPlaces','allTypes']),
+
+    
+
     //================================METHODS========================================
     methods: {
+
+    ...mapActions(['fetchPlacesx', 'fetchTypesx']),
 
         //Create todays date variable
         getDate: function(date){
@@ -294,6 +302,11 @@ export default {
                 text: 'You left the event !'
                 });
 
+        },
+
+        //Edit event
+        editEvent: function(eventId){
+            this.$emit('editEvent', eventId);
         },
 
         //Delete event from database

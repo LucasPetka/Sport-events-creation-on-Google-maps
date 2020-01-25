@@ -33,7 +33,7 @@
                                             </div>
                             
                                             <select class="custom-select" id="inputGroupSelect01" v-model="place.type">
-                                                <option v-for="type in types" :key="type.id" :value="type.id"> {{ type.name }}</option>
+                                                <option v-for="type in allTypes.data" :key="type.id" :value="type.id"> {{ type.name }}</option>
                                             </select>
                                         </div>
                                     </div>
@@ -51,7 +51,7 @@
 
         <div class="row" style="width:100%; padding:0; margin:0;">
             <div id="map" class="col-lg-12 p-0">
-                <Gmap v-bind:status='status' v-on:fetch="fetchPlaces()" v-on:showSpot="showSpot($event)" v-on:openForm="openAdd($event)" ref="gmapp"> </Gmap>  
+                <Gmap v-bind:status='status' v-on:showSpot="showSpot($event)" v-on:openForm="openAdd($event)" ref="gmapp"> </Gmap>  
             </div>
 
             <div id="side" class="col-lg-0 p-0 mt-5" style="display:none;">
@@ -102,7 +102,7 @@
                                     <a href ="/login"  class="btn btn-outline-secondary float-right mr-2">Login</a>
                                     </div>
                                 </div>
-                                <Calendar v-bind:status='status' v-bind:currentUser='currentUser' v-on:getDate="getDate($event)" v-on:closeAdd="closeAddEvent()" ref="calendar"> </Calendar>
+                                <Calendar v-bind:status='status' v-bind:currentUser='currentUser' v-on:editEvent="editEvent($event)" v-on:getDate="getDate($event)" v-on:closeAdd="closeAddEvent()" ref="calendar"> </Calendar>
                             </div>
                         </div>
 
@@ -114,7 +114,9 @@
                             <div class="modal-dialog modal-dialog-centered" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="addEventLongTitle">Add Event</h5>
+
+                                        <h5 v-if="edit" class="modal-title" id="addEventLongTitle">Edit Event</h5>
+                                        <h5 v-else class="modal-title" id="addEventLongTitle">Add Event</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                         </button>
@@ -159,7 +161,8 @@
 
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button id="add_event_btn" type="submit" class="btn btn-success float-right">Add <i class="fas fa-plus"></i></button>
+                                        <button v-if="edit" id="add_event_btn" type="submit" class="btn btn-success float-right"> Update </button>
+                                        <button v-else id="add_event_btn" type="submit" class="btn btn-success float-right">Add <i class="fas fa-plus"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -181,6 +184,7 @@ import Gmap from '../components/Gmap.vue';
 import Calendar from '../components/Calendar.vue';
 import { Datetime } from 'vue-datetime';
 import Vue from 'vue';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
         components: {
@@ -194,8 +198,6 @@ export default {
 
     data(){
         return{
-            places: [],
-            types:[],
             type: {
                 id:'',
                 name:''
@@ -249,13 +251,14 @@ export default {
            this.$refs.gmapp.hidePointer();
         });
 
-        //this.fetchPlaces(); //fetcing all places
-        this.fetchPlaces();
-        this.fetchTypes();  //fething all sport types
     },
+
+    computed: mapGetters(['allPlaces', 'allTypes']),
 
     //===============================METHODS=======================================================
     methods: { 
+
+    ...mapActions(['fetchPlacesx']),
 
     
     //Closes sidebar
@@ -289,7 +292,29 @@ export default {
            $('#addPlace').modal('hide'); 
     },
 
+    //------------------------Opens edit event creation label-------------------
+    async editEvent(id){
+        this.edit = true;
 
+        const response = await axios.get('api/event/'+ id);
+        console.log(response.data.data.title);
+        var even = response.data.data;
+
+        this.event = even;
+        var d = new Date(even.time_from);
+        var dat = new Date(even.time_until);
+
+        var dateee = d.toISOString();
+        this.start = dateee;
+        var dateee = dat.toISOString();
+        this.end = dateee;
+
+
+
+
+        $('#addEvent').modal('show');
+        
+    },
 
     //------------------------Opens add event creation label-------------------
     openAddEvent: function(){
@@ -300,7 +325,8 @@ export default {
 
         $('#addEvent').modal('show');
 
-        this.parseDate(0); this.parseDate(1);
+        this.parseDate(0); 
+        this.parseDate(1);
     },
 
     //-----------------Closes event creation label---------------------------
@@ -355,13 +381,12 @@ export default {
     //-----------------Show spot all info with all events happening in there--------------------
     showSpot: function(arg){
 
-        const foundPlace = this.places.find( place => place.id == arg[0]);
+        const foundPlace = this.allPlaces.data.find( place => place.id == arg[0]);
         this.show = foundPlace;
-        console.log("opas: "+this.show);
 
         this.$refs.calendar.fetchSpot(this.show.id);
 
-        const foundType = this.types.find( type => type.id == this.show.type);
+        const foundType = this.allTypes.data.find( type => type.id == this.show.type);
         this.type = foundType;
 
         const show = document.querySelector('#show');
@@ -376,33 +401,6 @@ export default {
 
         this.closeAddEvent();
     },
-
-    //------------------------Fetch sport places---------------------------------
-    fetchPlaces() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const nelat = urlParams.get('nelat')
-            const swlat = urlParams.get('swlat')
-            const nelng = urlParams.get('nelng')
-            const swlng = urlParams.get('swlng')
-
-
-        console.log('places: api/places/'+nelat+'/'+swlat+'/'+nelng+'/'+swlng);
-            fetch('api/places/'+nelat+'/'+swlat+'/'+nelng+'/'+swlng)
-            .then(res => res.json())
-            .then(res => {
-                this.places = res.data;
-            })
-    },
-
-    //------------------------Fetch sport types---------------------------------
-    fetchTypes() {
-        fetch('api/types')
-        .then(res => res.json())
-        .then(res => {
-            this.types = res.data;
-        })
-    },
-
 
     //---------------------------Get Cookie-------------------------------------
     getCookie(name) {
@@ -422,7 +420,7 @@ export default {
             })
                 .then(res => res.json())
                 .then(data => {
-                    this.fetchPlaces();
+                    this.$refs.gmapp.fetchPlaces();
                 })
                 .catch(err => console.log(err));
                 this.$refs.gmapp.fetchPlaces();
@@ -449,7 +447,6 @@ export default {
     addPlace() {
         this.place.personid = this.$props.currentUser.id;
 
-        if(this.edit === false){
             fetch('api/placequeue?api_token=' + this.getCookie("api_token"), {
                 method: 'post',
                 body: JSON.stringify(this.place),
@@ -464,7 +461,7 @@ export default {
                 this.place.lat = '';
                 this.place.lng = '';
                 this.place.type = '';
-                this.fetchPlaces();
+                this.$refs.gmapp.fetchPlaces();
             })
             .catch(err =>console.log(err));
 
@@ -480,49 +477,38 @@ export default {
                 this.closeAdd();
                 this.closeShow();
 
-
-        } else{
-
-        }
     },
 
     //-----------------------------------------Create new event-----------------------------------------------
      addEvent() {
         if(this.edit === false){
 
-        (async () => {
-        const Response = await fetch('api/event?api_token=' + this.getCookie("api_token"), {
-             method: 'post',
-                body: JSON.stringify(this.event),
-                headers: {
-                    'Accept': 'application/json',
-                    'content-type': 'application/json'
-                }     
-        });
+            (async () => {
+            const Response = await fetch('api/event?api_token=' + this.getCookie("api_token"), {
+                method: 'post',
+                    body: JSON.stringify(this.event),
+                    headers: {
+                        'Accept': 'application/json',
+                        'content-type': 'application/json'
+                    }     
+            });
 
-        const content = await Response.json();
-        await this.$refs.calendar.fetchEvents();
-        await this.$refs.calendar.fetchSpot(this.show.id);
-        })();
+            const content = await Response.json();
+            await this.$refs.calendar.fetchEvents();
+            await this.$refs.calendar.fetchSpot(this.show.id);
+            })();
 
 
-        Vue.notify({
-                group: 'foo',
-                title: 'Congrats!!',
-                type: 'success',
-                text: 'You have created an event !'
-                });
-
-                this.event.place_id = '';
-                this.event.title = '';
-                this.event.about = '';
-                this.event.time_from = '';
-                this.event.time_until = '';
-                this.event.organizator = '';
-                this.event.person_id = '';      
+            Vue.notify({
+                    group: 'foo',
+                    title: 'Congrats!!',
+                    type: 'success',
+                    text: 'You have created an event !'
+                    });
+   
         } else{
 
-             (async () => {
+            (async () => {
         const Response = await fetch('api/event?api_token=' + this.getCookie("api_token"), {
              method: 'put',
                 body: JSON.stringify(this.event),
@@ -537,23 +523,26 @@ export default {
         await this.$refs.calendar.fetchSpot(this.show.id);
         })();
 
+        this.edit = false;
+
 
         Vue.notify({
                 group: 'foo',
                 title: 'Congrats!!',
                 type: 'success',
                 text: 'You have updated an event !'
-                });
-
-                this.event.place_id = '';
-                this.event.title = '';
-                this.event.about = '';
-                this.event.time_from = '';
-                this.event.time_until = '';
-                this.event.organizator = '';
-                this.event.person_id = '';
-
+                });  
         }
+
+        this.event.place_id = '';
+        this.event.title = '';
+        this.event.about = '';
+        this.event.time_from = '';
+        this.event.time_until = '';
+        this.event.organizator = '';
+        this.event.person_id = '';
+
+
     },
 
     }

@@ -21,6 +21,7 @@ import Notifications from 'vue-notification'
 import GmapCluster from 'vue2-google-maps/dist/components/cluster'
 import Datetime from 'vue-datetime'
 import 'vue-datetime/dist/vue-datetime.css'
+import store from './store/index.js';
 
 Vue.use(Notifications);
 Vue.use(Datetime);
@@ -37,6 +38,7 @@ Vue.use(VueGoogleMaps, {
 
 
 const app = new Vue({
+  store,
     el: '#app',
 });
 

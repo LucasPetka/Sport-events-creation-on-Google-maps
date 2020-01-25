@@ -18,8 +18,8 @@
 
     <gmap-map ref="gmapp" v-on:rightclick="openMenu($event)" v-on:zoom_changed="updateZoom()" :center="center" v-on:bounds_changed="update_bounds($event)" :zoom="zoom_in" v-bind:options="mapStyle"  style="width:100%; height: 100vh;">
 
-      <gmap-marker v-for="place in places" :visible="place.visible" :key="place.id" :position="getPosition(place)" @click="center=getPosition(place)" v-on:click="showSpot(place.id)" :icon="icon(place.type)" v-on:mouseover="openInfoWindowTemplate(place)" v-on:mouseout="infoWindow.open=false"></gmap-marker>
-     
+      <gmap-marker v-for="place in allPlaces.data" :visible="place.visible" :key="place.id" :position="getPosition(place)" @click="center=getPosition(place)" v-on:click="showSpot(place.id)" :icon="icon(place.type)" v-on:mouseover="openInfoWindowTemplate(place)" v-on:mouseout="infoWindow.open=false"></gmap-marker>
+
       <gmap-info-window
           :options="{maxWidth:300, pixelOffset:{width:0, height:-25}}"
           :position="infoWindow.position"
@@ -42,6 +42,7 @@
 <script>
 
 import mapstyle from '../assets/options.json'
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
     
@@ -63,7 +64,6 @@ export default {
       lat:'',
       lng:'',
       type:'',
-      visible: true
     },
     infoWindow: {
       position: {lat: 0, lng: 0},
@@ -89,14 +89,17 @@ export default {
     };
   },
 
-  mounted() {
-    this.fetchTypes();
+  created() {
+    this.fetchTypesx();
     this.geolocation();
     this.checkVariable();
-    //this.marker_visibility = this.$parent.show_new;
   },
 
+  computed:  mapGetters(['allPlaces', 'allTypes']),
+
   methods: {
+
+     ...mapActions(['fetchPlacesx', 'fetchTypesx']),
 
     //Opens info window above marker and sets the position and text
     openInfoWindowTemplate: function(place) {
@@ -120,7 +123,7 @@ export default {
       }
       else
       {
-          window.setTimeout(this.checkVariable, 500);
+          window.setTimeout(this.checkVariable, 200);
       }
     },
 
@@ -178,12 +181,6 @@ export default {
     //update bounds where are the spots are showing
     update_bounds(bounds){
       this.bounds = bounds;
-
-      if(this.bounds != null){
-      var ne = this.bounds.getNorthEast();
-      var sw = this.bounds.getSouthWest();
-      window.history.replaceState(null, null, '?nelat='+ ne.lat() +'&swlat='+ sw.lat() +'&nelng='+ ne.lng() +'&swlng='+ sw.lng());
-      }
     },
 
 
@@ -233,9 +230,9 @@ export default {
     //Sets the icon for the place id
     icon: function(type){
 
-        for (let i = 0; i < this.types.length; i++) {
-          if (type == this.types[i].id){
-            return { url: require('../../../public/storage/sport_logo/'+ this.types[i].image)};
+        for (let i = 0; i < this.allTypes.data.length; i++) {
+          if (type == this.allTypes.data[i].id){
+            return { url: require('../../../public/storage/sport_logo/'+ this.allTypes.data[i].image)};
           }
         }
     },
@@ -293,33 +290,20 @@ export default {
         lng: parseFloat(place.lng)
       }
     },
-
-    fetchTypes(){
-
-      fetch('api/types')
-            .then(res => res.json())
-            .then(res => {
-                this.types = res.data;
-            })
-
-    },
     
     //gets all places from data base
     fetchPlaces() {
+      
+      var ne = this.bounds.getNorthEast();
+      var sw = this.bounds.getSouthWest();
 
-      this.$emit('fetch');
-      const urlParams = new URLSearchParams(window.location.search);
-      const nelat = urlParams.get('nelat')
-      const swlat = urlParams.get('swlat')
-      const nelng = urlParams.get('nelng')
-      const swlng = urlParams.get('swlng')
-      console.log('api/places/'+nelat+'/'+swlat+'/'+nelng+'/'+swlng);
+      this.fetchPlacesx(this.bounds);
 
-            fetch('api/places/'+nelat+'/'+swlat+'/'+nelng+'/'+swlng)
-            .then(res => res.json())
-            .then(res => {
-                this.places = res.data;
-            })
+      fetch('api/places/'+ne.lat()+'/'+sw.lat()+'/'+ne.lng()+'/'+sw.lng())
+      .then(res => res.json())
+      .then(res => {
+          this.places = res.data;
+      })
     },
 
     }

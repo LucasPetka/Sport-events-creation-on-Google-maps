@@ -24,6 +24,9 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/admin', 'AdminController@index')->middleware('admin');
 Route::get('/admin/users', 'AdminController@users')->middleware('admin');
+Route::get('/admin/sporttypes', 'AdminController@sportTypes')->middleware('admin');
+Route::post('/admin/sporttypes/add', 'AdminController@storeSportType')->middleware('admin');
+Route::delete('/admin/sporttypes/delete/{id}', 'AdminController@deleteSportType')->middleware('admin');
 Route::get('/admin/deleteuser/{id}', 'AdminController@deleteUser')->middleware('admin');
 Route::get('/admin/accplace/{id}', 'AdminController@acceptPlace')->middleware('admin');
 Route::get('/admin/decplace/{id}', 'AdminController@declinePlace')->middleware('admin');

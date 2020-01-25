@@ -14,13 +14,15 @@ class CreatePlacesTable extends Migration
     public function up()
     {
         Schema::create('places', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->increments('id')->unique();
             $table->string('title');
             $table->text('about');
-            $table->string('lat');
-            $table->string('lng');
-            $table->string('type');
+            $table->decimal('lat', 20, 16);
+            $table->decimal('lng', 20, 16);
+            $table->unsignedInteger('type');
             $table->timestamps();
+
+            $table->foreign('type')->references('id')->on('types');
         });
     }
 

@@ -33,12 +33,7 @@
                                             </div>
                             
                                             <select class="custom-select" id="inputGroupSelect01" v-model="place.type">
-                                                <option value="112">Soccer inside</option>
-                                                <option value="111">Soccer</option>
-                                                <option value="223">Basketball inside</option>
-                                                <option value="222">Basketball</option>
-                                                <option value="334">Volleyball inside</option>
-                                                <option value="333">Voleyball</option>
+                                                <option v-for="type in types" :key="type.id" :value="type.id"> {{ type.name }}</option>
                                             </select>
                                         </div>
                                     </div>
@@ -65,20 +60,16 @@
                 <!-- ==========================================SHOW SPOT INFO========================================================= -->
                
                     <div id="show" class="show" style="display:none; width:100%; height:auto; padding-bottom:270px;" >
+                       
                             
                         <div class="d-flex flex-column bd-highlight mb-3">
                             
                             <div class="p-4 bd-highlight">
                                 <button type="button" id="close_show" v-on:click="closeShow()" class="close" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
                                 
-                                <div v-if="type.id == '111' || type.id == '112'">
-                                    <h3> <img src="../assets/google_maps/soccerball.png"> {{ show.title }}</h3>
-                                </div>
-                                <div v-if="type.id == '222' || type.id == '223'">
-                                    <h3> <img src="../assets/google_maps/basketball.png"> {{ show.title }}</h3>
-                                </div>
-                                <div v-if="type.id == '333' || type.id == '334'">
-                                    <h3> <img src="../assets/google_maps/volleyball.png"> {{ show.title }}</h3>
+                            
+                                <div v-if="this.type.image">
+                                <h3> <img :src="'../../../storage/sport_logo/'+ this.type.image"> {{ show.title }}</h3>
                                 </div>
 
                                 <hr>
@@ -263,8 +254,6 @@ export default {
         this.fetchTypes();  //fething all sport types
     },
 
-
-
     //===============================METHODS=======================================================
     methods: { 
 
@@ -299,6 +288,7 @@ export default {
     closeAdd: function(){
            $('#addPlace').modal('hide'); 
     },
+
 
 
     //------------------------Opens add event creation label-------------------
@@ -406,11 +396,11 @@ export default {
 
     //------------------------Fetch sport types---------------------------------
     fetchTypes() {
-            fetch('api/types')
-            .then(res => res.json())
-            .then(res => {
-                this.types = res.data;
-            })
+        fetch('api/types')
+        .then(res => res.json())
+        .then(res => {
+            this.types = res.data;
+        })
     },
 
 
@@ -531,6 +521,37 @@ export default {
                 this.event.organizator = '';
                 this.event.person_id = '';      
         } else{
+
+             (async () => {
+        const Response = await fetch('api/event?api_token=' + this.getCookie("api_token"), {
+             method: 'put',
+                body: JSON.stringify(this.event),
+                headers: {
+                    'Accept': 'application/json',
+                    'content-type': 'application/json'
+                }     
+        });
+
+        const content = await Response.json();
+        await this.$refs.calendar.fetchEvents();
+        await this.$refs.calendar.fetchSpot(this.show.id);
+        })();
+
+
+        Vue.notify({
+                group: 'foo',
+                title: 'Congrats!!',
+                type: 'success',
+                text: 'You have updated an event !'
+                });
+
+                this.event.place_id = '';
+                this.event.title = '';
+                this.event.about = '';
+                this.event.time_from = '';
+                this.event.time_until = '';
+                this.event.organizator = '';
+                this.event.person_id = '';
 
         }
     },

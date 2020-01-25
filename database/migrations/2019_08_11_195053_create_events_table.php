@@ -14,14 +14,18 @@ class CreateEventsTable extends Migration
     public function up()
     {
         Schema::create('events', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('place_id');
+            $table->increments('id')->unique();
+            $table->unsignedInteger('place_id');
             $table->string('title');
             $table->text('about');
             $table->dateTime('time_from');
             $table->dateTime('time_until');
             $table->string('organizator');
             $table->timestamps();
+            $table->unsignedInteger('person_id');
+
+            $table->foreign('place_id')->references('id')->on('places');
+            $table->foreign('person_id')->references('id')->on('users');
         });
     }
 

@@ -14,11 +14,15 @@ class CreatePeopleGoingTable extends Migration
     public function up()
     {
         Schema::create('people_going', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('place_id');
-            $table->integer('event_id');
-            $table->integer('person_id');
+            $table->bigIncrements('id')->unique();
+            $table->unsignedInteger('place_id');
+            $table->unsignedInteger('event_id');
+            $table->unsignedInteger('person_id');
             $table->timestamps();
+
+            $table->foreign('place_id')->references('id')->on('places');
+            $table->foreign('event_id')->references('id')->on('events');
+            $table->foreign('person_id')->references('id')->on('users');
         });
     }
 

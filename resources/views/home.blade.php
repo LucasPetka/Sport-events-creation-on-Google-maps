@@ -9,7 +9,7 @@
             <div class="card mt-5">
                 <div class="card-body">
 
-                   <!-- <Profile v-bind:current-user='{!! Auth::user()->toJson() !!}'> </Profile> --> 
+                    
                     <div class="row mb-3">
                         <div class="col-12">
                             <button type="button" class="btn btn-primary ml-1 mr-1 float-right">

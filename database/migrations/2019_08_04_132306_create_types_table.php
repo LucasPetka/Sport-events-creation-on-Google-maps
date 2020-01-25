@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddPersonIdToEvent extends Migration
+class CreateTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class AddPersonIdToEvent extends Migration
      */
     public function up()
     {
-        Schema::table('events', function (Blueprint $table) {
-            $table->integer('person_id');
+        Schema::create('types', function (Blueprint $table) {
+            $table->increments('id')->unique();
+            $table->string('name');
+            $table->string('image');
         });
     }
 
@@ -25,8 +27,6 @@ class AddPersonIdToEvent extends Migration
      */
     public function down()
     {
-        Schema::table('events', function (Blueprint $table) {
-            $table->dropColumn('person_id');
-        });
+        Schema::dropIfExists('types');
     }
 }

@@ -17,6 +17,7 @@
       </div>
 
     <gmap-map ref="gmapp" v-on:rightclick="openMenu($event)" v-on:zoom_changed="updateZoom()" :center="center" v-on:bounds_changed="update_bounds($event)" :zoom="zoom_in" v-bind:options="mapStyle"  style="width:100%; height: 100vh;">
+
       <gmap-marker v-for="place in places" :visible="place.visible" :key="place.id" :position="getPosition(place)" @click="center=getPosition(place)" v-on:click="showSpot(place.id)" :icon="icon(place.type)" v-on:mouseover="openInfoWindowTemplate(place)" v-on:mouseout="infoWindow.open=false"></gmap-marker>
      
       <gmap-info-window
@@ -89,6 +90,7 @@ export default {
   },
 
   mounted() {
+    this.fetchTypes();
     this.geolocation();
     this.checkVariable();
     //this.marker_visibility = this.$parent.show_new;
@@ -230,14 +232,11 @@ export default {
 
     //Sets the icon for the place id
     icon: function(type){
-        if(type=="112" || type=="111"){
-            return { url: require('../assets/google_maps/soccerball.png')};
-        }
-        else if(type=="223" || type=="222"){
-            return { url: require('../assets/google_maps/basketball.png')};
-        }
-        else{
-            return { url: require('../assets/google_maps/volleyball.png')};
+
+        for (let i = 0; i < this.types.length; i++) {
+          if (type == this.types[i].id){
+            return { url: require('../../../public/storage/sport_logo/'+ this.types[i].image)};
+          }
         }
     },
 
@@ -293,6 +292,16 @@ export default {
         lat: parseFloat(place.lat),
         lng: parseFloat(place.lng)
       }
+    },
+
+    fetchTypes(){
+
+      fetch('api/types')
+            .then(res => res.json())
+            .then(res => {
+                this.types = res.data;
+            })
+
     },
     
     //gets all places from data base

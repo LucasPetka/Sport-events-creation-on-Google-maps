@@ -12,9 +12,6 @@ require('./components/Gmap.vue').default);
 Vue.component('calendar', 
 require('./components/Calendar.vue').default);
 
-Vue.component('profile', 
-require('./components/Profile.vue').default);
-
 Vue.component('smallmap', 
 require('./components/SmallMap.vue').default);
 
@@ -42,3 +39,4 @@ Vue.use(VueGoogleMaps, {
 const app = new Vue({
     el: '#app',
 });
+

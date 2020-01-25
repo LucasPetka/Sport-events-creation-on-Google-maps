@@ -28,7 +28,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">
+              <a class="nav-link" href="/admin/sporttypes">
                 <i class="far fa-futbol"></i>
                 Sport Types
               </a>
@@ -67,7 +67,7 @@
 
                   @foreach ($types as $type)
                     @if($type->id == $place->type)
-                      <td>{{ $type->name }}</td>
+                      <td><img src="../storage/sport_logo/{{ $type->image }}" alt="{{ $type->name }}"> {{ $type->name }}</td>
                     @endif
                   @endforeach
 
@@ -96,7 +96,16 @@
               <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">{{ $place->title }}</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">
+                      @foreach ($types as $type)
+                        @if($type->id == $place->type)
+                        <small><img src="../storage/sport_logo/{{ $type->image }}" alt="{{ $type->name }}"></small>
+                        @endif
+                      @endforeach
+                      
+                      
+                      {{ $place->title }}
+                    </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
@@ -111,7 +120,7 @@
                             <hr>
                             @foreach ($types as $type)
                               @if($type->id == $place->type)
-                              <small>Sport type: {{ $type->name }}</small>
+                              <small><img src="../storage/sport_logo/{{ $type->image }}" alt="{{ $type->name }}"> {{ $type->name }}</small>
                               @endif
                             @endforeach
                             <br>

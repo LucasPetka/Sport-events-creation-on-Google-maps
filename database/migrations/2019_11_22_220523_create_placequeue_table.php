@@ -14,14 +14,16 @@ class CreatePlacequeueTable extends Migration
     public function up()
     {
         Schema::create('placequeue', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->bigIncrements('id')->unique();
             $table->string('title');
             $table->text('about');
-            $table->string('lat');
-            $table->string('lng');
+            $table->decimal('lat', 20, 16);
+            $table->decimal('lng', 20, 16);
             $table->string('type');
-            $table->string('personid');
+            $table->integer('personid')->unsigned();
             $table->timestamps();
+
+            $table->foreign('personid')->references('id')->on('users');
         });
     }
 

@@ -129,7 +129,7 @@
 
                                         <div class="form-group">
                                             <label for="exampleFormControlTextarea1">About</label>
-                                            <textarea v-model="event.about" class="form-control" id="exampleFormControlTextarea1" rows="3" required></textarea>
+                                            <textarea v-model="event.about" class="form-control" id="exampleFormControlTextarea1" rows="6" required></textarea>
                                         </div>
 
                                         <div class="input-group mb-3">
@@ -319,6 +319,8 @@ export default {
     //------------------------Opens add event creation label-------------------
     openAddEvent: function(){
 
+        this.edit = false;
+
         this.event.place_id = this.show.id;
         this.event.person_id = this.currentUser.id;
         this.event.organizator = this.currentUser.name;
@@ -331,6 +333,7 @@ export default {
 
     //-----------------Closes event creation label---------------------------
     closeAddEvent: function(){
+        
          $('#addEvent').modal('hide');
     },
 

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Places;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Place;
 use App\Http\Resources\Place as PlaceResource;
@@ -27,23 +28,6 @@ class PlaceController extends Controller
 
         //Return collection as a resource
         return PlaceResource::collection($places);
-    }
-
-    public function placesCord($nelat, $swlat, $nelng, $swlng)
-    {
-        //Get places
-        $places = [$nelat, $swlat, $nelng, $swlng];
-
-        $places = DB::table('places')
-            ->select('*')
-            ->where('lat','<',$nelat)
-            ->where('lat','>',$swlat)
-            ->where('lng','<',$nelng)
-            ->where('lng','>',$swlng)
-            ->get();
-
-        //Return collection as a resource
-        return PlaceResource::collection($rs);
     }
 
 

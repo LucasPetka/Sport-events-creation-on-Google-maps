@@ -69,15 +69,115 @@
                         <button type="button" class="btn btn-primary ml-1 mr-1 float-right"  data-toggle="collapse" data-target="#goingto" aria-expanded="false" aria-controls="goingto">
                         <i class="fas fa-calendar-check"></i> Events you have joined <span class="badge badge-light">{{ count($goingtoevents) }}</span>
                         </button>
-                        <button type="button" class="btn btn-success ml-1 mr-1 float-right">
+                        <button type="button" class="btn btn-success ml-1 mr-1 float-right" data-toggle="collapse" data-target="#createdPlaces" aria-expanded="false" aria-controls="createdPlaces">
                             <i class="fas fa-map-marked-alt"></i>  Places  
                         </button>
                     </div>
                 </div>
 
+                
                 <div class="accordion" id="accordionExample">
+                    <div class="collapse" id="createdPlaces" data-parent="#accordionExample">
+                        <p class="h4 text-center">Places</p>
+
+                        <nav class="mt-2">
+                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Submited places</a>
+                                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Accepted places</a>
+                                <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Denied places</a>
+                            </div>
+                        </nav>
+                        <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+
+
+
+
+
+
+
+
+
+                                @if (count($submited_places) > 0)
+
+                                @foreach ($submited_places as $place)
+
+                                    <div class="card mt-2 mb-3">
+                                        <div class="card-body">
+                                            {{ $place->title }}
+
+                                            <div class="float-right"> 
+
+                                                @foreach ($types as $type)
+                                                    @if($type->id == $place->type)
+                                                    <img src="../storage/sport_logo/{{ $type->image }}" alt="{{ $type->name }}"> {{ $type->name }}</<img>
+                                                    @endif
+                                                @endforeach
+
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-5">
+                                                    {{ $place->about }}
+                                                </div>
+                                                <div class="col-7">
+                                                    <SmallMap v-bind:place='{{ $place }}' v-bind:size='"width:auto; height: 250px;"'> </SmallMap>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                @endforeach
+                                    
+                                @endif
+                                
+
+
+                            </div>
+                            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+
+                                @if (count($accepted_places) > 0)
+
+                                @foreach ($accepted_places as $place)
+
+                                <div class="card mt-2 mb-3">
+                                    <div class="card-body">
+                                        {{ $place->title }}
+
+                                        <div class="float-right"> 
+
+                                            @foreach ($types as $type)
+                                                @if($type->id == $place->type)
+                                                <img src="../storage/sport_logo/{{ $type->image }}" alt="{{ $type->name }}"> {{ $type->name }}</<img>
+                                                @endif
+                                            @endforeach
+
+                                        </div>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-5">
+                                                {{ $place->about }}
+                                            </div>
+                                            <div class="col-7">
+                                                <SmallMap v-bind:place='{{ $place }}' v-bind:size='"width:auto; height: 250px;"'> </SmallMap>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                    
+                                @endforeach
+                                    
+                                @endif
+
+                            </div>
+                            <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>
+                        </div>
+                            
+                    </div>
+
                     <div class="collapse" id="createdEvents" data-parent="#accordionExample">
-                        <p class="h4">Created</p>
+                        <p class="h4 text-center">Created</p>
                             @if(count($events) > 0)
                                 @foreach ($events as  $event)
                                 <div class="card mb-3">
@@ -98,9 +198,27 @@
 
                                             <div class="col-7">
                                                 {{ $event->about }}
-                                                <hr>
-                                                <i class="far fa-clock"></i> From {{ $event->time_from }} <br>
-                                                <i class="far fa-clock"></i> To {{ $event->time_until }}
+                                            <hr>
+
+                                                {{ $diff = Carbon\Carbon::parse($event->time_from)->diffForHumans(Carbon\Carbon::now()) }} 
+
+                                                <div class="float-right"> {{ Carbon\Carbon::parse($event->time_from)->format('Y-m-d') }}  </div>
+                                
+                                            <hr>
+
+                                            <table>
+                                                <tr>
+                                                    <td><i class="far fa-clock"></i> From</td>
+                                                    <td class="pl-3">{{ Carbon\Carbon::parse($event->time_from)->format('H:i') }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><i class="far fa-clock"></i> To</td>
+                                                    <td class="pl-3">{{ Carbon\Carbon::parse($event->time_until)->format('H:i') }}</td>
+                                                </tr>
+
+                                            </table>
+
+
                                             </div>
                                         </div>
                                       
@@ -111,7 +229,7 @@
                             @endif
                     </div>
                     <div class="collapse" id="goingto" data-parent="#accordionExample">
-                        <p class="h4">Going to</p>
+                        <p class="h4 text-center">Going to</p>
                         @if(count($goingtoevents) > 0)
                                 @foreach ($goingtoevents as  $event)
                                 <div class="card mb-3">
@@ -132,9 +250,27 @@
 
                                             <div class="col-7">
                                                 {{ $event->about }}
-                                                <hr>
-                                                <i class="far fa-clock"></i> From {{ $event->time_from }} <br>
-                                                <i class="far fa-clock"></i> To {{ $event->time_until }}
+                                            <hr>
+
+                                                {{ $diff = Carbon\Carbon::parse($event->time_from)->diffForHumans(Carbon\Carbon::now()) }} 
+
+                                                <div class="float-right"> {{ Carbon\Carbon::parse($event->time_from)->format('Y-m-d') }}  </div>
+                                
+                                            <hr>
+
+                                            <table>
+                                                <tr>
+                                                    <td><i class="far fa-clock"></i> From</td>
+                                                    <td class="pl-3">{{ Carbon\Carbon::parse($event->time_from)->format('H:i') }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><i class="far fa-clock"></i> To</td>
+                                                    <td class="pl-3">{{ Carbon\Carbon::parse($event->time_until)->format('H:i') }}</td>
+                                                </tr>
+
+                                            </table>
+
+
                                             </div>
                                         </div>
                                       

@@ -21,20 +21,20 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     //List Types
     Route::get('types', 'TypeController@index');
     //List Places
-    Route::get('places/{nelat}/{swlat}/{nelng}/{swlng}', 'PlaceController@index');
+    Route::get('places/{nelat}/{swlat}/{nelng}/{swlng}', 'Places\PlaceController@index');
     //Route::get('placescord/{nelat}/{swlat}/{nelng}/{swlng}', 'PlaceController@placesCord');
 
 
 Route::group(['middleware' => 'auth:api'], function() {
     //Create new Place
-    Route::post('place', 'PlaceController@store');
+    Route::post('place', 'Places\PlaceController@store');
     //Update place
-    Route::put('place', 'PlaceController@store');
+    Route::put('place', 'Places\PlaceController@store');
     //Delete place
-    Route::delete('place/{id}', 'PlaceController@destroy');
+    Route::delete('place/{id}', 'Places\PlaceController@destroy');
 
     //Create new Place
-    Route::post('placequeue', 'PlaceQueueController@store');
+    Route::post('placequeue', 'Places\PlaceQueueController@store');
 
 
 });
@@ -46,6 +46,9 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::get('events', 'EventController@index');
     //Get Event
     Route::get('event/{id}', 'EventController@show');
+
+    //Get which event happening right now or which event is closest one
+    Route::get('nearevent/{id}', 'EventController@closestEvent');
 
 Route::group(['middleware' => 'auth:api'], function() {
     //Create new Event

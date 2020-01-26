@@ -102,16 +102,31 @@ export default {
      ...mapActions(['fetchPlacesx', 'fetchTypesx']),
 
     //Opens info window above marker and sets the position and text
-    openInfoWindowTemplate: function(place) {
+     openInfoWindowTemplate: async function(place) {
       var res = "";
-       if(place.about.length > 100){
+
+        if(place.about.length > 100){
           res = place.about.slice(0, 100) + "...";
-       }else{
+        }else{
           res = place.about;
-       }
-        this.infoWindow.template = '<h6>'+place.title+'</h6>'+res+'<hr> <i class="fas fa-road"></i> <small>This place is '+this.measure_distance(place, this.user_location)+' km from you</small>';
-        this.infoWindow.position = this.getPosition(place);
-        this.infoWindow.open = true;
+        }
+
+      const response = await axios.get('api/nearevent/' + place.id);
+      
+      var nearest = response.data.data;
+
+      if(nearest.length > 0){
+        this.infoWindow.template = '<h6>'+place.title+'</h6>'+res+'<hr>' +
+        '<i class="fas fa-road"></i> <small>This place is '+
+        this.measure_distance(place, this.user_location)+' km from you <br><br><span style="color:red; font-size: 13pt; "> LIVE - '+ nearest[0].title +'</span></small>';
+      }
+      else{
+        this.infoWindow.template = '<h6>'+place.title+'</h6>'+res+'<hr>' + '<i class="fas fa-road"></i> <small>This place is '+
+        this.measure_distance(place, this.user_location)+' km from you </small>';
+      }
+
+      this.infoWindow.position = this.getPosition(place);
+      this.infoWindow.open = true;
    },
    
    //Waits for variable BOUNDS and then fetches places in those bounds from DB

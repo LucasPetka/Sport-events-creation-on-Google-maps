@@ -2915,9 +2915,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _assets_options_json__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../assets/options.json */ "./resources/js/assets/options.json");
-var _assets_options_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__webpack_require__.t(/*! ../assets/options.json */ "./resources/js/assets/options.json", 1);
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _assets_options_json__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../assets/options.json */ "./resources/js/assets/options.json");
+var _assets_options_json__WEBPACK_IMPORTED_MODULE_1___namespace = /*#__PURE__*/__webpack_require__.t(/*! ../assets/options.json */ "./resources/js/assets/options.json", 1);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -3010,7 +3014,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       currentPlace: null,
       marker_visibility: false,
       mapStyle: {
-        styles: _assets_options_json__WEBPACK_IMPORTED_MODULE_0__,
+        styles: _assets_options_json__WEBPACK_IMPORTED_MODULE_1__,
         options: {
           fullscreenControl: false,
           mapTypeControl: false,
@@ -3026,21 +3030,45 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     this.geolocation();
     this.checkVariable();
   },
-  computed: Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])(['allPlaces', 'allTypes']),
-  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapActions"])(['fetchPlacesx', 'fetchTypesx']), {
+  computed: Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapGetters"])(['allPlaces', 'allTypes']),
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapActions"])(['fetchPlacesx', 'fetchTypesx']), {
     //Opens info window above marker and sets the position and text
     openInfoWindowTemplate: function openInfoWindowTemplate(place) {
-      var res = "";
+      var res, response, nearest;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function openInfoWindowTemplate$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              res = "";
 
-      if (place.about.length > 100) {
-        res = place.about.slice(0, 100) + "...";
-      } else {
-        res = place.about;
-      }
+              if (place.about.length > 100) {
+                res = place.about.slice(0, 100) + "...";
+              } else {
+                res = place.about;
+              }
 
-      this.infoWindow.template = '<h6>' + place.title + '</h6>' + res + '<hr> <i class="fas fa-road"></i> <small>This place is ' + this.measure_distance(place, this.user_location) + ' km from you</small>';
-      this.infoWindow.position = this.getPosition(place);
-      this.infoWindow.open = true;
+              _context.next = 4;
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get('api/nearevent/' + place.id));
+
+            case 4:
+              response = _context.sent;
+              nearest = response.data.data;
+
+              if (nearest.length > 0) {
+                this.infoWindow.template = '<h6>' + place.title + '</h6>' + res + '<hr>' + '<i class="fas fa-road"></i> <small>This place is ' + this.measure_distance(place, this.user_location) + ' km from you <br><br><span style="color:red; font-size: 13pt; "> LIVE - ' + nearest[0].title + '</span></small>';
+              } else {
+                this.infoWindow.template = '<h6>' + place.title + '</h6>' + res + '<hr>' + '<i class="fas fa-road"></i> <small>This place is ' + this.measure_distance(place, this.user_location) + ' km from you </small>';
+              }
+
+              this.infoWindow.position = this.getPosition(place);
+              this.infoWindow.open = true;
+
+            case 9:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, null, this);
     },
     //Waits for variable BOUNDS and then fetches places in those bounds from DB
     checkVariable: function checkVariable() {
@@ -3577,6 +3605,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     //------------------------Opens add event creation label-------------------
     openAddEvent: function openAddEvent() {
+      this.edit = false;
       this.event.place_id = this.show.id;
       this.event.person_id = this.currentUser.id;
       this.event.organizator = this.currentUser.name;
@@ -52118,7 +52147,7 @@ var render = function() {
                                         staticClass: "form-control",
                                         attrs: {
                                           id: "exampleFormControlTextarea1",
-                                          rows: "3",
+                                          rows: "6",
                                           required: ""
                                         },
                                         domProps: { value: _vm.event.about },

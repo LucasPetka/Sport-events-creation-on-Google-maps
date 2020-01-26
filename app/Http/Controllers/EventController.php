@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+
 use Illuminate\Http\Request;
 use App\Event;
 use App\Http\Resources\Event as EventResource;
@@ -13,11 +15,6 @@ use App\Http\Resources\PeopleGoing as PeopleGoingResource;
 
 class EventController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $events = Event::all();
@@ -26,12 +23,7 @@ class EventController extends Controller
         return EventResource::collection($events);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
         $event = $request->isMethod('put') ? Event::findOrFail($request->id) : new Event;
@@ -50,12 +42,7 @@ class EventController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function show($id)
     {
         $event = Event::findOrFail($id);
@@ -63,12 +50,32 @@ class EventController extends Controller
         return new EventResource($event);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
+    public function closestEvent($id)
+    {
+        $mytime = Carbon::now();
+
+        $event = DB::table('events')
+            ->select('*')
+            ->where('place_id','=', $id)
+            ->where('time_from','<', $mytime)
+            ->where('time_until','>', $mytime)
+            ->get();
+
+        // if(empty($event)){
+        //     $event = DB::table('events')
+        //     ->select('*')
+        //     ->where('place_id','=', $id)
+        //     ->where('time_from','>', $mytime)
+        //     ->orderBy('time_from', 'asc')
+        //     ->get();
+        // }
+
+        return EventResource::collection($event);
+    }
+
+
+
     public function destroy($id)
     {
         $event = Event::findOrFail($id);

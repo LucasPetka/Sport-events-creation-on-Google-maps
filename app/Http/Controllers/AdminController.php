@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\PlaceQueue;
 use App\Place;
+use App\AcceptedPlaces;
 use App\Type;
 use App\User;
 use Illuminate\Support\Facades\Storage;
@@ -46,7 +47,6 @@ class AdminController extends Controller
     }
     
 
-
     public function acceptPlace($id)
     { 
         $place = PlaceQueue::find($id);
@@ -60,6 +60,12 @@ class AdminController extends Controller
         $newPlace->created_at = $place->created_at;
         $newPlace->updated_at = $place->updated_at;
         $newPlace->save();
+
+        $accepted_place = new AcceptedPlaces;
+        $accepted_place->person_id = $place->personid;
+        $accepted_place->place_id = $newPlace->id;
+        $accepted_place->save();
+
 
         $place->delete();
 

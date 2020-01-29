@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\PlaceQueue;
 use App\Http\Resources\PlaceQueue as PlaceResource;
+use Illuminate\Support\Facades\Auth;
 
 class PlaceQueueController extends Controller
 {
@@ -40,7 +41,7 @@ class PlaceQueueController extends Controller
         $place->lat = $request->input('lat');
         $place->lng = $request->input('lng');
         $place->type = $request->input('type');
-        $place->personid = $request->input('personid');
+        $place->personid = Auth::id();
 
         if($place->save()){
             return new PlaceResource($place);

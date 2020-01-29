@@ -36,7 +36,6 @@ Route::group(['middleware' => 'auth:api'], function() {
     //Create new Place
     Route::post('placequeue', 'Places\PlaceQueueController@store');
 
-
 });
 
 

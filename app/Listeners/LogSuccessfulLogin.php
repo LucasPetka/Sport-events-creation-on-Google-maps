@@ -29,12 +29,17 @@ class LogSuccessfulLogin
      */
     public function handle(Login $event)
     {
-        $minutes = 60;
+        $minutes = 720;
         $user = User::find($event->user->id);
-        $token = Str::random(60);
-        $user->api_token = $token;
-        
+
+        do{
+            $token = Str::random(60);
+            $user->api_token = $token;
+
+         }while(User::where('api_token', $user->api_token)->exists());
+         
         Cookie::queue(Cookie::make('api_token', $token, $minutes, null, null, false, false));
         $user->save();
     }
+
 }

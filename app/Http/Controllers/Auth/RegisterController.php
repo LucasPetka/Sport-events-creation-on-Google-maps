@@ -65,12 +65,19 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
 
+        do{
+            $minutes = 720;
+            $token = Str::random(60);
+         }while(User::where('api_token', $user->api_token)->exists());
+
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'api_token' => Str::random(60),
+            'api_token' => $token,
         ]);
+
+        Cookie::queue(Cookie::make('api_token', $token, $minutes, null, null, false, false));
 
         $user->sendEmailVerificationNotification();
 

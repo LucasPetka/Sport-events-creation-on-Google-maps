@@ -34,7 +34,7 @@ class PeopleGoingController extends Controller
         $person->id = $request->input('id');
         $person->place_id = $request->input('place_id');
         $person->event_id = $request->input('event_id');
-        $person->person_id = $request->input('person_id');
+        $person->person_id = Auth::id();
 
         if($person->save()){
             return new PeopleGoingResource($person);

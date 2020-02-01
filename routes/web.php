@@ -21,6 +21,8 @@ Auth::routes(['verify' => true]);
 Route::get('/', 'PagesController@index');
 Route::get('/home/myevents', 'PagesController@myevents')->middleware('auth');
 Route::get('/home', 'HomeController@index')->name('home');
+Route::post('/resubmit/{id}', 'DeclinedPlacesController@update')->middleware('auth');
+Route::delete('/decplace/{id}', 'DeclinedPlacesController@destroy')->middleware('auth');
 
 Route::get('/admin', 'AdminController@index')->middleware('admin');
 

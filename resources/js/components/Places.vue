@@ -24,7 +24,7 @@
                                         </div>
 
                                         <div class="input-group mb-3">
-                                            <textarea class="form-control" placeholder="About..." v-model="place.about" ></textarea>
+                                            <textarea class="form-control" rows="6" placeholder="About..." v-model="place.about" ></textarea>
                                         </div>
 
                                         <div class="input-group mb-3">
@@ -45,7 +45,7 @@
                                 </div>
                             </div>
                         </div>
-                        </form>
+                    </form>
     <!--=======================================================================================================================================-->
 
 
@@ -63,13 +63,11 @@
                        
                             
                         <div class="d-flex flex-column bd-highlight mb-3">
-                            
                             <div class="p-4 bd-highlight">
                                 <button type="button" id="close_show" v-on:click="closeShow()" class="close" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
                                 
-                            
                                 <div v-if="this.type.image">
-                                <h3> <img :src="'../../../storage/sport_logo/'+ this.type.image"> {{ show.title }}</h3>
+                                    <h3> <img :src="'../../../storage/sport_logo/'+ this.type.image"> {{ show.title }}</h3>
                                 </div>
 
                                 <hr>
@@ -77,7 +75,11 @@
                                 <div class="card-body">
                                     <p class="card-text">{{ show.about }}</p>
                                     <hr class="mt-4">
-                                    <p class="float-right"> <i class="fas fa-road"></i> <small>This place is {{ measured_distance }} km from you</small></p>
+                                    <p class="float-right"> 
+                                        <i class="fas fa-road"></i> 
+                                        <small>This place is {{ measured_distance }} km from you</small>
+                                        <a :href="'https://www.google.co.uk/maps/dir//'+show.lat+','+show.lng" target="_blank" class="badge badge-dark ml-3"><i class="fas fa-map-marker-alt"></i> Show directions</a>
+                                    </p>
                                 </div>
 
                                 <span v-if="currentUser">
@@ -92,8 +94,9 @@
                                 <h6>Events</h6>  
                             </div>
                             <div class="card-body">
+                                <Calendar v-bind:status='status' v-on:openAddEvent="openAddEvent()" v-bind:currentUser='currentUser' v-on:editEvent="editEvent($event)" v-on:getDate="getDate($event)" v-on:closeAdd="closeAddEvent()" ref="calendar"> </Calendar>
                                 <div v-if="this.status === 1">
-                                    <button v-on:click="openAddEvent()" class="btn btn-outline-danger float-right">Add Event <i class="fas fa-plus"></i></button>
+                                    <!--<button v-on:click="openAddEvent()" class="btn btn-outline-success pt-2 pb-2 pr-4 pl-4 float-right">Add Event <i class="fas fa-plus"></i></button>-->
                                 </div>
                                 <div v-else>
                                     <div class="alert alert-warning pb-5" role="alert">
@@ -102,7 +105,6 @@
                                     <a href ="/login"  class="btn btn-outline-secondary float-right mr-2">Login</a>
                                     </div>
                                 </div>
-                                <Calendar v-bind:status='status' v-bind:currentUser='currentUser' v-on:editEvent="editEvent($event)" v-on:getDate="getDate($event)" v-on:closeAdd="closeAddEvent()" ref="calendar"> </Calendar>
                             </div>
                         </div>
 

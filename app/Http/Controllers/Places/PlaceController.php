@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Place;
 use App\Http\Resources\Place as PlaceResource;
 use DB;
+use Auth;
 
 class PlaceController extends Controller
 {
@@ -81,7 +82,7 @@ class PlaceController extends Controller
         $place = Place::findOrFail($id);
 
         if($place->delete()){
-        return new PlaceResource($place);
+            return new PlaceResource($place);
         }
     }
 }

@@ -3,12 +3,10 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Type;
 
-class Place extends Model
+class DeclinedPlaces extends Model
 {
-    
-
+    protected $table = 'declined_places';
 
     function typee() {
         return $this->belongsTo('App\Type', 'type', 'id');

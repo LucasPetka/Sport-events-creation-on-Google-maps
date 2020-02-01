@@ -21,19 +21,8 @@
                 <tr>
                   <th scope="row">{{ ++$key }}</th>
                   <td>{{ $place->title }}</td>
-
-                  @foreach ($types as $type)
-                    @if($type->id == $place->type)
-                      <td><img src="../storage/sport_logo/{{ $type->image }}" alt="{{ $type->name }}"> {{ $type->name }}</td>
-                    @endif
-                  @endforeach
-
-                  @foreach ($users as $user)
-                    @if($user->id == $place->personid)
-                      <td>{{ $user->name }}</td>
-                    @endif
-                  @endforeach
-
+                  <td><img src="../storage/sport_logo/{{ $place->typee->image }}" alt="{{ $place->typee->name }}"> {{ $place->typee->name }}</td>
+                  <td>{{ $place->user->name }}</td>
                   <td>
                       <button type="button" class="btn btn-primary mr-4" data-toggle="modal" data-target="#placeid{{ $place->id }}"> Open </button>
                       <a href ="/admin/accplace/{{ $place->id }}"  class="btn btn-success mr-2" data-toggle="tooltip" data-placement="top" title="Publish new place" ><i class="fas fa-check"></i></a>
@@ -54,19 +43,14 @@
                 <div class="modal-content">
                   <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">
-                      @foreach ($types as $type)
-                        @if($type->id == $place->type)
-                        <small><img src="../storage/sport_logo/{{ $type->image }}" alt="{{ $type->name }}"></small>
-                        @endif
-                      @endforeach
-                      
-                      
+                      <small><img src="../storage/sport_logo/{{ $place->typee->image }}" alt="{{ $place->typee->name }}"></small>
                       {{ $place->title }}
                     </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
+
                   <div class="modal-body">
                     <div class="row">
                         <div class="col-lg-7">
@@ -75,17 +59,9 @@
                         <div class="col-lg-5">
                             {{ $place->about }}
                             <hr>
-                            @foreach ($types as $type)
-                              @if($type->id == $place->type)
-                              <small><img src="../storage/sport_logo/{{ $type->image }}" alt="{{ $type->name }}"> {{ $type->name }}</small>
-                              @endif
-                            @endforeach
+                              <small><img src="../storage/sport_logo/{{ $place->typee->image }}" alt="{{ $place->typee->name }}"> {{ $place->typee->name }}</small>
                             <br>
-                            @foreach ($users as $user)
-                              @if($user->id == $place->personid)
-                                <small>Created by: {{ $user->name }}</small>
-                              @endif
-                            @endforeach
+                                <small>Created by: {{ $place->user->name }}</small>
                             <hr>
                             <a href ="/admin/accplace/{{ $place->id }}"  class="btn btn-success mr-2"> Accept <i class="fas fa-check"></i></a>
                             <a href ="/admin/decplace/{{ $place->id }}"  class="btn btn-danger mr-2"> Decline <i class="fas fa-times"></i></a>
@@ -103,6 +79,9 @@
               </div>
             </div>
           @endforeach
+
+        @else
+          <p class="text-center mt-4 text-muted"> No new places submited... </p>
         @endif
 
 

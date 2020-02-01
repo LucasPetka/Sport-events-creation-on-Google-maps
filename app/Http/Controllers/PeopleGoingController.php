@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\PeopleGoing;
 use App\Http\Resources\PeopleGoing as PeopleGoingResource;
+use Auth;
 
 class PeopleGoingController extends Controller
 {

@@ -2648,6 +2648,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -2928,11 +2932,6 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-//
-//
-//
-//
-//
 //
 //
 //
@@ -3276,6 +3275,8 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
 //
 //
 //
@@ -8429,7 +8430,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.vdp-datepicker input{\n    border-radius: 5px 0px 0px 5px;\n    box-shadow: none !important;\n    border: solid 1px #b7b7b7;\n    padding: 8px;\n}\n\n\n", ""]);
+exports.push([module.i, "\n.vdp-datepicker input{\n    border-radius: 5px 5px 5px 5px;\n    box-shadow: none !important;\n    border: solid 1px #b7b7b7;\n    padding: 8px;\n}\n\n\n", ""]);
 
 // exports
 
@@ -8448,7 +8449,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n#refresh_button[data-v-bdcfc800]{\n  position: absolute;\n  bottom:20px;\n  left: 49%;\n  -webkit-transform: translate(-49%, -40%);\n  transform: translate(-49%, -40%);\n  z-index: 5;\n}\n#geoloc_bar[data-v-bdcfc800]{\n  position: absolute;\n  top:120px;\n  left: 49%;\n  -webkit-transform: translate(-49%, -40%);\n  transform: translate(-49%, -40%);\n  z-index: 5;\n  background-color: white;\n  padding: 10px 15px;\n  border-radius: 8px;\n  width: 400px;\n}\n#marker[data-v-bdcfc800] {\n display: none;\n}\n\n\n", ""]);
+exports.push([module.i, "\n#refresh_button[data-v-bdcfc800]{\n  position: absolute;\n  bottom:20px;\n  left: 49%;\n  -webkit-transform: translate(-49%, -40%);\n  transform: translate(-49%, -40%);\n  z-index: 5;\n}\n#geoloc_bar[data-v-bdcfc800]{\n  position: absolute;\n  top:120px;\n  left: 49%;\n  -webkit-transform: translate(-49%, -40%);\n  transform: translate(-49%, -40%);\n  z-index: 5;\n  background-color: white;\n  padding: 10px 15px;\n  border-radius: 8px;\n  width: 300px;\n}\n#marker[data-v-bdcfc800] {\n display: none;\n}\n\n\n", ""]);
 
 // exports
 
@@ -51252,35 +51253,52 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c(
-      "div",
-      { staticClass: "input-group mb-3 mx-auto" },
-      [
-        _c("datepicker", {
-          attrs: {
-            placeholder: "Select Date",
-            highlighted: _vm.highlighted,
-            format: _vm.format,
-            value: _vm.todays_date
-          },
-          on: {
-            closed: function($event) {
-              return _vm.showEvents()
+    _c("div", { staticClass: "row" }, [
+      _c(
+        "div",
+        { staticClass: "col-lg-6 col-sm-12 mb-2" },
+        [
+          _c("datepicker", {
+            attrs: {
+              placeholder: "Select Date",
+              highlighted: _vm.highlighted,
+              format: _vm.format,
+              value: _vm.todays_date
+            },
+            on: {
+              closed: function($event) {
+                return _vm.showEvents()
+              }
+            },
+            model: {
+              value: _vm.todays_date,
+              callback: function($$v) {
+                _vm.todays_date = $$v
+              },
+              expression: "todays_date"
+            }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-lg-6 col-sm-12 pl-5" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-outline-success pt-2 pb-2 mx-auto",
+            on: {
+              click: function($event) {
+                return _vm.$emit("openAddEvent")
+              }
             }
           },
-          model: {
-            value: _vm.todays_date,
-            callback: function($$v) {
-              _vm.todays_date = $$v
-            },
-            expression: "todays_date"
-          }
-        }),
-        _vm._v(" "),
-        _vm._m(0)
-      ],
-      1
-    ),
+          [_vm._v("Add Event "), _c("i", { staticClass: "fas fa-plus" })]
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _c("hr"),
     _vm._v(" "),
     _c(
       "div",
@@ -51427,7 +51445,10 @@ var render = function() {
         _vm.show_events.length === 0
           ? _c(
               "div",
-              { staticClass: "alert alert-light", attrs: { role: "alert" } },
+              {
+                staticClass: "alert text-center alert-light mt-3",
+                attrs: { role: "alert" }
+              },
               [
                 _vm._v(
                   "\n        Sorry, but there are no events on this day... \n        "
@@ -51440,20 +51461,7 @@ var render = function() {
     )
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "input-group-append" }, [
-      _c(
-        "span",
-        { staticClass: "input-group-text", attrs: { id: "basic-addon2" } },
-        [_c("i", { staticClass: "far fa-calendar-alt" })]
-      )
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -51761,7 +51769,7 @@ var render = function() {
                             }
                           ],
                           staticClass: "form-control",
-                          attrs: { placeholder: "About..." },
+                          attrs: { rows: "6", placeholder: "About..." },
                           domProps: { value: _vm.place.about },
                           on: {
                             input: function($event) {
@@ -51940,7 +51948,28 @@ var render = function() {
                                     _vm._s(_vm.measured_distance) +
                                     " km from you"
                                 )
-                              ])
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "a",
+                                {
+                                  staticClass: "badge badge-dark ml-3",
+                                  attrs: {
+                                    href:
+                                      "https://www.google.co.uk/maps/dir//" +
+                                      _vm.show.lat +
+                                      "," +
+                                      _vm.show.lng,
+                                    target: "_blank"
+                                  }
+                                },
+                                [
+                                  _c("i", {
+                                    staticClass: "fas fa-map-marker-alt"
+                                  }),
+                                  _vm._v(" Show directions")
+                                ]
+                              )
                             ])
                           ]),
                           _vm._v(" "),
@@ -51981,27 +52010,6 @@ var render = function() {
                           "div",
                           { staticClass: "card-body" },
                           [
-                            this.status === 1
-                              ? _c("div", [
-                                  _c(
-                                    "button",
-                                    {
-                                      staticClass:
-                                        "btn btn-outline-danger float-right",
-                                      on: {
-                                        click: function($event) {
-                                          return _vm.openAddEvent()
-                                        }
-                                      }
-                                    },
-                                    [
-                                      _vm._v("Add Event "),
-                                      _c("i", { staticClass: "fas fa-plus" })
-                                    ]
-                                  )
-                                ])
-                              : _c("div", [_vm._m(5)]),
-                            _vm._v(" "),
                             _c("Calendar", {
                               ref: "calendar",
                               attrs: {
@@ -52009,6 +52017,9 @@ var render = function() {
                                 currentUser: _vm.currentUser
                               },
                               on: {
+                                openAddEvent: function($event) {
+                                  return _vm.openAddEvent()
+                                },
                                 editEvent: function($event) {
                                   return _vm.editEvent($event)
                                 },
@@ -52019,7 +52030,11 @@ var render = function() {
                                   return _vm.closeAddEvent()
                                 }
                               }
-                            })
+                            }),
+                            _vm._v(" "),
+                            this.status === 1
+                              ? _c("div")
+                              : _c("div", [_vm._m(5)])
                           ],
                           1
                         )
@@ -72462,18 +72477,27 @@ var regionDayMap = {
 
 var map = {
 	"./badminton_1579959606.png": "./storage/app/public/sport_logo/badminton_1579959606.png",
+	"./badminton_1580587001.png": "./storage/app/public/sport_logo/badminton_1580587001.png",
 	"./baseball_1579959588.png": "./storage/app/public/sport_logo/baseball_1579959588.png",
+	"./baseball_1580586985.png": "./storage/app/public/sport_logo/baseball_1580586985.png",
 	"./basketball_1579958515.png": "./storage/app/public/sport_logo/basketball_1579958515.png",
 	"./basketball_1579959451.png": "./storage/app/public/sport_logo/basketball_1579959451.png",
 	"./basketball_1580417233.png": "./storage/app/public/sport_logo/basketball_1580417233.png",
+	"./basketball_1580578020.png": "./storage/app/public/sport_logo/basketball_1580578020.png",
 	"./cricket_1579959617.png": "./storage/app/public/sport_logo/cricket_1579959617.png",
+	"./cricket_1580587012.png": "./storage/app/public/sport_logo/cricket_1580587012.png",
 	"./new.png": "./storage/app/public/sport_logo/new.png",
 	"./pingpong_1579959560.png": "./storage/app/public/sport_logo/pingpong_1579959560.png",
+	"./pingpong_1580586958.png": "./storage/app/public/sport_logo/pingpong_1580586958.png",
 	"./rugby_1579960889.png": "./storage/app/public/sport_logo/rugby_1579960889.png",
+	"./rugby_1580587021.png": "./storage/app/public/sport_logo/rugby_1580587021.png",
 	"./soccerball_1579959550.png": "./storage/app/public/sport_logo/soccerball_1579959550.png",
 	"./soccerball_1580404081.png": "./storage/app/public/sport_logo/soccerball_1580404081.png",
+	"./soccerball_1580586946.png": "./storage/app/public/sport_logo/soccerball_1580586946.png",
 	"./tennis_1579959574.png": "./storage/app/public/sport_logo/tennis_1579959574.png",
-	"./volleyball_1579959535.png": "./storage/app/public/sport_logo/volleyball_1579959535.png"
+	"./tennis_1580586972.png": "./storage/app/public/sport_logo/tennis_1580586972.png",
+	"./volleyball_1579959535.png": "./storage/app/public/sport_logo/volleyball_1579959535.png",
+	"./volleyball_1580586935.png": "./storage/app/public/sport_logo/volleyball_1580586935.png"
 };
 
 
@@ -73100,6 +73124,17 @@ module.exports = "/images/badminton_1579959606.png?5e3c6fb94e3348f8150e99d2bbea3
 
 /***/ }),
 
+/***/ "./storage/app/public/sport_logo/badminton_1580587001.png":
+/*!****************************************************************!*\
+  !*** ./storage/app/public/sport_logo/badminton_1580587001.png ***!
+  \****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/badminton_1580587001.png?5e3c6fb94e3348f8150e99d2bbea3fe8";
+
+/***/ }),
+
 /***/ "./storage/app/public/sport_logo/baseball_1579959588.png":
 /*!***************************************************************!*\
   !*** ./storage/app/public/sport_logo/baseball_1579959588.png ***!
@@ -73108,6 +73143,17 @@ module.exports = "/images/badminton_1579959606.png?5e3c6fb94e3348f8150e99d2bbea3
 /***/ (function(module, exports) {
 
 module.exports = "/images/baseball_1579959588.png?b955314eb9b4771c8dc55459cf773409";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/baseball_1580586985.png":
+/*!***************************************************************!*\
+  !*** ./storage/app/public/sport_logo/baseball_1580586985.png ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/baseball_1580586985.png?b955314eb9b4771c8dc55459cf773409";
 
 /***/ }),
 
@@ -73144,6 +73190,17 @@ module.exports = "/images/basketball_1580417233.png?3ea563a13d594d5dc49e485fdc95
 
 /***/ }),
 
+/***/ "./storage/app/public/sport_logo/basketball_1580578020.png":
+/*!*****************************************************************!*\
+  !*** ./storage/app/public/sport_logo/basketball_1580578020.png ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/basketball_1580578020.png?3ea563a13d594d5dc49e485fdc95eccb";
+
+/***/ }),
+
 /***/ "./storage/app/public/sport_logo/cricket_1579959617.png":
 /*!**************************************************************!*\
   !*** ./storage/app/public/sport_logo/cricket_1579959617.png ***!
@@ -73152,6 +73209,17 @@ module.exports = "/images/basketball_1580417233.png?3ea563a13d594d5dc49e485fdc95
 /***/ (function(module, exports) {
 
 module.exports = "/images/cricket_1579959617.png?27388d20d7a22826e24c6d12a5efb259";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/cricket_1580587012.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/cricket_1580587012.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/cricket_1580587012.png?27388d20d7a22826e24c6d12a5efb259";
 
 /***/ }),
 
@@ -73177,6 +73245,17 @@ module.exports = "/images/pingpong_1579959560.png?57b02fb4c7ede6d037d61415589eb7
 
 /***/ }),
 
+/***/ "./storage/app/public/sport_logo/pingpong_1580586958.png":
+/*!***************************************************************!*\
+  !*** ./storage/app/public/sport_logo/pingpong_1580586958.png ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/pingpong_1580586958.png?57b02fb4c7ede6d037d61415589eb74d";
+
+/***/ }),
+
 /***/ "./storage/app/public/sport_logo/rugby_1579960889.png":
 /*!************************************************************!*\
   !*** ./storage/app/public/sport_logo/rugby_1579960889.png ***!
@@ -73185,6 +73264,17 @@ module.exports = "/images/pingpong_1579959560.png?57b02fb4c7ede6d037d61415589eb7
 /***/ (function(module, exports) {
 
 module.exports = "/images/rugby_1579960889.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1580587021.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1580587021.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1580587021.png?f833e17eea80a75768afc4dac66af217";
 
 /***/ }),
 
@@ -73210,6 +73300,17 @@ module.exports = "/images/soccerball_1580404081.png?9429e98d23527067401c4bfbb94a
 
 /***/ }),
 
+/***/ "./storage/app/public/sport_logo/soccerball_1580586946.png":
+/*!*****************************************************************!*\
+  !*** ./storage/app/public/sport_logo/soccerball_1580586946.png ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/soccerball_1580586946.png?9429e98d23527067401c4bfbb94a8faa";
+
+/***/ }),
+
 /***/ "./storage/app/public/sport_logo/tennis_1579959574.png":
 /*!*************************************************************!*\
   !*** ./storage/app/public/sport_logo/tennis_1579959574.png ***!
@@ -73221,6 +73322,17 @@ module.exports = "/images/tennis_1579959574.png?0689ae8cd4e0ae11f989ce5a4bce7493
 
 /***/ }),
 
+/***/ "./storage/app/public/sport_logo/tennis_1580586972.png":
+/*!*************************************************************!*\
+  !*** ./storage/app/public/sport_logo/tennis_1580586972.png ***!
+  \*************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/tennis_1580586972.png?0689ae8cd4e0ae11f989ce5a4bce7493";
+
+/***/ }),
+
 /***/ "./storage/app/public/sport_logo/volleyball_1579959535.png":
 /*!*****************************************************************!*\
   !*** ./storage/app/public/sport_logo/volleyball_1579959535.png ***!
@@ -73229,6 +73341,17 @@ module.exports = "/images/tennis_1579959574.png?0689ae8cd4e0ae11f989ce5a4bce7493
 /***/ (function(module, exports) {
 
 module.exports = "/images/volleyball_1579959535.png?682e28ed0436850553275c4d54f5daca";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/volleyball_1580586935.png":
+/*!*****************************************************************!*\
+  !*** ./storage/app/public/sport_logo/volleyball_1580586935.png ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/volleyball_1580586935.png?682e28ed0436850553275c4d54f5daca";
 
 /***/ }),
 

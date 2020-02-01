@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\PlaceQueue;
 use App\Place;
 use App\AcceptedPlaces;
+use App\DeclinedPlaces;
 use App\Type;
 use App\User;
 use Illuminate\Support\Facades\Storage;
@@ -28,10 +29,8 @@ class AdminController extends Controller
     public function places()
     { 
         $places = PlaceQueue::all();
-        $types = Type::all();
-        $users = User::all();
 
-        return view('admin.places')->with(compact('places', 'types', 'users'));
+        return view('admin.places')->with(compact('places'));
     }
 
     public function sportTypes()
@@ -82,15 +81,26 @@ class AdminController extends Controller
 
         $place->delete();
 
-        return redirect('/admin');
+        return redirect('/admin/places');
     }
 
     public function declinePlace($id)
     { 
         $place = PlaceQueue::find($id);
+        
+        $declinedPlace = new DeclinedPlaces;
+        $declinedPlace->title = $place->title;
+        $declinedPlace->about = $place->about;
+        $declinedPlace->lat = $place->lat;
+        $declinedPlace->lng = $place->lng;
+        $declinedPlace->type = $place->type;
+        $declinedPlace->personid = $place->personid;
+        $declinedPlace->save();
+        
+        
         $place->delete();
 
-        return redirect('/admin');
+        return redirect('/admin/places');
     }
 
 

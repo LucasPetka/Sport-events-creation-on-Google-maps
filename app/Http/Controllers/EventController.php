@@ -11,6 +11,7 @@ use App\Http\Resources\Event as EventResource;
 use Illuminate\Support\Facades\DB;
 use App\PeopleGoing;
 use App\Http\Resources\PeopleGoing as PeopleGoingResource;
+use Auth;
 
 
 class EventController extends Controller

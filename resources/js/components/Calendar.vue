@@ -1,13 +1,17 @@
 <template>
         <div>
             
-            <div class="input-group mb-3 mx-auto">
-            <datepicker placeholder="Select Date"  :highlighted="highlighted" :format="format" :value="todays_date" v-model="todays_date" @closed="showEvents()"></datepicker>
-            <div class="input-group-append">
-                <span class="input-group-text" id="basic-addon2"><i class="far fa-calendar-alt"></i></span>
-            </div>
+            <div class="row">
+                <div class="col-lg-6 col-sm-12 mb-2">
+                        <datepicker placeholder="Select Date" :highlighted="highlighted" :format="format" :value="todays_date" v-model="todays_date" @closed="showEvents()"></datepicker>
+                </div>
+                <div class="col-lg-6 col-sm-12 pl-5">
+                    <button v-on:click="$emit('openAddEvent')" class="btn btn-outline-success pt-2 pb-2 mx-auto">Add Event <i class="fas fa-plus"></i></button>
+                </div>
             </div>
             
+            <hr>
+        
             <div>
 
                 <div v-for="event in show_events" v-bind:key="event.id" class="card mt-3"  style="width: 90%; margin-left:auto; margin-right:auto;">
@@ -40,7 +44,7 @@
                 </div>
                 </div>    
 
-                <div v-if="show_events.length === 0" class="alert alert-light" role="alert">
+                <div v-if="show_events.length === 0" class="alert text-center alert-light mt-3" role="alert">
                 Sorry, but there are no events on this day... 
                 </div>
 
@@ -345,7 +349,7 @@ export default {
 <style>
 
 .vdp-datepicker input{
-    border-radius: 5px 0px 0px 5px;
+    border-radius: 5px 5px 5px 5px;
     box-shadow: none !important;
     border: solid 1px #b7b7b7;
     padding: 8px;

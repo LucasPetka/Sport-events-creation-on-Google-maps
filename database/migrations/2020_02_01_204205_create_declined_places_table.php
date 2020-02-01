@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePlacequeueTable extends Migration
+class CreateDeclinedPlacesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreatePlacequeueTable extends Migration
      */
     public function up()
     {
-        Schema::create('placequeue', function (Blueprint $table) {
+        Schema::create('declined_places', function (Blueprint $table) {
             $table->bigIncrements('id')->unique();
             $table->string('title');
             $table->text('about');
@@ -35,6 +35,6 @@ class CreatePlacequeueTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('placequeue');
+        Schema::dropIfExists('declined_places');
     }
 }

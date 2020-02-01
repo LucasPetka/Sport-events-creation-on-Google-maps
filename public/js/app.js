@@ -72465,11 +72465,13 @@ var map = {
 	"./baseball_1579959588.png": "./storage/app/public/sport_logo/baseball_1579959588.png",
 	"./basketball_1579958515.png": "./storage/app/public/sport_logo/basketball_1579958515.png",
 	"./basketball_1579959451.png": "./storage/app/public/sport_logo/basketball_1579959451.png",
+	"./basketball_1580417233.png": "./storage/app/public/sport_logo/basketball_1580417233.png",
 	"./cricket_1579959617.png": "./storage/app/public/sport_logo/cricket_1579959617.png",
 	"./new.png": "./storage/app/public/sport_logo/new.png",
 	"./pingpong_1579959560.png": "./storage/app/public/sport_logo/pingpong_1579959560.png",
 	"./rugby_1579960889.png": "./storage/app/public/sport_logo/rugby_1579960889.png",
 	"./soccerball_1579959550.png": "./storage/app/public/sport_logo/soccerball_1579959550.png",
+	"./soccerball_1580404081.png": "./storage/app/public/sport_logo/soccerball_1580404081.png",
 	"./tennis_1579959574.png": "./storage/app/public/sport_logo/tennis_1579959574.png",
 	"./volleyball_1579959535.png": "./storage/app/public/sport_logo/volleyball_1579959535.png"
 };
@@ -73131,6 +73133,17 @@ module.exports = "/images/basketball_1579959451.png?3ea563a13d594d5dc49e485fdc95
 
 /***/ }),
 
+/***/ "./storage/app/public/sport_logo/basketball_1580417233.png":
+/*!*****************************************************************!*\
+  !*** ./storage/app/public/sport_logo/basketball_1580417233.png ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/basketball_1580417233.png?3ea563a13d594d5dc49e485fdc95eccb";
+
+/***/ }),
+
 /***/ "./storage/app/public/sport_logo/cricket_1579959617.png":
 /*!**************************************************************!*\
   !*** ./storage/app/public/sport_logo/cricket_1579959617.png ***!
@@ -73183,6 +73196,17 @@ module.exports = "/images/rugby_1579960889.png?f833e17eea80a75768afc4dac66af217"
 /***/ (function(module, exports) {
 
 module.exports = "/images/soccerball_1579959550.png?9429e98d23527067401c4bfbb94a8faa";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/soccerball_1580404081.png":
+/*!*****************************************************************!*\
+  !*** ./storage/app/public/sport_logo/soccerball_1580404081.png ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/soccerball_1580404081.png?9429e98d23527067401c4bfbb94a8faa";
 
 /***/ }),
 

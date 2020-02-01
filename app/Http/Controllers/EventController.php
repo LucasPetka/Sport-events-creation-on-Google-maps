@@ -62,15 +62,6 @@ class EventController extends Controller
             ->where('time_until','>', $mytime)
             ->get();
 
-        // if(empty($event)){
-        //     $event = DB::table('events')
-        //     ->select('*')
-        //     ->where('place_id','=', $id)
-        //     ->where('time_from','>', $mytime)
-        //     ->orderBy('time_from', 'asc')
-        //     ->get();
-        // }
-
         return EventResource::collection($event);
     }
 

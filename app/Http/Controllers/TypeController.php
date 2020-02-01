@@ -9,11 +9,7 @@ use App\Http\Resources\Types as TypesResource;
 
 class TypeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         //Get places
@@ -23,33 +19,42 @@ class TypeController extends Controller
         return TypesResource::collection($types);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'sport_id' => 'required',
+            'sport_name' => 'required',
+            'sport_logo' => 'required|image|nullable|max:15000'
+        ]);
+
+        // Handle File Upload
+        if($request->hasFile('sport_logo')){
+            // Get filename with the extension
+            $filenameWithExt = $request->file('sport_logo')->getClientOriginalName();
+            // Get just filename
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            // Get just text
+            $extension = $request->file('sport_logo')->getClientOriginalExtension();
+            // Filename to store
+            $fileNameToStore= $filename.'_'.time().'.'.$extension;
+            // Upload Image
+            $path = $request->file('sport_logo')->storeAs('public/sport_logo', $fileNameToStore);
+        } else {
+            $fileNameToStore = 'noimage.jpg';
+        }
+
+        $type = new Type;
+        $type->id = $request->input('sport_id');
+        $type->name = $request->input('sport_name');
+        $type->image = $request->input('sport_logo');
+        $type->image = $fileNameToStore;
+        $type->timestamps = false;
+        $type->save();
+
+        return redirect('/admin/sporttypes')->with('success', 'Sport Type has been succesfuly added');
     }
 
-   /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function show($id)
     {
         $type = Type::findOrFail($id);
@@ -57,37 +62,25 @@ class TypeController extends Controller
         return new TypesResource($type);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        //
+        $type = Type::find($id);
+        
+        //Check if type exists before deleting
+        if (!isset($type)){
+            return redirect('/posts')->with('error', 'No Type Found');
+        }
+        if($type->image != 'noimage.jpg'){
+        // Delete Image
+            Storage::delete('public/sport_logo/'.$type->image);
+        }
+        
+        $type->delete();
+        return redirect('/admin/sporttypes')->with('success', 'Sport type deleted');
     }
 }

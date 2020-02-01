@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Str;
+use Cookie;
 
 class RegisterController extends Controller
 {
@@ -68,7 +69,7 @@ class RegisterController extends Controller
         do{
             $minutes = 720;
             $token = Str::random(60);
-         }while(User::where('api_token', $user->api_token)->exists());
+         }while(User::where('api_token', $token)->exists());
 
         $user = User::create([
             'name' => $data['name'],

@@ -4,7 +4,7 @@
 
 
         <!-- Modal -->
-        {!! Form::open(['action' => 'AdminController@storeSportType', 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!}
+        {!! Form::open(['action' => 'TypeController@store', 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!}
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -40,51 +40,6 @@
         {!! Form::close() !!}
 
 
-
-
-  <div class="container-fluid vh-100">
-    <div class="row h-100">
-      <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-        <div class="sidebar-sticky">
-
-          <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-            <span>Admin dashboard</span>
-            <a class="d-flex align-items-center text-muted" href="#">
-              <span data-feather="plus-circle"></span>
-            </a>
-          </h6>
-
-          <ul class="nav flex-column">
-            <li class="nav-item">
-              <a class="nav-link active" href="/admin">
-                <i class="fas fa-map-marked-alt"></i>
-                Places to confirm ({{ count($places) }})
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/admin/users">
-                <i class="fas fa-user"></i>
-                Users
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/admin/sporttypes">
-                <i class="far fa-futbol"></i>
-                Sport Types
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                <i class="fas fa-stream"></i>
-                Users streams
-              </a>
-            </li>
-          </ul>
-        </div>
-      </nav>
-  
-      <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-
         <h3 class="mt-4"><i class="fas fa-user"></i> Sport Types</h3>
         <div class="table-responsive">
           <table class="table table-striped">
@@ -106,7 +61,7 @@
                   <td> <img src="../storage/sport_logo/{{ $type->image }}" alt="{{ $type->name }}"> {{ $type->name }} </td>
                   <td>    
                     <button type="button" class="btn btn-primary float-left"> <i class="far fa-edit"></i> </button> 
-                    {!!Form::open(['action' => ['AdminController@deleteSportType', $type->id], 'method' => 'POST', 'class' => 'float-left ml-2'])!!}
+                    {!!Form::open(['action' => ['TypeController@destroy', $type->id], 'method' => 'POST', 'class' => 'float-left ml-2'])!!}
                         {{Form::hidden('_method', 'DELETE')}}
                         {{Form::button('<i class="fas fa-trash-alt"></i>', ['type' => 'submit','class' => 'btn btn-danger'])}}
                     {!!Form::close()!!}
@@ -118,8 +73,4 @@
             </tbody>
         </div>
 
-      </main>
-
-    </div>
-  </div>
   @endsection

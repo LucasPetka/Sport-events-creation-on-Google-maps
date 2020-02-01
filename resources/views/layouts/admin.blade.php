@@ -43,11 +43,62 @@
             </div>
           </div>
           </nav>
-        
 
-        <main>
-            @yield('content')
-        </main>
+          <div class="container-fluid" style="height:94vh;">
+            <div class="row" style="height:100%;">
+              <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+                <div class="sidebar-sticky">
+        
+                  <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                    <span>Admin dashboard</span>
+                    <a class="d-flex align-items-center text-muted" href="#">
+                      <span data-feather="plus-circle"></span>
+                    </a>
+                  </h6>
+        
+                  <ul class="nav flex-column">
+                    <li class="nav-item">
+                      <a class="nav-link active" href="/admin">
+                        <i class="fas fa-user-shield"></i>
+                        Admin home
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link active" href="/admin/places">
+                        <i class="fas fa-map-marked-alt"></i>
+                        Places to confirm ({{ count($places) }}) <span class="sr-only">(current)</span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="/admin/users">
+                        <i class="fas fa-user"></i>
+                        Users
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="/admin/sporttypes">
+                        <i class="far fa-futbol"></i>
+                        Sport Types
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">
+                        <i class="fas fa-stream"></i>
+                        Users streams
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </nav>
+          
+              <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+        
+                @yield('content')
+              
+              </main>
+            </div>
+          </div>
+
     </div>
 
         <script src="{{ asset('js/app.js') }}"></script>

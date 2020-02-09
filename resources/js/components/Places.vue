@@ -4,7 +4,8 @@
     <div id="geras">MoSi</div>
     </div>
 
-    <notifications group="foo" classes="my-style" ignoreDuplicates position="top center" />
+    <notifications group="foo" classes="my-style" ignoreDuplicates position="top left" />
+
 
 
     <!-- =====================================ADD NEW PLACE======================================================== -->
@@ -67,7 +68,7 @@
                                 <button type="button" id="close_show" v-on:click="closeShow()" class="close" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
                                 
                                 <div v-if="this.type.image">
-                                    <h3> <img :src="'../../../storage/sport_logo/'+ this.type.image"> {{ show.title }}</h3>
+                                    <h3> <a :href="'place/' + show.id"> <img :src="'../../../storage/sport_logo/'+ this.type.image"> {{ show.title }} </a></h3>
                                 </div>
 
                                 <hr>
@@ -474,6 +475,7 @@ export default {
                 group: 'foo',
                 title: 'Congrats!!',
                 type: 'success',
+                duration: 10000,
                 text: 'The new place has been sent for inspection and if everything is okay will be uploaded'
                 });
 
@@ -508,6 +510,7 @@ export default {
                     group: 'foo',
                     title: 'Congrats!!',
                     type: 'success',
+                    duration: 10000,
                     text: 'You have created an event !'
                     });
    
@@ -564,11 +567,13 @@ export default {
 
 .my-style {
     padding: 15px;
-    margin-top: 0px;
-    width: 300px;
+    margin-top: 65px;
+    margin-left: 10px;
+    width: 290px;
  
     font-size: 14px;
-    border-radius: 0px 0px 10px 10px;
+    border-radius: 5px;
+    border-left: solid rgb(99, 156, 88) 5px;
 
 
     color: #ffffff;

@@ -2,18 +2,11 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
-
-Vue.component('places', 
-require('./components/Places.vue').default);
-
-Vue.component('gmap', 
-require('./components/Gmap.vue').default);
-
-Vue.component('calendar', 
-require('./components/Calendar.vue').default);
-
-Vue.component('smallmap', 
-require('./components/SmallMap.vue').default);
+Vue.component('places', require('./components/Places.vue').default);
+Vue.component('gmap', require('./components/Gmap.vue').default);
+Vue.component('calendar', require('./components/Calendar.vue').default);
+Vue.component('smallmap', require('./components/SmallMap.vue').default);
+Vue.component('chats', require('./components/Chats.vue').default);
 
 import Vue from 'vue'
 import * as VueGoogleMaps from 'vue2-google-maps'
@@ -26,7 +19,6 @@ import store from './store/index.js';
 Vue.use(Notifications);
 Vue.use(Datetime);
 Vue.component('GmapCluster', GmapCluster);
-
 
 Vue.use(VueGoogleMaps, {
   load: {

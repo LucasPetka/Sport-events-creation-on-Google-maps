@@ -19,20 +19,25 @@
 Auth::routes(['verify' => true]); 
 
 Route::get('/', 'PagesController@index');
-Route::get('/home/myevents', 'PagesController@myevents')->middleware('auth');
+
 Route::get('/home', 'HomeController@index')->name('home');
 Route::post('/resubmit/{id}', 'DeclinedPlacesController@update')->middleware('auth');
 Route::delete('/decplace/{id}', 'DeclinedPlacesController@destroy')->middleware('auth');
 
+
+
+//------------------------------PLACE INTERFACE---------------------------------------
+Route::get('/place/{id}', 'Places\PlaceController@show_place_page')->middleware('auth');
+Route::get('/messages/{id}', 'Places\PlaceController@fetchMessages');
+Route::post('/messages', 'Places\PlaceController@sendMessage');
+
+
+//------------------------------ADMIN--------------------------------------------------
 Route::get('/admin', 'AdminController@index')->middleware('admin');
-
 Route::get('/admin/places', 'AdminController@places')->middleware('admin');
-
-
 Route::get('/admin/users', 'AdminController@users')->middleware('admin');
-
-
 Route::get('/admin/sporttypes', 'AdminController@sportTypes')->middleware('admin');
+
 Route::post('/admin/sporttypes/add', 'TypeController@store')->middleware('admin');
 Route::delete('/admin/sporttypes/delete/{id}', 'TypeController@destroy')->middleware('admin');
 Route::get('/admin/deleteuser/{id}', 'AdminController@deleteUser')->middleware('admin');

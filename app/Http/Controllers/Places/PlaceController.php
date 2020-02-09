@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Places;
 
+use App\Events\WebsocketDemoEvent;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Place;
 use App\Http\Resources\Place as PlaceResource;
 use DB;
 use Auth;
+use App\Message;
+use App\Events\MessageSent;
 
 class PlaceController extends Controller
 {
@@ -85,4 +88,35 @@ class PlaceController extends Controller
             return new PlaceResource($place);
         }
     }
+
+
+
+    public function show_place_page($id)
+    {
+        $place = Place::findOrFail($id);
+
+        return view('pages.place')->with(compact('place')); 
+    }
+
+    public function fetchMessages($id)
+    {
+
+        return Message::with('user')->where('place_id', $id)->get();
+    }
+
+    public function sendMessage(Request $request)
+    {
+        $message = auth()->user()->messages()->create([
+            'message' => $request->message,
+            'place_id' => $request->place_id
+        ]);
+
+        broadcast(new MessageSent($message->load('user')))->toOthers();
+
+        return ['status' => 'success'];
+    }
+
+
+
+
 }

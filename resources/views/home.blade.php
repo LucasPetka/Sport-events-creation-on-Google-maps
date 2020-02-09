@@ -294,7 +294,7 @@
                                                         <td><i class="far fa-clock"></i> From</td>
                                                         <td class="pl-3">{{ Carbon\Carbon::parse($event->time_from)->format('H:i') }}</td>
                                                         <td rowspan="2">
-                                                        <button type="button" class="btn btn-outline-success btn-lg float-right" data-toggle="modal" data-target="#created_map{{ $place->id }}">
+                                                        <button type="button" class="btn btn-outline-success btn-lg float-right" data-toggle="modal" data-target="#created_map{{ $event->place->id }}">
                                                             <i class="fas fa-map-marked-alt"></i>
                                                         </button>
                                                         </td>
@@ -307,11 +307,11 @@
                                             </div>
 
                                             <!------------------------------------------MAP MODAL-------------------------------------->
-                                            <div class="modal fade" id="created_map{{ $place->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                            <div class="modal fade" id="created_map{{ $event->place->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                                     <div class="modal-content">
                                                     <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLongTitle">{{ $place->title}}</h5>
+                                                    <h5 class="modal-title" id="exampleModalLongTitle">{{ $event->place->title}}</h5>
                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                         </button>
@@ -357,7 +357,7 @@
                                                         <td><i class="far fa-clock"></i> From</td>
                                                         <td class="pl-3">{{ Carbon\Carbon::parse($event->time_from)->format('H:i') }}</td>
                                                         <td rowspan="2">
-                                                        <button type="button" class="btn btn-outline-success btn-lg float-right" data-toggle="modal" data-target="#going_map{{ $place->id }}">
+                                                        <button type="button" class="btn btn-outline-success btn-lg float-right" data-toggle="modal" data-target="#going_map{{ $event->place->id }}">
                                                             <i class="fas fa-map-marked-alt"></i>
                                                         </button>
                                                         </td>
@@ -370,11 +370,11 @@
                                             </div>
 
                                             <!------------------------------------------MAP MODAL-------------------------------------->
-                                            <div class="modal fade" id="going_map{{ $place->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                            <div class="modal fade" id="going_map{{ $event->place->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                                     <div class="modal-content">
                                                     <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLongTitle">{{ $place->title}}</h5>
+                                                    <h5 class="modal-title" id="exampleModalLongTitle">{{ $event->place->title}}</h5>
                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                         </button>

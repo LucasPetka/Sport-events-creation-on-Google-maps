@@ -1,5 +1,7 @@
 <?php
 
+use App\Place;
+
 /*
 |--------------------------------------------------------------------------
 | Broadcast Channels
@@ -13,4 +15,9 @@
 
 Broadcast::channel('App.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
+});
+
+
+Broadcast::channel('place.{id}', function ($user, $place_id) {
+    return $user;
 });

@@ -2956,18 +2956,26 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user', 'event'],
   data: function data() {
     return {
       messages: [],
       newMessage: '',
-      users: []
+      users: [],
+      people_going: [],
+      activeUser: false,
+      typeTime: false
     };
   },
   created: function created() {
     var _this = this;
 
+    this.fetchPeopleGoing();
     this.fetchMessages();
     Echo.join('event.' + this.event.id).here(function (user) {
       _this.users = user;
@@ -2979,6 +2987,16 @@ __webpack_require__.r(__webpack_exports__);
       });
     }).listen('MessageSent', function (event) {
       _this.messages.push(event.message);
+    }).listenForWhisper('type', function (user) {
+      _this.activeUser = user;
+
+      if (_this.typeTime) {
+        clearTimeout(_this.typeTime);
+      }
+
+      _this.typeTime = setTimeout(function () {
+        _this.activeUser = false;
+      }, 3000);
     });
   },
   methods: {
@@ -2999,6 +3017,19 @@ __webpack_require__.r(__webpack_exports__);
         event_id: this.event.id
       });
       this.newMessage = '';
+    },
+    sendTyping: function sendTyping() {
+      Echo.join('event.' + this.event.id).whisper('type', this.user);
+    },
+    fetchPeopleGoing: function fetchPeopleGoing() {
+      var _this3 = this;
+
+      fetch('../api/people_going/' + this.event.id).then(function (res) {
+        return res.json();
+      }).then(function (res) {
+        _this3.people_going = res.data;
+        return _this3.people_going.length;
+      });
     }
   }
 });
@@ -3170,7 +3201,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         this.loadMarkers();
         this.fetchPlaces();
       } else {
-        window.setTimeout(this.checkVariable, 200);
+        window.setTimeout(this.checkVariable, 50);
       }
     },
     //sets map center, main location LITHUANIA, but if person has location ON then it shows person location
@@ -3622,16 +3653,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       opacity: '1',
       top: '40%',
       fontSize: '50px'
-    }, 1500, function () {
+    }, 900, function () {
       $("#geras").animate({
         left: '43%',
         top: '39%',
         fontSize: '80px'
-      }, 500, function () {
+      }, 300, function () {
         $("#loading-screen").animate({
           opacity: '0',
           width: '0%'
-        }, 500, function () {
+        }, 300, function () {
           $("#loading-screen").hide();
         });
       });
@@ -10513,7 +10544,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n#refresh_button[data-v-bdcfc800]{\n  position: absolute;\n  bottom:20px;\n  left: 49%;\n  -webkit-transform: translate(-49%, -40%);\n  transform: translate(-49%, -40%);\n  z-index: 5;\n}\n#geoloc_bar[data-v-bdcfc800]{\n  position: absolute;\n  top:120px;\n  left: 49%;\n  -webkit-transform: translate(-49%, -40%);\n  transform: translate(-49%, -40%);\n  z-index: 5;\n  background-color: white;\n  padding: 10px 15px;\n  border-radius: 8px;\n  width: 300px;\n}\n#marker[data-v-bdcfc800] {\n display: none;\n}\n\n\n", ""]);
+exports.push([module.i, "\n#refresh_button[data-v-bdcfc800]{\n  position: absolute;\n  bottom:20px;\n  left: 49%;\n  -webkit-transform: translate(-49%, -40%);\n  transform: translate(-49%, -40%);\n  z-index: 5;\n}\n#geoloc_bar[data-v-bdcfc800]{\n  position: absolute;\n  top:120px;\n  left: 49%;\n  -webkit-transform: translate(-49%, -40%);\n  transform: translate(-49%, -40%);\n  z-index: 1;\n  background-color: white;\n  padding: 10px 15px;\n  border-radius: 8px;\n  width: 300px;\n}\n#marker[data-v-bdcfc800] {\n display: none;\n}\n\n\n", ""]);
 
 // exports
 
@@ -10532,7 +10563,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n#time_error{\n    margin-top: -15px;\n    margin-left: 110px;\n}\n.my-style {\n    padding: 15px;\n    margin-top: 65px;\n    margin-left: 10px;\n    width: 290px;\n \n    font-size: 14px;\n    border-radius: 5px;\n    border-left: solid rgb(99, 156, 88) 5px;\n\n\n    color: #ffffff;\n    background: #82CC75;\n}\n.success {\n    background: #82CC75;\n}\n.error {\n    background: #DC4146;\n}\n#sidebar{\n    height: 94vh;\n    overflow-y: auto;\n}\n#geras{\n    position: absolute;\n    color:white;\n    font-size: 25px;\n    opacity: 0.1;\n}\n#loading-screen {\n    position: fixed;\n    z-index: 100;\n    background-color: #82cc75;\n    height: 100%;\n    width: 100%;\n}\n.vdatetime-input{\n    border-radius: 0px;\n    box-shadow: none !important;\n    border: solid 1px #b7b7b7;\n    padding: 8px;\n    color:#6C757D;\n}\n.vdatetime-popup__header {\n    background: #28a745;\n}\n.vdatetime-time-picker__item--selected {\n    color: #28a745;\n}\n.vdatetime-popup__actions__button {\n    color: #28a745;\n}\n@media only screen and (max-width: 900px) {\n#map {\n    width: 100% !important;\n}\n#show{\n    width: 95% !important;\n}\n#createDiv{\n    width: 95% !important;\n}\n#sidebar{\n    height: auto;\n    overflow-y: hidden;\n}\n}\n", ""]);
+exports.push([module.i, "\n#time_error{\n    margin-top: -15px;\n    margin-left: 110px;\n}\n.my-style {\n    padding: 15px;\n    margin-top: 65px;\n    margin-left: 10px;\n    width: 290px;\n \n    font-size: 14px;\n    border-radius: 5px;\n    border-left: solid rgb(99, 156, 88) 5px;\n\n\n    color: #ffffff;\n    background: #82CC75;\n}\n.success {\n    background: #82CC75;\n}\n.error {\n    background: #DC4146;\n}\n#sidebar{\n    height: 94vh;\n    overflow-y: auto;\n}\n#geras{\n    position: absolute;\n    color:white;\n    font-size: 25px;\n    opacity: 0.1;\n}\n#loading-screen {\n    z-index: 100;\n    position: absolute; top: 0; right: 0; bottom: 0; left: 0;\n    background-color: #82cc75;\n}\n.vdatetime-input{\n    border-radius: 0px;\n    box-shadow: none !important;\n    border: solid 1px #b7b7b7;\n    padding: 8px;\n    color:#6C757D;\n}\n.vdatetime-popup__header {\n    background: #28a745;\n}\n.vdatetime-time-picker__item--selected {\n    color: #28a745;\n}\n.vdatetime-popup__actions__button {\n    color: #28a745;\n}\n@media only screen and (max-width: 900px) {\n#map {\n    width: 100% !important;\n}\n#show{\n    width: 95% !important;\n}\n#createDiv{\n    width: 95% !important;\n}\n#sidebar{\n    height: auto;\n    overflow-y: hidden;\n}\n}\n", ""]);
 
 // exports
 
@@ -59988,6 +60019,94 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 
 /***/ }),
 
+/***/ "./node_modules/vue-chat-scroll/dist/vue-chat-scroll.js":
+/*!**************************************************************!*\
+  !*** ./node_modules/vue-chat-scroll/dist/vue-chat-scroll.js ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+(function (global, factory) {
+	 true ? module.exports = factory() :
+	undefined;
+}(this, (function () { 'use strict';
+
+/**
+* @name VueJS vChatScroll (vue-chat-scroll)
+* @description Monitors an element and scrolls to the bottom if a new child is added
+* @author Theodore Messinezis <theo@theomessin.com>
+* @file v-chat-scroll  directive definition
+*/
+
+var scrollToBottom = function scrollToBottom(el, smooth) {
+  if (typeof el.scroll === "function") {
+    el.scroll({
+      top: el.scrollHeight,
+      behavior: smooth ? 'smooth' : 'instant'
+    });
+  } else {
+    el.scrollTop = el.scrollHeight;
+  }
+};
+
+var vChatScroll = {
+  bind: function bind(el, binding) {
+    var scrolled = false;
+
+    el.addEventListener('scroll', function (e) {
+      scrolled = el.scrollTop + el.clientHeight + 1 < el.scrollHeight;
+    });
+
+    new MutationObserver(function (e) {
+      var config = binding.value || {};
+      var pause = config.always === false && scrolled;
+      var addedNodes = e[e.length - 1].addedNodes.length;
+      var removedNodes = e[e.length - 1].removedNodes.length;
+
+      if (config.scrollonremoved) {
+        if (pause || addedNodes != 1 && removedNodes != 1) return;
+      } else {
+        if (pause || addedNodes != 1) return;
+      }
+
+      var smooth = config.smooth;
+      var loadingRemoved = !addedNodes && removedNodes === 1;
+      if (loadingRemoved && config.scrollonremoved && 'smoothonremoved' in config) {
+        smooth = config.smoothonremoved;
+      }
+      scrollToBottom(el, smooth);
+    }).observe(el, { childList: true, subtree: true });
+  },
+  inserted: function inserted(el, binding) {
+    var config = binding.value || {};
+    scrollToBottom(el, config.smooth);
+  }
+};
+
+/**
+* @name VueJS vChatScroll (vue-chat-scroll)
+* @description Monitors an element and scrolls to the bottom if a new child is added
+* @author Theodore Messinezis <theo@theomessin.com>
+* @file vue-chat-scroll plugin definition
+*/
+
+var VueChatScroll = {
+  install: function install(Vue, options) {
+    Vue.directive('chat-scroll', vChatScroll);
+  }
+};
+
+if (typeof window !== 'undefined' && window.Vue) {
+  window.Vue.use(VueChatScroll);
+}
+
+return VueChatScroll;
+
+})));
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-datetime/dist/vue-datetime.css":
 /*!*********************************************************!*\
   !*** ./node_modules/vue-datetime/dist/vue-datetime.css ***!
@@ -61445,86 +61564,111 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "row" }, [
-    _c("div", { staticClass: "col-8" }, [
-      _c("div", { staticClass: "card card-default" }, [
-        _c("div", { staticClass: "card-header" }, [_vm._v("Messages")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "card-body p-0" }, [
-          _c(
-            "ul",
-            {
-              staticClass: "list-unstyled",
-              staticStyle: { height: "300px", "overflow-y": "scroll" },
-              attrs: { id: "message_list" }
-            },
-            _vm._l(_vm.messages, function(message) {
-              return _c("li", { key: message.id, staticClass: "p-2" }, [
-                _c("strong", [_vm._v(_vm._s(message.user.name))]),
-                _vm._v(
-                  "\n                        " +
-                    _vm._s(message.message) +
-                    "\n                    "
-                )
-              ])
-            }),
-            0
-          )
-        ]),
-        _vm._v(" "),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.newMessage,
-              expression: "newMessage"
-            }
-          ],
-          staticClass: "form-control",
-          attrs: {
-            type: "text",
-            name: "message",
-            placeholder: "Enter your message..."
-          },
-          domProps: { value: _vm.newMessage },
-          on: {
-            keyup: function($event) {
-              if (
-                !$event.type.indexOf("key") &&
-                _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
-              ) {
-                return null
-              }
-              return _vm.sendMessage($event)
-            },
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.newMessage = $event.target.value
-            }
-          }
-        })
-      ]),
-      _vm._v(" "),
-      _c("span", { staticClass: "text-muted" }, [_vm._v("user is typing...")])
+  return _c("div", [
+    _c("p", [
+      _c("b", [
+        _c("i", { staticClass: "fas fa-user" }),
+        _vm._v(" " + _vm._s(_vm.people_going.length) + " people going ")
+      ])
     ]),
     _vm._v(" "),
-    _c("div", { staticClass: "col-4" }, [
-      _c("div", { staticClass: "card card-default" }, [
-        _c("div", { staticClass: "card-header" }, [_vm._v("Users online")]),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-8" }, [
+        _c("div", { staticClass: "card card-default" }, [
+          _c("div", { staticClass: "card-header" }, [_vm._v("Messages")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body p-0" }, [
+            _c(
+              "ul",
+              {
+                directives: [
+                  {
+                    name: "chat-scroll",
+                    rawName: "v-chat-scroll",
+                    value: { smooth: true },
+                    expression: "{smooth: true}"
+                  }
+                ],
+                staticClass: "list-unstyled",
+                staticStyle: { height: "300px", "overflow-y": "scroll" },
+                attrs: { id: "message_list" }
+              },
+              _vm._l(_vm.messages, function(message) {
+                return _c("li", { key: message.id, staticClass: "p-2" }, [
+                  _c("strong", [_vm._v(_vm._s(message.user.name))]),
+                  _vm._v(
+                    "\n                        " +
+                      _vm._s(message.message) +
+                      "\n                    "
+                  )
+                ])
+              }),
+              0
+            )
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.newMessage,
+                expression: "newMessage"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: {
+              type: "text",
+              name: "message",
+              placeholder: "Enter your message..."
+            },
+            domProps: { value: _vm.newMessage },
+            on: {
+              keydown: _vm.sendTyping,
+              keyup: function($event) {
+                if (
+                  !$event.type.indexOf("key") &&
+                  _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                ) {
+                  return null
+                }
+                return _vm.sendMessage($event)
+              },
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.newMessage = $event.target.value
+              }
+            }
+          })
+        ]),
         _vm._v(" "),
-        _c("div", { staticClass: "card-body p-0" }, [
-          _c(
-            "ul",
-            _vm._l(_vm.users, function(user) {
-              return _c("li", { key: user.id, staticClass: "py-2" }, [
-                _vm._v(" " + _vm._s(user.name) + " ")
-              ])
-            }),
-            0
-          )
+        _vm.activeUser
+          ? _c("span", { staticClass: "text-muted" }, [
+              _vm._v(_vm._s(_vm.activeUser.name) + " is typing...")
+            ])
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-4" }, [
+        _c("div", { staticClass: "card card-default" }, [
+          _c("div", { staticClass: "card-header" }, [_vm._v("Users online")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body p-0" }, [
+            _c(
+              "ul",
+              { staticClass: "list-group list-group-flush" },
+              _vm._l(_vm.users, function(user) {
+                return _c(
+                  "li",
+                  { key: user.id, staticClass: "list-group-item" },
+                  [_vm._v(" " + _vm._s(user.name) + " ")]
+                )
+              }),
+              0
+            )
+          ])
         ])
       ])
     ])
@@ -82613,6 +82757,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_datetime_dist_vue_datetime_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue-datetime/dist/vue-datetime.css */ "./node_modules/vue-datetime/dist/vue-datetime.css");
 /* harmony import */ var vue_datetime_dist_vue_datetime_css__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(vue_datetime_dist_vue_datetime_css__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _store_index_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./store/index.js */ "./resources/js/store/index.js");
+/* harmony import */ var vue_chat_scroll__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vue-chat-scroll */ "./node_modules/vue-chat-scroll/dist/vue-chat-scroll.js");
+/* harmony import */ var vue_chat_scroll__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(vue_chat_scroll__WEBPACK_IMPORTED_MODULE_7__);
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
@@ -82628,6 +82774,8 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('chats', __webpack_require_
 
 
 
+
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_chat_scroll__WEBPACK_IMPORTED_MODULE_7___default.a);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_notification__WEBPACK_IMPORTED_MODULE_2___default.a);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_datetime__WEBPACK_IMPORTED_MODULE_4___default.a);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('GmapCluster', vue2_google_maps_dist_components_cluster__WEBPACK_IMPORTED_MODULE_3___default.a);

@@ -133,7 +133,7 @@ export default {
       }
       else
       {
-          window.setTimeout(this.checkVariable, 200);
+          window.setTimeout(this.checkVariable, 50);
       }
     },
 
@@ -338,7 +338,7 @@ export default {
   left: 49%;
   -webkit-transform: translate(-49%, -40%);
   transform: translate(-49%, -40%);
-  z-index: 5;
+  z-index: 1;
   background-color: white;
   padding: 10px 15px;
   border-radius: 8px;

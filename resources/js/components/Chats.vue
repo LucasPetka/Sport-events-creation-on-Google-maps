@@ -1,12 +1,15 @@
 <template>
 
+<div>
+<p><b> <i class="fas fa-user"></i> {{ people_going.length }} people going </b></p>
+
 <div class="row">
 
     <div class="col-8">
         <div class="card card-default">
             <div class="card-header">Messages</div>
             <div class="card-body p-0">
-                <ul class="list-unstyled" id="message_list" style="height:300px; overflow-y:scroll">
+                <ul class="list-unstyled" id="message_list" style="height:300px; overflow-y:scroll" v-chat-scroll="{smooth: true}">
                     <li class="p-2" v-for="message in messages"  :key="message.id">
                         <strong>{{ message.user.name }}</strong>
                         {{ message.message }}
@@ -14,23 +17,24 @@
                 </ul>
             </div>
 
-            <input @keyup.enter="sendMessage" v-model="newMessage" type="text" name="message" placeholder="Enter your message..." class="form-control">
+            <input @keydown="sendTyping" @keyup.enter="sendMessage" v-model="newMessage" type="text" name="message" placeholder="Enter your message..." class="form-control">
         </div>
 
-        <span class="text-muted">user is typing...</span>
+        <span class="text-muted" v-if="activeUser">{{ activeUser.name }} is typing...</span>
     </div>
 
     <div class="col-4">
         <div class="card card-default">
             <div class="card-header">Users online</div>
             <div class="card-body p-0">
-                <ul>
-                    <li class="py-2" v-for="user in users" :key="user.id"> {{ user.name }} </li>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item" v-for="user in users" :key="user.id"> {{ user.name }} </li>
                 </ul>
             </div>
         </div>
     </div>
 
+</div>
 </div>
     
 </template>
@@ -45,12 +49,16 @@ export default {
             messages: [],
             newMessage: '',
             users: [],
+            people_going: [],
+            activeUser: false,
+            typeTime: false
         }
     },
 
 
     created(){
 
+        this.fetchPeopleGoing();
         this.fetchMessages();
         Echo.join('event.' + this.event.id)
             .here(user => {
@@ -64,6 +72,17 @@ export default {
             })
             .listen('MessageSent', (event) => {
                 this.messages.push(event.message);
+            })
+            .listenForWhisper('type', user => {
+                this.activeUser = user;
+
+                if(this.typeTime){
+                    clearTimeout(this.typeTime)
+                }
+
+                this.typeTime = setTimeout(() => {
+                    this.activeUser = false;
+                }, 3000)
             })
     },
 
@@ -82,12 +101,29 @@ export default {
                 message: this.newMessage
             })
 
-
             axios.post('../messages', {message: this.newMessage, event_id: this.event.id });
 
             this.newMessage = '';
+        },
 
-        }
+        sendTyping(){
+
+            Echo.join('event.' + this.event.id)
+                .whisper('type', this.user);
+
+        },
+
+
+        fetchPeopleGoing() {
+                fetch('../api/people_going/'+ this.event.id)
+                .then(res => res.json())
+                .then(res => {
+                    this.people_going = res.data;
+
+                    return this.people_going.length;
+                })
+            
+        },
 
     }
 

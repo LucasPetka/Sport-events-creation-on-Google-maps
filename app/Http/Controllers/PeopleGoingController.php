@@ -48,9 +48,12 @@ class PeopleGoingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function returnByEvent($id)
     {
-        //
+        $people_going = PeopleGoing::where('event_id', $id)->get();
+
+        //Return collection as a resource
+        return PeopleGoingResource::collection($people_going);
     }
 
     /**

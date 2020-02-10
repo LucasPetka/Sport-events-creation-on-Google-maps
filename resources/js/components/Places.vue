@@ -1,7 +1,7 @@
 <template>
 <div>
     <div id="loading-screen">
-    <div id="geras">MoSi</div>
+        <div id="geras">MoSi</div>
     </div>
 
     <notifications group="foo" classes="my-style" ignoreDuplicates position="top left" />
@@ -245,9 +245,9 @@ export default {
     //==============================ON LOAD FUNCTION==============================================
     mounted(){
         //animation
-        $("#geras").animate({left: '45%', opacity: '1', top:'40%', fontSize:'50px'}, 1500, function(){
-            $("#geras").animate({left:'43%',top:'39%', fontSize:'80px'}, 500, function(){
-            $("#loading-screen").animate({opacity:'0', width:'0%'}, 500, function(){
+        $("#geras").animate({left: '45%', opacity: '1', top:'40%', fontSize:'50px'}, 900, function(){
+            $("#geras").animate({left:'43%',top:'39%', fontSize:'80px'}, 300, function(){
+            $("#loading-screen").animate({opacity:'0', width:'0%'}, 300, function(){
             $("#loading-screen").hide();});});});
 
          $('#addPlace').on('hide.bs.modal', (e) => {
@@ -603,11 +603,9 @@ export default {
 }
 
 #loading-screen {
-    position: fixed;
     z-index: 100;
+    position: absolute; top: 0; right: 0; bottom: 0; left: 0;
     background-color: #82cc75;
-    height: 100%;
-    width: 100%;
 }
 
 

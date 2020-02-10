@@ -61,6 +61,8 @@ Route::group(['middleware' => 'auth:api'], function() {
     //People Going
     Route::get('people_going', 'PeopleGoingController@index');
 
+    Route::get('people_going/{id}', 'PeopleGoingController@returnByEvent');
+
 Route::group(['middleware' => 'auth:api'], function() {
     //Add person to event
     Route::post('person', 'PeopleGoingController@store');

@@ -5,7 +5,7 @@
         
 <div class="container mt-5 pt-5">
 
-<chats :user="{{ auth()->user() }}" :place="{{ $place }}" ></chats>
+<chats :user="{{ auth()->user() }}" :event="{{ $event }}" ></chats>
 
 </div>
         

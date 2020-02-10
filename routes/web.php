@@ -27,9 +27,9 @@ Route::delete('/decplace/{id}', 'DeclinedPlacesController@destroy')->middleware(
 
 
 //------------------------------PLACE INTERFACE---------------------------------------
-Route::get('/place/{id}', 'Places\PlaceController@show_place_page')->middleware('auth');
-Route::get('/messages/{id}', 'Places\PlaceController@fetchMessages');
-Route::post('/messages', 'Places\PlaceController@sendMessage');
+Route::get('/event/{id}', 'EventController@show_event_page')->middleware('auth');
+Route::get('/messages/{id}', 'EventController@fetchMessages');
+Route::post('/messages', 'EventController@sendMessage');
 
 
 //------------------------------ADMIN--------------------------------------------------

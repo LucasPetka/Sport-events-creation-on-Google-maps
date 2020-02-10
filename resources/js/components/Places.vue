@@ -68,7 +68,7 @@
                                 <button type="button" id="close_show" v-on:click="closeShow()" class="close" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
                                 
                                 <div v-if="this.type.image">
-                                    <h3> <a :href="'place/' + show.id"> <img :src="'../../../storage/sport_logo/'+ this.type.image"> {{ show.title }} </a></h3>
+                                    <h3> <img :src="'../../../storage/sport_logo/'+ this.type.image"> {{ show.title }} </h3>
                                 </div>
 
                                 <hr>

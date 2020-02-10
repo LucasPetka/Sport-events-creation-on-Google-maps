@@ -5,7 +5,6 @@
     <div class="col-8">
         <div class="card card-default">
             <div class="card-header">Messages</div>
-        
             <div class="card-body p-0">
                 <ul class="list-unstyled" id="message_list" style="height:300px; overflow-y:scroll">
                     <li class="p-2" v-for="message in messages"  :key="message.id">
@@ -39,7 +38,7 @@
 <script>
 export default {
 
-    props:['user', 'place'],
+    props:['user', 'event'],
 
     data(){
         return{
@@ -53,7 +52,7 @@ export default {
     created(){
 
         this.fetchMessages();
-        Echo.join('place.' + this.place.id)
+        Echo.join('event.' + this.event.id)
             .here(user => {
                 this.users = user;
             })
@@ -72,7 +71,7 @@ export default {
     methods: {
 
         fetchMessages(){
-            axios.get('../messages/' + this.place.id).then(response =>{
+            axios.get('../messages/' + this.event.id).then(response =>{
                 this.messages = response.data;
             })
         },
@@ -83,7 +82,8 @@ export default {
                 message: this.newMessage
             })
 
-            axios.post('../messages', {message: this.newMessage, place_id: this.place.id });
+
+            axios.post('../messages', {message: this.newMessage, event_id: this.event.id });
 
             this.newMessage = '';
 

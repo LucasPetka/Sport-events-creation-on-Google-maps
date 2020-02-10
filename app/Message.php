@@ -8,7 +8,7 @@ use App\User;
 class Message extends Model
 {
   
-    protected $fillable = ['message', 'place_id'];
+    protected $fillable = ['message', 'event_id'];
 
     public function user(){
         return $this->belongsTo(User::class);

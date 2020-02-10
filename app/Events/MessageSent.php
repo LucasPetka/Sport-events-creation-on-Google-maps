@@ -35,6 +35,6 @@ class MessageSent implements ShouldBroadcast
     {
 
 
-        return new PresenceChannel('place.'.$this->message->place_id);
+        return new PresenceChannel('event.'.$this->message->event_id);
     }
 }

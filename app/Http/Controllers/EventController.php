@@ -13,6 +13,9 @@ use App\PeopleGoing;
 use App\Http\Resources\PeopleGoing as PeopleGoingResource;
 use Auth;
 
+use App\Message;
+use App\Events\MessageSent;
+
 
 class EventController extends Controller
 {
@@ -78,4 +81,34 @@ class EventController extends Controller
         return new EventResource($event);
         }
     }
+
+
+
+    public function show_event_page($id)
+    {
+        $event = Event::findOrFail($id);
+
+        return view('pages.event')->with(compact('event')); 
+    }
+
+    public function fetchMessages($id)
+    {
+
+        return Message::with('user')->where('event_id', $id)->get();
+    }
+
+    public function sendMessage(Request $request)
+    {
+        $message = auth()->user()->messages()->create([
+            'message' => $request->message,
+            'event_id' => $request->event_id
+        ]);
+
+        broadcast(new MessageSent($message->load('user')))->toOthers();
+
+        return ['status' => 'success'];
+    }
+
+
+
 }

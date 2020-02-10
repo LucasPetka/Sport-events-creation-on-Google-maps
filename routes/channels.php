@@ -18,6 +18,6 @@ Broadcast::channel('App.User.{id}', function ($user, $id) {
 });
 
 
-Broadcast::channel('place.{id}', function ($user, $place_id) {
+Broadcast::channel('event.{id}', function ($user, $event_id) {
     return $user;
 });

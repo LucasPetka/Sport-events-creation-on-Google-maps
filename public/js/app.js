@@ -2956,9 +2956,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['user', 'place'],
+  props: ['user', 'event'],
   data: function data() {
     return {
       messages: [],
@@ -2970,7 +2969,7 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     this.fetchMessages();
-    Echo.join('place.' + this.place.id).here(function (user) {
+    Echo.join('event.' + this.event.id).here(function (user) {
       _this.users = user;
     }).joining(function (user) {
       _this.users.push(user);
@@ -2986,7 +2985,7 @@ __webpack_require__.r(__webpack_exports__);
     fetchMessages: function fetchMessages() {
       var _this2 = this;
 
-      axios.get('../messages/' + this.place.id).then(function (response) {
+      axios.get('../messages/' + this.event.id).then(function (response) {
         _this2.messages = response.data;
       });
     },
@@ -2997,7 +2996,7 @@ __webpack_require__.r(__webpack_exports__);
       });
       axios.post('../messages', {
         message: this.newMessage,
-        place_id: this.place.id
+        event_id: this.event.id
       });
       this.newMessage = '';
     }
@@ -61279,7 +61278,9 @@ var render = function() {
             [
               _c("div", { staticClass: "card-body" }, [
                 _c("h5", { staticClass: "card-title" }, [
-                  _vm._v(_vm._s(event.title))
+                  _c("a", { attrs: { href: "event/" + event.id } }, [
+                    _vm._v(" " + _vm._s(event.title) + " ")
+                  ])
                 ]),
                 _vm._v(" "),
                 _c("h6", { staticClass: "card-subtitle mb-3 text-muted" }, [
@@ -61986,20 +61987,14 @@ var render = function() {
                           this.type.image
                             ? _c("div", [
                                 _c("h3", [
-                                  _c(
-                                    "a",
-                                    { attrs: { href: "place/" + _vm.show.id } },
-                                    [
-                                      _c("img", {
-                                        attrs: {
-                                          src:
-                                            "../../../storage/sport_logo/" +
-                                            this.type.image
-                                        }
-                                      }),
-                                      _vm._v(" " + _vm._s(_vm.show.title) + " ")
-                                    ]
-                                  )
+                                  _c("img", {
+                                    attrs: {
+                                      src:
+                                        "../../../storage/sport_logo/" +
+                                        this.type.image
+                                    }
+                                  }),
+                                  _vm._v(" " + _vm._s(_vm.show.title) + " ")
                                 ])
                               ])
                             : _vm._e(),

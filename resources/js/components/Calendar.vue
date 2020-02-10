@@ -16,7 +16,7 @@
 
                 <div v-for="event in show_events" v-bind:key="event.id" class="card mt-3"  style="width: 90%; margin-left:auto; margin-right:auto;">
                 <div class="card-body">
-                    <h5 class="card-title">{{ event.title }}</h5>
+                    <h5 class="card-title"> <a :href="'event/' + event.id"> {{ event.title }} </a></h5>
                     <h6 class="card-subtitle mb-3 text-muted">{{ countPeopleGoing(event.id) }} people going</h6>
                     <p class="card-text">{{ event.about }}</p>
                     <ul class="list-group list-group-flush">

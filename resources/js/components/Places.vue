@@ -4,6 +4,59 @@
         <div id="geras">MoSi</div>
     </div>
 
+
+    <div class="container-fluid position-fixed mt-5" style="z-index:2;">
+        <div class="row">
+            <div class="col-4"></div>
+            <div class="col-6">
+                <div class="row">
+                    <div class="col-1">
+                        <button type="button" id="search_button" class="btn btn-dark dropdown-toggle pt-2 pb-2" style="border-radius: 0px 0px 5px 5px;" data-toggle="collapse" data-target="#places_sort" aria-expanded="false" aria-controls="places_sort">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+
+                    <div class="col-6">
+                    <div class="collapse" id="places_sort">
+                    <div class="card card-body pt-4 pl-3 pr-3 pb-0">
+                        <div class="row">
+                            <div class="col-6">
+                                <label for="sport_type-url">Sport type</label>
+                                <div class="input-group mb-3">
+                                <select @change="sort_places" v-model="rules.type" class="custom-select" id="sport_type">
+                                    <option selected>All</option>
+                                    <option v-for="type in allTypes.data" :key="type.id" :value="type.id"> {{ type.name }}</option>
+                                </select>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <label for="distance">Distance</label>
+                                <div class="input-group mb-3">
+                                <select @change="sort_places" v-model="rules.distance" class="custom-select" id="distance">
+                                    <option selected>Any</option>
+                                    <option value="1">1 km</option>
+                                    <option value="3">3 km</option>
+                                    <option value="5">5 km</option>
+                                    <option value="10">10 km</option>
+                                    <option value="25">25 km</option>
+                                </select>
+                                </div>
+                            </div>        
+                        </div>
+                    </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-2"></div>
+        </div>
+
+    </div>
+
+
+   
+
     <notifications group="foo" classes="my-style" ignoreDuplicates position="top left" />
 
 
@@ -231,6 +284,9 @@ export default {
                 time_until:'',
                 organizator:'',
                 person_id:'',
+            },
+            rules:{
+                type: 'All', distance: 'Any'
             },
             date:'',
             measured_distance:null,
@@ -553,6 +609,12 @@ export default {
 
     },
 
+    sort_places() {
+        
+        this.$refs.gmapp.fetchPlaces_sort(this.rules);
+        
+    },
+
     }
 }
 </script>
@@ -600,6 +662,15 @@ export default {
     font-size: 25px;
     opacity: 0.1;
 
+}
+
+#search_button{
+    z-index: 50;
+}
+
+#places_sort{
+    z-index: 51;
+    width:100%;
 }
 
 #loading-screen {

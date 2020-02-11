@@ -20,7 +20,7 @@
 
 
                     <div class="row">
-                        <div class="col-3">
+                        <div class="col-sm-12 col-md-3 col-lg-3">
                             <figure class="figure">
                                 <img src="images/blank-user-img.jpg" class="figure-img img-fluid img-thumbnail" width="180px" height="180px" alt="profile-photo">
                                 <figcaption class="figure-caption">{{ $user->name }}</figcaption>
@@ -32,7 +32,7 @@
                                 <figcaption> <a href="#" class="badge badge-success"><i class="fas fa-user-edit"></i> Edit profile </a> </figcaption>
                             </figure>
                         </div>
-                        <div class="col-9">
+                        <div class="col-sm-12 col-md-9 col-lg-9">
                             <table class="table">
                                 <tbody>
                                   <tr>
@@ -63,13 +63,13 @@
 
                 <div class="row mb-3">
                     <div class="col-12">
-                        <button type="button" class="btn btn-primary ml-1 mr-1 float-right" data-toggle="collapse" data-target="#createdEvents" aria-expanded="false" aria-controls="createdEvents">
-                        <i class="far fa-calendar-alt"></i>  Your created events <span class="badge badge-light">{{ count($createdevents) }}</span>
+                        <button type="button" class="btn btn-primary m-1 float-right" data-toggle="collapse" data-target="#createdEvents" aria-expanded="false" aria-controls="createdEvents">
+                            <i class="far fa-calendar-alt"></i>  Your created events <span class="badge badge-light">{{ count($createdevents) }}</span>
                         </button>
-                        <button type="button" class="btn btn-primary ml-1 mr-1 float-right"  data-toggle="collapse" data-target="#goingto" aria-expanded="false" aria-controls="goingto">
-                        <i class="fas fa-calendar-check"></i> Events you have joined <span class="badge badge-light">{{ count($goingtoevents) }}</span>
+                        <button type="button" class="btn btn-primary m-1 float-right"  data-toggle="collapse" data-target="#goingto" aria-expanded="false" aria-controls="goingto">
+                            <i class="fas fa-calendar-check"></i> Events you have joined <span class="badge badge-light">{{ count($goingtoevents) }}</span>
                         </button>
-                        <button type="button" class="btn btn-success ml-1 mr-1 float-right" data-toggle="collapse" data-target="#createdPlaces" aria-expanded="false" aria-controls="createdPlaces">
+                        <button type="button" class="btn btn-success m-1 float-right" data-toggle="collapse" data-target="#createdPlaces" aria-expanded="false" aria-controls="createdPlaces">
                             <i class="fas fa-map-marked-alt"></i>  Places  
                         </button>
                     </div>

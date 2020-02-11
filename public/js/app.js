@@ -3094,6 +3094,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3156,7 +3158,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     this.checkVariable();
   },
   computed: Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapGetters"])(['allPlaces', 'allTypes']),
-  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapActions"])(['fetchPlacesx', 'fetchTypesx']), {
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapActions"])(['fetchPlacesx', 'fetchTypesx', 'fetchPlacesx_sort']), {
     //Opens info window above marker and sets the position and text
     openInfoWindowTemplate: function openInfoWindowTemplate(place) {
       var res, response, nearest;
@@ -3369,6 +3371,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }).then(function (res) {
         _this5.places = res.data;
       });
+    },
+    fetchPlaces_sort: function fetchPlaces_sort(rules) {
+      var ne = this.bounds.getNorthEast();
+      var sw = this.bounds.getSouthWest();
+      console.log(rules);
+      this.fetchPlacesx_sort([this.bounds, rules, this.user_location]);
     }
   })
 });
@@ -3401,6 +3409,59 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3630,6 +3691,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         time_until: '',
         organizator: '',
         person_id: ''
+      },
+      rules: {
+        type: 'All',
+        distance: 'Any'
       },
       date: '',
       measured_distance: null,
@@ -3985,6 +4050,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.event.time_until = '';
       this.event.organizator = '';
       this.event.person_id = '';
+    },
+    sort_places: function sort_places() {
+      this.$refs.gmapp.fetchPlaces_sort(this.rules);
     }
   })
 });
@@ -10563,7 +10631,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n#time_error{\n    margin-top: -15px;\n    margin-left: 110px;\n}\n.my-style {\n    padding: 15px;\n    margin-top: 65px;\n    margin-left: 10px;\n    width: 290px;\n \n    font-size: 14px;\n    border-radius: 5px;\n    border-left: solid rgb(99, 156, 88) 5px;\n\n\n    color: #ffffff;\n    background: #82CC75;\n}\n.success {\n    background: #82CC75;\n}\n.error {\n    background: #DC4146;\n}\n#sidebar{\n    height: 94vh;\n    overflow-y: auto;\n}\n#geras{\n    position: absolute;\n    color:white;\n    font-size: 25px;\n    opacity: 0.1;\n}\n#loading-screen {\n    z-index: 100;\n    position: absolute; top: 0; right: 0; bottom: 0; left: 0;\n    background-color: #82cc75;\n}\n.vdatetime-input{\n    border-radius: 0px;\n    box-shadow: none !important;\n    border: solid 1px #b7b7b7;\n    padding: 8px;\n    color:#6C757D;\n}\n.vdatetime-popup__header {\n    background: #28a745;\n}\n.vdatetime-time-picker__item--selected {\n    color: #28a745;\n}\n.vdatetime-popup__actions__button {\n    color: #28a745;\n}\n@media only screen and (max-width: 900px) {\n#map {\n    width: 100% !important;\n}\n#show{\n    width: 95% !important;\n}\n#createDiv{\n    width: 95% !important;\n}\n#sidebar{\n    height: auto;\n    overflow-y: hidden;\n}\n}\n", ""]);
+exports.push([module.i, "\n#time_error{\n    margin-top: -15px;\n    margin-left: 110px;\n}\n.my-style {\n    padding: 15px;\n    margin-top: 65px;\n    margin-left: 10px;\n    width: 290px;\n \n    font-size: 14px;\n    border-radius: 5px;\n    border-left: solid rgb(99, 156, 88) 5px;\n\n\n    color: #ffffff;\n    background: #82CC75;\n}\n.success {\n    background: #82CC75;\n}\n.error {\n    background: #DC4146;\n}\n#sidebar{\n    height: 94vh;\n    overflow-y: auto;\n}\n#geras{\n    position: absolute;\n    color:white;\n    font-size: 25px;\n    opacity: 0.1;\n}\n#search_button{\n    z-index: 50;\n}\n#places_sort{\n    z-index: 51;\n    width:100%;\n}\n#loading-screen {\n    z-index: 100;\n    position: absolute; top: 0; right: 0; bottom: 0; left: 0;\n    background-color: #82cc75;\n}\n.vdatetime-input{\n    border-radius: 0px;\n    box-shadow: none !important;\n    border: solid 1px #b7b7b7;\n    padding: 8px;\n    color:#6C757D;\n}\n.vdatetime-popup__header {\n    background: #28a745;\n}\n.vdatetime-time-picker__item--selected {\n    color: #28a745;\n}\n.vdatetime-popup__actions__button {\n    color: #28a745;\n}\n@media only screen and (max-width: 900px) {\n#map {\n    width: 100% !important;\n}\n#show{\n    width: 95% !important;\n}\n#createDiv{\n    width: 95% !important;\n}\n#sidebar{\n    height: auto;\n    overflow-y: hidden;\n}\n}\n", ""]);
 
 // exports
 
@@ -61775,55 +61843,62 @@ var render = function() {
           }
         },
         [
-          _vm._l(_vm.allPlaces.data, function(place) {
-            return _c("gmap-marker", {
-              key: place.id,
-              attrs: {
-                visible: place.visible,
-                position: _vm.getPosition(place),
-                icon: _vm.icon(place.type)
-              },
-              on: {
-                click: [
-                  function($event) {
-                    _vm.center = _vm.getPosition(place)
-                  },
-                  function($event) {
-                    return _vm.showSpot(place.id)
-                  }
-                ],
-                mouseover: function($event) {
-                  return _vm.openInfoWindowTemplate(place)
-                },
-                mouseout: function($event) {
-                  _vm.infoWindow.open = false
-                }
-              }
-            })
-          }),
-          _vm._v(" "),
           _c(
-            "gmap-info-window",
-            {
-              attrs: {
-                options: {
-                  maxWidth: 300,
-                  pixelOffset: { width: 0, height: -25 }
-                },
-                position: _vm.infoWindow.position,
-                opened: _vm.infoWindow.open
-              },
-              on: {
-                mouseout: function($event) {
-                  _vm.infoWindow.open = false
-                }
-              }
-            },
+            "gmap-cluster",
+            { attrs: { "zoom-on-click": true, gridSize: 40 } },
             [
-              _c("div", {
-                domProps: { innerHTML: _vm._s(_vm.infoWindow.template) }
-              })
-            ]
+              _vm._l(_vm.allPlaces.data, function(place) {
+                return _c("gmap-marker", {
+                  key: place.id,
+                  attrs: {
+                    visible: place.visible,
+                    position: _vm.getPosition(place),
+                    icon: _vm.icon(place.type)
+                  },
+                  on: {
+                    click: [
+                      function($event) {
+                        _vm.center = _vm.getPosition(place)
+                      },
+                      function($event) {
+                        return _vm.showSpot(place.id)
+                      }
+                    ],
+                    mouseover: function($event) {
+                      return _vm.openInfoWindowTemplate(place)
+                    },
+                    mouseout: function($event) {
+                      _vm.infoWindow.open = false
+                    }
+                  }
+                })
+              }),
+              _vm._v(" "),
+              _c(
+                "gmap-info-window",
+                {
+                  attrs: {
+                    options: {
+                      maxWidth: 300,
+                      pixelOffset: { width: 0, height: -25 }
+                    },
+                    position: _vm.infoWindow.position,
+                    opened: _vm.infoWindow.open
+                  },
+                  on: {
+                    mouseout: function($event) {
+                      _vm.infoWindow.open = false
+                    }
+                  }
+                },
+                [
+                  _c("div", {
+                    domProps: { innerHTML: _vm._s(_vm.infoWindow.template) }
+                  })
+                ]
+              )
+            ],
+            2
           ),
           _vm._v(" "),
           _c("gmap-marker", {
@@ -61834,7 +61909,7 @@ var render = function() {
             }
           })
         ],
-        2
+        1
       ),
       _vm._v(" "),
       _c(
@@ -61903,6 +61978,191 @@ var render = function() {
     [
       _vm._m(0),
       _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "container-fluid position-fixed mt-5",
+          staticStyle: { "z-index": "2" }
+        },
+        [
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-4" }),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-6" }, [
+              _c("div", { staticClass: "row" }, [
+                _vm._m(1),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-6" }, [
+                  _c(
+                    "div",
+                    { staticClass: "collapse", attrs: { id: "places_sort" } },
+                    [
+                      _c(
+                        "div",
+                        { staticClass: "card card-body pt-4 pl-3 pr-3 pb-0" },
+                        [
+                          _c("div", { staticClass: "row" }, [
+                            _c("div", { staticClass: "col-6" }, [
+                              _c(
+                                "label",
+                                { attrs: { for: "sport_type-url" } },
+                                [_vm._v("Sport type")]
+                              ),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "input-group mb-3" }, [
+                                _c(
+                                  "select",
+                                  {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.rules.type,
+                                        expression: "rules.type"
+                                      }
+                                    ],
+                                    staticClass: "custom-select",
+                                    attrs: { id: "sport_type" },
+                                    on: {
+                                      change: [
+                                        function($event) {
+                                          var $$selectedVal = Array.prototype.filter
+                                            .call(
+                                              $event.target.options,
+                                              function(o) {
+                                                return o.selected
+                                              }
+                                            )
+                                            .map(function(o) {
+                                              var val =
+                                                "_value" in o
+                                                  ? o._value
+                                                  : o.value
+                                              return val
+                                            })
+                                          _vm.$set(
+                                            _vm.rules,
+                                            "type",
+                                            $event.target.multiple
+                                              ? $$selectedVal
+                                              : $$selectedVal[0]
+                                          )
+                                        },
+                                        _vm.sort_places
+                                      ]
+                                    }
+                                  },
+                                  [
+                                    _c("option", { attrs: { selected: "" } }, [
+                                      _vm._v("All")
+                                    ]),
+                                    _vm._v(" "),
+                                    _vm._l(_vm.allTypes.data, function(type) {
+                                      return _c(
+                                        "option",
+                                        {
+                                          key: type.id,
+                                          domProps: { value: type.id }
+                                        },
+                                        [_vm._v(" " + _vm._s(type.name))]
+                                      )
+                                    })
+                                  ],
+                                  2
+                                )
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "col-6" }, [
+                              _c("label", { attrs: { for: "distance" } }, [
+                                _vm._v("Distance")
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "input-group mb-3" }, [
+                                _c(
+                                  "select",
+                                  {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.rules.distance,
+                                        expression: "rules.distance"
+                                      }
+                                    ],
+                                    staticClass: "custom-select",
+                                    attrs: { id: "distance" },
+                                    on: {
+                                      change: [
+                                        function($event) {
+                                          var $$selectedVal = Array.prototype.filter
+                                            .call(
+                                              $event.target.options,
+                                              function(o) {
+                                                return o.selected
+                                              }
+                                            )
+                                            .map(function(o) {
+                                              var val =
+                                                "_value" in o
+                                                  ? o._value
+                                                  : o.value
+                                              return val
+                                            })
+                                          _vm.$set(
+                                            _vm.rules,
+                                            "distance",
+                                            $event.target.multiple
+                                              ? $$selectedVal
+                                              : $$selectedVal[0]
+                                          )
+                                        },
+                                        _vm.sort_places
+                                      ]
+                                    }
+                                  },
+                                  [
+                                    _c("option", { attrs: { selected: "" } }, [
+                                      _vm._v("Any")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("option", { attrs: { value: "1" } }, [
+                                      _vm._v("1 km")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("option", { attrs: { value: "3" } }, [
+                                      _vm._v("3 km")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("option", { attrs: { value: "5" } }, [
+                                      _vm._v("5 km")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("option", { attrs: { value: "10" } }, [
+                                      _vm._v("10 km")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("option", { attrs: { value: "25" } }, [
+                                      _vm._v("25 km")
+                                    ])
+                                  ]
+                                )
+                              ])
+                            ])
+                          ])
+                        ]
+                      )
+                    ]
+                  )
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-2" })
+          ])
+        ]
+      ),
+      _vm._v(" "),
       _c("notifications", {
         attrs: {
           group: "foo",
@@ -61944,7 +62204,7 @@ var render = function() {
                 },
                 [
                   _c("div", { staticClass: "modal-content" }, [
-                    _vm._m(1),
+                    _vm._m(2),
                     _vm._v(" "),
                     _c("div", { staticClass: "modal-body" }, [
                       _c("div", { staticClass: "input-group mb-3" }, [
@@ -61996,7 +62256,7 @@ var render = function() {
                       ]),
                       _vm._v(" "),
                       _c("div", { staticClass: "input-group mb-3" }, [
-                        _vm._m(2),
+                        _vm._m(3),
                         _vm._v(" "),
                         _c(
                           "select",
@@ -62043,7 +62303,7 @@ var render = function() {
                       ])
                     ]),
                     _vm._v(" "),
-                    _vm._m(3)
+                    _vm._m(4)
                   ])
                 ]
               )
@@ -62217,7 +62477,7 @@ var render = function() {
                       "div",
                       { staticClass: "card m-3 width:100%; height:100%;" },
                       [
-                        _vm._m(4),
+                        _vm._m(5),
                         _vm._v(" "),
                         _c(
                           "div",
@@ -62247,7 +62507,7 @@ var render = function() {
                             _vm._v(" "),
                             this.status === 1
                               ? _c("div")
-                              : _c("div", [_vm._m(5)])
+                              : _c("div", [_vm._m(6)])
                           ],
                           1
                         )
@@ -62306,7 +62566,7 @@ var render = function() {
                                           [_vm._v("Add Event")]
                                         ),
                                     _vm._v(" "),
-                                    _vm._m(6)
+                                    _vm._m(7)
                                   ]),
                                   _vm._v(" "),
                                   _c("div", { staticClass: "modal-body" }, [
@@ -62437,7 +62697,7 @@ var render = function() {
                                           }
                                         }),
                                         _vm._v(" "),
-                                        _vm._m(7)
+                                        _vm._m(8)
                                       ],
                                       1
                                     ),
@@ -62485,7 +62745,7 @@ var render = function() {
                                           }
                                         }),
                                         _vm._v(" "),
-                                        _vm._m(8)
+                                        _vm._m(9)
                                       ],
                                       1
                                     ),
@@ -62562,6 +62822,29 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { attrs: { id: "loading-screen" } }, [
       _c("div", { attrs: { id: "geras" } }, [_vm._v("MoSi")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-1" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-dark dropdown-toggle pt-2 pb-2",
+          staticStyle: { "border-radius": "0px 0px 5px 5px" },
+          attrs: {
+            type: "button",
+            id: "search_button",
+            "data-toggle": "collapse",
+            "data-target": "#places_sort",
+            "aria-expanded": "false",
+            "aria-controls": "places_sort"
+          }
+        },
+        [_c("i", { staticClass: "fas fa-search" })]
+      )
     ])
   },
   function() {
@@ -82782,7 +83065,9 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('GmapCluster', vue2_google_
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue2_google_maps__WEBPACK_IMPORTED_MODULE_1__, {
   load: {
     key: 'AIzaSyBQxzhnAAV7IpsN2kjtER2X2Je00Lpnmm8',
-    libraries: ['places', 'geometry']
+    libraries: ['places', 'geometry'],
+    region: 'GB',
+    language: 'EN'
   },
   autobindAllEvents: false
 });
@@ -83319,10 +83604,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
 
 
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
 var state = {
   placesx: [],
   typesx: [],
-  eventsx: []
+  bounds: []
 };
 var getters = {
   allPlaces: function allPlaces(state) {
@@ -83356,23 +83650,49 @@ var actions = {
       }
     });
   },
-  fetchTypesx: function fetchTypesx(_ref2) {
-    var commit, response;
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function fetchTypesx$(_context2) {
+  fetchPlacesx_sort: function fetchPlacesx_sort(_ref2, _ref3) {
+    var commit, _ref4, bounds, rules, user_location, ne, sw, response;
+
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function fetchPlacesx_sort$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
             commit = _ref2.commit;
-            _context2.next = 3;
+            _ref4 = _slicedToArray(_ref3, 3), bounds = _ref4[0], rules = _ref4[1], user_location = _ref4[2];
+            console.log("YR: " + rules);
+            ne = bounds.getNorthEast();
+            sw = bounds.getSouthWest();
+            _context2.next = 7;
+            return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios__WEBPACK_IMPORTED_MODULE_1___default.a.get('api/places/' + ne.lat() + '/' + sw.lat() + '/' + ne.lng() + '/' + sw.lng() + '?type=' + rules.type + '&distance=' + rules.distance + '&lat=' + user_location.lat + '&lng=' + user_location.lng));
+
+          case 7:
+            response = _context2.sent;
+            commit('setPlaces', response.data);
+
+          case 9:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    });
+  },
+  fetchTypesx: function fetchTypesx(_ref5) {
+    var commit, response;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function fetchTypesx$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            commit = _ref5.commit;
+            _context3.next = 3;
             return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios__WEBPACK_IMPORTED_MODULE_1___default.a.get('api/types'));
 
           case 3:
-            response = _context2.sent;
+            response = _context3.sent;
             commit('setTypes', response.data);
 
           case 5:
           case "end":
-            return _context2.stop();
+            return _context3.stop();
         }
       }
     });

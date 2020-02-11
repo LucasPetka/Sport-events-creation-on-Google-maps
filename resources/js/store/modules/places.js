@@ -4,7 +4,7 @@ const state = {
 
 placesx:[],
 typesx:[],
-eventsx:[]
+bounds:[],
 
 };
 
@@ -21,6 +21,14 @@ const actions = {
         var ne = bounds.getNorthEast();
         var sw = bounds.getSouthWest();
         const response = await axios.get('api/places/'+ne.lat()+'/'+sw.lat()+'/'+ne.lng()+'/'+sw.lng());
+        commit('setPlaces', response.data);
+    },
+
+    async fetchPlacesx_sort({commit}, [bounds, rules, user_location]){
+        console.log("YR: " + rules);
+        var ne = bounds.getNorthEast();
+        var sw = bounds.getSouthWest();
+        const response = await axios.get('api/places/'+ne.lat()+'/'+sw.lat()+'/'+ne.lng()+'/'+sw.lng()+'?type=' + rules.type + '&distance=' + rules.distance + '&lat=' + user_location.lat + '&lng=' + user_location.lng);
         commit('setPlaces', response.data);
     },
 

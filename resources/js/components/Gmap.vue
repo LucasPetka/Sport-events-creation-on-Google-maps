@@ -15,6 +15,7 @@
       </div>
 
     <gmap-map ref="gmapp" v-on:rightclick="openMenu($event)" v-on:zoom_changed="updateZoom()" :center="center" v-on:bounds_changed="update_bounds($event)" :zoom="zoom_in" v-bind:options="mapStyle"  style="width:100%; height: 100vh;">
+      <gmap-cluster :zoom-on-click="true" :gridSize="40">
       <gmap-marker v-for="place in allPlaces.data" :visible="place.visible" :key="place.id" :position="getPosition(place)" @click="center=getPosition(place)" v-on:click="showSpot(place.id)" :icon="icon(place.type)" v-on:mouseover="openInfoWindowTemplate(place)" v-on:mouseout="infoWindow.open=false"></gmap-marker>
       <gmap-info-window
           :options="{maxWidth:300, pixelOffset:{width:0, height:-25}}"
@@ -23,6 +24,7 @@
           v-on:mouseout="infoWindow.open=false">
           <div v-html="infoWindow.template"></div>
       </gmap-info-window>
+      </gmap-cluster>
       <gmap-marker :visible="marker_visibility" :position="getPosition(addNewmark_coordinates)" :icon="{ url: require('../assets/google_maps/new.png')}" ></gmap-marker>
     </gmap-map>
 
@@ -94,7 +96,7 @@ export default {
 
   methods: {
 
-     ...mapActions(['fetchPlacesx', 'fetchTypesx']),
+     ...mapActions(['fetchPlacesx', 'fetchTypesx', 'fetchPlacesx_sort']),
 
     //Opens info window above marker and sets the position and text
      openInfoWindowTemplate: async function(place) {
@@ -314,6 +316,15 @@ export default {
       .then(res => {
           this.places = res.data;
       })
+    },
+
+    fetchPlaces_sort(rules) {
+      var ne = this.bounds.getNorthEast();
+      var sw = this.bounds.getSouthWest();
+      console.log(rules);
+
+
+      this.fetchPlacesx_sort([this.bounds, rules, this.user_location]);
     },
 
     }

@@ -22,10 +22,13 @@ Vue.use(Notifications);
 Vue.use(Datetime);
 Vue.component('GmapCluster', GmapCluster);
 
+
 Vue.use(VueGoogleMaps, {
   load: {
     key: 'AIzaSyBQxzhnAAV7IpsN2kjtER2X2Je00Lpnmm8',
     libraries: ['places','geometry'],
+    region: 'GB',
+    language: 'EN',
   },
    autobindAllEvents: false,
 })

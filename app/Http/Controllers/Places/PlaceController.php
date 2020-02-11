@@ -19,8 +19,44 @@ class PlaceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($nelat, $swlat, $nelng, $swlng)
+    public function index($nelat, $swlat, $nelng, $swlng, Request $request)
     {
+
+        $distance = $request->input('distance');
+        $lat = $request->input('lat');
+        $lng = $request->input('lng');
+
+
+        if(null !== $request->input('distance') && $request->input('type') != "All" && null !== $request->input('type') && $request->input('distance') != "Any"){
+            $places = DB::table('places')->select('*')
+            ->where('lat','<',$nelat)
+            ->where('lat','>',$swlat)
+            ->where('lng','<',$nelng)
+            ->where('lng','>',$swlng)
+            ->whereRaw('? > ( 6371 * acos ( cos ( radians( ? ) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians( ? ) ) + sin ( radians( ? ) ) * sin( radians( lat ) ) ) )', [$distance, $lat, $lng, $lat])
+            ->where('type','=',$request->input('type'))
+            ->get();
+        }
+        else if(null !== $request->input('distance') && $request->input('distance') != "Any"){
+            $places = DB::table('places')->select('*')
+            ->where('lat','<',$nelat)
+            ->where('lat','>',$swlat)
+            ->where('lng','<',$nelng)
+            ->where('lng','>',$swlng)
+            ->whereRaw('? > ( 6371 * acos ( cos ( radians( ? ) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians( ? ) ) + sin ( radians( ? ) ) * sin( radians( lat ) ) ) )', [$distance, $lat, $lng, $lat])
+            ->get();
+        }
+        else if(null !== $request->input('type') && $request->input('type') != "All"){
+            $places = DB::table('places')
+            ->select('*')
+            ->where('lat','<',$nelat)
+            ->where('lat','>',$swlat)
+            ->where('lng','<',$nelng)
+            ->where('lng','>',$swlng)
+            ->where('type','=',$request->input('type'))
+            ->get();
+        }
+        else{
         //Get places
         $places = DB::table('places')
             ->select('*')
@@ -29,6 +65,7 @@ class PlaceController extends Controller
             ->where('lng','<',$nelng)
             ->where('lng','>',$swlng)
             ->get();
+        }
 
         //Return collection as a resource
         return PlaceResource::collection($places);

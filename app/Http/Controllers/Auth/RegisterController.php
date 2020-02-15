@@ -69,13 +69,18 @@ class RegisterController extends Controller
         do{
             $minutes = 720;
             $token = Str::random(60);
-         }while(User::where('api_token', $token)->exists());
+        }while(User::where('api_token', $token)->exists());
+
+        do{
+            $auth_id = Str::random(10);
+        }while(User::where('auth_id', $auth_id)->exists());
 
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'avatar' => "blank-user-img.jpg",
             'password' => Hash::make($data['password']),
+            'auth_id' => $auth_id,
             'api_token' => $token,
         ]);
 

@@ -20,7 +20,6 @@ class CreateEventsTable extends Migration
             $table->text('about');
             $table->dateTime('time_from');
             $table->dateTime('time_until');
-            $table->string('organizator');
             $table->timestamps();
             $table->unsignedInteger('person_id');
 

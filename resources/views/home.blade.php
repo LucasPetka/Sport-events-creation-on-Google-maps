@@ -23,7 +23,7 @@
                         <div class="col-sm-12 col-md-3 col-lg-3">
                             <figure class="figure">
                                 @if (isset($user->provider))
-                                    <img src="{{ $user->avatar }}" class="figure-img img-fluid img-thumbnail" width="180px" height="180px" alt="profile-photo">
+                                    <img src="http://graph.facebook.com/{{ $user->provider_id }}/picture?type=large" class="figure-img img-fluid img-thumbnail" width="180px" height="180px" alt="profile-photo">
                                 @else
                                     <img src="images/avatars/{{ $user->avatar }}" class="figure-img img-fluid img-thumbnail" width="180px" height="180px" alt="profile-photo">
                                 @endif

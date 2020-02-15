@@ -61503,7 +61503,14 @@ var render = function() {
                       staticClass:
                         "list-group-item card-subtitle mb-2 text-muted"
                     },
-                    [_vm._v("Event created by " + _vm._s(event.organizator))]
+                    [
+                      _vm._v("Event created by "),
+                      _c(
+                        "a",
+                        { attrs: { href: "/user/" + event.person_id.auth_id } },
+                        [_vm._v(_vm._s(event.person_id.name))]
+                      )
+                    ]
                   )
                 ]),
                 _vm._v(" "),
@@ -83030,6 +83037,7 @@ var map = {
 	"./soccerball_1580404081.png": "./storage/app/public/sport_logo/soccerball_1580404081.png",
 	"./soccerball_1580586946.png": "./storage/app/public/sport_logo/soccerball_1580586946.png",
 	"./soccerball_1581785775.png": "./storage/app/public/sport_logo/soccerball_1581785775.png",
+	"./soccerball_1581788776.png": "./storage/app/public/sport_logo/soccerball_1581788776.png",
 	"./tennis_1579959574.png": "./storage/app/public/sport_logo/tennis_1579959574.png",
 	"./tennis_1580586972.png": "./storage/app/public/sport_logo/tennis_1580586972.png",
 	"./tennis_1581785845.png": "./storage/app/public/sport_logo/tennis_1581785845.png",
@@ -84040,6 +84048,17 @@ module.exports = "/images/soccerball_1580586946.png?9429e98d23527067401c4bfbb94a
 /***/ (function(module, exports) {
 
 module.exports = "/images/soccerball_1581785775.png?9429e98d23527067401c4bfbb94a8faa";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/soccerball_1581788776.png":
+/*!*****************************************************************!*\
+  !*** ./storage/app/public/sport_logo/soccerball_1581788776.png ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/soccerball_1581788776.png?9429e98d23527067401c4bfbb94a8faa";
 
 /***/ }),
 

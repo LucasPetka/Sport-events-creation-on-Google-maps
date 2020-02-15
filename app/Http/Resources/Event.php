@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\User;
 
 class Event extends JsonResource
 {
@@ -22,7 +23,7 @@ class Event extends JsonResource
             'time_from' => $this->time_from,
             'time_until' => $this->time_until,
             'organizator' => $this->organizator,
-            'person_id' => $this->person_id
+            'person_id' => User::findOrFail($this->person_id),
 
         ];
     }

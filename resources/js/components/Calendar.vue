@@ -21,7 +21,7 @@
                     <p class="card-text">{{ event.about }}</p>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">Start: {{ returnTime(event.time_from)  }} <br> End: {{ returnTime(event.time_until) }}</li>
-                        <li class="list-group-item card-subtitle mb-2 text-muted">Event created by {{ event.organizator }}</li>
+                        <li class="list-group-item card-subtitle mb-2 text-muted">Event created by <a :href="'/user/' + event.person_id.auth_id">{{ event.person_id.name }}</a></li>
                     </ul>
 
                     <div v-if="status === 1">
@@ -50,7 +50,7 @@
 
 
             </div>
-        </div>    
+        </template>    
 </template>
 
 <script>

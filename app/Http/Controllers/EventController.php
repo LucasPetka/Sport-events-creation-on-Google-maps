@@ -6,6 +6,7 @@ use Carbon\Carbon;
 
 use Illuminate\Http\Request;
 use App\Event;
+use App\User;
 use App\Http\Resources\Event as EventResource;
 
 use Illuminate\Support\Facades\DB;
@@ -21,7 +22,7 @@ class EventController extends Controller
 {
     public function index()
     {
-        $events = Event::all();
+        $events = Event::with('user')->get();
 
         //Return collection as a resource
         return EventResource::collection($events);
@@ -68,7 +69,6 @@ class EventController extends Controller
 
         return EventResource::collection($event);
     }
-
 
 
     public function destroy($id)

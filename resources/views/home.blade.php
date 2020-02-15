@@ -22,7 +22,11 @@
                     <div class="row">
                         <div class="col-sm-12 col-md-3 col-lg-3">
                             <figure class="figure">
-                                <img src="images/blank-user-img.jpg" class="figure-img img-fluid img-thumbnail" width="180px" height="180px" alt="profile-photo">
+                                @if (isset($user->provider))
+                                    <img src="{{ $user->avatar }}" class="figure-img img-fluid img-thumbnail" width="180px" height="180px" alt="profile-photo">
+                                @else
+                                    <img src="images/avatars/{{ $user->avatar }}" class="figure-img img-fluid img-thumbnail" width="180px" height="180px" alt="profile-photo">
+                                @endif
                                 <figcaption class="figure-caption">{{ $user->name }}</figcaption>
                                 @if ($user->isAdmin === 1)
                                 <figcaption class="figure-caption"><a href="/admin"><b>Admin panel</b></a></figcaption>

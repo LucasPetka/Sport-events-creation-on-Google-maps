@@ -11,6 +11,14 @@
             <div class="card-body p-0">
                 <ul class="list-unstyled" id="message_list" style="height:300px; overflow-y:scroll" v-chat-scroll="{smooth: true}">
                     <li class="p-2" v-for="message in messages"  :key="message.id">
+                        
+                        <span v-if="message.user.provider == null">
+                            <img class="rounded-circle" :src="'../../../images/avatars/'+message.user.avatar" width="30" height="30" alt="">
+                        </span>
+                        <span v-else>
+                            <img class="rounded-circle" :src="message.user.avatar" width="30" height="30" alt="">
+                        </span>
+    
                         <strong>{{ message.user.name }}</strong>
                         {{ message.message }}
                     </li>

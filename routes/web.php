@@ -43,3 +43,7 @@ Route::delete('/admin/sporttypes/delete/{id}', 'TypeController@destroy')->middle
 Route::get('/admin/deleteuser/{id}', 'AdminController@deleteUser')->middleware('admin');
 Route::get('/admin/accplace/{id}', 'AdminController@acceptPlace')->middleware('admin');
 Route::get('/admin/decplace/{id}', 'AdminController@declinePlace')->middleware('admin');
+
+
+Route::get('/auth/redirect/{provider}', 'SocialController@redirect');
+Route::get('/callback/{provider}', 'SocialController@callback');

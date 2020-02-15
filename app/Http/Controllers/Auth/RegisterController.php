@@ -74,6 +74,7 @@ class RegisterController extends Controller
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'avatar' => "blank-user-img.jpg",
             'password' => Hash::make($data['password']),
             'api_token' => $token,
         ]);

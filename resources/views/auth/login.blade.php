@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8 mt-5">
 
@@ -65,6 +65,13 @@
                             </div>
                         </div>
                     </form>
+
+                    <hr>
+                    <div class="form-group row mb-0">
+                        <div class="col-md-8 offset-md-4">
+                            <a href="{{ url('/auth/redirect/facebook') }}" class="btn btn-primary"><i class="fab fa-facebook-f mr-2"></i> Log In with Facebook</a>
+                        </div>
+                    </div>
                 
             
         </div>

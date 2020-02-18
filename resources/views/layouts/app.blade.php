@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" style="overflow-y: auto;">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" style="overflow-y: hidden;">
     <head style="font-family: 'Roboto', sans-serif;">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -19,7 +19,7 @@
 </head>
 <body>
     <div id="app" class="mh-100">
-        <nav class="navbar navbar-expand-md fixed-top navbar-dark shadow-sm" style="background-color: #313638;">
+        <nav class="navbar navbar-expand-md navbar-dark shadow-sm" style="background-color: #313638;">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     <img src="/images/logonotext.png" height="25px" weight="100%">

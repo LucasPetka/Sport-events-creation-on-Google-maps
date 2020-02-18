@@ -3189,7 +3189,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           mapTypeControl: false,
           scaleControl: false,
           streetViewControl: false,
-          zoomControl: true
+          zoomControl: false
         }
       }
     };
@@ -3688,6 +3688,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 
 
@@ -3782,20 +3785,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   //===============================METHODS=======================================================
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_5__["mapActions"])(['fetchPlacesx']), {
     //Closes sidebar
-    openShow: function openShow() {
-      $("#map").removeClass("col-lg-12");
-      $("#map").addClass("col-lg-8");
-      $("#side").removeClass("col-lg-0");
-      $('#side').show();
-      $("#side").addClass("col-lg-4");
-    },
+    openShow: function openShow() {},
     //Closes sidebar
     closeShow: function closeShow() {
-      $("#map").removeClass("col-lg-8");
-      $("#map").addClass("col-lg-12");
-      $("#side").removeClass("col-lg-4");
-      $('#side').hide();
-      $("#side").addClass("col-lg-0");
+      $("#show").slideUp("slow");
     },
     //------------------------Opens PLACE ADD label-----------------------------
     openAdd: function openAdd(cord) {
@@ -10642,10 +10635,10 @@ exports.push([module.i, "\n.vdp-datepicker input{\n    border-radius: 5px 5px 5p
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Gmap.vue?vue&type=style&index=0&id=bdcfc800&scoped=true&lang=css&":
-/*!**********************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Gmap.vue?vue&type=style&index=0&id=bdcfc800&scoped=true&lang=css& ***!
-  \**********************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Gmap.vue?vue&type=style&index=0&lang=css&":
+/*!**********************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Gmap.vue?vue&type=style&index=0&lang=css& ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -10654,7 +10647,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n#refresh_button[data-v-bdcfc800]{\n  position: absolute;\n  bottom:20px;\n  left: 49%;\n  -webkit-transform: translate(-49%, -40%);\n  transform: translate(-49%, -40%);\n  z-index: 5;\n}\n#geoloc_bar[data-v-bdcfc800]{\n  position: absolute;\n  top:120px;\n  left: 49%;\n  -webkit-transform: translate(-49%, -40%);\n  transform: translate(-49%, -40%);\n  z-index: 1;\n  background-color: white;\n  padding: 10px 15px;\n  border-radius: 8px;\n  width: 300px;\n}\n#marker[data-v-bdcfc800] {\n display: none;\n}\n\n\n", ""]);
+exports.push([module.i, "\n#refresh_button{\n  position: absolute;\n  bottom:20px;\n  left: 49%;\n  -webkit-transform: translate(-49%, -40%);\n  transform: translate(-49%, -40%);\n  z-index: 5;\n}\n#geoloc_bar{\n  position: absolute;\n  top:120px;\n  left: 49%;\n  -webkit-transform: translate(-49%, -40%);\n  transform: translate(-49%, -40%);\n  z-index: 1;\n  background-color: white;\n  padding: 10px 15px;\n  border-radius: 8px;\n  width: 300px;\n}\n#marker {\n display: none;\n}\n\n\n", ""]);
 
 // exports
 
@@ -10673,7 +10666,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n#time_error{\n    margin-top: -15px;\n    margin-left: 110px;\n}\n.my-style {\n    padding: 15px;\n    margin-top: 65px;\n    margin-left: 10px;\n    width: 290px;\n \n    font-size: 14px;\n    border-radius: 5px;\n    border-left: solid rgb(99, 156, 88) 5px;\n\n\n    color: #ffffff;\n    background: #82CC75;\n}\n.success {\n    background: #82CC75;\n}\n.error {\n    background: #DC4146;\n}\n#sidebar{\n    height: 94vh;\n    overflow-y: auto;\n}\n#geras{\n    position: absolute;\n    color:white;\n    font-size: 25px;\n    opacity: 0.1;\n}\n#search_button{\n    z-index: 50;\n}\n#places_sort{\n    z-index: 51;\n    width:100%;\n}\n#loading-screen {\n    z-index: 100;\n    position: absolute; top: 0; right: 0; bottom: 0; left: 0;\n    background-color: #82cc75;\n}\n.vdatetime-input{\n    border-radius: 0px;\n    box-shadow: none !important;\n    border: solid 1px #b7b7b7;\n    padding: 8px;\n    color:#6C757D;\n}\n.vdatetime-popup__header {\n    background: #28a745;\n}\n.vdatetime-time-picker__item--selected {\n    color: #28a745;\n}\n.vdatetime-popup__actions__button {\n    color: #28a745;\n}\n@media only screen and (max-width: 900px) {\n#map {\n    width: 100% !important;\n}\n#show{\n    width: 95% !important;\n}\n#createDiv{\n    width: 95% !important;\n}\n#sidebar{\n    height: auto;\n    overflow-y: hidden;\n}\n}\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* width */\n::-webkit-scrollbar {\n  width: 10px;\n}\n\n/* Track */\n::-webkit-scrollbar-track {\n  background: #f1f1f1;\n}\n \n/* Handle */\n::-webkit-scrollbar-thumb {\n  background: #888;\n}\n\n/* Handle on hover */\n::-webkit-scrollbar-thumb:hover {\n  background: #555;\n}\n#time_error{\n    margin-top: -15px;\n    margin-left: 110px;\n}\n#map {\n    width: 100% !important; \n    height:100% !important;\n}\n.my-style {\n    padding: 15px;\n    margin-top: 65px;\n    margin-left: 10px;\n    width: 290px;\n \n    font-size: 14px;\n    border-radius: 5px;\n    border-left: solid rgb(99, 156, 88) 5px;\n\n\n    color: #ffffff;\n    background: #82CC75;\n}\n.success {\n    background: #82CC75;\n}\n.error {\n    background: #DC4146;\n}\n#sidebar{\n    height: 94vh;\n    overflow-y: auto;\n}\n#geras{\n    position: absolute;\n    color:white;\n    font-size: 25px;\n    opacity: 0.1;\n}\n#search_button{\n    z-index: 50;\n}\n#places_sort{\n    z-index: 51;\n    width:100%;\n}\n#loading-screen {\n    z-index: 100;\n    position: absolute; top: 0; right: 0; bottom: 0; left: 0;\n    background-color: #82cc75;\n}\n.vdatetime-input{\n    border-radius: 0px;\n    box-shadow: none !important;\n    border: solid 1px #b7b7b7;\n    padding: 8px;\n    color:#6C757D;\n}\n.vdatetime-popup__header {\n    background: #28a745;\n}\n.vdatetime-time-picker__item--selected {\n    color: #28a745;\n}\n.vdatetime-popup__actions__button {\n    color: #28a745;\n}\n@media only screen and (max-width: 900px) {\n#map {\n    width: 100% !important; \n    height:100% !important;\n}\n#show{\n    width: 95% !important;\n}\n#createDiv{\n    width: 95% !important;\n}\n#sidebar{\n    height: auto;\n    overflow-y: hidden;\n}\n}\n", ""]);
 
 // exports
 
@@ -59485,15 +59478,15 @@ if(false) {}
 
 /***/ }),
 
-/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Gmap.vue?vue&type=style&index=0&id=bdcfc800&scoped=true&lang=css&":
-/*!**************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Gmap.vue?vue&type=style&index=0&id=bdcfc800&scoped=true&lang=css& ***!
-  \**************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Gmap.vue?vue&type=style&index=0&lang=css&":
+/*!**************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Gmap.vue?vue&type=style&index=0&lang=css& ***!
+  \**************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(/*! !../../../node_modules/css-loader??ref--6-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--6-2!../../../node_modules/vue-loader/lib??vue-loader-options!./Gmap.vue?vue&type=style&index=0&id=bdcfc800&scoped=true&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Gmap.vue?vue&type=style&index=0&id=bdcfc800&scoped=true&lang=css&");
+var content = __webpack_require__(/*! !../../../node_modules/css-loader??ref--6-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--6-2!../../../node_modules/vue-loader/lib??vue-loader-options!./Gmap.vue?vue&type=style&index=0&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Gmap.vue?vue&type=style&index=0&lang=css&");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -61952,10 +61945,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Gmap.vue?vue&type=template&id=bdcfc800&scoped=true&":
-/*!*******************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Gmap.vue?vue&type=template&id=bdcfc800&scoped=true& ***!
-  \*******************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Gmap.vue?vue&type=template&id=bdcfc800&":
+/*!*******************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Gmap.vue?vue&type=template&id=bdcfc800& ***!
+  \*******************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -62027,7 +62020,7 @@ var render = function() {
         "gmap-map",
         {
           ref: "gmapp",
-          staticStyle: { width: "100%", height: "100vh" },
+          staticStyle: { width: "100%", height: "94vh" },
           attrs: {
             center: _vm.center,
             zoom: _vm.zoom_in,
@@ -62184,7 +62177,7 @@ var render = function() {
       _c(
         "div",
         {
-          staticClass: "container-fluid position-fixed mt-5",
+          staticClass: "container-fluid position-absolute",
           staticStyle: { "z-index": "2" }
         },
         [
@@ -62381,6 +62374,247 @@ var render = function() {
           on: {
             submit: function($event) {
               $event.preventDefault()
+              return _vm.addEvent($event)
+            }
+          }
+        },
+        [
+          _c(
+            "div",
+            {
+              staticClass: "modal fade",
+              attrs: {
+                id: "addEvent",
+                tabindex: "-1",
+                role: "dialog",
+                "aria-labelledby": "addEventCenterTitle",
+                "aria-hidden": "true"
+              }
+            },
+            [
+              _c(
+                "div",
+                {
+                  staticClass: "modal-dialog modal-dialog-centered",
+                  attrs: { role: "document" }
+                },
+                [
+                  _c("div", { staticClass: "modal-content" }, [
+                    _c("div", { staticClass: "modal-header" }, [
+                      _vm.edit
+                        ? _c(
+                            "h5",
+                            {
+                              staticClass: "modal-title",
+                              attrs: { id: "addEventLongTitle" }
+                            },
+                            [_vm._v("Edit Event")]
+                          )
+                        : _c(
+                            "h5",
+                            {
+                              staticClass: "modal-title",
+                              attrs: { id: "addEventLongTitle" }
+                            },
+                            [_vm._v("Add Event")]
+                          ),
+                      _vm._v(" "),
+                      _vm._m(2)
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "modal-body" }, [
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("label", { attrs: { for: "exampleInputEmail1" } }, [
+                          _vm._v("Title")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.event.title,
+                              expression: "event.title"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: {
+                            type: "text",
+                            id: "exampleInputEmail1",
+                            "aria-describedby": "emailHelp",
+                            placeholder: "Enter title",
+                            required: ""
+                          },
+                          domProps: { value: _vm.event.title },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(_vm.event, "title", $event.target.value)
+                            }
+                          }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "form-group" }, [
+                        _c(
+                          "label",
+                          { attrs: { for: "exampleFormControlTextarea1" } },
+                          [_vm._v("About")]
+                        ),
+                        _vm._v(" "),
+                        _c("textarea", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.event.about,
+                              expression: "event.about"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: {
+                            id: "exampleFormControlTextarea1",
+                            rows: "6",
+                            required: ""
+                          },
+                          domProps: { value: _vm.event.about },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(_vm.event, "about", $event.target.value)
+                            }
+                          }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "input-group mb-3" },
+                        [
+                          _c("div", { staticClass: "input-group-prepend" }, [
+                            _c("span", { staticClass: "input-group-text" }, [
+                              _vm._v(_vm._s(_vm.date))
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("datetime", {
+                            attrs: {
+                              type: "time",
+                              id: "start",
+                              format: "HH:mm",
+                              "value-zone": "local",
+                              "minute-step": 10,
+                              required: ""
+                            },
+                            on: {
+                              input: function($event) {
+                                return _vm.parseDate(0)
+                              }
+                            },
+                            model: {
+                              value: _vm.start,
+                              callback: function($$v) {
+                                _vm.start = $$v
+                              },
+                              expression: "start"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _vm._m(3)
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "input-group mb-3" },
+                        [
+                          _c("div", { staticClass: "input-group-prepend" }, [
+                            _c("span", { staticClass: "input-group-text" }, [
+                              _vm._v(_vm._s(_vm.date))
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("datetime", {
+                            attrs: {
+                              type: "time",
+                              id: "end",
+                              format: "HH:mm",
+                              "value-zone": "local",
+                              "minute-step": 10,
+                              required: ""
+                            },
+                            on: {
+                              input: function($event) {
+                                return _vm.parseDate(1)
+                              }
+                            },
+                            model: {
+                              value: _vm.end,
+                              callback: function($$v) {
+                                _vm.end = $$v
+                              },
+                              expression: "end"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _vm._m(4)
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("div", { attrs: { id: "time_error" } })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "modal-footer" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-secondary",
+                          attrs: { type: "button", "data-dismiss": "modal" }
+                        },
+                        [_vm._v("Close")]
+                      ),
+                      _vm._v(" "),
+                      _vm.edit
+                        ? _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-success float-right",
+                              attrs: { id: "add_event_btn", type: "submit" }
+                            },
+                            [_vm._v(" Update ")]
+                          )
+                        : _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-success float-right",
+                              attrs: { id: "add_event_btn", type: "submit" }
+                            },
+                            [
+                              _vm._v("Add "),
+                              _c("i", { staticClass: "fas fa-plus" })
+                            ]
+                          )
+                    ])
+                  ])
+                ]
+              )
+            ]
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "form",
+        {
+          on: {
+            submit: function($event) {
+              $event.preventDefault()
               return _vm.addPlace($event)
             }
           }
@@ -62407,7 +62641,7 @@ var render = function() {
                 },
                 [
                   _c("div", { staticClass: "modal-content" }, [
-                    _vm._m(2),
+                    _vm._m(5),
                     _vm._v(" "),
                     _c("div", { staticClass: "modal-body" }, [
                       _c("div", { staticClass: "input-group mb-3" }, [
@@ -62459,7 +62693,7 @@ var render = function() {
                       ]),
                       _vm._v(" "),
                       _c("div", { staticClass: "input-group mb-3" }, [
-                        _vm._m(3),
+                        _vm._m(6),
                         _vm._v(" "),
                         _c(
                           "select",
@@ -62506,7 +62740,7 @@ var render = function() {
                       ])
                     ]),
                     _vm._v(" "),
-                    _vm._m(4)
+                    _vm._m(7)
                   ])
                 ]
               )
@@ -62518,13 +62752,18 @@ var render = function() {
       _c(
         "div",
         {
-          staticClass: "row",
-          staticStyle: { width: "100%", padding: "0", margin: "0" }
+          staticClass: "row full-height justify-content-end",
+          staticStyle: {
+            width: "100%",
+            height: "100%",
+            padding: "0",
+            margin: "0"
+          }
         },
         [
           _c(
             "div",
-            { staticClass: "col-lg-12 p-0", attrs: { id: "map" } },
+            { attrs: { id: "map" } },
             [
               _c("Gmap", {
                 ref: "gmapp",
@@ -62545,25 +62784,19 @@ var render = function() {
           _c(
             "div",
             {
-              staticClass: "col-lg-0 p-0 mt-5",
-              staticStyle: { display: "none" },
-              attrs: { id: "side" }
+              staticClass: "show col-lg-4 col-sm-12 position-fixed",
+              staticStyle: { display: "none", "z-index": "50" },
+              attrs: { id: "show" }
             },
             [
-              _c("div", { attrs: { id: "sidebar" } }, [
-                _c(
-                  "div",
-                  {
-                    staticClass: "show",
-                    staticStyle: {
-                      display: "none",
-                      width: "100%",
-                      height: "auto",
-                      "padding-bottom": "270px"
-                    },
-                    attrs: { id: "show" }
-                  },
-                  [
+              _c(
+                "div",
+                {
+                  staticClass: "card shadow-lg mt-4",
+                  staticStyle: { height: "85vh" }
+                },
+                [
+                  _c("div", { staticClass: "card-body overflow-auto" }, [
                     _c(
                       "div",
                       { staticClass: "d-flex flex-column bd-highlight mb-3" },
@@ -62680,7 +62913,7 @@ var render = function() {
                       "div",
                       { staticClass: "card m-3 width:100%; height:100%;" },
                       [
-                        _vm._m(5),
+                        _vm._m(8),
                         _vm._v(" "),
                         _c(
                           "div",
@@ -62710,306 +62943,15 @@ var render = function() {
                             _vm._v(" "),
                             this.status === 1
                               ? _c("div")
-                              : _c("div", [_vm._m(6)])
+                              : _c("div", [_vm._m(9)])
                           ],
                           1
                         )
                       ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "form",
-                      {
-                        on: {
-                          submit: function($event) {
-                            $event.preventDefault()
-                            return _vm.addEvent($event)
-                          }
-                        }
-                      },
-                      [
-                        _c(
-                          "div",
-                          {
-                            staticClass: "modal fade",
-                            attrs: {
-                              id: "addEvent",
-                              tabindex: "-1",
-                              role: "dialog",
-                              "aria-labelledby": "addEventCenterTitle",
-                              "aria-hidden": "true"
-                            }
-                          },
-                          [
-                            _c(
-                              "div",
-                              {
-                                staticClass:
-                                  "modal-dialog modal-dialog-centered",
-                                attrs: { role: "document" }
-                              },
-                              [
-                                _c("div", { staticClass: "modal-content" }, [
-                                  _c("div", { staticClass: "modal-header" }, [
-                                    _vm.edit
-                                      ? _c(
-                                          "h5",
-                                          {
-                                            staticClass: "modal-title",
-                                            attrs: { id: "addEventLongTitle" }
-                                          },
-                                          [_vm._v("Edit Event")]
-                                        )
-                                      : _c(
-                                          "h5",
-                                          {
-                                            staticClass: "modal-title",
-                                            attrs: { id: "addEventLongTitle" }
-                                          },
-                                          [_vm._v("Add Event")]
-                                        ),
-                                    _vm._v(" "),
-                                    _vm._m(7)
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("div", { staticClass: "modal-body" }, [
-                                    _c("div", { staticClass: "form-group" }, [
-                                      _c(
-                                        "label",
-                                        {
-                                          attrs: { for: "exampleInputEmail1" }
-                                        },
-                                        [_vm._v("Title")]
-                                      ),
-                                      _vm._v(" "),
-                                      _c("input", {
-                                        directives: [
-                                          {
-                                            name: "model",
-                                            rawName: "v-model",
-                                            value: _vm.event.title,
-                                            expression: "event.title"
-                                          }
-                                        ],
-                                        staticClass: "form-control",
-                                        attrs: {
-                                          type: "text",
-                                          id: "exampleInputEmail1",
-                                          "aria-describedby": "emailHelp",
-                                          placeholder: "Enter title",
-                                          required: ""
-                                        },
-                                        domProps: { value: _vm.event.title },
-                                        on: {
-                                          input: function($event) {
-                                            if ($event.target.composing) {
-                                              return
-                                            }
-                                            _vm.$set(
-                                              _vm.event,
-                                              "title",
-                                              $event.target.value
-                                            )
-                                          }
-                                        }
-                                      })
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("div", { staticClass: "form-group" }, [
-                                      _c(
-                                        "label",
-                                        {
-                                          attrs: {
-                                            for: "exampleFormControlTextarea1"
-                                          }
-                                        },
-                                        [_vm._v("About")]
-                                      ),
-                                      _vm._v(" "),
-                                      _c("textarea", {
-                                        directives: [
-                                          {
-                                            name: "model",
-                                            rawName: "v-model",
-                                            value: _vm.event.about,
-                                            expression: "event.about"
-                                          }
-                                        ],
-                                        staticClass: "form-control",
-                                        attrs: {
-                                          id: "exampleFormControlTextarea1",
-                                          rows: "6",
-                                          required: ""
-                                        },
-                                        domProps: { value: _vm.event.about },
-                                        on: {
-                                          input: function($event) {
-                                            if ($event.target.composing) {
-                                              return
-                                            }
-                                            _vm.$set(
-                                              _vm.event,
-                                              "about",
-                                              $event.target.value
-                                            )
-                                          }
-                                        }
-                                      })
-                                    ]),
-                                    _vm._v(" "),
-                                    _c(
-                                      "div",
-                                      { staticClass: "input-group mb-3" },
-                                      [
-                                        _c(
-                                          "div",
-                                          {
-                                            staticClass: "input-group-prepend"
-                                          },
-                                          [
-                                            _c(
-                                              "span",
-                                              {
-                                                staticClass: "input-group-text"
-                                              },
-                                              [_vm._v(_vm._s(_vm.date))]
-                                            )
-                                          ]
-                                        ),
-                                        _vm._v(" "),
-                                        _c("datetime", {
-                                          attrs: {
-                                            type: "time",
-                                            id: "start",
-                                            format: "HH:mm",
-                                            "value-zone": "local",
-                                            "minute-step": 10,
-                                            required: ""
-                                          },
-                                          on: {
-                                            input: function($event) {
-                                              return _vm.parseDate(0)
-                                            }
-                                          },
-                                          model: {
-                                            value: _vm.start,
-                                            callback: function($$v) {
-                                              _vm.start = $$v
-                                            },
-                                            expression: "start"
-                                          }
-                                        }),
-                                        _vm._v(" "),
-                                        _vm._m(8)
-                                      ],
-                                      1
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "div",
-                                      { staticClass: "input-group mb-3" },
-                                      [
-                                        _c(
-                                          "div",
-                                          {
-                                            staticClass: "input-group-prepend"
-                                          },
-                                          [
-                                            _c(
-                                              "span",
-                                              {
-                                                staticClass: "input-group-text"
-                                              },
-                                              [_vm._v(_vm._s(_vm.date))]
-                                            )
-                                          ]
-                                        ),
-                                        _vm._v(" "),
-                                        _c("datetime", {
-                                          attrs: {
-                                            type: "time",
-                                            id: "end",
-                                            format: "HH:mm",
-                                            "value-zone": "local",
-                                            "minute-step": 10,
-                                            required: ""
-                                          },
-                                          on: {
-                                            input: function($event) {
-                                              return _vm.parseDate(1)
-                                            }
-                                          },
-                                          model: {
-                                            value: _vm.end,
-                                            callback: function($$v) {
-                                              _vm.end = $$v
-                                            },
-                                            expression: "end"
-                                          }
-                                        }),
-                                        _vm._v(" "),
-                                        _vm._m(9)
-                                      ],
-                                      1
-                                    ),
-                                    _vm._v(" "),
-                                    _c("div", { attrs: { id: "time_error" } })
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("div", { staticClass: "modal-footer" }, [
-                                    _c(
-                                      "button",
-                                      {
-                                        staticClass: "btn btn-secondary",
-                                        attrs: {
-                                          type: "button",
-                                          "data-dismiss": "modal"
-                                        }
-                                      },
-                                      [_vm._v("Close")]
-                                    ),
-                                    _vm._v(" "),
-                                    _vm.edit
-                                      ? _c(
-                                          "button",
-                                          {
-                                            staticClass:
-                                              "btn btn-success float-right",
-                                            attrs: {
-                                              id: "add_event_btn",
-                                              type: "submit"
-                                            }
-                                          },
-                                          [_vm._v(" Update ")]
-                                        )
-                                      : _c(
-                                          "button",
-                                          {
-                                            staticClass:
-                                              "btn btn-success float-right",
-                                            attrs: {
-                                              id: "add_event_btn",
-                                              type: "submit"
-                                            }
-                                          },
-                                          [
-                                            _vm._v("Add "),
-                                            _c("i", {
-                                              staticClass: "fas fa-plus"
-                                            })
-                                          ]
-                                        )
-                                  ])
-                                ])
-                              ]
-                            )
-                          ]
-                        )
-                      ]
                     )
-                  ]
-                )
-              ])
+                  ])
+                ]
+              )
             ]
           )
         ]
@@ -63047,6 +62989,47 @@ var staticRenderFns = [
           }
         },
         [_c("i", { staticClass: "fas fa-search" })]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "modal",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-append" }, [
+      _c(
+        "span",
+        { staticClass: "input-group-text", attrs: { id: "basic-addon2" } },
+        [_c("i", { staticClass: "far fa-clock" })]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-append" }, [
+      _c(
+        "span",
+        { staticClass: "input-group-text", attrs: { id: "basic-addon2" } },
+        [_c("i", { staticClass: "far fa-clock" })]
       )
     ])
   },
@@ -63128,10 +63111,13 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c(
       "div",
-      { staticClass: "alert alert-warning pb-5", attrs: { role: "alert" } },
+      {
+        staticClass: "alert alert-warning mt-3 pb-5",
+        attrs: { role: "alert" }
+      },
       [
         _vm._v(
-          "\n                                    If you want to join or add events you need to login / register."
+          "\n                            If you want to join or add events you need to login / register."
         ),
         _c("br"),
         _vm._v(" "),
@@ -63154,47 +63140,6 @@ var staticRenderFns = [
         )
       ]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "button",
-      {
-        staticClass: "close",
-        attrs: {
-          type: "button",
-          "data-dismiss": "modal",
-          "aria-label": "Close"
-        }
-      },
-      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "input-group-append" }, [
-      _c(
-        "span",
-        { staticClass: "input-group-text", attrs: { id: "basic-addon2" } },
-        [_c("i", { staticClass: "far fa-clock" })]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "input-group-append" }, [
-      _c(
-        "span",
-        { staticClass: "input-group-text", attrs: { id: "basic-addon2" } },
-        [_c("i", { staticClass: "far fa-clock" })]
-      )
-    ])
   }
 ]
 render._withStripped = true
@@ -83542,9 +83487,9 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Gmap_vue_vue_type_template_id_bdcfc800_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Gmap.vue?vue&type=template&id=bdcfc800&scoped=true& */ "./resources/js/components/Gmap.vue?vue&type=template&id=bdcfc800&scoped=true&");
+/* harmony import */ var _Gmap_vue_vue_type_template_id_bdcfc800___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Gmap.vue?vue&type=template&id=bdcfc800& */ "./resources/js/components/Gmap.vue?vue&type=template&id=bdcfc800&");
 /* harmony import */ var _Gmap_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Gmap.vue?vue&type=script&lang=js& */ "./resources/js/components/Gmap.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _Gmap_vue_vue_type_style_index_0_id_bdcfc800_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Gmap.vue?vue&type=style&index=0&id=bdcfc800&scoped=true&lang=css& */ "./resources/js/components/Gmap.vue?vue&type=style&index=0&id=bdcfc800&scoped=true&lang=css&");
+/* empty/unused harmony star reexport *//* harmony import */ var _Gmap_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Gmap.vue?vue&type=style&index=0&lang=css& */ "./resources/js/components/Gmap.vue?vue&type=style&index=0&lang=css&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -83556,11 +83501,11 @@ __webpack_require__.r(__webpack_exports__);
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
   _Gmap_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Gmap_vue_vue_type_template_id_bdcfc800_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Gmap_vue_vue_type_template_id_bdcfc800_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _Gmap_vue_vue_type_template_id_bdcfc800___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Gmap_vue_vue_type_template_id_bdcfc800___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
-  "bdcfc800",
+  null,
   null
   
 )
@@ -83586,35 +83531,35 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/Gmap.vue?vue&type=style&index=0&id=bdcfc800&scoped=true&lang=css&":
-/*!***************************************************************************************************!*\
-  !*** ./resources/js/components/Gmap.vue?vue&type=style&index=0&id=bdcfc800&scoped=true&lang=css& ***!
-  \***************************************************************************************************/
+/***/ "./resources/js/components/Gmap.vue?vue&type=style&index=0&lang=css&":
+/*!***************************************************************************!*\
+  !*** ./resources/js/components/Gmap.vue?vue&type=style&index=0&lang=css& ***!
+  \***************************************************************************/
 /*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Gmap_vue_vue_type_style_index_0_id_bdcfc800_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/style-loader!../../../node_modules/css-loader??ref--6-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--6-2!../../../node_modules/vue-loader/lib??vue-loader-options!./Gmap.vue?vue&type=style&index=0&id=bdcfc800&scoped=true&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Gmap.vue?vue&type=style&index=0&id=bdcfc800&scoped=true&lang=css&");
-/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Gmap_vue_vue_type_style_index_0_id_bdcfc800_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Gmap_vue_vue_type_style_index_0_id_bdcfc800_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Gmap_vue_vue_type_style_index_0_id_bdcfc800_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Gmap_vue_vue_type_style_index_0_id_bdcfc800_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
- /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Gmap_vue_vue_type_style_index_0_id_bdcfc800_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Gmap_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/style-loader!../../../node_modules/css-loader??ref--6-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--6-2!../../../node_modules/vue-loader/lib??vue-loader-options!./Gmap.vue?vue&type=style&index=0&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Gmap.vue?vue&type=style&index=0&lang=css&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Gmap_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Gmap_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Gmap_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Gmap_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Gmap_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
-/***/ "./resources/js/components/Gmap.vue?vue&type=template&id=bdcfc800&scoped=true&":
-/*!*************************************************************************************!*\
-  !*** ./resources/js/components/Gmap.vue?vue&type=template&id=bdcfc800&scoped=true& ***!
-  \*************************************************************************************/
+/***/ "./resources/js/components/Gmap.vue?vue&type=template&id=bdcfc800&":
+/*!*************************************************************************!*\
+  !*** ./resources/js/components/Gmap.vue?vue&type=template&id=bdcfc800& ***!
+  \*************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Gmap_vue_vue_type_template_id_bdcfc800_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./Gmap.vue?vue&type=template&id=bdcfc800&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Gmap.vue?vue&type=template&id=bdcfc800&scoped=true&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Gmap_vue_vue_type_template_id_bdcfc800_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Gmap_vue_vue_type_template_id_bdcfc800___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./Gmap.vue?vue&type=template&id=bdcfc800& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Gmap.vue?vue&type=template&id=bdcfc800&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Gmap_vue_vue_type_template_id_bdcfc800___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Gmap_vue_vue_type_template_id_bdcfc800_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Gmap_vue_vue_type_template_id_bdcfc800___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

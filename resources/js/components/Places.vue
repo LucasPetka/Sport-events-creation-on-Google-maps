@@ -5,7 +5,7 @@
     </div>
 
 
-    <div class="container-fluid position-fixed mt-5" style="z-index:2;">
+    <div class="container-fluid position-absolute" style="z-index:2;">
         <div class="row">
             <div class="col-4"></div>
             <div class="col-6">
@@ -51,7 +51,6 @@
 
             <div class="col-2"></div>
         </div>
-
     </div>
 
 
@@ -59,175 +58,179 @@
 
     <notifications group="foo" classes="my-style" ignoreDuplicates position="top left" />
 
+    <!--===================================================Add event Modal==================================================-->
+            <form @submit.prevent="addEvent">
+            <div class="modal fade" id="addEvent" tabindex="-1" role="dialog" aria-labelledby="addEventCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
 
+                            <h5 v-if="edit" class="modal-title" id="addEventLongTitle">Edit Event</h5>
+                            <h5 v-else class="modal-title" id="addEventLongTitle">Add Event</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Title</label>
+                                <input v-model="event.title" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter title" required>
+                            </div>
 
-    <!-- =====================================ADD NEW PLACE======================================================== -->
-                    <form @submit.prevent="addPlace">
-                        <div class="modal fade" id="addPlace" tabindex="-1" role="dialog" aria-labelledby="addPlaceCenterTitle" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="addPlaceLongTitle">Add new sport spot</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="input-group mb-3">
-                                        <input type="text" class="form-control" placeholder="Title" v-model="place.title">
-                                        </div>
+                            <div class="form-group">
+                                <label for="exampleFormControlTextarea1">About</label>
+                                <textarea v-model="event.about" class="form-control" id="exampleFormControlTextarea1" rows="6" required></textarea>
+                            </div>
 
-                                        <div class="input-group mb-3">
-                                            <textarea class="form-control" rows="6" placeholder="About..." v-model="place.about" ></textarea>
-                                        </div>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">{{ date }}</span>
+                                </div>
 
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <label class="input-group-text" for="inputGroupSelect01">Sport</label>
-                                            </div>
+                                <datetime type="time" id="start" v-model="start" format="HH:mm" :value-zone="'local'" :minute-step="10" v-on:input="parseDate(0)" required></datetime>
                             
-                                            <select class="custom-select" id="inputGroupSelect01" v-model="place.type">
-                                                <option v-for="type in allTypes.data" :key="type.id" :value="type.id"> {{ type.name }}</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-success float-right">Add <i class="fas fa-plus"></i></button>
-                                    </div>
+                                <div class="input-group-append">
+                                    <span class="input-group-text" id="basic-addon2"><i class="far fa-clock"></i></span>
                                 </div>
                             </div>
-                        </div>
-                    </form>
-    <!--=======================================================================================================================================-->
 
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">{{ date }}</span>
+                                </div>
 
-        <div class="row" style="width:100%; padding:0; margin:0;">
-            <div id="map" class="col-lg-12 p-0">
-                <Gmap v-bind:status='status' v-on:showSpot="showSpot($event)" v-on:openForm="openAdd($event)" ref="gmapp"> </Gmap>  
-            </div>
-
-            <div id="side" class="col-lg-0 p-0 mt-5" style="display:none;">
-                <div id="sidebar">
-
-                <!-- ==========================================SHOW SPOT INFO========================================================= -->
-               
-                    <div id="show" class="show" style="display:none; width:100%; height:auto; padding-bottom:270px;" >
-                       
-                            
-                        <div class="d-flex flex-column bd-highlight mb-3">
-                            <div class="p-4 bd-highlight">
-                                <button type="button" id="close_show" v-on:click="closeShow()" class="close" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                                <datetime  type="time" id="end" v-model="end" format="HH:mm" :value-zone="'local'" :minute-step="10" v-on:input="parseDate(1)" required></datetime>
                                 
-                                <div v-if="this.type.image">
-                                    <h3> <img :src="'../../../storage/sport_logo/'+ this.type.image"> {{ show.title }} </h3>
-                                </div>
-
-                                <hr>
-
-                                <div class="card-body">
-                                    <p class="card-text">{{ show.about }}</p>
-                                    <hr class="mt-4">
-                                    <p class="float-right"> 
-                                        <i class="fas fa-road"></i> 
-                                        <small>This place is {{ measured_distance }} km from you</small>
-                                        <a :href="'https://www.google.co.uk/maps/dir//'+show.lat+','+show.lng" target="_blank" class="badge badge-dark ml-3"><i class="fas fa-map-marker-alt"></i> Show directions</a>
-                                    </p>
-                                </div>
-
-                                <span v-if="currentUser">
-                                    <button v-if="currentUser.isAdmin == 1" v-on:click="deletePlace(show.id)" class="btn btn-danger m-2"> <i class="fas fa-times"></i> Delete place</button>
-                                </span>
-                            </div>
-                        </div>
-                        
-                        
-                        <div class="card m-3 width:100%; height:100%;">
-                            <div class="card-header ">
-                                <h6>Events</h6>  
-                            </div>
-                            <div class="card-body">
-                                <Calendar v-bind:status='status' v-on:openAddEvent="openAddEvent()" v-bind:currentUser='currentUser' v-on:editEvent="editEvent($event)" v-on:getDate="getDate($event)" v-on:closeAdd="closeAddEvent()" ref="calendar"> </Calendar>
-                                <div v-if="this.status === 1">
-                                    <!--<button v-on:click="openAddEvent()" class="btn btn-outline-success pt-2 pb-2 pr-4 pl-4 float-right">Add Event <i class="fas fa-plus"></i></button>-->
-                                </div>
-                                <div v-else>
-                                    <div class="alert alert-warning pb-5" role="alert">
-                                    If you want to join or add events you need to login / register.<br>
-                                    <a href ="/register" class="btn btn-outline-secondary float-right ml-2">Register</a>
-                                    <a href ="/login"  class="btn btn-outline-secondary float-right mr-2">Login</a>
-                                    </div>
+                                <div class="input-group-append">
+                                    <span class="input-group-text" id="basic-addon2"><i class="far fa-clock"></i></span>
                                 </div>
                             </div>
+
+                            <div id="time_error"></div>
                         </div>
 
-
-
-                        <!--===================================================Add event Modal==================================================-->
-                        <form @submit.prevent="addEvent">
-                        <div class="modal fade" id="addEvent" tabindex="-1" role="dialog" aria-labelledby="addEventCenterTitle" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-
-                                        <h5 v-if="edit" class="modal-title" id="addEventLongTitle">Edit Event</h5>
-                                        <h5 v-else class="modal-title" id="addEventLongTitle">Add Event</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="form-group">
-                                            <label for="exampleInputEmail1">Title</label>
-                                            <input v-model="event.title" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter title" required>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="exampleFormControlTextarea1">About</label>
-                                            <textarea v-model="event.about" class="form-control" id="exampleFormControlTextarea1" rows="6" required></textarea>
-                                        </div>
-
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text">{{ date }}</span>
-                                            </div>
-
-                                            <datetime type="time" id="start" v-model="start" format="HH:mm" :value-zone="'local'" :minute-step="10" v-on:input="parseDate(0)" required></datetime>
-                                        
-                                            <div class="input-group-append">
-                                                <span class="input-group-text" id="basic-addon2"><i class="far fa-clock"></i></span>
-                                            </div>
-                                        </div>
-
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text">{{ date }}</span>
-                                            </div>
-
-                                            <datetime  type="time" id="end" v-model="end" format="HH:mm" :value-zone="'local'" :minute-step="10" v-on:input="parseDate(1)" required></datetime>
-                                            
-                                            <div class="input-group-append">
-                                                <span class="input-group-text" id="basic-addon2"><i class="far fa-clock"></i></span>
-                                            </div>
-                                        </div>
-
-                                        <div id="time_error"></div>
-                                    </div>
-
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button v-if="edit" id="add_event_btn" type="submit" class="btn btn-success float-right"> Update </button>
-                                        <button v-else id="add_event_btn" type="submit" class="btn btn-success float-right">Add <i class="fas fa-plus"></i></button>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button v-if="edit" id="add_event_btn" type="submit" class="btn btn-success float-right"> Update </button>
+                            <button v-else id="add_event_btn" type="submit" class="btn btn-success float-right">Add <i class="fas fa-plus"></i></button>
                         </div>
-                        </form>
-
                     </div>
                 </div>
             </div>
+            </form>
+
+    <!-- =====================================ADD NEW PLACE MODAL======================================================== -->
+            <form @submit.prevent="addPlace">
+                <div class="modal fade" id="addPlace" tabindex="-1" role="dialog" aria-labelledby="addPlaceCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addPlaceLongTitle">Add new sport spot</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Title" v-model="place.title">
+                                </div>
+
+                                <div class="input-group mb-3">
+                                    <textarea class="form-control" rows="6" placeholder="About..." v-model="place.about" ></textarea>
+                                </div>
+
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <label class="input-group-text" for="inputGroupSelect01">Sport</label>
+                                    </div>
+                    
+                                    <select class="custom-select" id="inputGroupSelect01" v-model="place.type">
+                                        <option v-for="type in allTypes.data" :key="type.id" :value="type.id"> {{ type.name }}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-success float-right">Add <i class="fas fa-plus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+    <!--=======================================================================================================================================-->
+
+
+        <div class="row full-height justify-content-end" style="width:100%; height:100%; padding:0; margin:0;">
+            <div id="map">
+                <Gmap v-bind:status='status' v-on:showSpot="showSpot($event)" v-on:openForm="openAdd($event)" ref="gmapp"> </Gmap>  
+            </div>
+
+            <!-- ==========================================SHOW SPOT INFO========================================================= -->
+    
+
+            <div id="show" class="show col-lg-4 col-sm-12 position-fixed" style="display:none; z-index:50;">
+            
+            <div class="card shadow-lg mt-4" style="height:85vh;">
+            <div class="card-body overflow-auto">
+
+                <div class="d-flex flex-column bd-highlight mb-3">
+                    <div class="p-4 bd-highlight">
+                        <button type="button" id="close_show" v-on:click="closeShow()" class="close" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                        
+                        <div v-if="this.type.image">
+                            <h3> <img :src="'../../../storage/sport_logo/'+ this.type.image"> {{ show.title }} </h3>
+                        </div>
+
+                        <hr>
+
+                        <div class="card-body">
+                            <p class="card-text">{{ show.about }}</p>
+                            <hr class="mt-4">
+                            <p class="float-right"> 
+                                <i class="fas fa-road"></i> 
+                                <small>This place is {{ measured_distance }} km from you</small>
+                                <a :href="'https://www.google.co.uk/maps/dir//'+show.lat+','+show.lng" target="_blank" class="badge badge-dark ml-3"><i class="fas fa-map-marker-alt"></i> Show directions</a>
+                            </p>
+                        </div>
+
+                        <span v-if="currentUser">
+                            <button v-if="currentUser.isAdmin == 1" v-on:click="deletePlace(show.id)" class="btn btn-danger m-2"> <i class="fas fa-times"></i> Delete place</button>
+                        </span>
+                    </div>
+                </div>
+                
+                
+                <div class="card m-3 width:100%; height:100%;">
+                    <div class="card-header ">
+                        <h6>Events</h6>  
+                    </div>
+                    <div class="card-body">
+                        <Calendar v-bind:status='status' v-on:openAddEvent="openAddEvent()" v-bind:currentUser='currentUser' v-on:editEvent="editEvent($event)" v-on:getDate="getDate($event)" v-on:closeAdd="closeAddEvent()" ref="calendar"> </Calendar>
+                        <div v-if="this.status === 1">
+                            <!--<button v-on:click="openAddEvent()" class="btn btn-outline-success pt-2 pb-2 pr-4 pl-4 float-right">Add Event <i class="fas fa-plus"></i></button>-->
+                        </div>
+                        <div v-else>
+                            <div class="alert alert-warning mt-3 pb-5" role="alert">
+                            If you want to join or add events you need to login / register.<br>
+                            <a href ="/register" class="btn btn-outline-secondary float-right ml-2">Register</a>
+                            <a href ="/login"  class="btn btn-outline-secondary float-right mr-2">Login</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+            </div>
+            </div>
+
+
+        </div>
+
+
+
+            
+
         </div>
 
    
@@ -322,20 +325,12 @@ export default {
     
     //Closes sidebar
     openShow: function(){
-        $("#map").removeClass("col-lg-12");
-        $("#map").addClass("col-lg-8");
-        $("#side").removeClass("col-lg-0");
-        $('#side').show();
-        $("#side").addClass("col-lg-4");
+        
     },
 
     //Closes sidebar
     closeShow: function(){
-        $("#map").removeClass("col-lg-8");
-        $("#map").addClass("col-lg-12");
-        $("#side").removeClass("col-lg-4");
-        $('#side').hide();
-        $("#side").addClass("col-lg-0");
+        $("#show").slideUp("slow");
     },
 
     //------------------------Opens PLACE ADD label-----------------------------
@@ -622,9 +617,34 @@ export default {
 
 <style>
 
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
 #time_error{
     margin-top: -15px;
     margin-left: 110px;
+}
+
+#map {
+    width: 100% !important; 
+    height:100% !important;
 }
 
 .my-style {
@@ -707,6 +727,7 @@ export default {
 
 #map {
     width: 100% !important; 
+    height:100% !important;
 }
 #show{
     width: 95% !important; 

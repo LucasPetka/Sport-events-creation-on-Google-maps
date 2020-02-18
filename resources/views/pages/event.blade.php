@@ -28,6 +28,15 @@
         <div class="card mb-3">
             <div class="card-body">
                 {{ $event->about }}
+                <hr>
+                <span class="float-left">
+                    <i class="far fa-calendar-alt"></i> {{ Carbon\Carbon::parse($event->time_from)->format('Y-m-d') }}
+                </span>
+                <span class="float-right">
+                    <i class="far fa-clock"></i> 
+                    {{ Carbon\Carbon::parse($event->time_from)->format('H:i') }}
+                    - {{ Carbon\Carbon::parse($event->time_until)->format('H:i') }}
+                </span>
             </div>
         </div>
 

@@ -59,4 +59,5 @@ class HomeController extends Controller
 
         return view('home')->with(compact('user', 'createdevents', 'goingtoevents', 'accepted_places', 'submited_places', 'declined_places'));
     }
+
 }

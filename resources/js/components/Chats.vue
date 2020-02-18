@@ -1,7 +1,40 @@
 <template>
 
 <div>
-<p><b> <i class="fas fa-user"></i> {{ people_going.length }} people going </b></p>
+
+<!-- People going MODAL -->
+<div class="modal fade" id="people_going" tabindex="-1" role="dialog" aria-labelledby="people_goingTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">People Going</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item" v-for="user in people_going" :key="user.id">
+                <a class="nav-link m-0 p-0" target="_blank" :href="'/user/' + user.person_id.auth_id">
+                    <span v-if="user.person_id.provider == null">
+                        <img class="rounded-circle" :src="'../../../images/avatars/'+user.person_id.avatar" width="30" height="30" alt="">
+                    </span>
+                    <span v-else>
+                        <img class="rounded-circle" :src="user.person_id.avatar" width="30" height="30" alt="">
+                    </span>
+                    {{ user.person_id.name }} 
+                </a> 
+            </li>
+        </ul>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<p><b> <a href="#" data-toggle="modal" data-target="#people_going"> <i class="fas fa-user"></i> {{ people_going.length }} people going </a></b></p>
 
 <div class="row">
 

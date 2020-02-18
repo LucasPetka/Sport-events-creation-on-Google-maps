@@ -2652,6 +2652,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 
@@ -2710,7 +2711,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.people_going.forEach(myFunction);
 
       function myFunction(person, index) {
-        if (person.place_id == place && person.event_id == event && person.person_id == user) {
+        if (person.place_id == place && person.event_id == event && person.person_id.id == user) {
           ans = 1;
         } else {
           if (ans == 1) {
@@ -2848,7 +2849,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this6 = this;
 
       var first = this.people_going.filter(function (oneper) {
-        return oneper.person_id == person;
+        return oneper.person_id.id == person;
       });
       var second = first.filter(function (oneper) {
         return oneper.event_id == event;
@@ -2919,6 +2920,39 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -61507,7 +61541,12 @@ var render = function() {
                       _vm._v("Event created by "),
                       _c(
                         "a",
-                        { attrs: { href: "/user/" + event.person_id.auth_id } },
+                        {
+                          attrs: {
+                            target: "_blank",
+                            href: "/user/" + event.person_id.auth_id
+                          }
+                        },
                         [_vm._v(_vm._s(event.person_id.name))]
                       )
                     ]
@@ -61648,10 +61687,108 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "people_going",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "people_goingTitle",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          {
+            staticClass: "modal-dialog modal-dialog-centered",
+            attrs: { role: "document" }
+          },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c(
+                  "ul",
+                  { staticClass: "list-group list-group-flush" },
+                  _vm._l(_vm.people_going, function(user) {
+                    return _c(
+                      "li",
+                      { key: user.id, staticClass: "list-group-item" },
+                      [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "nav-link m-0 p-0",
+                            attrs: {
+                              target: "_blank",
+                              href: "/user/" + user.person_id.auth_id
+                            }
+                          },
+                          [
+                            user.person_id.provider == null
+                              ? _c("span", [
+                                  _c("img", {
+                                    staticClass: "rounded-circle",
+                                    attrs: {
+                                      src:
+                                        "../../../images/avatars/" +
+                                        user.person_id.avatar,
+                                      width: "30",
+                                      height: "30",
+                                      alt: ""
+                                    }
+                                  })
+                                ])
+                              : _c("span", [
+                                  _c("img", {
+                                    staticClass: "rounded-circle",
+                                    attrs: {
+                                      src: user.person_id.avatar,
+                                      width: "30",
+                                      height: "30",
+                                      alt: ""
+                                    }
+                                  })
+                                ]),
+                            _vm._v(
+                              "\n                    " +
+                                _vm._s(user.person_id.name) +
+                                " \n                "
+                            )
+                          ]
+                        )
+                      ]
+                    )
+                  }),
+                  0
+                )
+              ])
+            ])
+          ]
+        )
+      ]
+    ),
+    _vm._v(" "),
     _c("p", [
       _c("b", [
-        _c("i", { staticClass: "fas fa-user" }),
-        _vm._v(" " + _vm._s(_vm.people_going.length) + " people going ")
+        _c(
+          "a",
+          {
+            attrs: {
+              href: "#",
+              "data-toggle": "modal",
+              "data-target": "#people_going"
+            }
+          },
+          [
+            _c("i", { staticClass: "fas fa-user" }),
+            _vm._v(" " + _vm._s(_vm.people_going.length) + " people going ")
+          ]
+        )
       ])
     ]),
     _vm._v(" "),
@@ -61782,7 +61919,33 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "h5",
+        { staticClass: "modal-title", attrs: { id: "exampleModalLongTitle" } },
+        [_vm._v("People Going")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  }
+]
 render._withStripped = true
 
 

@@ -295,17 +295,13 @@
                                                 <hr>
                                                     <table class="w-100">
                                                         <tr>
-                                                        <td><i class="far fa-clock"></i> From</td>
-                                                        <td class="pl-3">{{ Carbon\Carbon::parse($event->time_from)->format('H:i') }}</td>
+                                                        <td><i class="far fa-clock"></i></td>
+                                                        <td class="pl-"><i class="far fa-calendar-alt"></i> {{ Carbon\Carbon::parse($event->time_from)->format('H:i') }} - {{ Carbon\Carbon::parse($event->time_until)->format('H:i') }}</td>
                                                         <td rowspan="2">
                                                         <button type="button" class="btn btn-outline-success btn-lg float-right" data-toggle="modal" data-target="#created_map{{ $event->place->id }}">
                                                             <i class="fas fa-map-marked-alt"></i>
                                                         </button>
                                                         </td>
-                                                        </tr>
-                                                        <tr>
-                                                        <td><i class="far fa-clock"></i> To</td>
-                                                        <td class="pl-3">{{ Carbon\Carbon::parse($event->time_until)->format('H:i') }}</td>
                                                         </tr>
                                                     </table>
                                             </div>
@@ -354,21 +350,17 @@
                                             <div class="col-6">
                                                 <hr>
                                                     {{ $diff = Carbon\Carbon::parse($event->time_from)->diffForHumans(Carbon\Carbon::now()) }} 
-                                                    <div class="float-right"> {{ Carbon\Carbon::parse($event->time_from)->format('Y-m-d') }}  </div>                                
+                                                    <div class="float-right"><i class="far fa-calendar-alt"></i> {{ Carbon\Carbon::parse($event->time_from)->format('Y-m-d') }}  </div>                                
                                                 <hr>
                                                     <table class="w-100">
                                                         <tr>
-                                                        <td><i class="far fa-clock"></i> From</td>
-                                                        <td class="pl-3">{{ Carbon\Carbon::parse($event->time_from)->format('H:i') }}</td>
+                                                        <td><i class="far fa-clock"></i></td>
+                                                        <td class="pl-1">{{ Carbon\Carbon::parse($event->time_from)->format('H:i') }} - {{ Carbon\Carbon::parse($event->time_until)->format('H:i') }}</td>
                                                         <td rowspan="2">
                                                         <button type="button" class="btn btn-outline-success btn-lg float-right" data-toggle="modal" data-target="#going_map{{ $event->place->id }}">
                                                             <i class="fas fa-map-marked-alt"></i>
                                                         </button>
                                                         </td>
-                                                        </tr>
-                                                        <tr>
-                                                        <td><i class="far fa-clock"></i> To</td>
-                                                        <td class="pl-3">{{ Carbon\Carbon::parse($event->time_until)->format('H:i') }}</td>
                                                         </tr>
                                                     </table>
                                             </div>

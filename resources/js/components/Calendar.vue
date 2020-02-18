@@ -21,7 +21,7 @@
                     <p class="card-text">{{ event.about }}</p>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">Start: {{ returnTime(event.time_from)  }} <br> End: {{ returnTime(event.time_until) }}</li>
-                        <li class="list-group-item card-subtitle mb-2 text-muted">Event created by <a :href="'/user/' + event.person_id.auth_id">{{ event.person_id.name }}</a></li>
+                        <li class="list-group-item card-subtitle mb-2 text-muted">Event created by <a target="_blank" :href="'/user/' + event.person_id.auth_id">{{ event.person_id.name }}</a></li>
                     </ul>
 
                     <div v-if="status === 1">
@@ -50,8 +50,9 @@
 
 
             </div>
-        </template>    
-</template>
+            </div>
+</template>    
+
 
 <script>
 import Datepicker from 'vuejs-datepicker';
@@ -131,7 +132,7 @@ export default {
             this.people_going.forEach(myFunction);
             function myFunction(person, index) {
 
-                if(person.place_id == place && person.event_id == event && person.person_id == user){
+                if(person.place_id == place && person.event_id == event && person.person_id.id == user){
                     ans = 1;
 
                 } else{
@@ -282,7 +283,7 @@ export default {
         //Delete person from event
         deletePerson: function(place, event, person, but) {
 
-            const first = this.people_going.filter( oneper => oneper.person_id == person);
+            const first = this.people_going.filter( oneper => oneper.person_id.id == person);
             const second = first.filter( oneper => oneper.event_id == event);
             const third = second.filter( oneper => oneper.place_id == place);
 

@@ -598,7 +598,6 @@ export default {
         this.event.about = '';
         this.event.time_from = '';
         this.event.time_until = '';
-        this.event.organizator = '';
         this.event.person_id = '';
 
 

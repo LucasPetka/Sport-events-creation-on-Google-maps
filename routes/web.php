@@ -21,8 +21,8 @@ Auth::routes(['verify' => true]);
 Route::get('/', 'PagesController@index');
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::post('/resubmit/{id}', 'Places\DeclinedPlacesController@update')->middleware('auth');
-Route::delete('/decplace/{id}', 'Places\DeclinedPlacesController@destroy')->middleware('auth');
+Route::post('/resubmit/{id}', 'DeclinedPlacesController@update')->middleware('auth');
+Route::delete('/decplace/{id}', 'DeclinedPlacesController@destroy')->middleware('auth');
 
 
 

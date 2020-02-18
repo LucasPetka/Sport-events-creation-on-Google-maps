@@ -23,8 +23,15 @@ class EventController extends Controller
     public function index()
     {
         $events = Event::with('user')->get();
-
         //Return collection as a resource
+        return EventResource::collection($events);
+    }
+
+    public function get_events_by_place($id)
+    {
+        $events = Event::with('user')->where('place_id', $id)->get();
+        
+
         return EventResource::collection($events);
     }
 
@@ -39,7 +46,6 @@ class EventController extends Controller
         $event->about = $request->input('about');
         $event->time_from = $request->input('time_from');
         $event->time_until = $request->input('time_until');
-        $event->organizator = $request->input('organizator');
         $event->person_id = Auth::id();
 
         if($event->save()){

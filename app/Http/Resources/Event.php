@@ -22,7 +22,6 @@ class Event extends JsonResource
             'about' => $this->about,
             'time_from' => $this->time_from,
             'time_until' => $this->time_until,
-            'organizator' => $this->organizator,
             'person_id' => User::findOrFail($this->person_id),
 
         ];

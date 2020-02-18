@@ -1,8 +1,11 @@
 <template>
     <div class="container-fluid">
-                <gmap-map :center="getPosition()" v-bind:options="mapStyle" :zoom="14" :style="size">
-                    <gmap-marker :position="getPosition()"></gmap-marker>
+                <gmap-map :center="center" v-bind:options="mapStyle" :zoom="14" :style="size">
+                    <gmap-marker :draggable="drag" @drag="updateCoordinates" :position="coords"></gmap-marker>
                 </gmap-map>
+
+                <input type="hidden" id="lat" name="lat" :value="coords.lat">
+                <input type="hidden" id="lng" name="lng" :value="coords.lng">
     </div>
 </template>
 
@@ -12,12 +15,15 @@ import mapstyle from '../assets/options.json'
 
 export default {
 
-    props: ['place', 'size'],
+    props: ['place', 'size', 'drag'],
 
     data() {
         return {
         center: { lat: 55.205448395768826, lng: 23.930382446707117 }, //the center of the map "LITHUANIA"
-        
+        coords:{
+            lat: 0,
+            lng: 0
+        },
         mapStyle: {
         styles: mapstyle,
         options:{
@@ -33,19 +39,29 @@ export default {
     },
 
     mounted() {
+
+
+
+        this.center = {
+                lat: parseFloat(this.$props.place.lat),
+                lng: parseFloat(this.$props.place.lng)
+        };
+
+        this.coords = {
+                lat: parseFloat(this.$props.place.lat),
+                lng: parseFloat(this.$props.place.lng)
+        };
     
     },
 
     methods: {
 
-        getPosition: function() { 
-        return {
-            lat: parseFloat(this.$props.place.lat),
-            lng: parseFloat(this.$props.place.lng)
-        }
-
-
-    },
+    updateCoordinates(location) {
+            this.coords = {
+                lat: location.latLng.lat(),
+                lng: location.latLng.lng(),
+            };
+        },
 
     }
 };

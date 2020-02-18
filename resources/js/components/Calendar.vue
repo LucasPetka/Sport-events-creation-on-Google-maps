@@ -16,7 +16,7 @@
 
                 <div v-for="event in show_events" v-bind:key="event.id" class="card mt-3"  style="width: 90%; margin-left:auto; margin-right:auto;">
                 <div class="card-body">
-                    <h5 class="card-title"> <a :href="'event/' + event.id"> {{ event.title }} </a></h5>
+                    <h5 class="card-title"> <a target="_blank" :href="'event/' + event.id"> {{ event.title }} </a></h5>
                     <h6 class="card-subtitle mb-3 text-muted">{{ countPeopleGoing(event.id) }} people going</h6>
                     <p class="card-text">{{ event.about }}</p>
                     <ul class="list-group list-group-flush">
@@ -33,7 +33,7 @@
                         </div>
                     
 
-                        <div v-if="currentUser.id == event.person_id">
+                        <div v-if="currentUser.id == event.person_id.id">
                             <button type="button" class="btn btn-danger float-right ml-2" v-on:click="deleteEvent(event.id)"> <i class="fas fa-trash-alt"></i> </button>
                             <button type="button" class="btn btn-primary float-right" v-on:click="editEvent(event.id)" > <i class="far fa-edit"></i> </button>
                         </div>
@@ -191,7 +191,7 @@ export default {
 
             this.place_id = id; // gets the place where we looking at
 
-            fetch('api/events')
+            fetch('api/events/' + id)
             .then(res => res.json())
             .then(res => {
             

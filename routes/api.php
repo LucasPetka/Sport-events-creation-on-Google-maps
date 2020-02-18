@@ -43,6 +43,8 @@ Route::group(['middleware' => 'auth:api'], function() {
 
     //List Events
     Route::get('events', 'EventController@index');
+    //List Events by place
+    Route::get('events/{id}', 'EventController@get_events_by_place');
     //Get Event
     Route::get('event/{id}', 'EventController@show');
 

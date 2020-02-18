@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mt-5">
+<div class="container">
     
     <div class="row justify-content-center">
         <h1 class="display-4 mt-5">Profile</h1>
@@ -22,18 +22,21 @@
                     <div class="row">
                         <div class="col-sm-12 col-md-3 col-lg-3">
                             <figure class="figure">
+
                                 @if (isset($user->provider))
                                     <img src="http://graph.facebook.com/{{ $user->provider_id }}/picture?type=large" class="figure-img img-fluid img-thumbnail" width="180px" height="180px" alt="profile-photo">
                                 @else
                                     <img src="images/avatars/{{ $user->avatar }}" class="figure-img img-fluid img-thumbnail" width="180px" height="180px" alt="profile-photo">
                                 @endif
-                                <figcaption class="figure-caption">{{ $user->name }}</figcaption>
+                                    <figcaption class="figure-caption">{{ $user->name }}</figcaption>
+
                                 @if ($user->isAdmin === 1)
-                                <figcaption class="figure-caption"><a href="/admin"><b>Admin panel</b></a></figcaption>
+                                    <figcaption class="figure-caption"><a href="/admin"><b>Admin panel</b></a></figcaption>
                                 @else
-                                <figcaption class="figure-caption">User</figcaption>
+                                    <figcaption class="figure-caption">User</figcaption>
                                 @endif
-                                <figcaption> <a href="#" class="badge badge-success"><i class="fas fa-user-edit"></i> Edit profile </a> </figcaption>
+                                    <figcaption> <a href="#" class="badge badge-success"><i class="fas fa-user-edit"></i> Update profile </a> </figcaption>
+
                             </figure>
                         </div>
                         <div class="col-sm-12 col-md-9 col-lg-9">
@@ -52,12 +55,12 @@
                                   <tr>
                                     <th scope="row">Verified</th>
                                     @if (isset($user->email_verified_at))
-                                    <td> Verified ({{ $user->email_verified_at }})</td>
+                                        <td> Verified ({{ $user->email_verified_at }})</td>
                                     @else
-                                    <td> 
-                                        Not verified 
-                                        <a class="btn btn-primary float-right mr-5" href="/email/resend" role="button"> <i class="far fa-envelope"></i> Send verification email</a>
-                                    </td>   
+                                        <td> 
+                                            Not verified 
+                                            <a class="btn btn-primary float-right mr-5" href="/email/resend" role="button"> <i class="far fa-envelope"></i> Send verification email</a>
+                                        </td>   
                                     @endif
                                   </tr>
                                 </tbody>
@@ -175,7 +178,7 @@
                                     </div>
                                     @endforeach
                                 @else
-                                    <p class="text-center mt-4 text-muted"> No submited places.. </p> 
+                                    <p class="text-center mt-4 text-muted"> No accepted places.. </p> 
                                 @endif
                             </div>
 
@@ -204,29 +207,10 @@
                                                     <button type="button" class="btn btn-outline-primary btn-lg float-right m-1" data-toggle="modal" data-target="#editPlace{{ $place->id }}">
                                                         <i class="far fa-edit"></i>
                                                     </button>
-                                                    <button type="button" class="btn btn-outline-success btn-lg float-right m-1" data-toggle="modal" data-target="#decline_map{{ $place->id }}">
-                                                        <i class="fas fa-map-marked-alt"></i>
-                                                    </button>
                                                 </div>
                                                 
-                                                <!------------------------------------------MAP MODAL-------------------------------------->
-                                                <div class="modal fade" id="decline_map{{ $place->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                                        <div class="modal-content">
-                                                        <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLongTitle">{{ $place->title}}</h5>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <SmallMap v-bind:place='{{ $place }}' v-bind:size='"width:auto; height: 450px;"'> </SmallMap>
-                                                        </div>  
-                                                        </div>
-                                                    </div>
-                                                </div>
 
-                                                <!------------------------------------------EDIT MODAL-------------------------------------->
+                                                <!------------------------------------------Re-submit MODAL-------------------------------------->
                                                 {!! Form::open(['action' => ['DeclinedPlacesController@update', $place->id], 'method' => 'POST']) !!}
                                                 <div class="modal fade" id="editPlace{{ $place->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -247,6 +231,8 @@
                                                                     {{Form::label('about', 'About')}}
                                                                     {{Form::textarea('about', $place->about, ['class' => 'form-control', 'placeholder' => 'About', 'rows'=> '6'])}}
                                                                 </div>
+
+                                                                <SmallMap v-bind:place='{{ $place }}' v-bind:drag='true' v-bind:size='"width:auto; height: 350px;"'> </SmallMap>
                                                             
                                                         </div>
                                                         <div class="modal-footer">
@@ -279,7 +265,7 @@
                                 @foreach ($createdevents as  $event)
                                 <div class="card mb-3">
                                     <div class="card-header">
-                                      {{ $event->title }}
+                                        <img src="../storage/sport_logo/{{ $event->place->typee->image }}" alt="{{ $event->place->typee->name }}">  {{ $event->title }}
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
@@ -311,7 +297,7 @@
                                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                                     <div class="modal-content">
                                                     <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLongTitle">{{ $event->place->title}}</h5>
+                                                    <h5 class="modal-title" id="exampleModalLongTitle"><img src="../storage/sport_logo/{{ $event->place->typee->image }}" alt="{{ $event->place->typee->name }}"> {{ $event->place->title}}</h5>
                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                         </button>
@@ -338,7 +324,7 @@
                                 @foreach ($goingtoevents as  $event)
                                 <div class="card mb-3">
                                     <div class="card-header">
-                                      {{ $event->title }}
+                                        <img src="../storage/sport_logo/{{ $event->place->typee->image }}" alt="{{ $event->place->typee->name }}"> {{ $event->title }}
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
@@ -370,7 +356,7 @@
                                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                                     <div class="modal-content">
                                                     <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLongTitle">{{ $event->place->title}}</h5>
+                                                    <h5 class="modal-title" id="exampleModalLongTitle"><img src="../storage/sport_logo/{{ $event->place->typee->image }}" alt="{{ $event->place->typee->name }}"> {{ $event->place->title}}</h5>
                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                         </button>
@@ -392,10 +378,6 @@
 
                     </div>
                 </div>
-                
-
-
-
             </div>
         </div>
     </div>

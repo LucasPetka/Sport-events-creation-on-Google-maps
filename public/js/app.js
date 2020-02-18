@@ -2763,7 +2763,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.place_id = id; // gets the place where we looking at
 
-      fetch('api/events').then(function (res) {
+      fetch('api/events/' + id).then(function (res) {
         return res.json();
       }).then(function (res) {
         //Shows all events which are on that spot and and that day
@@ -4083,7 +4083,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.event.about = '';
       this.event.time_from = '';
       this.event.time_until = '';
-      this.event.organizator = '';
       this.event.person_id = '';
     },
     sort_places: function sort_places() {
@@ -4113,9 +4112,12 @@ var _assets_options_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/_
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['place', 'size'],
+  props: ['place', 'size', 'drag'],
   data: function data() {
     return {
       center: {
@@ -4123,6 +4125,10 @@ var _assets_options_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/_
         lng: 23.930382446707117
       },
       //the center of the map "LITHUANIA"
+      coords: {
+        lat: 0,
+        lng: 0
+      },
       mapStyle: {
         styles: _assets_options_json__WEBPACK_IMPORTED_MODULE_0__,
         options: {
@@ -4135,12 +4141,21 @@ var _assets_options_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/_
       }
     };
   },
-  mounted: function mounted() {},
+  mounted: function mounted() {
+    this.center = {
+      lat: parseFloat(this.$props.place.lat),
+      lng: parseFloat(this.$props.place.lng)
+    };
+    this.coords = {
+      lat: parseFloat(this.$props.place.lat),
+      lng: parseFloat(this.$props.place.lng)
+    };
+  },
   methods: {
-    getPosition: function getPosition() {
-      return {
-        lat: parseFloat(this.$props.place.lat),
-        lng: parseFloat(this.$props.place.lng)
+    updateCoordinates: function updateCoordinates(location) {
+      this.coords = {
+        lat: location.latLng.lat(),
+        lng: location.latLng.lng()
       };
     }
   }
@@ -10666,7 +10681,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* width */\n::-webkit-scrollbar {\n  width: 10px;\n}\n\n/* Track */\n::-webkit-scrollbar-track {\n  background: #f1f1f1;\n}\n \n/* Handle */\n::-webkit-scrollbar-thumb {\n  background: #888;\n}\n\n/* Handle on hover */\n::-webkit-scrollbar-thumb:hover {\n  background: #555;\n}\n#time_error{\n    margin-top: -15px;\n    margin-left: 110px;\n}\n#map {\n    width: 100% !important; \n    height:100% !important;\n}\n.my-style {\n    padding: 15px;\n    margin-top: 65px;\n    margin-left: 10px;\n    width: 290px;\n \n    font-size: 14px;\n    border-radius: 5px;\n    border-left: solid rgb(99, 156, 88) 5px;\n\n\n    color: #ffffff;\n    background: #82CC75;\n}\n.success {\n    background: #82CC75;\n}\n.error {\n    background: #DC4146;\n}\n#sidebar{\n    height: 94vh;\n    overflow-y: auto;\n}\n#geras{\n    position: absolute;\n    color:white;\n    font-size: 25px;\n    opacity: 0.1;\n}\n#search_button{\n    z-index: 50;\n}\n#places_sort{\n    z-index: 51;\n    width:100%;\n}\n#loading-screen {\n    z-index: 100;\n    position: absolute; top: 0; right: 0; bottom: 0; left: 0;\n    background-color: #82cc75;\n}\n.vdatetime-input{\n    border-radius: 0px;\n    box-shadow: none !important;\n    border: solid 1px #b7b7b7;\n    padding: 8px;\n    color:#6C757D;\n}\n.vdatetime-popup__header {\n    background: #28a745;\n}\n.vdatetime-time-picker__item--selected {\n    color: #28a745;\n}\n.vdatetime-popup__actions__button {\n    color: #28a745;\n}\n@media only screen and (max-width: 900px) {\n#map {\n    width: 100% !important; \n    height:100% !important;\n}\n#show{\n    width: 95% !important;\n}\n#createDiv{\n    width: 95% !important;\n}\n#sidebar{\n    height: auto;\n    overflow-y: hidden;\n}\n}\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* width */\n::-webkit-scrollbar {\n  width: 10px;\n}\n\n/* Track */\n::-webkit-scrollbar-track {\n  background: #f1f1f1;\n}\n \n/* Handle */\n::-webkit-scrollbar-thumb {\n  background: #888;\n}\n\n/* Handle on hover */\n::-webkit-scrollbar-thumb:hover {\n  background: #555;\n}\n#time_error{\n    margin-top: -15px;\n    margin-left: 110px;\n}\n#map {\n    width: 100% !important; \n    height:100% !important;\n}\n.my-style {\n    padding: 15px;\n    margin-top: 65px;\n    margin-left: 10px;\n    width: 290px;\n \n    font-size: 14px;\n    border-radius: 5px;\n    border-left: solid rgb(99, 156, 88) 5px;\n\n\n    color: #ffffff;\n    background: #82CC75;\n}\n.success {\n    background: #82CC75;\n}\n.error {\n    background: #DC4146;\n}\n#sidebar{\n    height: 94vh;\n    overflow-y: auto;\n}\n#geras{\n    position: absolute;\n    color:white;\n    font-size: 25px;\n    opacity: 0.1;\n}\n#search_button{\n    z-index: 50;\n}\n#places_sort{\n    z-index: 51;\n    width:100%;\n}\n#loading-screen {\n    z-index: 100;\n    position: absolute; top: 0; right: 0; bottom: 0; left: 0;\n    background-color: #82cc75;\n}\n.vdatetime-input{\n    border-radius: 0px;\n    box-shadow: none !important;\n    border: solid 1px #b7b7b7;\n    padding: 8px;\n    color:#6C757D;\n}\n.vdatetime-popup__header {\n    background: #28a745;\n}\n.vdatetime-time-picker__item--selected {\n    color: #28a745;\n}\n.vdatetime-popup__actions__button {\n    color: #28a745;\n}\n@media only screen and (max-width: 900px) {\n#map {\n    width: 100% !important; \n    height:100% !important;\n}\n#show{\n    width: 95% !important;\n}\n#createDiv{\n    width: 95% !important;\n}\n#sidebar{\n    height: auto;\n    overflow-y: hidden;\n}\n}\n", ""]);
 
 // exports
 
@@ -61500,9 +61515,11 @@ var render = function() {
             [
               _c("div", { staticClass: "card-body" }, [
                 _c("h5", { staticClass: "card-title" }, [
-                  _c("a", { attrs: { href: "event/" + event.id } }, [
-                    _vm._v(" " + _vm._s(event.title) + " ")
-                  ])
+                  _c(
+                    "a",
+                    { attrs: { target: "_blank", href: "event/" + event.id } },
+                    [_vm._v(" " + _vm._s(event.title) + " ")]
+                  )
                 ]),
                 _vm._v(" "),
                 _c("h6", { staticClass: "card-subtitle mb-3 text-muted" }, [
@@ -61600,7 +61617,7 @@ var render = function() {
                             )
                           ]),
                       _vm._v(" "),
-                      _vm.currentUser.id == event.person_id
+                      _vm.currentUser.id == event.person_id.id
                         ? _c("div", [
                             _c(
                               "button",
@@ -63171,11 +63188,26 @@ var render = function() {
         "gmap-map",
         {
           style: _vm.size,
-          attrs: { center: _vm.getPosition(), options: _vm.mapStyle, zoom: 14 }
+          attrs: { center: _vm.center, options: _vm.mapStyle, zoom: 14 }
         },
-        [_c("gmap-marker", { attrs: { position: _vm.getPosition() } })],
+        [
+          _c("gmap-marker", {
+            attrs: { draggable: _vm.drag, position: _vm.coords },
+            on: { drag: _vm.updateCoordinates }
+          })
+        ],
         1
-      )
+      ),
+      _vm._v(" "),
+      _c("input", {
+        attrs: { type: "hidden", id: "lat", name: "lat" },
+        domProps: { value: _vm.coords.lat }
+      }),
+      _vm._v(" "),
+      _c("input", {
+        attrs: { type: "hidden", id: "lng", name: "lng" },
+        domProps: { value: _vm.coords.lng }
+      })
     ],
     1
   )
@@ -83123,24 +83155,30 @@ var map = {
 	"./badminton_1579959606.png": "./storage/app/public/sport_logo/badminton_1579959606.png",
 	"./badminton_1580587001.png": "./storage/app/public/sport_logo/badminton_1580587001.png",
 	"./badminton_1581785871.png": "./storage/app/public/sport_logo/badminton_1581785871.png",
+	"./badminton_1582061537.png": "./storage/app/public/sport_logo/badminton_1582061537.png",
 	"./baseball_1579959588.png": "./storage/app/public/sport_logo/baseball_1579959588.png",
 	"./baseball_1580586985.png": "./storage/app/public/sport_logo/baseball_1580586985.png",
 	"./baseball_1581785861.png": "./storage/app/public/sport_logo/baseball_1581785861.png",
+	"./baseball_1582061525.png": "./storage/app/public/sport_logo/baseball_1582061525.png",
 	"./basketball_1579958515.png": "./storage/app/public/sport_logo/basketball_1579958515.png",
 	"./basketball_1579959451.png": "./storage/app/public/sport_logo/basketball_1579959451.png",
 	"./basketball_1580417233.png": "./storage/app/public/sport_logo/basketball_1580417233.png",
 	"./basketball_1580578020.png": "./storage/app/public/sport_logo/basketball_1580578020.png",
 	"./basketball_1581785802.png": "./storage/app/public/sport_logo/basketball_1581785802.png",
+	"./basketball_1582061477.png": "./storage/app/public/sport_logo/basketball_1582061477.png",
 	"./cricket_1579959617.png": "./storage/app/public/sport_logo/cricket_1579959617.png",
 	"./cricket_1580587012.png": "./storage/app/public/sport_logo/cricket_1580587012.png",
 	"./cricket_1581785882.png": "./storage/app/public/sport_logo/cricket_1581785882.png",
+	"./cricket_1582061553.png": "./storage/app/public/sport_logo/cricket_1582061553.png",
 	"./new.png": "./storage/app/public/sport_logo/new.png",
 	"./pingpong_1579959560.png": "./storage/app/public/sport_logo/pingpong_1579959560.png",
 	"./pingpong_1580586958.png": "./storage/app/public/sport_logo/pingpong_1580586958.png",
 	"./pingpong_1581785833.png": "./storage/app/public/sport_logo/pingpong_1581785833.png",
+	"./pingpong_1582061500.png": "./storage/app/public/sport_logo/pingpong_1582061500.png",
 	"./rugby_1579960889.png": "./storage/app/public/sport_logo/rugby_1579960889.png",
 	"./rugby_1580587021.png": "./storage/app/public/sport_logo/rugby_1580587021.png",
 	"./rugby_1581785894.png": "./storage/app/public/sport_logo/rugby_1581785894.png",
+	"./rugby_1582061562.png": "./storage/app/public/sport_logo/rugby_1582061562.png",
 	"./soccerball_1579959550.png": "./storage/app/public/sport_logo/soccerball_1579959550.png",
 	"./soccerball_1580404081.png": "./storage/app/public/sport_logo/soccerball_1580404081.png",
 	"./soccerball_1580586946.png": "./storage/app/public/sport_logo/soccerball_1580586946.png",
@@ -83149,9 +83187,11 @@ var map = {
 	"./tennis_1579959574.png": "./storage/app/public/sport_logo/tennis_1579959574.png",
 	"./tennis_1580586972.png": "./storage/app/public/sport_logo/tennis_1580586972.png",
 	"./tennis_1581785845.png": "./storage/app/public/sport_logo/tennis_1581785845.png",
+	"./tennis_1582061512.png": "./storage/app/public/sport_logo/tennis_1582061512.png",
 	"./volleyball_1579959535.png": "./storage/app/public/sport_logo/volleyball_1579959535.png",
 	"./volleyball_1580586935.png": "./storage/app/public/sport_logo/volleyball_1580586935.png",
-	"./volleyball_1581785822.png": "./storage/app/public/sport_logo/volleyball_1581785822.png"
+	"./volleyball_1581785822.png": "./storage/app/public/sport_logo/volleyball_1581785822.png",
+	"./volleyball_1582061488.png": "./storage/app/public/sport_logo/volleyball_1582061488.png"
 };
 
 
@@ -83917,6 +83957,17 @@ module.exports = "/images/badminton_1581785871.png?5e3c6fb94e3348f8150e99d2bbea3
 
 /***/ }),
 
+/***/ "./storage/app/public/sport_logo/badminton_1582061537.png":
+/*!****************************************************************!*\
+  !*** ./storage/app/public/sport_logo/badminton_1582061537.png ***!
+  \****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/badminton_1582061537.png?5e3c6fb94e3348f8150e99d2bbea3fe8";
+
+/***/ }),
+
 /***/ "./storage/app/public/sport_logo/baseball_1579959588.png":
 /*!***************************************************************!*\
   !*** ./storage/app/public/sport_logo/baseball_1579959588.png ***!
@@ -83947,6 +83998,17 @@ module.exports = "/images/baseball_1580586985.png?b955314eb9b4771c8dc55459cf7734
 /***/ (function(module, exports) {
 
 module.exports = "/images/baseball_1581785861.png?b955314eb9b4771c8dc55459cf773409";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/baseball_1582061525.png":
+/*!***************************************************************!*\
+  !*** ./storage/app/public/sport_logo/baseball_1582061525.png ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/baseball_1582061525.png?b955314eb9b4771c8dc55459cf773409";
 
 /***/ }),
 
@@ -84005,6 +84067,17 @@ module.exports = "/images/basketball_1581785802.png?3ea563a13d594d5dc49e485fdc95
 
 /***/ }),
 
+/***/ "./storage/app/public/sport_logo/basketball_1582061477.png":
+/*!*****************************************************************!*\
+  !*** ./storage/app/public/sport_logo/basketball_1582061477.png ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/basketball_1582061477.png?3ea563a13d594d5dc49e485fdc95eccb";
+
+/***/ }),
+
 /***/ "./storage/app/public/sport_logo/cricket_1579959617.png":
 /*!**************************************************************!*\
   !*** ./storage/app/public/sport_logo/cricket_1579959617.png ***!
@@ -84035,6 +84108,17 @@ module.exports = "/images/cricket_1580587012.png?27388d20d7a22826e24c6d12a5efb25
 /***/ (function(module, exports) {
 
 module.exports = "/images/cricket_1581785882.png?27388d20d7a22826e24c6d12a5efb259";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/cricket_1582061553.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/cricket_1582061553.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/cricket_1582061553.png?27388d20d7a22826e24c6d12a5efb259";
 
 /***/ }),
 
@@ -84082,6 +84166,17 @@ module.exports = "/images/pingpong_1581785833.png?57b02fb4c7ede6d037d61415589eb7
 
 /***/ }),
 
+/***/ "./storage/app/public/sport_logo/pingpong_1582061500.png":
+/*!***************************************************************!*\
+  !*** ./storage/app/public/sport_logo/pingpong_1582061500.png ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/pingpong_1582061500.png?57b02fb4c7ede6d037d61415589eb74d";
+
+/***/ }),
+
 /***/ "./storage/app/public/sport_logo/rugby_1579960889.png":
 /*!************************************************************!*\
   !*** ./storage/app/public/sport_logo/rugby_1579960889.png ***!
@@ -84112,6 +84207,17 @@ module.exports = "/images/rugby_1580587021.png?f833e17eea80a75768afc4dac66af217"
 /***/ (function(module, exports) {
 
 module.exports = "/images/rugby_1581785894.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1582061562.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1582061562.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1582061562.png?f833e17eea80a75768afc4dac66af217";
 
 /***/ }),
 
@@ -84203,6 +84309,17 @@ module.exports = "/images/tennis_1581785845.png?0689ae8cd4e0ae11f989ce5a4bce7493
 
 /***/ }),
 
+/***/ "./storage/app/public/sport_logo/tennis_1582061512.png":
+/*!*************************************************************!*\
+  !*** ./storage/app/public/sport_logo/tennis_1582061512.png ***!
+  \*************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/tennis_1582061512.png?0689ae8cd4e0ae11f989ce5a4bce7493";
+
+/***/ }),
+
 /***/ "./storage/app/public/sport_logo/volleyball_1579959535.png":
 /*!*****************************************************************!*\
   !*** ./storage/app/public/sport_logo/volleyball_1579959535.png ***!
@@ -84233,6 +84350,17 @@ module.exports = "/images/volleyball_1580586935.png?682e28ed0436850553275c4d54f5
 /***/ (function(module, exports) {
 
 module.exports = "/images/volleyball_1581785822.png?682e28ed0436850553275c4d54f5daca";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/volleyball_1582061488.png":
+/*!*****************************************************************!*\
+  !*** ./storage/app/public/sport_logo/volleyball_1582061488.png ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/volleyball_1582061488.png?682e28ed0436850553275c4d54f5daca";
 
 /***/ }),
 

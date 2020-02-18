@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mt-5">
+<div class="container">
     
     <div class="row justify-content-center">
         <h1 class="display-4 mt-5">Profile</h1>

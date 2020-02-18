@@ -14,13 +14,16 @@ class DeclinedPlacesController extends Controller
         $declinedPlace = DeclinedPlaces::findOrFail($request->id);
         $declinedPlace->title = $request->input('title');
         $declinedPlace->about = $request->input('about');
+        $declinedPlace->lat = $request->input('lat');
+        $declinedPlace->lng = $request->input('lng');
 
 
         $place =  new PlaceQueue;
         $place->title = $request->input('title');
         $place->about = $request->input('about');
-        $place->lat = $declinedPlace->lat;
-        $place->lng = $declinedPlace->lng;
+        $place->about = $request->input('about');
+        $place->lat = $request->input('lat');
+        $place->lng = $request->input('lng');
         $place->type = $declinedPlace->type;
         $place->personid = $declinedPlace->personid;
 

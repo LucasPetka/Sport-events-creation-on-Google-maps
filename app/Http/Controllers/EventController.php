@@ -31,7 +31,6 @@ class EventController extends Controller
     {
         $events = Event::with('user')->where('place_id', $id)->get();
         
-
         return EventResource::collection($events);
     }
 
@@ -89,7 +88,6 @@ class EventController extends Controller
     }
 
 
-
     public function show_event_page($id)
     {
         $event = Event::findOrFail($id);
@@ -97,11 +95,12 @@ class EventController extends Controller
         return view('pages.event')->with(compact('event')); 
     }
 
+
     public function fetchMessages($id)
     {
-
         return Message::with('user')->where('event_id', $id)->get();
     }
+
 
     public function sendMessage(Request $request)
     {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" style="overflow-y: hidden;">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" style="overflow-y: auto;">
     <head style="font-family: 'Roboto', sans-serif;">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">

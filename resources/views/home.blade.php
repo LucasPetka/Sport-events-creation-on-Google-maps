@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container vh-100 overflow-y-auto">
     
     <div class="row justify-content-center">
         <h1 class="display-4 mt-5">Profile</h1>
@@ -35,10 +35,66 @@
                                 @else
                                     <figcaption class="figure-caption">User</figcaption>
                                 @endif
-                                    <figcaption> <a href="#" class="badge badge-success"><i class="fas fa-user-edit"></i> Update profile </a> </figcaption>
+                                    <figcaption> <button class="badge badge-success" data-toggle="modal" data-target="#editProfile"><i class="fas fa-user-edit"></i> Update profile </button> </figcaption>
 
                             </figure>
                         </div>
+
+                            <form action="/update_profile" method="post">
+                            <!-- Edit Profile MODAL -->
+                            <div class="modal fade" id="editProfile" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                @csrf
+                                <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Edit Profile</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                    <div class="form-group">
+                                        <label for="username">Username</label>
+                                        <input type="text" name="username" class="form-control" id="username" placeholder="Username" value="{{ $user->name }}">
+                                    </div>    
+
+                                    <p class="mb-2 mt-5">Sports you like</p>
+
+                                    
+                                    @foreach ($types as $type)
+                                        @if(!is_null($user->liked_sports))
+                                            @if(in_array( $type->id, json_decode($user->liked_sports)))
+                                            <div class="custom-control custom-checkbox float-left mr-4">
+                                                <input type="checkbox" name="types[]" value="{{ $type->id }}" class="custom-control-input" id="{{  $type->id  }}" checked>
+                                                <label class="custom-control-label" for="{{  $type->id  }}">{{  $type->name  }}</label>
+                                            </div>
+                                            @else
+                                            <div class="custom-control custom-checkbox float-left mr-4">
+                                                <input type="checkbox" name="types[]" value="{{ $type->id }}" class="custom-control-input" id="{{  $type->id  }}">
+                                                <label class="custom-control-label" for="{{  $type->id  }}">{{  $type->name  }}</label>
+                                            </div>
+                                            @endif
+                                        @else
+                                            <div class="custom-control custom-checkbox float-left mr-4">
+                                                <input type="checkbox" name="types[]" value="{{ $type->id }}" class="custom-control-input" id="{{  $type->id  }}">
+                                                <label class="custom-control-label" for="{{  $type->id  }}">{{  $type->name  }}</label>
+                                            </div>
+                                        @endif
+                                    @endforeach
+
+
+                                    </div>
+                                    <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            </form>
+
+
                         <div class="col-sm-12 col-md-9 col-lg-9">
                             <table class="table">
                                 <tbody>
@@ -124,7 +180,7 @@
                                                             <span aria-hidden="true">&times;</span>
                                                             </button>
                                                         </div>
-                                                        <div class="modal-body">
+                                                        <div class="modal-body p-0">
                                                             <SmallMap v-bind:place='{{ $place }}' v-bind:size='"width:auto; height: 450px;"'> </SmallMap>
                                                         </div>  
                                                         </div>
@@ -167,7 +223,7 @@
                                                         <span aria-hidden="true">&times;</span>
                                                         </button>
                                                     </div>
-                                                    <div class="modal-body">
+                                                    <div class="modal-body p-0">
                                                         <SmallMap v-bind:place='{{ $place }}' v-bind:size='"width:auto; height: 450px;"'> </SmallMap>
                                                     </div>  
                                                     </div>
@@ -265,7 +321,9 @@
                                 @foreach ($createdevents as  $event)
                                 <div class="card mb-3">
                                     <div class="card-header">
-                                        <img src="../storage/sport_logo/{{ $event->place->typee->image }}" alt="{{ $event->place->typee->name }}">  {{ $event->title }}
+                                        <a target="_blank" href="/event/{{ $event->id }}" class="nav-link m-0 p-0">
+                                            <img src="../storage/sport_logo/{{ $event->place->typee->image }}" alt="{{ $event->place->typee->name }}">  {{ $event->title }}
+                                        </a>
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
@@ -302,7 +360,7 @@
                                                         <span aria-hidden="true">&times;</span>
                                                         </button>
                                                     </div>
-                                                    <div class="modal-body">
+                                                    <div class="modal-body p-0">
                                                         <SmallMap v-bind:place='{{ $event->place }}' v-bind:size='"width:100%; height:450px;"'> </SmallMap>
                                                     </div>  
                                                     </div>
@@ -324,7 +382,9 @@
                                 @foreach ($goingtoevents as  $event)
                                 <div class="card mb-3">
                                     <div class="card-header">
-                                        <img src="../storage/sport_logo/{{ $event->place->typee->image }}" alt="{{ $event->place->typee->name }}"> {{ $event->title }}
+                                        <a target="_blank" href="/event/{{ $event->id }}" class="nav-link m-0 p-0">
+                                            <img src="../storage/sport_logo/{{ $event->place->typee->image }}" alt="{{ $event->place->typee->name }}"> {{ $event->title }}
+                                        </a>
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
@@ -361,7 +421,7 @@
                                                         <span aria-hidden="true">&times;</span>
                                                         </button>
                                                     </div>
-                                                    <div class="modal-body">
+                                                    <div class="modal-body p-0">
                                                         <SmallMap v-bind:place='{{ $event->place }}' v-bind:size='"width:100%; height:450px;"'> </SmallMap>
                                                     </div>  
                                                     </div>

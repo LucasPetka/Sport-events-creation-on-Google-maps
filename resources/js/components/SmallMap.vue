@@ -1,5 +1,5 @@
 <template>
-    <div class="container-fluid">
+    <div class="container-fluid p-0">
                 <gmap-map :center="center" v-bind:options="mapStyle" :zoom="14" :style="size">
                     <gmap-marker :draggable="drag" @drag="updateCoordinates" :position="coords"></gmap-marker>
                 </gmap-map>

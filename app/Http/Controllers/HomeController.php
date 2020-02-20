@@ -7,6 +7,7 @@ use Auth;
 use Illuminate\Support\Facades\DB;
 
 use App\Place;
+use App\User;
 use App\Type;
 use App\AcceptedPlaces;
 use App\PlaceQueue;
@@ -55,9 +56,24 @@ class HomeController extends Controller
         $submited_places = PlaceQueue::select('*')
         ->where('personid','=',$user->id)->get();
 
+        $types = Type::all();
 
 
-        return view('home')->with(compact('user', 'createdevents', 'goingtoevents', 'accepted_places', 'submited_places', 'declined_places'));
+
+        return view('home')->with(compact('user', 'createdevents', 'goingtoevents', 'accepted_places', 'submited_places', 'declined_places', 'types'));
+    }
+
+
+
+    function update_profile(Request $request){
+
+        $user = Auth::user();
+        $user->name = $request->input('username');
+        $user->liked_sports = json_encode($request->input('types'));
+
+        $user->save();
+
+        return redirect('/home');
     }
 
 }

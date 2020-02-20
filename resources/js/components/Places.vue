@@ -291,13 +291,11 @@ export default {
             rules:{
                 type: 'All', distance: 'Any'
             },
-            date:'',
             measured_distance:null,
+            date:'',
             start:new Date().toISOString(),
             end:new Date().toISOString(),
-            coordinates:{lat:0, lng:0},
             edit: false,
-            truee: true,
         }
     },
 
@@ -667,6 +665,7 @@ export default {
 
 .error {
     background: #DC4146;
+    border-left: solid rgb(177, 52, 56) 5px;
 }
 
 
@@ -729,7 +728,7 @@ export default {
     height:100% !important;
 }
 #show{
-    width: 95% !important; 
+    width: 100% !important; 
 }
 #createDiv{
     width: 95% !important;   

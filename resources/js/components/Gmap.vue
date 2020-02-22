@@ -14,7 +14,7 @@
         <button type="button" class="btn btn-success" v-on:click="loadMarkers()">Refresh markers <i class="fas fa-redo"></i></button>
       </div>
 
-    <gmap-map ref="gmapp" v-on:rightclick="openMenu($event)" v-on:zoom_changed="updateZoom()" :center="center" v-on:bounds_changed="update_bounds($event)" :zoom="zoom_in" v-bind:options="mapStyle" style="width:100%; height:94vh;">
+    <gmap-map ref="gmapp" v-on:rightclick="openMenu($event)" v-on:zoom_changed="updateZoom()" :center="center" v-on:bounds_changed="update_bounds($event)" :zoom="zoom_in" v-bind:options="mapStyle" style=" overflow:hidden; width:100%; height:94vh;">
       <gmap-cluster :zoom-on-click="true" :gridSize="40" :maxZoom="16">
       <gmap-marker v-for="place in allPlaces.data" :visible="place.visible" :key="place.id" :position="getPosition(place)" @click="center=getPosition(place)" v-on:click="showSpot(place.id)" :icon="icon(place.type)" v-on:mouseover="openInfoWindowTemplate(place)" v-on:mouseout="infoWindow.open=false"></gmap-marker>
       <gmap-info-window
@@ -37,15 +37,14 @@
 </template>
 
 <script>
+import mapstyle from '../assets/options.json';
 
-import mapstyle from '../assets/options.json'
 import { mapGetters, mapActions } from 'vuex';
-
 export default {
     
   name: "GoogleMap",
 
-  props: ['status'],  //checks if someone loged in to let them add new Marker
+  props: ['status', 'location'],  //checks if someone loged in to let them add new Marker
 
   data() {
     return {
@@ -76,6 +75,7 @@ export default {
     mapStyle: {
       styles: mapstyle,
       options:{
+        gestureHandling: 'greedy',
         fullscreenControl: false,
         mapTypeControl: false,
         scaleControl: false,
@@ -87,6 +87,8 @@ export default {
   },
 
   created() {
+    this.center = this.location;
+
     this.fetchTypesx();
     this.geolocation();
     this.checkVariable();
@@ -131,11 +133,10 @@ export default {
       if ( this.bounds != null )
       {
           this.loadMarkers();
-          this.fetchPlaces();
       }
       else
       {
-          window.setTimeout(this.checkVariable, 50);
+          window.setTimeout(this.checkVariable, 10);
       }
     },
 
@@ -160,19 +161,24 @@ export default {
             this.checkVariable();
 
           }, err =>{    //if something goes wrong when locating just set map center
-            this.center = {
-              lat: 55.205448395768826, 
-              lng: 23.930382446707117
-            };
-            this.zoom_in = 8;
+
+            this.center = this.location;
+            this.zoom_in = 13;
+
+            this.user_location = this.location;
+            this.user_loc_set = true;
+
+            this.checkVariable();
           });
         }
         else{           //if tracking is OFF when just locate set map center
-          this.center = {
-            lat: 55.205448395768826, 
-            lng: 23.930382446707117
-          };
-          this.zoom_in = 8;
+          this.center = this.location;
+          this.zoom_in = 13;
+
+          this.user_location = this.location;
+          this.user_loc_set = true;
+
+          this.checkVariable();
         }
       }
     },

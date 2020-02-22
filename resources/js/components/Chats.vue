@@ -81,6 +81,7 @@
 </template>
 
 <script>
+
 export default {
 
     props:['user', 'event'],

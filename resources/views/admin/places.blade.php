@@ -11,6 +11,7 @@
                 <th scope="col">Title</th>
                 <th scope="col">Sport type</th>
                 <th scope="col">User</th>
+                <th scope="col">Paid</th>
                 <th scope="col"></th>
               </tr>
             </thead>
@@ -23,6 +24,13 @@
                   <td>{{ $place->title }}</td>
                   <td><img src="../storage/sport_logo/{{ $place->typee->image }}" alt="{{ $place->typee->name }}"> {{ $place->typee->name }}</td>
                   <td>{{ $place->user->name }}</td>
+                  <td>
+                    @if($place->paid == "1")
+                    <i class="fas fa-coins"></i>
+                    @else
+                    Free
+                    @endif
+                  </td>
                   <td>
                       <button type="button" class="btn btn-primary mr-4" data-toggle="modal" data-target="#placeid{{ $place->id }}"> Open </button>
                       <a href ="/admin/accplace/{{ $place->id }}"  class="btn btn-success mr-2" data-toggle="tooltip" data-placement="top" title="Publish new place" ><i class="fas fa-check"></i></a>
@@ -44,7 +52,13 @@
                   <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">
                       <small><img src="../storage/sport_logo/{{ $place->typee->image }}" alt="{{ $place->typee->name }}"></small>
-                      {{ $place->title }}
+                      {{ $place->title }}  
+                      @if($place->paid == "1")
+                      <i class="fas fa-coins ml-3"></i> Paid
+                      @else
+                      <i class="fas fa-coins ml-3"></i> Free
+                      @endif
+
                     </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>

@@ -7,7 +7,7 @@
 
 
 <div class="row">
-    <div class="col-4">
+    <div class="col-sm-12 col-md-12 col-lg-4 mb-5">
 
 
         <div class="card" >
@@ -23,7 +23,7 @@
 
     </div>
 
-    <div class="col-8">
+    <div class="col-sm-12 col-md-12 col-lg-8 mb-5">
         <p class="h4">{{ $event->title }}</p>
         <div class="card mb-3">
             <div class="card-body">

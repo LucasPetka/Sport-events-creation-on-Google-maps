@@ -21,6 +21,7 @@ class PlaceQueue extends JsonResource
             'lat' => $this->lat,
             'lng' => $this->lng,
             'type' => $this->type,
+            'paid' => $this->paid,
 
         ];
     }

@@ -1,9 +1,5 @@
 <template>
 <div>
-    <div id="loading-screen">
-        <div id="geras">MoSi</div>
-    </div>
-
 
     <div class="container-fluid position-absolute" style="z-index:2;">
         <div class="row">
@@ -87,8 +83,8 @@
                                     <span class="input-group-text">{{ date }}</span>
                                 </div>
 
-                                <datetime type="time" id="start" v-model="start" format="HH:mm" :value-zone="'local'" :minute-step="10" v-on:input="parseDate(0)" required></datetime>
-                            
+                                <input type="time" id="start" v-model="start" format="HH:mm" v-on:input="parseDate(1)" min="09:00" max="18:00" required>
+
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="basic-addon2"><i class="far fa-clock"></i></span>
                                 </div>
@@ -99,8 +95,8 @@
                                     <span class="input-group-text">{{ date }}</span>
                                 </div>
 
-                                <datetime  type="time" id="end" v-model="end" format="HH:mm" :value-zone="'local'" :minute-step="10" v-on:input="parseDate(1)" required></datetime>
-                                
+                                <input type="time" id="end" v-model="end" format="HH:mm" v-on:input="parseDate(1)" min="09:00" max="18:00" required>
+
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="basic-addon2"><i class="far fa-clock"></i></span>
                                 </div>
@@ -148,6 +144,11 @@
                                         <option v-for="type in allTypes.data" :key="type.id" :value="type.id"> {{ type.name }}</option>
                                     </select>
                                 </div>
+
+                                <div class="custom-control custom-checkbox float-left mr-4">
+                                    <input v-model="place.paid" type="checkbox" name="paid" class="custom-control-input" id="paid">
+                                    <label class="custom-control-label" for="paid" >Paid</label>
+                                </div>
                             </div>
 
                             <div class="modal-footer">
@@ -163,7 +164,7 @@
 
         <div class="row full-height justify-content-end" style="width:100%; height:100%; padding:0; margin:0;">
             <div id="map">
-                <Gmap v-bind:status='status' v-on:showSpot="showSpot($event)" v-on:openForm="openAdd($event)" ref="gmapp"> </Gmap>  
+                <Gmap v-bind:status='status' v-bind:location='ip' v-on:showSpot="showSpot($event)" v-on:openForm="openAdd($event)" ref="gmapp"> </Gmap>  
             </div>
 
             <!-- ==========================================SHOW SPOT INFO========================================================= -->
@@ -239,20 +240,18 @@
 
 
 <script>
-import Gmap from '../components/Gmap.vue';
-import Calendar from '../components/Calendar.vue';
-import { Datetime } from 'vue-datetime';
-import Vue from 'vue';
+const Calendar = () => import("../components/Calendar.vue");
+const Gmap = () => import("../components/Gmap.vue");
+
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
         components: {
         'Gmap': Gmap,
         'Calendar': Calendar,
-        'datetime': Datetime,
     },
 
-    props: ['status','currentUser'], //checks if someone loged in and gets all information about user
+    props: ['status','currentUser','ip'], //checks if someone loged in and gets all information about user
     
 
     data(){
@@ -268,6 +267,7 @@ export default {
                 lat:'',
                 lng:'',
                 type:'',
+                paid:'',
                 personid:''
             },
             show: {         
@@ -293,19 +293,16 @@ export default {
             },
             measured_distance:null,
             date:'',
-            start:new Date().toISOString(),
-            end:new Date().toISOString(),
+            start:'2017-06-01T08:30',
+            end:'2017-06-01T08:30',
             edit: false,
         }
     },
 
     //==============================ON LOAD FUNCTION==============================================
     mounted(){
-        //animation
-        $("#geras").animate({left: '45%', opacity: '1', top:'40%', fontSize:'50px'}, 900, function(){
-            $("#geras").animate({left:'43%',top:'39%', fontSize:'80px'}, 300, function(){
-            $("#loading-screen").animate({opacity:'0', width:'0%'}, 300, function(){
-            $("#loading-screen").hide();});});});
+
+        console.log(this.ip);
 
          $('#addPlace').on('hide.bs.modal', (e) => {
            this.$refs.gmapp.hidePointer();
@@ -356,13 +353,10 @@ export default {
         var d = new Date(even.time_from);
         var dat = new Date(even.time_until);
 
-        var dateee = d.toISOString();
+        var dateee = d.getHours() +":"+ d.getMinutes();
         this.start = dateee;
-        var dateee = dat.toISOString();
+        var dateee = dat.getHours() +":"+ dat.getMinutes();
         this.end = dateee;
-
-
-
 
         $('#addEvent').modal('show');
         
@@ -372,27 +366,20 @@ export default {
     openAddEvent: function(){
 
         this.edit = false;
-
         this.event.place_id = this.show.id;
         this.event.person_id = this.currentUser.id;
         this.event.organizator = this.currentUser.name;
 
         $('#addEvent').modal('show');
-
-        this.parseDate(0); 
-        this.parseDate(1);
     },
 
     //-----------------Closes event creation label---------------------------
     closeAddEvent: function(){
-        
          $('#addEvent').modal('hide');
     },
 
     //---------------------Parse data in right format to choose when event starts and when ends--------------------
     parseDate(choose){
-        var d = new Date(this.start);
-
         if(this.start == this.end){
             $("#time_error").html("<span class='text-danger'><small>Times should not be equal!</small></span>");
             $("#add_event_btn").attr("disabled", true);
@@ -405,17 +392,6 @@ export default {
             $("#time_error").html("");
             $('#add_event_btn').removeAttr("disabled");
         }
-
-        if(choose == 0){
-            var d = new Date(this.start);
-            var n = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds(); 
-            this.event.time_from = n;
-        } 
-        else if(choose == 1){
-            var d = new Date(this.end);
-             var n = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds(); 
-            this.event.time_until = n;
-        }
     },
 
     //---------------------Gets date in day chooser--------------------------------
@@ -427,9 +403,9 @@ export default {
         dat.setMinutes(30);
         dat.setHours(d.getHours() + 1);
 
-        dateee = d.toISOString();
+        dateee = d.getHours() +":"+ d.getMinutes();
         this.start = dateee;
-        dateee = dat.toISOString();
+        dateee = dat.getHours() +":"+ dat.getMinutes();
         this.end = dateee;
     },
 
@@ -516,6 +492,7 @@ export default {
                 this.place.lat = '';
                 this.place.lng = '';
                 this.place.type = '';
+                this.place.paid = '';
                 this.$refs.gmapp.fetchPlaces();
             })
             .catch(err =>console.log(err));
@@ -538,6 +515,9 @@ export default {
     //-----------------------------------------Create new event-----------------------------------------------
      addEvent() {
         if(this.edit === false){
+
+            this.event.time_from = this.date + " " + this.start;
+            this.event.time_until = this.date + " " + this.end;
 
             (async () => {
             const Response = await fetch('api/event?api_token=' + this.getCookie("api_token"), {
@@ -564,6 +544,9 @@ export default {
                     });
    
         } else{
+
+            this.event.time_from = this.date + " " + this.start;
+            this.event.time_until = this.date + " " + this.end;
 
             (async () => {
         const Response = await fetch('api/event?api_token=' + this.getCookie("api_token"), {
@@ -696,30 +679,6 @@ export default {
     position: absolute; top: 0; right: 0; bottom: 0; left: 0;
     background-color: #82cc75;
 }
-
-
-.vdatetime-input{
-    border-radius: 0px;
-    box-shadow: none !important;
-    border: solid 1px #b7b7b7;
-    padding: 8px;
-    color:#6C757D;
-
-}
-
-.vdatetime-popup__header {
-    background: #28a745;
-}
-
-.vdatetime-time-picker__item--selected {
-    color: #28a745;
-}
-
-.vdatetime-popup__actions__button {
-    color: #28a745;
-}
-
-
 
 @media only screen and (max-width: 900px) {
 

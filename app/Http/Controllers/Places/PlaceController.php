@@ -82,6 +82,7 @@ class PlaceController extends Controller
     {
         $place = $request->isMethod('put') ? Place::findOrFail($request->place_id) : new Place;
 
+
         $place->id = $request->input('place_id');
         $place->title = $request->input('title');
         $place->about = $request->input('about');

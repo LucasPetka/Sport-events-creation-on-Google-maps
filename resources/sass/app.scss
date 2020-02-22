@@ -6,3 +6,24 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+
+#loading-screen {
+    z-index: 100;
+    position: absolute; top: 0; right: 0; bottom: 0; left: 0;
+    background-color: #82cc75;
+}
+  
+#geras{
+    position: relative;
+    color:white;
+    font-size: 25px;
+    opacity: 1;
+}
+
+.vertical-center {
+    min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+    min-height: 100vh; /* These two lines are counted as one :-)       */
+    display: flex;
+    align-items: center;
+}

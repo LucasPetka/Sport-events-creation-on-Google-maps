@@ -55,10 +55,9 @@
 
 
 <script>
-import Datepicker from 'vuejs-datepicker';
-import Vue from 'vue';
-import { mapGetters, mapActions } from 'vuex';
+const Datepicker = () => import("vuejs-datepicker");
 
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
 

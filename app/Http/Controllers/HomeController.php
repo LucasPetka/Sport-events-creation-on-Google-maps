@@ -51,7 +51,7 @@ class HomeController extends Controller
         ->whereIn('id', $accepted)
         ->get();
 
-        $declined_places = DeclinedPlaces::where('personid','=',$user->id)->get();
+        $declined_places = DeclinedPlaces::with('typee')->where('personid','=',$user->id)->get();
 
         $submited_places = PlaceQueue::select('*')
         ->where('personid','=',$user->id)->get();

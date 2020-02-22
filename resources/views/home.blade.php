@@ -287,6 +287,10 @@
                                                                     {{Form::label('about', 'About')}}
                                                                     {{Form::textarea('about', $place->about, ['class' => 'form-control', 'placeholder' => 'About', 'rows'=> '6'])}}
                                                                 </div>
+                                                                <div class="custom-control custom-checkbox">
+                                                                    {{Form::checkbox('paid', null, $place->paid, ['id' => 'paid', 'class' => 'custom-control-input'])}}
+                                                                    {{Form::label('paid', 'Paid', ['class' => 'custom-control-label'])}}
+                                                                </div>
 
                                                                 <SmallMap v-bind:place='{{ $place }}' v-bind:drag='true' v-bind:size='"width:auto; height: 350px;"'> </SmallMap>
                                                             

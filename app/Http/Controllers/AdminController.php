@@ -69,6 +69,7 @@ class AdminController extends Controller
         $newPlace->lat = $place->lat;
         $newPlace->lng = $place->lng;
         $newPlace->type = $place->type;
+        $newPlace->paid = $place->paid;
         $newPlace->created_at = $place->created_at;
         $newPlace->updated_at = $place->updated_at;
         $newPlace->save();
@@ -94,6 +95,7 @@ class AdminController extends Controller
         $declinedPlace->lat = $place->lat;
         $declinedPlace->lng = $place->lng;
         $declinedPlace->type = $place->type;
+        $declinedPlace->paid = $place->paid;
         $declinedPlace->personid = $place->personid;
         $declinedPlace->save();
         

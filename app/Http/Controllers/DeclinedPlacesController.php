@@ -14,9 +14,6 @@ class DeclinedPlacesController extends Controller
         $declinedPlace = DeclinedPlaces::findOrFail($request->id);
         $declinedPlace->title = $request->input('title');
         $declinedPlace->about = $request->input('about');
-        $declinedPlace->lat = $request->input('lat');
-        $declinedPlace->lng = $request->input('lng');
-
 
         $place =  new PlaceQueue;
         $place->title = $request->input('title');
@@ -25,6 +22,13 @@ class DeclinedPlacesController extends Controller
         $place->lat = $request->input('lat');
         $place->lng = $request->input('lng');
         $place->type = $declinedPlace->type;
+        if($request->input('paid')){
+            $place->paid = 1;
+        }
+        else{
+            $place->paid = 0;
+        }
+        
         $place->personid = $declinedPlace->personid;
 
         if($place->save()){

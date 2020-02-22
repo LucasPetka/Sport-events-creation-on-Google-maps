@@ -35,6 +35,13 @@ class PlaceQueueController extends Controller
     {
         $place = $request->isMethod('put') ? PlaceQueue::findOrFail($request->place_id) : new PlaceQueue;
 
+        if($request->input('paid')) {
+            $place->paid = 1;
+        }
+        else{
+            $place->paid = 0;
+        }
+
         $place->id = $request->input('place_id');
         $place->title = $request->input('title');
         $place->about = $request->input('about');

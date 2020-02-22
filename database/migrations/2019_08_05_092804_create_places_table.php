@@ -20,6 +20,7 @@ class CreatePlacesTable extends Migration
             $table->decimal('lat', 20, 16);
             $table->decimal('lng', 20, 16);
             $table->unsignedInteger('type');
+            $table->string('paid', 1);
             $table->timestamps();
 
             $table->foreign('type')->references('id')->on('types');

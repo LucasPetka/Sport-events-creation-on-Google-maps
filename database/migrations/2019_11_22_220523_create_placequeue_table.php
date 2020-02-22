@@ -20,6 +20,7 @@ class CreatePlacequeueTable extends Migration
             $table->decimal('lat', 20, 16);
             $table->decimal('lng', 20, 16);
             $table->integer('type')->unsigned();
+            $table->string('paid', 1);
             $table->integer('personid')->unsigned();
             $table->timestamps();
 

@@ -2763,8 +2763,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
 var Datepicker = function Datepicker() {
   return __webpack_require__.e(/*! import() */ 0).then(__webpack_require__.bind(null, /*! vuejs-datepicker */ "./node_modules/vuejs-datepicker/dist/vuejs-datepicker.esm.js"));
 };
@@ -3842,6 +3840,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 var Calendar = function Calendar() {
   return Promise.resolve(/*! import() */).then(__webpack_require__.bind(null, /*! ../components/Calendar.vue */ "./resources/js/components/Calendar.vue"));
 };
@@ -3880,7 +3880,8 @@ var Gmap = function Gmap() {
         about: '',
         lat: '',
         lng: '',
-        type: ''
+        type: '',
+        paid: ''
       },
       event: {
         id: '',
@@ -3949,9 +3950,9 @@ var Gmap = function Gmap() {
               this.event = even;
               d = new Date(even.time_from);
               dat = new Date(even.time_until);
-              dateee = d.getHours() + ":" + d.getMinutes();
+              dateee = ('0' + d.getHours()).slice(-2) + ":" + ('0' + d.getMinutes()).slice(-2);
               this.start = dateee;
-              dateee = dat.getHours() + ":" + dat.getMinutes();
+              dateee = ('0' + dat.getHours()).slice(-2) + ":" + ('0' + dat.getMinutes()).slice(-2);
               this.end = dateee;
               $('#addEvent').modal('show');
 
@@ -10748,7 +10749,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.vdp-datepicker input{\n    border-radius: 5px 5px 5px 5px;\n    box-shadow: none !important;\n    border: solid 1px #b7b7b7;\n    padding: 8px;\n}\n\n\n", ""]);
+exports.push([module.i, "\n.vdp-datepicker input{\n    border-radius: 5px 5px 5px 5px;\n    width: 110px;\n    box-shadow: none !important;\n    border: solid 1px #b7b7b7;\n    padding: 8px;\n    float: left;\n    outline: none !important;\n}\n\n\n", ""]);
 
 // exports
 
@@ -10786,7 +10787,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* width */\n::-webkit-scrollbar {\n  width: 10px;\n}\n\n/* Track */\n::-webkit-scrollbar-track {\n  background: #f1f1f1;\n}\n \n/* Handle */\n::-webkit-scrollbar-thumb {\n  background: #888;\n}\n\n/* Handle on hover */\n::-webkit-scrollbar-thumb:hover {\n  background: #555;\n}\n#time_error{\n    margin-top: -15px;\n    margin-left: 110px;\n}\n#map {\n    width: 100% !important; \n    height:100% !important;\n}\n.my-style {\n    padding: 15px;\n    margin-top: 65px;\n    margin-left: 10px;\n    width: 290px;\n \n    font-size: 14px;\n    border-radius: 5px;\n    border-left: solid rgb(99, 156, 88) 5px;\n\n\n    color: #ffffff;\n    background: #82CC75;\n}\n.success {\n    background: #82CC75;\n}\n.error {\n    background: #DC4146;\n    border-left: solid rgb(177, 52, 56) 5px;\n}\n#sidebar{\n    height: 94vh;\n    overflow-y: auto;\n}\n#geras{\n    position: absolute;\n    color:white;\n    font-size: 25px;\n    opacity: 0.1;\n}\n#search_button{\n    z-index: 50;\n}\n#places_sort{\n    z-index: 51;\n    width:100%;\n}\n#loading-screen {\n    z-index: 100;\n    position: absolute; top: 0; right: 0; bottom: 0; left: 0;\n    background-color: #82cc75;\n}\n@media only screen and (max-width: 900px) {\n#map {\n    width: 100% !important; \n    height:100% !important;\n}\n#show{\n    width: 100% !important;\n}\n#createDiv{\n    width: 95% !important;\n}\n#sidebar{\n    height: auto;\n    overflow-y: hidden;\n}\n}\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* width */\n::-webkit-scrollbar {\n  width: 10px;\n}\n\n/* Track */\n::-webkit-scrollbar-track {\n  background: #f1f1f1;\n}\n \n/* Handle */\n::-webkit-scrollbar-thumb {\n  background: rgb(182, 182, 182);\n}\n\n/* Handle on hover */\n::-webkit-scrollbar-thumb:hover {\n  background: rgb(136, 136, 136);\n}\n#time_error{\n    margin-top: -15px;\n    margin-left: 110px;\n}\n#map {\n    width: 100% !important; \n    height:100% !important;\n}\n.my-style {\n    padding: 15px;\n    margin-top: 65px;\n    margin-left: 10px;\n    width: 290px;\n \n    font-size: 14px;\n    border-radius: 5px;\n    border-left: solid rgb(99, 156, 88) 5px;\n\n\n    color: #ffffff;\n    background: #82CC75;\n}\n.success {\n    background: #82CC75;\n}\n.error {\n    background: #DC4146;\n    border-left: solid rgb(177, 52, 56) 5px;\n}\n#sidebar{\n    height: 94vh;\n    overflow-y: auto;\n}\n#geras{\n    position: absolute;\n    color:white;\n    font-size: 25px;\n    opacity: 0.1;\n}\n#search_button{\n    z-index: 50;\n}\n#places_sort{\n    z-index: 51;\n    width:100%;\n}\n#loading-screen {\n    z-index: 100;\n    position: absolute; top: 0; right: 0; bottom: 0; left: 0;\n    background-color: #82cc75;\n}\n@media only screen and (max-width: 900px) {\n#map {\n    width: 100% !important; \n    height:100% !important;\n}\n#show{\n    width: 100% !important;\n}\n#createDiv{\n    width: 95% !important;\n}\n#sidebar{\n    height: auto;\n    overflow-y: hidden;\n}\n}\n", ""]);
 
 // exports
 
@@ -52294,7 +52295,7 @@ var render = function() {
     _c("div", { staticClass: "row" }, [
       _c(
         "div",
-        { staticClass: "col-lg-6 col-sm-12 mb-2" },
+        { staticClass: "col-12 m-2" },
         [
           _c("datepicker", {
             attrs: {
@@ -52315,28 +52316,26 @@ var render = function() {
               },
               expression: "todays_date"
             }
-          })
+          }),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-outline-success pt-2 pb-2 ml-3 float-left",
+              on: {
+                click: function($event) {
+                  return _vm.$emit("openAddEvent")
+                }
+              }
+            },
+            [_vm._v("Add Event "), _c("i", { staticClass: "fas fa-plus" })]
+          )
         ],
         1
-      ),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-lg-6 col-sm-12 pl-5" }, [
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-outline-success pt-2 pb-2 mx-auto",
-            on: {
-              click: function($event) {
-                return _vm.$emit("openAddEvent")
-              }
-            }
-          },
-          [_vm._v("Add Event "), _c("i", { staticClass: "fas fa-plus" })]
-        )
-      ])
+      )
     ]),
     _vm._v(" "),
-    _c("hr"),
+    _c("hr", { staticClass: "mt-0" }),
     _vm._v(" "),
     _c(
       "div",
@@ -52346,7 +52345,7 @@ var render = function() {
             "div",
             {
               key: event.id,
-              staticClass: "card mt-3",
+              staticClass: "card mb-3",
               staticStyle: {
                 width: "90%",
                 "margin-left": "auto",
@@ -52644,7 +52643,7 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-8" }, [
+      _c("div", { staticClass: "col-lg-8 mb-3" }, [
         _c("div", { staticClass: "card card-default" }, [
           _c("div", { staticClass: "card-header" }, [_vm._v("Messages")]),
           _vm._v(" "),
@@ -52747,7 +52746,7 @@ var render = function() {
           : _vm._e()
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "col-4" }, [
+      _c("div", { staticClass: "col-lg-4" }, [
         _c("div", { staticClass: "card card-default" }, [
           _c("div", { staticClass: "card-header" }, [_vm._v("Users online")]),
           _vm._v(" "),
@@ -53077,11 +53076,9 @@ var render = function() {
           _c("div", { staticClass: "row" }, [
             _c("div", { staticClass: "col-4" }),
             _vm._v(" "),
-            _c("div", { staticClass: "col-6" }, [
+            _c("div", { staticClass: "col-sm-12 col-lg-6" }, [
               _c("div", { staticClass: "row" }, [
-                _vm._m(0),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-6" }, [
+                _c("div", { staticClass: "col-sm-12 col-lg-6" }, [
                   _c(
                     "div",
                     { staticClass: "collapse", attrs: { id: "places_sort" } },
@@ -53244,7 +53241,9 @@ var render = function() {
                     ]
                   )
                 ])
-              ])
+              ]),
+              _vm._v(" "),
+              _vm._m(0)
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "col-2" })
@@ -53404,8 +53403,6 @@ var render = function() {
                             type: "time",
                             id: "start",
                             format: "HH:mm",
-                            min: "09:00",
-                            max: "18:00",
                             required: ""
                           },
                           domProps: { value: _vm.start },
@@ -53447,8 +53444,6 @@ var render = function() {
                             type: "time",
                             id: "end",
                             format: "HH:mm",
-                            min: "09:00",
-                            max: "18:00",
                             required: ""
                           },
                           domProps: { value: _vm.end },
@@ -53769,160 +53764,179 @@ var render = function() {
                   staticStyle: { height: "85vh" }
                 },
                 [
-                  _c("div", { staticClass: "card-body overflow-auto" }, [
-                    _c(
-                      "div",
-                      { staticClass: "d-flex flex-column bd-highlight mb-3" },
-                      [
-                        _c("div", { staticClass: "p-4 bd-highlight" }, [
-                          _c(
-                            "button",
-                            {
-                              staticClass: "close",
-                              attrs: {
-                                type: "button",
-                                id: "close_show",
-                                "aria-label": "Close"
-                              },
-                              on: {
-                                click: function($event) {
-                                  return _vm.closeShow()
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "card-body overflow-auto overflow-x-hidden p-2"
+                    },
+                    [
+                      _c(
+                        "div",
+                        { staticClass: "d-flex flex-column bd-highlight mb-3" },
+                        [
+                          _c("div", { staticClass: "p-4 bd-highlight" }, [
+                            _c(
+                              "button",
+                              {
+                                staticClass: "close",
+                                attrs: {
+                                  type: "button",
+                                  id: "close_show",
+                                  "aria-label": "Close"
+                                },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.closeShow()
+                                  }
                                 }
-                              }
-                            },
-                            [
-                              _c("span", { attrs: { "aria-hidden": "true" } }, [
-                                _vm._v("×")
-                              ])
-                            ]
-                          ),
-                          _vm._v(" "),
-                          this.type.image
-                            ? _c("div", [
-                                _c("h3", [
-                                  _c("img", {
-                                    attrs: {
-                                      src:
-                                        "../../../storage/sport_logo/" +
-                                        this.type.image
-                                    }
-                                  }),
-                                  _vm._v(" " + _vm._s(_vm.show.title) + " ")
-                                ])
-                              ])
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _c("hr"),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "card-body" }, [
-                            _c("p", { staticClass: "card-text" }, [
-                              _vm._v(_vm._s(_vm.show.about))
-                            ]),
-                            _vm._v(" "),
-                            _c("hr", { staticClass: "mt-4" }),
-                            _vm._v(" "),
-                            _c("p", { staticClass: "float-right" }, [
-                              _c("i", { staticClass: "fas fa-road" }),
-                              _vm._v(" "),
-                              _c("small", [
-                                _vm._v(
-                                  "This place is " +
-                                    _vm._s(_vm.measured_distance) +
-                                    " km from you"
+                              },
+                              [
+                                _c(
+                                  "span",
+                                  { attrs: { "aria-hidden": "true" } },
+                                  [_vm._v("×")]
                                 )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            this.type.image
+                              ? _c("div", [
+                                  _c("h3", [
+                                    _c("img", {
+                                      attrs: {
+                                        src:
+                                          "../../../storage/sport_logo/" +
+                                          this.type.image
+                                      }
+                                    }),
+                                    _vm._v(" " + _vm._s(_vm.show.title) + " ")
+                                  ])
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _c("hr"),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "card-body" }, [
+                              _c("p", { staticClass: "card-text" }, [
+                                _vm._v(_vm._s(_vm.show.about))
                               ]),
                               _vm._v(" "),
-                              _c(
-                                "a",
-                                {
-                                  staticClass: "badge badge-dark ml-3",
-                                  attrs: {
-                                    href:
-                                      "https://www.google.co.uk/maps/dir//" +
-                                      _vm.show.lat +
-                                      "," +
-                                      _vm.show.lng,
-                                    target: "_blank"
-                                  }
-                                },
-                                [
-                                  _c("i", {
-                                    staticClass: "fas fa-map-marker-alt"
-                                  }),
-                                  _vm._v(" Show directions")
-                                ]
-                              )
-                            ])
-                          ]),
-                          _vm._v(" "),
-                          _vm.currentUser
-                            ? _c("span", [
-                                _vm.currentUser.isAdmin == 1
-                                  ? _c(
-                                      "button",
-                                      {
-                                        staticClass: "btn btn-danger m-2",
-                                        on: {
-                                          click: function($event) {
-                                            return _vm.deletePlace(_vm.show.id)
-                                          }
-                                        }
-                                      },
-                                      [
-                                        _c("i", {
-                                          staticClass: "fas fa-times"
-                                        }),
-                                        _vm._v(" Delete place")
-                                      ]
-                                    )
-                                  : _vm._e()
+                              _c("hr", { staticClass: "mt-4" }),
+                              _vm._v(" "),
+                              _vm.show.paid == 1
+                                ? _c("p", { staticClass: "float-left m-0" }, [
+                                    _c("i", { staticClass: "fas fa-coins" }),
+                                    _vm._v(" "),
+                                    _c("small", [_vm._v(" Paid ")])
+                                  ])
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _c("p", { staticClass: "float-right" }, [
+                                _c("i", { staticClass: "fas fa-road" }),
+                                _vm._v(" "),
+                                _c("small", { staticClass: "mr-3" }, [
+                                  _vm._v(
+                                    "This place is " +
+                                      _vm._s(_vm.measured_distance) +
+                                      " km from you"
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c(
+                                  "a",
+                                  {
+                                    staticClass: "badge badge-dark",
+                                    attrs: {
+                                      href:
+                                        "https://www.google.co.uk/maps/dir//" +
+                                        _vm.show.lat +
+                                        "," +
+                                        _vm.show.lng,
+                                      target: "_blank"
+                                    }
+                                  },
+                                  [
+                                    _c("i", {
+                                      staticClass: "fas fa-map-marker-alt"
+                                    }),
+                                    _vm._v(" Show directions")
+                                  ]
+                                )
                               ])
-                            : _vm._e()
-                        ])
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "card m-3 width:100%; height:100%;" },
-                      [
-                        _vm._m(7),
-                        _vm._v(" "),
-                        _c(
-                          "div",
-                          { staticClass: "card-body" },
-                          [
-                            _c("Calendar", {
-                              ref: "calendar",
-                              attrs: {
-                                status: _vm.status,
-                                currentUser: _vm.currentUser
-                              },
-                              on: {
-                                openAddEvent: function($event) {
-                                  return _vm.openAddEvent()
-                                },
-                                editEvent: function($event) {
-                                  return _vm.editEvent($event)
-                                },
-                                getDate: function($event) {
-                                  return _vm.getDate($event)
-                                },
-                                closeAdd: function($event) {
-                                  return _vm.closeAddEvent()
-                                }
-                              }
-                            }),
+                            ]),
                             _vm._v(" "),
-                            this.status === 1
-                              ? _c("div")
-                              : _c("div", [_vm._m(8)])
-                          ],
-                          1
-                        )
-                      ]
-                    )
-                  ])
+                            _vm.currentUser
+                              ? _c("span", [
+                                  _vm.currentUser.isAdmin == 1
+                                    ? _c(
+                                        "button",
+                                        {
+                                          staticClass: "btn btn-danger m-2",
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.deletePlace(
+                                                _vm.show.id
+                                              )
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _c("i", {
+                                            staticClass: "fas fa-times"
+                                          }),
+                                          _vm._v(" Delete place")
+                                        ]
+                                      )
+                                    : _vm._e()
+                                ])
+                              : _vm._e()
+                          ])
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "card m-3 width:100%; height:100%;" },
+                        [
+                          _vm._m(7),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            { staticClass: "card-body p-0" },
+                            [
+                              _c("Calendar", {
+                                ref: "calendar",
+                                attrs: {
+                                  status: _vm.status,
+                                  currentUser: _vm.currentUser
+                                },
+                                on: {
+                                  openAddEvent: function($event) {
+                                    return _vm.openAddEvent()
+                                  },
+                                  editEvent: function($event) {
+                                    return _vm.editEvent($event)
+                                  },
+                                  getDate: function($event) {
+                                    return _vm.getDate($event)
+                                  },
+                                  closeAdd: function($event) {
+                                    return _vm.closeAddEvent()
+                                  }
+                                }
+                              }),
+                              _vm._v(" "),
+                              this.status === 1
+                                ? _c("div")
+                                : _c("div", [_vm._m(8)])
+                            ],
+                            1
+                          )
+                        ]
+                      )
+                    ]
+                  )
                 ]
               )
             ]
@@ -53938,7 +53952,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-1" }, [
+    return _c("div", { staticClass: "col-sm-2 col-lg-1" }, [
       _c(
         "button",
         {
@@ -53950,7 +53964,8 @@ var staticRenderFns = [
             "data-toggle": "collapse",
             "data-target": "#places_sort",
             "aria-expanded": "false",
-            "aria-controls": "places_sort"
+            "aria-controls": "places_sort",
+            onclick: "this.blur();"
           }
         },
         [_c("i", { staticClass: "fas fa-search" })]

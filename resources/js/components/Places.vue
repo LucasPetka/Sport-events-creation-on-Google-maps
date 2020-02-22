@@ -4,15 +4,9 @@
     <div class="container-fluid position-absolute" style="z-index:2;">
         <div class="row">
             <div class="col-4"></div>
-            <div class="col-6">
+            <div class="col-sm-12 col-lg-6">
                 <div class="row">
-                    <div class="col-1">
-                        <button type="button" id="search_button" class="btn btn-dark dropdown-toggle pt-2 pb-2" style="border-radius: 0px 0px 5px 5px;" data-toggle="collapse" data-target="#places_sort" aria-expanded="false" aria-controls="places_sort">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-
-                    <div class="col-6">
+                    <div class="col-sm-12 col-lg-6">
                     <div class="collapse" id="places_sort">
                     <div class="card card-body pt-4 pl-3 pr-3 pb-0">
                         <div class="row">
@@ -42,6 +36,11 @@
                     </div>
                     </div>
                     </div>
+                </div>
+                <div class="col-sm-2 col-lg-1">
+                        <button type="button" id="search_button" class="btn btn-dark dropdown-toggle pt-2 pb-2" style="border-radius: 0px 0px 5px 5px;" data-toggle="collapse" data-target="#places_sort" aria-expanded="false" aria-controls="places_sort" onclick="this.blur();">
+                            <i class="fas fa-search"></i>
+                        </button>
                 </div>
             </div>
 
@@ -83,7 +82,7 @@
                                     <span class="input-group-text">{{ date }}</span>
                                 </div>
 
-                                <input type="time" id="start" v-model="start" format="HH:mm" v-on:input="parseDate(1)" min="09:00" max="18:00" required>
+                                <input type="time" id="start" v-model="start" format="HH:mm" v-on:input="parseDate(1)" required>
 
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="basic-addon2"><i class="far fa-clock"></i></span>
@@ -95,7 +94,7 @@
                                     <span class="input-group-text">{{ date }}</span>
                                 </div>
 
-                                <input type="time" id="end" v-model="end" format="HH:mm" v-on:input="parseDate(1)" min="09:00" max="18:00" required>
+                                <input type="time" id="end" v-model="end" format="HH:mm" v-on:input="parseDate(1)" required>
 
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="basic-addon2"><i class="far fa-clock"></i></span>
@@ -173,7 +172,7 @@
             <div id="show" class="show col-lg-4 col-sm-12 position-fixed" style="display:none; z-index:50;">
             
             <div class="card shadow-lg mt-4" style="height:85vh;">
-            <div class="card-body overflow-auto">
+            <div class="card-body overflow-auto overflow-x-hidden p-2">
 
                 <div class="d-flex flex-column bd-highlight mb-3">
                     <div class="p-4 bd-highlight">
@@ -188,10 +187,13 @@
                         <div class="card-body">
                             <p class="card-text">{{ show.about }}</p>
                             <hr class="mt-4">
+                            <p class="float-left m-0" v-if="show.paid == 1">
+                               <i class="fas fa-coins"></i> <small> Paid </small>
+                            </p>
                             <p class="float-right"> 
                                 <i class="fas fa-road"></i> 
-                                <small>This place is {{ measured_distance }} km from you</small>
-                                <a :href="'https://www.google.co.uk/maps/dir//'+show.lat+','+show.lng" target="_blank" class="badge badge-dark ml-3"><i class="fas fa-map-marker-alt"></i> Show directions</a>
+                                <small class="mr-3">This place is {{ measured_distance }} km from you</small>
+                                <a :href="'https://www.google.co.uk/maps/dir//'+show.lat+','+show.lng" target="_blank" class="badge badge-dark"><i class="fas fa-map-marker-alt"></i> Show directions</a>
                             </p>
                         </div>
 
@@ -206,7 +208,7 @@
                     <div class="card-header ">
                         <h6>Events</h6>  
                     </div>
-                    <div class="card-body">
+                    <div class="card-body p-0">
                         <Calendar v-bind:status='status' v-on:openAddEvent="openAddEvent()" v-bind:currentUser='currentUser' v-on:editEvent="editEvent($event)" v-on:getDate="getDate($event)" v-on:closeAdd="closeAddEvent()" ref="calendar"> </Calendar>
                         <div v-if="this.status === 1">
                             <!--<button v-on:click="openAddEvent()" class="btn btn-outline-success pt-2 pb-2 pr-4 pl-4 float-right">Add Event <i class="fas fa-plus"></i></button>-->
@@ -276,7 +278,8 @@ export default {
                 about:'',
                 lat:'',
                 lng:'',
-                type:''
+                type:'',
+                paid:''
             },
             event:{
                 id:'',
@@ -353,9 +356,9 @@ export default {
         var d = new Date(even.time_from);
         var dat = new Date(even.time_until);
 
-        var dateee = d.getHours() +":"+ d.getMinutes();
+        var dateee = ('0'+d.getHours()).slice(-2) +":"+ ('0'+d.getMinutes()).slice(-2);
         this.start = dateee;
-        var dateee = dat.getHours() +":"+ dat.getMinutes();
+        var dateee = ('0'+dat.getHours()).slice(-2) +":"+ ('0'+dat.getMinutes()).slice(-2);
         this.end = dateee;
 
         $('#addEvent').modal('show');
@@ -609,12 +612,12 @@ export default {
  
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #888; 
+  background: rgb(182, 182, 182); 
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #555; 
+  background: rgb(136, 136, 136); 
 }
 
 #time_error{

@@ -17,7 +17,7 @@
 </head>
 <body>
     <div id="app" class="mh-100">
-        <nav class="navbar navbar-expand-md navbar-dark shadow-sm" style="background-color: #313638;">
+        <nav class="navbar navbar-expand-md navbar-dark shadow-sm" style="background-color: #313638; z-index:2;">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     <img src="/images/logonotext.png" height="25px" weight="100%">

@@ -332,11 +332,11 @@
                                     <div class="card-body">
                                         <div class="row">
 
-                                            <div class="col-6">
+                                            <div class="col-lg-6">
                                                 {{ $event->about }}
                                             </div>
 
-                                            <div class="col-6">
+                                            <div class="col-lg-6">
                                                 <hr>
                                                     {{ $diff = Carbon\Carbon::parse($event->time_from)->diffForHumans(Carbon\Carbon::now()) }} 
                                                     <div class="float-right"> {{ Carbon\Carbon::parse($event->time_from)->format('Y-m-d') }}  </div>                                
@@ -393,11 +393,11 @@
                                     <div class="card-body">
                                         <div class="row">
 
-                                            <div class="col-6">
+                                            <div class="col-lg-6">
                                                 {{ $event->about }}
                                             </div>
 
-                                            <div class="col-6">
+                                            <div class="col-lg-6">
                                                 <hr>
                                                     {{ $diff = Carbon\Carbon::parse($event->time_from)->diffForHumans(Carbon\Carbon::now()) }} 
                                                     <div class="float-right"><i class="far fa-calendar-alt"></i> {{ Carbon\Carbon::parse($event->time_from)->format('Y-m-d') }}  </div>                                

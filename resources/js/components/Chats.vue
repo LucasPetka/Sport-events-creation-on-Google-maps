@@ -38,7 +38,7 @@
 
 <div class="row">
 
-    <div class="col-8">
+    <div class="col-lg-8 mb-3">
         <div class="card card-default">
             <div class="card-header">Messages</div>
             <div class="card-body p-0">
@@ -64,7 +64,7 @@
         <span class="text-muted" v-if="activeUser">{{ activeUser.name }} is typing...</span>
     </div>
 
-    <div class="col-4">
+    <div class="col-lg-4">
         <div class="card card-default">
             <div class="card-header">Users online</div>
             <div class="card-body p-0">

@@ -8,6 +8,7 @@ Vue.component('calendar', require('./components/Calendar.vue').default);
 Vue.component('smallmap', require('./components/SmallMap.vue').default);
 Vue.component('chats', require('./components/Chats.vue').default);
 Vue.component('pagination', require('./components/Pagination.vue').default);
+Vue.component('payment', require('./components/Payment.vue').default);
 
 import Vue from 'vue'
 

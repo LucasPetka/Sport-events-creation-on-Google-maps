@@ -24,6 +24,7 @@ class Place extends JsonResource
             'lng' => $this->lng,
             'type' => $this->type,
             'paid' => $this->paid,
+            'highlighted' => $this->highlighted,
 
         ];
     }

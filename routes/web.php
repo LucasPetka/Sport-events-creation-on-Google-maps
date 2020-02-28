@@ -21,6 +21,8 @@ Auth::routes(['verify' => true]);
 Route::get('/', 'PagesController@index');
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/place_owner/{id}', 'PagesController@payment_page');
+
 Route::post('/update_profile', 'HomeController@update_profile')->middleware('auth');
 
 Route::post('/resubmit/{id}', 'DeclinedPlacesController@update')->middleware('auth');

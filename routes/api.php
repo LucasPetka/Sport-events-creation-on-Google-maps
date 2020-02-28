@@ -17,6 +17,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+    //Create new Place
+    Route::post('purchase/complete', 'PagesController@payment_successful');
 
     //List Types
     Route::get('types', 'TypeController@index');

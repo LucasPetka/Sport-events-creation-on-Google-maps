@@ -11,7 +11,7 @@
 
 
         <div class="card" >
-            <SmallMap class="card-img-top mt-3" v-bind:place='{{ $event->place }}' v-bind:size='"width:auto; height: 300px;"'> </SmallMap>
+            <SmallMap class="card-img-top" v-bind:place='{{ $event->place }}' v-bind:size='"width:auto; height: 300px;"'> </SmallMap>
             <div class="card-body">
                 <p class="h6"><img src="../storage/sport_logo/{{ $event->place->typee->image }}" alt="{{ $event->place->typee->name }}"> {{ $event->place->title }}</p>
                 <hr>

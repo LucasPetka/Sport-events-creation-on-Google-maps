@@ -19,6 +19,7 @@ class Types extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'image' => $this->image,
+            'image_h' => $this->image_h
 
         ];
     }

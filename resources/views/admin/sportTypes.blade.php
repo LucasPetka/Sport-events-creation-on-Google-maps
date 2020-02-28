@@ -28,6 +28,10 @@
                             {{Form::label('sport_logo', 'Logo of sport')}}
                             {{Form::file('sport_logo')}}
                         </div>
+                        <div class="form-group">
+                          {{Form::label('sport_logo_highlighted', 'Logo of sport - highlighted')}}
+                          {{Form::file('sport_logo_highlighted')}}
+                        </div>
                     
                 </div>
                 <div class="modal-footer">

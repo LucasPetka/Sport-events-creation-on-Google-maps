@@ -28,17 +28,22 @@ class TypeController extends Controller
         ]);
 
         // Handle File Upload
-        if($request->hasFile('sport_logo')){
+        if($request->hasFile('sport_logo') && $request->hasFile('sport_logo_highlighted')){
             // Get filename with the extension
             $filenameWithExt = $request->file('sport_logo')->getClientOriginalName();
+            $filenameWithExt2 = $request->file('sport_logo_highlighted')->getClientOriginalName();
             // Get just filename
             $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            $filename2 = pathinfo($filenameWithExt2, PATHINFO_FILENAME);
             // Get just text
             $extension = $request->file('sport_logo')->getClientOriginalExtension();
+            $extension2 = $request->file('sport_logo_highlighted')->getClientOriginalExtension();
             // Filename to store
             $fileNameToStore= $filename.'_'.time().'.'.$extension;
+            $fileNameToStore2= $filename2.'_'.time().'.'.$extension2;
             // Upload Image
             $path = $request->file('sport_logo')->storeAs('public/sport_logo', $fileNameToStore);
+            $path2 = $request->file('sport_logo_highlighted')->storeAs('public/sport_logo', $fileNameToStore2);
         } else {
             $fileNameToStore = 'noimage.jpg';
         }
@@ -46,8 +51,8 @@ class TypeController extends Controller
         $type = new Type;
         $type->id = $request->input('sport_id');
         $type->name = $request->input('sport_name');
-        $type->image = $request->input('sport_logo');
         $type->image = $fileNameToStore;
+        $type->image_h = $fileNameToStore2;
         $type->timestamps = false;
         $type->save();
 

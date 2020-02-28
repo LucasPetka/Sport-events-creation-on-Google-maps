@@ -186,16 +186,18 @@
 
                         <div class="card-body">
                             <p class="card-text">{{ show.about }}</p>
-                            <hr class="mt-4">
+                        </div>
+
+                        <hr class="mt-4">
                             <p class="float-left m-0" v-if="show.paid == 1">
-                               <i class="fas fa-coins"></i> <small> Paid </small>
+                                <i class="fas fa-coins"></i> <small>Paid</small> <br>
+                               <a class="nav-link pl-0" :href="'place_owner/'+show.id">Are you the owner?</a>
                             </p>
                             <p class="float-right"> 
                                 <i class="fas fa-road"></i> 
                                 <small class="mr-3">This place is {{ measured_distance }} km from you</small>
                                 <a :href="'https://www.google.co.uk/maps/dir//'+show.lat+','+show.lng" target="_blank" class="badge badge-dark"><i class="fas fa-map-marker-alt"></i> Show directions</a>
                             </p>
-                        </div>
 
                         <span v-if="currentUser">
                             <button v-if="currentUser.isAdmin == 1" v-on:click="deletePlace(show.id)" class="btn btn-danger m-2"> <i class="fas fa-times"></i> Delete place</button>

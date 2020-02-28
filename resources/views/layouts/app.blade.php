@@ -14,10 +14,12 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"  integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"  crossorigin="anonymous">
         
         <link rel="stylesheet" href="{{ mix('/css/app.css') }}">
+
+        
 </head>
 <body>
     <div id="app" class="mh-100">
-        <nav class="navbar navbar-expand-md navbar-dark shadow-sm" style="background-color: #313638; z-index:2;">
+        <nav class="navbar navbar-expand-md navbar-dark shadow-sm" style="background-color: #313638; z-index:100;">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     <img src="/images/logonotext.png" height="25px" weight="100%">
@@ -51,7 +53,7 @@
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
 
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" style="z-index: 100;">
 
                                     <a class="dropdown-item" href="/home">Profile</a>
 

@@ -21,6 +21,8 @@ class CreatePlacesTable extends Migration
             $table->decimal('lng', 20, 16);
             $table->unsignedInteger('type');
             $table->string('paid', 1);
+            $table->boolean('highlighted')->nullable();
+            $table->string('highlight_valid')->nullable();
             $table->timestamps();
 
             $table->foreign('type')->references('id')->on('types');

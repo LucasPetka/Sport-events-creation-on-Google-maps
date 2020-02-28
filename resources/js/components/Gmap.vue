@@ -16,7 +16,7 @@
 
     <gmap-map ref="gmapp" v-on:rightclick="openMenu($event)" v-on:zoom_changed="updateZoom()" :center="center" v-on:bounds_changed="update_bounds($event)" :zoom="zoom_in" v-bind:options="mapStyle" style=" overflow:hidden; width:100%; height:94vh;">
       <gmap-cluster :zoom-on-click="true" :gridSize="40" :maxZoom="16">
-      <gmap-marker v-for="place in allPlaces.data" :visible="place.visible" :key="place.id" :position="getPosition(place)" @click="center=getPosition(place)" v-on:click="showSpot(place.id)" :icon="icon(place.type)" v-on:mouseover="openInfoWindowTemplate(place)" v-on:mouseout="infoWindow.open=false"></gmap-marker>
+      <gmap-marker v-for="place in allPlaces.data" :visible="place.visible" :key="place.id" :position="getPosition(place)" @click="center=getPosition(place)" v-on:click="showSpot(place.id)" :icon="icon(place)" v-on:mouseover="openInfoWindowTemplate(place)" v-on:mouseout="infoWindow.open=false"></gmap-marker>
       <gmap-info-window
           :options="{maxWidth:300, pixelOffset:{width:0, height:-25}}"
           :position="infoWindow.position"
@@ -60,6 +60,8 @@ export default {
       lat:'',
       lng:'',
       type:'',
+      paid:'',
+      highlighted:'',
     },
     infoWindow: {
       position: {lat: 0, lng: 0},
@@ -246,11 +248,15 @@ export default {
     },
 
     //Sets the icon for the place id
-    icon: function(type){
+    icon: function(place){
 
         for (let i = 0; i < this.allTypes.data.length; i++) {
-          if (type == this.allTypes.data[i].id){
-            return { url: require('../../../public/storage/sport_logo/'+ this.allTypes.data[i].image)};
+          if (place.type == this.allTypes.data[i].id){
+            if(place.highlighted == "1"){
+                return { url: require('../../../public/storage/sport_logo/'+ this.allTypes.data[i].image_h)};
+            }else{
+                return { url: require('../../../public/storage/sport_logo/'+ this.allTypes.data[i].image)};
+            }
           }
         }
     },

@@ -17,6 +17,7 @@ class CreateTypesTable extends Migration
             $table->increments('id')->unique();
             $table->string('name');
             $table->string('image');
+            $table->string('image_h');
         });
     }
 

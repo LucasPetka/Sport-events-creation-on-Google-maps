@@ -24,17 +24,18 @@
     </div>
 
     <div class="col-sm-12 col-md-12 col-lg-8 mb-5">
-
-        @if($place->highlighted)
-            <h4>This place is already published until {{ Carbon\Carbon::parse($place->highlight_valid)->format('Y-m-d') }}</h4>
-        @else
-            <div class="card mb-3">
-                <div class="card-body">
-                    <payment v-bind:place="{{ $place }}" v-bind:user="{{ $user }}"> </payment>
-                </div>
+        <div class="card mb-3">
+            <div class="card-body">
+            @if($place->highlighted)
+                <h4>This place is already published until {{ Carbon\Carbon::parse($place->highlight_valid)->format('Y-m-d') }}</h4>
+            @else
+                <payment v-bind:place="{{ $place }}" v-bind:user="{{ $user }}"> </payment>
+            @endif
             </div>
-        @endif
+        </div>
     </div>
+
+
 </div>
 
 

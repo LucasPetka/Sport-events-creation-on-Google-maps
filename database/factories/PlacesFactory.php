@@ -6,13 +6,16 @@ use App\Model;
 use Faker\Generator as Faker;
 
 $factory->define(App\Place::class, function (Faker $faker) {
-    return [
-        'title' => $faker->text($min = 5, $max = 10),
-        'about' => $faker->text(200),
-        'lat' => $faker->latitude($min = -55, $max = 83), 
-        'lng' => $faker->longitude($min = -168, $max = 174),
-        'type' => $faker->randomElement([111, 112, 222, 223, 333, 334])
-        
 
+    $startingDate = $faker->dateTimeThisYear('+1 month');
+    return [
+        'title' => $faker->text($min = 10, $max = 20),
+        'about' => $faker->text($min = 150, $max = 300),
+        'lat' => $faker->latitude($min = 52.278645377656964, $max = 53.02182837230083), 
+        'lng' => $faker->longitude($min = -2.3149357594216013, $max = 0.22153274643777365),
+        'type' => $faker->randomElement([111, 222, 333, 444, 555, 666, 777, 888]),
+        'paid' => $faker->randomElement([1, 0]),
+        'highlighted' => null, // 50% chance of FALSE
+        'highlight_valid' => null, // 50% chance of FALSE
     ];
 });

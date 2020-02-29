@@ -99,7 +99,7 @@ export default {
 
     //ONLOAD PAGE DO THIS
     mounted(){
-        this.fetchEvents(); // get all events from data base
+        //this.fetchEvents(); // get all events from data base
         this.fetchPeopleGoing(); // get all people going from data base
     },
 
@@ -192,6 +192,8 @@ export default {
             .then(res => res.json())
             .then(res => {
             
+                this.events = res.data;
+                
                 //Shows all events which are on that spot and and that day
                 this.showEvents();
     
@@ -214,17 +216,6 @@ export default {
                 };
             })
 
-        },
-
-
-        //Get all events from database
-        fetchEvents() {
-            fetch('api/events')
-            .then(res => res.json())
-            .then(res => {
-                this.events = res.data;
-            })
-                return this.events;
         },
 
 

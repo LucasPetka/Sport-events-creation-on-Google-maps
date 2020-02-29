@@ -72,8 +72,8 @@ export default {
     zoom_in: 13,
     bounds: null,
     currentPlace: null,
-    marker_visibility: false,   
-    
+    marker_visibility: false,
+    rules:{type: 'All', distance: 'Any'},   
     mapStyle: {
       styles: mapstyle,
       options:{
@@ -206,7 +206,7 @@ export default {
 
     //load all sports spots that are in bounds of view to reduce data traffic
     loadMarkers(){
-      this.fetchPlaces();
+      this.fetchPlaces_sort(this.rules);
 
       this.zoom_in = this.zoom_in - 1;
       this.zoom_in = this.zoom_in + 1;
@@ -300,7 +300,7 @@ export default {
         
     //on click show information about this place
     showSpot: function(key){
-      const foundPlace = this.places.find( place => place.id == key);
+      const foundPlace = this.allPlaces.data.find( place => place.id == key);
       this.place = foundPlace;
       var arg = [key, this.measure_distance(this.place,this.user_location)];
       this.smoothZoom(17, this.zoom_in);
@@ -314,27 +314,12 @@ export default {
         lng: parseFloat(place.lng)
       }
     },
-    
-    //gets all places from data base
-    fetchPlaces() {
-      
-      var ne = this.bounds.getNorthEast();
-      var sw = this.bounds.getSouthWest();
-
-      this.fetchPlacesx(this.bounds);
-
-      fetch('api/places/'+ne.lat()+'/'+sw.lat()+'/'+ne.lng()+'/'+sw.lng())
-      .then(res => res.json())
-      .then(res => {
-          this.places = res.data;
-      })
-    },
 
     fetchPlaces_sort(rules) {
       var ne = this.bounds.getNorthEast();
       var sw = this.bounds.getSouthWest();
-      console.log(rules);
-
+      console.log(ne + " " + sw);
+      this.rules = rules;
 
       this.fetchPlacesx_sort([this.bounds, rules, this.user_location]);
     },

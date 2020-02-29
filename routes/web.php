@@ -21,7 +21,9 @@ Auth::routes(['verify' => true]);
 Route::get('/', 'PagesController@index');
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/place_owner/{id}', 'PagesController@payment_page');
+Route::get('/place_owner/{id}', 'PagesController@payment_page')->middleware('auth');
+
+Route::get('/validate_time', 'EventController@check_time');
 
 Route::post('/update_profile', 'HomeController@update_profile')->middleware('auth');
 

@@ -77,37 +77,23 @@
                                 <textarea v-model="event.about" class="form-control" id="exampleFormControlTextarea1" rows="6" required></textarea>
                             </div>
 
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">{{ date }}</span>
-                                </div>
 
-                                <input type="time" id="start" v-model="start" format="HH:mm" v-on:input="parseDate(1)" required>
+                            <ul class="list-group list-group-horizontal mb-4">
+                                <li class="list-group-item"><i class="far fa-calendar-alt"></i> {{ date }}</li>
+                                <li class="list-group-item"><i class="far fa-clock"></i> {{ event_time[0] }} -  {{ event_time[1] }}</li>
+                            </ul>
+                               
 
-                                <div class="input-group-append">
-                                    <span class="input-group-text" id="basic-addon2"><i class="far fa-clock"></i></span>
-                                </div>
-                            </div>
+                            <vue-slider  :adsorb="true" v-if="event_time != ''" v-on:drag-end="parseDate(1)" class="mr-3 ml-3 mb-5" v-model="event_time" :data="data" :marks="marks" :enable-cross="false"></vue-slider>
 
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">{{ date }}</span>
-                                </div>
-
-                                <input type="time" id="end" v-model="end" format="HH:mm" v-on:input="parseDate(1)" required>
-
-                                <div class="input-group-append">
-                                    <span class="input-group-text" id="basic-addon2"><i class="far fa-clock"></i></span>
-                                </div>
-                            </div>
 
                             <div id="time_error"></div>
                         </div>
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button v-if="edit" id="add_event_btn" type="submit" class="btn btn-success float-right"> Update </button>
-                            <button v-else id="add_event_btn" type="submit" class="btn btn-success float-right">Add <i class="fas fa-plus"></i></button>
+                            <button v-if="edit" id="add_event_btn" type="submit" class="btn btn-success float-right" :disabled="isLoading"> Update </button>
+                            <button v-else id="add_event_btn" type="submit" class="btn btn-success float-right" :disabled="isLoading">Add <i class="fas fa-plus"></i></button>
                         </div>
                     </div>
                 </div>
@@ -260,6 +246,22 @@ export default {
 
     data(){
         return{
+            // process1: dotsPos => [
+            //     ['06:00', '07:30', { backgroundColor: 'red' }],
+            //     [35, 40, { backgroundColor: 'red' }]
+            // ],
+            isLoading: null,
+            event_time:['', ''],
+            data: [],
+            marks:{
+                '06:00': '06:00',
+                '09:00': '09:00',
+                '12:00': '12:00',
+                '15:00': '15:00',
+                '18:00': '18:00',
+                '21:00': '21:00',
+                '23:30': '23:30',
+            },
             type: {
                 id:'',
                 name:''
@@ -298,8 +300,8 @@ export default {
             },
             measured_distance:null,
             date:'',
-            start:'2017-06-01T08:30',
-            end:'2017-06-01T08:30',
+            start:'08:30',
+            end:'08:30',
             edit: false,
         }
     },
@@ -307,7 +309,7 @@ export default {
     //==============================ON LOAD FUNCTION==============================================
     mounted(){
 
-        console.log(this.ip);
+        this.fillArrayWithTimes();
 
          $('#addPlace').on('hide.bs.modal', (e) => {
            this.$refs.gmapp.hidePointer();
@@ -322,10 +324,14 @@ export default {
 
     ...mapActions(['fetchPlacesx']),
 
-    
-    //Closes sidebar
-    openShow: function(){
-        
+    fillArrayWithTimes: function(){
+        const hours = 24;
+        var times_arr = [];
+        for (let i = 6; i <= 23; i++) {
+            times_arr.push(('0'+i).slice(-2) + ":" + '00');
+            times_arr.push(('0'+i).slice(-2) + ":" + '30'); 
+        }
+        this.data = times_arr;
     },
 
     //Closes sidebar
@@ -359,9 +365,11 @@ export default {
         var dat = new Date(even.time_until);
 
         var dateee = ('0'+d.getHours()).slice(-2) +":"+ ('0'+d.getMinutes()).slice(-2);
-        this.start = dateee;
+        this.event_time[0] = dateee;
         var dateee = ('0'+dat.getHours()).slice(-2) +":"+ ('0'+dat.getMinutes()).slice(-2);
-        this.end = dateee;
+        this.event_time[1] = dateee;
+
+        this.event_time = [this.event_time[0], this.event_time[1]];
 
         $('#addEvent').modal('show');
         
@@ -374,6 +382,8 @@ export default {
         this.event.place_id = this.show.id;
         this.event.person_id = this.currentUser.id;
         this.event.organizator = this.currentUser.name;
+        this.event_time = [this.event_time[0], this.event_time[1]];
+
 
         $('#addEvent').modal('show');
     },
@@ -385,11 +395,11 @@ export default {
 
     //---------------------Parse data in right format to choose when event starts and when ends--------------------
     parseDate(choose){
-        if(this.start == this.end){
+        if(this.event_time[0] == this.event_time[1]){
             $("#time_error").html("<span class='text-danger'><small>Times should not be equal!</small></span>");
             $("#add_event_btn").attr("disabled", true);
         }
-        else if(this.start > this.end) {
+        else if(this.event_time[0] > this.event_time[1]) {
             $("#time_error").html("<span class='text-danger'><small>Second time should be later!</small></span>");
             $("#add_event_btn").attr("disabled", true);
         }
@@ -397,6 +407,25 @@ export default {
             $("#time_error").html("");
             $('#add_event_btn').removeAttr("disabled");
         }
+
+        $.ajax({
+            type: "GET",
+            url: "/validate_time?start="+ this.date +" "+ this.event_time[0]+"&end="+ this.date +" "+ this.event_time[1]+"&place_id="+this.event.place_id,     
+            success: function(result){
+
+                if(!result.found){
+                    $("#time_error").html("");
+                    $('#add_event_btn').removeAttr("disabled");
+                }  
+                else{
+                    $("#time_error").html("<span class='text-danger'><small>Time overlaping with other events</small></span>");
+                    $("#add_event_btn").attr("disabled", true);
+                }
+                
+            }
+        });
+
+
     },
 
     //---------------------Gets date in day chooser--------------------------------
@@ -409,9 +438,9 @@ export default {
         dat.setHours(d.getHours() + 1);
 
         dateee = d.getHours() +":"+ d.getMinutes();
-        this.start = dateee;
+        this.event_time[0] = dateee;
         dateee = dat.getHours() +":"+ dat.getMinutes();
-        this.end = dateee;
+        this.event_time[1] = dateee;
     },
 
     //-----------------Show spot all info with all events happening in there--------------------
@@ -429,14 +458,13 @@ export default {
 
         this.measured_distance = arg[1];
 
-        this.openShow();
-
         if (show.style.display === 'none') {
             $("#show").slideDown("slow");
         }
 
         this.closeAddEvent();
     },
+    
 
     //---------------------------Get Cookie-------------------------------------
     getCookie(name) {
@@ -456,10 +484,10 @@ export default {
             })
                 .then(res => res.json())
                 .then(data => {
-                    this.$refs.gmapp.fetchPlaces();
+                    this.$refs.gmapp.fetchPlaces_sort();
                 })
                 .catch(err => console.log(err));
-                this.$refs.gmapp.fetchPlaces();
+                this.$refs.gmapp.fetchPlaces_sort();
                 this.show.title = '';
                 this.show.about = '';
                 this.show.lat = '';
@@ -498,7 +526,7 @@ export default {
                 this.place.lng = '';
                 this.place.type = '';
                 this.place.paid = '';
-                this.$refs.gmapp.fetchPlaces();
+                this.$refs.gmapp.fetchPlaces_sort();
             })
             .catch(err =>console.log(err));
 
@@ -510,7 +538,7 @@ export default {
                 text: 'The new place has been sent for inspection and if everything is okay will be uploaded'
                 });
 
-                this.$refs.gmapp.fetchPlaces();
+                this.$refs.gmapp.fetchPlaces_sort();
                 this.$refs.gmapp.hidePointer();
                 this.closeAdd();
                 this.closeShow();
@@ -519,10 +547,15 @@ export default {
 
     //-----------------------------------------Create new event-----------------------------------------------
      addEvent() {
+
+        this.isLoading = true
+        setTimeout(() => {
+            this.isLoading = false
+        }, 2000)
         if(this.edit === false){
 
-            this.event.time_from = this.date + " " + this.start;
-            this.event.time_until = this.date + " " + this.end;
+            this.event.time_from = this.date + " " + this.event_time[0]
+            this.event.time_until = this.date + " " + this.event_time[1];
 
             (async () => {
             const Response = await fetch('api/event?api_token=' + this.getCookie("api_token"), {
@@ -535,7 +568,6 @@ export default {
             });
 
             const content = await Response.json();
-            await this.$refs.calendar.fetchEvents();
             await this.$refs.calendar.fetchSpot(this.show.id);
             })();
 
@@ -550,8 +582,8 @@ export default {
    
         } else{
 
-            this.event.time_from = this.date + " " + this.start;
-            this.event.time_until = this.date + " " + this.end;
+            this.event.time_from = this.date + " " + this.event_time[0];
+            this.event.time_until = this.date + " " + this.event_time[1];
 
             (async () => {
         const Response = await fetch('api/event?api_token=' + this.getCookie("api_token"), {
@@ -564,7 +596,6 @@ export default {
         });
 
         const content = await Response.json();
-        await this.$refs.calendar.fetchEvents();
         await this.$refs.calendar.fetchSpot(this.show.id);
         })();
 
@@ -579,20 +610,17 @@ export default {
                 });  
         }
 
+        this.event.id= '';
         this.event.place_id = '';
         this.event.title = '';
         this.event.about = '';
         this.event.time_from = '';
         this.event.time_until = '';
         this.event.person_id = '';
-
-
     },
 
     sort_places() {
-        
         this.$refs.gmapp.fetchPlaces_sort(this.rules);
-        
     },
 
     }
@@ -623,8 +651,10 @@ export default {
 }
 
 #time_error{
-    margin-top: -15px;
-    margin-left: 110px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    text-align: center;
 }
 
 #map {

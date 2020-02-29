@@ -87,6 +87,32 @@ class EventController extends Controller
         }
     }
 
+    //--------------Check if event time is not overlaping with others----------
+    public function check_time(Request $request) {
+        
+        $start = $request->start;
+        $end = $request->end;
+        $place_id = $request->place_id;
+
+        $exists = Event::where('place_id', $place_id)
+        ->where([['time_from','<', $start],['time_until','>', $start],])
+        ->orWhere([['time_from','<', $end],['time_until','>', $end],])
+        ->orWhere([['time_from','>', $start],['time_until','<', $end],])
+        ->exists();
+
+        if (!empty($exists)) {
+            return response()->json(array('found'=> true), 200);
+        }
+        else{
+            return response()->json(array('found'=> false), 200);
+        }
+     }
+
+
+
+    //===================================================================================================
+    //----------------------------------Event page and messaging controllers-----------------------------
+    //===================================================================================================
 
     public function show_event_page($id)
     {
@@ -95,12 +121,10 @@ class EventController extends Controller
         return view('pages.event')->with(compact('event')); 
     }
 
-
     public function fetchMessages($id)
     {
         return Message::with('user')->where('event_id', $id)->get();
     }
-
 
     public function sendMessage(Request $request)
     {

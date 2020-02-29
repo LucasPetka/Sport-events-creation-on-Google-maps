@@ -18,8 +18,11 @@ import VueChatScroll from 'vue-chat-scroll'
 import Notifications from 'vue-notification'
 import store from './store/index.js'
 import JwPagination from 'jw-vue-pagination'
+import VueSlider from 'vue-slider-component'
+import 'vue-slider-component/theme/default.css'
 
 
+Vue.component('VueSlider', VueSlider)
 Vue.component('jw-pagination', JwPagination);
 Vue.use(VueChatScroll)
 Vue.use(Notifications);

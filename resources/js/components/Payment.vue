@@ -4,15 +4,17 @@
     <div v-if="!paidFor">
       <h4>Advertisment for this place - ${{ product.price }} gbp</h4>
       <p>{{ product.description }}</p>
-    </div>
 
-    <div v-for="product_checked in products"  :key="product_checked.id">
-        <div class="form-check">
-          <input class="form-check-input" type="radio" name="product" :value="product_checked" v-model="product" :id="'product' + product_checked.id">
-          <label class="form-check-label" :for="'product' + product_checked.id">
-            {{ product_checked.description }}
-          </label>
+        <div v-for="product_checked in products"  :key="product_checked.id">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="product" :value="product_checked" v-model="product" :id="'product' + product_checked.id">
+              <label class="form-check-label" :for="'product' + product_checked.id">
+                {{ product_checked.description }}
+              </label>
+            </div>
         </div>
+
+      <div ref="paypal"></div>
     </div>
 
 
@@ -20,7 +22,7 @@
       <h1>Nice, you bought a advertisment!</h1>
     </div>
 
-    <div ref="paypal"></div>
+    
 
   </div>
 </template>

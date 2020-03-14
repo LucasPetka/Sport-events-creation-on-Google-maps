@@ -38,8 +38,11 @@
                     </div>
                 </div>
                 <div class="col-sm-2 col-lg-1">
-                        <button type="button" id="search_button" class="btn btn-dark dropdown-toggle pt-2 pb-2" style="border-radius: 0px 0px 5px 5px;" data-toggle="collapse" data-target="#places_sort" aria-expanded="false" aria-controls="places_sort" onclick="this.blur();">
-                            <i class="fas fa-search"></i>
+                        <button type="button" id="search_button" class="btn btn-dark pt-2 pb-2" style="border-radius: 0px 0px 5px 5px; white-space:nowrap;" data-toggle="collapse" data-target="#places_sort" aria-expanded="false" aria-controls="places_sort" onclick="this.blur();">
+                            
+                            <span v-if="search_expanded"><i class="fas fa-search"></i> <small><i class="fas fa-chevron-up"></i></small></span>
+                            <span v-else ><i class="fas fa-search"></i> <small><i class="fas fa-chevron-down"></i></small></span>
+
                         </button>
                 </div>
             </div>
@@ -51,7 +54,7 @@
 
    
 
-    <notifications group="foo" classes="my-style" ignoreDuplicates position="top left" />
+    <notifications group="foo" classes="my-style" position="top left" style="margin-top:55px;" />
 
     <!--===================================================Add event Modal==================================================-->
             <form @submit.prevent="addEvent">
@@ -113,11 +116,11 @@
                             </div>
                             <div class="modal-body">
                                 <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="Title" v-model="place.title">
+                                <input type="text" class="form-control" placeholder="Title" v-model="place.title" required>
                                 </div>
 
                                 <div class="input-group mb-3">
-                                    <textarea class="form-control" rows="6" placeholder="About..." v-model="place.about" ></textarea>
+                                    <textarea class="form-control" rows="6" placeholder="About..." v-model="place.about" required></textarea>
                                 </div>
 
                                 <div class="input-group mb-3">
@@ -125,7 +128,7 @@
                                         <label class="input-group-text" for="inputGroupSelect01">Sport</label>
                                     </div>
                     
-                                    <select class="custom-select" id="inputGroupSelect01" v-model="place.type">
+                                    <select class="custom-select" id="inputGroupSelect01" v-model="place.type" required>
                                         <option v-for="type in allTypes.data" :key="type.id" :value="type.id"> {{ type.name }}</option>
                                     </select>
                                 </div>
@@ -138,7 +141,7 @@
 
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-success float-right">Add <i class="fas fa-plus"></i></button>
+                                <button type="submit" class="btn btn-success float-right" :disabled="isLoading">Add <i class="fas fa-plus"></i></button>
                             </div>
                         </div>
                     </div>
@@ -250,6 +253,7 @@ export default {
             //     ['06:00', '07:30', { backgroundColor: 'red' }],
             //     [35, 40, { backgroundColor: 'red' }]
             // ],
+            search_expanded:false,
             isLoading: null,
             event_time:['', ''],
             data: [],
@@ -311,8 +315,16 @@ export default {
 
         this.fillArrayWithTimes();
 
-         $('#addPlace').on('hide.bs.modal', (e) => {
+        $('#addPlace').on('hide.bs.modal', (e) => {
            this.$refs.gmapp.hidePointer();
+        });
+
+        $('#places_sort').on('show.bs.collapse', (e) => {
+           this.search_expanded = true;
+        });
+
+        $('#places_sort').on('hide.bs.collapse', (e) => {
+           this.search_expanded = false;
         });
 
     },
@@ -511,6 +523,23 @@ export default {
     addPlace() {
         this.place.personid = this.$props.currentUser.id;
 
+        this.isLoading = true
+        setTimeout(() => {
+            this.isLoading = false
+        }, 2000);
+
+        if(this.place.title == '' || this.place.about == '' || this.place.type == '' || this.place.lat == '' || this.place.lng == ''){
+
+            Vue.notify({
+                group: 'foo',
+                title: 'Alert',
+                type: 'error',
+                duration: 3000,
+                text: 'The form was not completed, try again'
+            });
+        
+        }
+        else{
             fetch('api/placequeue?api_token=' + this.getCookie("api_token"), {
                 method: 'post',
                 body: JSON.stringify(this.place),
@@ -526,7 +555,6 @@ export default {
                 this.place.lng = '';
                 this.place.type = '';
                 this.place.paid = '';
-                this.$refs.gmapp.fetchPlaces_sort();
             })
             .catch(err =>console.log(err));
 
@@ -536,12 +564,12 @@ export default {
                 type: 'success',
                 duration: 10000,
                 text: 'The new place has been sent for inspection and if everything is okay will be uploaded'
-                });
+            });
+        }
 
-                this.$refs.gmapp.fetchPlaces_sort();
-                this.$refs.gmapp.hidePointer();
-                this.closeAdd();
-                this.closeShow();
+            this.$refs.gmapp.hidePointer();
+            this.closeAdd();
+            this.closeShow();
 
     },
 
@@ -551,7 +579,8 @@ export default {
         this.isLoading = true
         setTimeout(() => {
             this.isLoading = false
-        }, 2000)
+        }, 2000);
+
         if(this.edit === false){
 
             this.event.time_from = this.date + " " + this.event_time[0]
@@ -664,8 +693,8 @@ export default {
 
 .my-style {
     padding: 15px;
-    margin-top: 65px;
     margin-left: 10px;
+    margin-top: 10px;
     width: 290px;
  
     font-size: 14px;

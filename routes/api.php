@@ -17,7 +17,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-    //Create new Place
+    //Purchase complete
     Route::post('purchase/complete', 'PagesController@payment_successful');
 
     //List Types
@@ -40,7 +40,9 @@ Route::group(['middleware' => 'auth:api'], function() {
 
 });
 
-
+    
+    //Find event by sort
+    Route::post('find_events', 'EventFindController@findEvents');
     //List Events
     Route::get('events', 'EventController@index');
     //List Events by place

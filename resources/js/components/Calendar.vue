@@ -1,8 +1,25 @@
 <template>
         <div>
-            
+
+            <!-- ==============================Confirmation MODAL============================================== -->
+            <div class="modal fade" id="confirmation_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                <div class="modal-body">
+                    <p class="h5 text-center mb-0 pb-0">Are you sure you want to delete this event?</p><br>
+                    <p class="text-muted text-center mb-0 pb-0"><small> {{ event_mod.title }} </small></p>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-danger" v-on:click="deleteEvent(event_mod.id)">Delete</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+                </div>
+            </div>
+            </div>
+
+
             <div class="row">
-                <div class="col-12 m-2">
+                <div class="col-12 m-2" id="calendar">
                         <datepicker placeholder="Select Date" :highlighted="highlighted" :format="format" :value="todays_date" v-model="todays_date" @closed="showEvents()"></datepicker>
                         <button v-on:click="$emit('openAddEvent')" class="btn btn-outline-success pt-2 pb-2 ml-3 float-left">Add Event <i class="fas fa-plus"></i></button>
                 </div>
@@ -24,21 +41,19 @@
 
                     <div v-if="status === 1">
                         <div v-if="ifJoined(event.place_id, event.id, currentUser.id) == 0">
-                            <button id="join_btn" type="button" class="btn btn-success float-left" v-on:click="addPerson(event.place_id, event.id, currentUser.id, $event)"><i class="fas fa-user-plus"></i> Join</button>
+                            <button id="join_btn" type="button" class="btn btn-success float-left" :disabled="isLoading" v-on:click="addPerson(event.place_id, event.id, currentUser.id, $event)"><i class="fas fa-user-plus"></i> Join</button>
                         </div>
                         <div v-else>
-                            <button type="button" class="btn btn-secondary float-left" v-on:click="deletePerson(event.place_id, event.id, currentUser.id, $event)"><i class="fas fa-check"></i> Joined</button>
+                            <button type="button" class="btn btn-secondary float-left" :disabled="isLoading" v-on:click="deletePerson(event.place_id, event.id, currentUser.id, $event)"><i class="fas fa-check"></i> Joined</button>
                         </div>
                     
 
                         <div v-if="currentUser.id == event.person_id.id">
-                            <button type="button" class="btn btn-danger float-right ml-2" v-on:click="deleteEvent(event.id)"> <i class="fas fa-trash-alt"></i> </button>
-                            <button type="button" class="btn btn-primary float-right" v-on:click="editEvent(event.id)" > <i class="far fa-edit"></i> </button>
+                            <button type="button" class="btn btn-danger float-right ml-2" v-on:click="openConfirmation(event)"> <i class="fas fa-trash-alt"></i> </button>
+                            <button type="button" class="btn btn-primary float-right" v-on:click="editEvent(event.id)"> <i class="far fa-edit"></i> </button>
                         </div>
 
                     </div>
-                    
-                    
                 </div>
                 </div>    
 
@@ -68,6 +83,17 @@ export default {
     
     data(){
         return{
+            event_mod: {
+                id:'',
+                place_id:'',
+                title:'',
+                about:'',
+                time_from:'',
+                time_until:'',
+                organizator:'',
+                people_going:0,
+            },
+            isLoading: null,
             format:'yyyy-MM-dd',
             todays_date: new Date(),
             place_id: null,
@@ -121,6 +147,11 @@ export default {
         },
 
 
+        openConfirmation: function(event){
+            this.event_mod = event;
+            $('#confirmation_modal').appendTo("body").modal('show');
+        },
+        
         //Check if person already joined to current event
         ifJoined: function(place, event, user){
 
@@ -236,6 +267,12 @@ export default {
 
         //Add person to the event
         addPerson(place, event, person, but) {
+            
+            this.isLoading = true
+            setTimeout(() => {
+                this.isLoading = false
+            }, 2000);
+
             this.person.place_id = place;
             this.person.event_id = event;
             this.person.person_id = person;
@@ -270,6 +307,11 @@ export default {
         
         //Delete person from event
         deletePerson: function(place, event, person, but) {
+
+            this.isLoading = true
+            setTimeout(() => {
+                this.isLoading = false
+            }, 2000);
 
             const first = this.people_going.filter( oneper => oneper.person_id.id == person);
             const second = first.filter( oneper => oneper.event_id == event);
@@ -329,6 +371,8 @@ export default {
                 text: 'You have deleted an event'
                 });
 
+                $('#confirmation_modal').modal('hide');
+
         },
 
     }
@@ -337,7 +381,7 @@ export default {
 
 <style>
 
-.vdp-datepicker input{
+#calendar .vdp-datepicker input{
     border-radius: 5px 5px 5px 5px;
     width: 110px;
     box-shadow: none !important;
@@ -347,5 +391,5 @@ export default {
     outline: none !important;
 }
 
-
 </style>
+

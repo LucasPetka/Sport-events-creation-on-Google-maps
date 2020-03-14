@@ -19,14 +19,20 @@
 Auth::routes(['verify' => true]); 
 
 Route::get('/', 'PagesController@index');
-
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/place_owner/{id}', 'PagesController@payment_page')->middleware('auth');
 
+
+//--------------------EVENT FINDER------------------------------------------------
+Route::get('/find_event', 'EventFindController@index');
+
+
+//-------------------PAYMENT AND EVENT VALIDATION------------------------------------
+Route::get('/place_owner/{id}', 'PagesController@payment_page')->middleware('auth');
 Route::get('/validate_time', 'EventController@check_time');
 
-Route::post('/update_profile', 'HomeController@update_profile')->middleware('auth');
 
+//----------------------------PROFILE-------------------------------------------
+Route::post('/update_profile', 'HomeController@update_profile')->middleware('auth');
 Route::post('/resubmit/{id}', 'DeclinedPlacesController@update')->middleware('auth');
 Route::delete('/decplace/{id}', 'DeclinedPlacesController@destroy')->middleware('auth');
 

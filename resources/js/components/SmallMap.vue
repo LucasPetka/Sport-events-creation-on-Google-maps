@@ -27,6 +27,7 @@ export default {
         mapStyle: {
         styles: mapstyle,
         options:{
+            gestureHandling: 'greedy',
             fullscreenControl: true,
             mapTypeControl: false,
             scaleControl: false,

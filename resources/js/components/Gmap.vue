@@ -3,9 +3,9 @@
     
       <div id="geoloc_bar">
         <div class="input-group">
-          <gmap-autocomplete class="form-control" @keyup.enter="locate" @place_changed="setPlace"></gmap-autocomplete> 
+          <gmap-autocomplete class="form-control" :select-first-on-enter="true" @place_changed="setPlace"></gmap-autocomplete> 
           <div class="input-group-append">
-            <button class="btn btn-outline-secondary" @click="locate">Locate</button>
+            <button class="btn btn-outline-secondary" @click="locate(bounds)">Locate</button>
           </div>
         </div>
       </div>
@@ -77,9 +77,10 @@ export default {
     mapStyle: {
       styles: mapstyle,
       options:{
+        minZoom: 10,
         gestureHandling: 'greedy',
         fullscreenControl: false,
-        mapTypeControl: false,
+        mapTypeControl: true,
         scaleControl: false,
         streetViewControl: false,
         zoomControl: false
@@ -90,6 +91,8 @@ export default {
 
   created() {
     this.center = this.location;
+
+    console.log(this.location);
 
     this.fetchTypesx();
     this.geolocation();
@@ -194,7 +197,6 @@ export default {
         else {
           setTimeout(() => {  this.smoothZoom(max, cnt + 1); this.zoom_in = cnt;}, 120)
         }
-        
     },  
 
 
@@ -227,25 +229,19 @@ export default {
 
     //updates center
     setPlace(place) {
-      this.currentPlace = place;
-    },
-
-
-    //locates inputed geographic name
-    locate() {
-      if (this.currentPlace) {
-        const marker = {
-          lat: this.currentPlace.geometry.location.lat(),
-          lng: this.currentPlace.geometry.location.lng()
+      
+        const LocatedPlace = {
+          lat: place.geometry.location.lat(),
+          lng: place.geometry.location.lng()
         };
-        this.center = marker;
-       
+        this.center = LocatedPlace;
         this.currentPlace = null;
-          this.smoothZoom(13, this.zoom_in);
-          setTimeout(() => { this.loadMarkers(); }, 800)
-      }
 
+        this.smoothZoom(13, this.zoom_in);
+        setTimeout(() => { this.loadMarkers(); }, 800)
+      
     },
+
 
     //Sets the icon for the place id
     icon: function(place){
@@ -318,7 +314,6 @@ export default {
     fetchPlaces_sort(rules) {
       var ne = this.bounds.getNorthEast();
       var sw = this.bounds.getSouthWest();
-      console.log(ne + " " + sw);
       this.rules = rules;
 
       this.fetchPlacesx_sort([this.bounds, rules, this.user_location]);

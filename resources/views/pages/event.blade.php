@@ -37,7 +37,7 @@
                     {{ Carbon\Carbon::parse($event->time_from)->format('H:i') }}
                     - {{ Carbon\Carbon::parse($event->time_until)->format('H:i') }}
                 </span>
-            </div>
+            </div>    
         </div>
 
         <chats :user="{{ auth()->user() }}" :event="{{ $event }}" ></chats>

@@ -52,8 +52,8 @@
                             <button type="button" class="btn btn-danger float-right ml-2" v-on:click="openConfirmation(event)"> <i class="fas fa-trash-alt"></i> </button>
                             <button type="button" class="btn btn-primary float-right" v-on:click="editEvent(event.id)"> <i class="far fa-edit"></i> </button>
                         </div>
-
                     </div>
+                    
                 </div>
                 </div>    
 

@@ -35,6 +35,11 @@ Route::get('/validate_time', 'EventController@check_time');
 Route::post('/update_profile', 'HomeController@update_profile')->middleware('auth');
 Route::post('/resubmit/{id}', 'DeclinedPlacesController@update')->middleware('auth');
 Route::delete('/decplace/{id}', 'DeclinedPlacesController@destroy')->middleware('auth');
+Route::get('/returncreatedevents', 'HomeController@returnCreatedEvents')->middleware('auth');
+Route::get('/returngoingtoevents', 'HomeController@returnGoingToEvents')->middleware('auth');
+Route::get('/returnacceptedplaces', 'HomeController@returnAcceptedPlaces')->middleware('auth');
+Route::get('/returndeclinedplaces', 'HomeController@returnDeclinedPlaces')->middleware('auth');
+Route::get('/returnsubmitedplaces', 'HomeController@returnSubmitedPlaces')->middleware('auth');
 
 
 

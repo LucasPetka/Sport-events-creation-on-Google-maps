@@ -9,11 +9,7 @@ use Auth;
 
 class PeopleGoingController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    //----------------------Return all DB people going-----------------------------
     public function index()
     {
         $people_going = PeopleGoing::all();
@@ -22,17 +18,11 @@ class PeopleGoingController extends Controller
         return PeopleGoingResource::collection($people_going);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    //-------------------Adds person to going list DB-----------------------------
     public function store(Request $request)
     {
-        $person = $request->isMethod('put') ? PeopleGoing::findOrFail($request->id) : new PeopleGoing;
+        $person = new PeopleGoing;
 
-        $person->id = $request->input('id');
         $person->place_id = $request->input('place_id');
         $person->event_id = $request->input('event_id');
         $person->person_id = Auth::id();
@@ -42,12 +32,7 @@ class PeopleGoingController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    //---------------------Return list of people who are going to specific event----------------------
     public function returnByEvent($id)
     {
         $people_going = PeopleGoing::where('event_id', $id)->get();
@@ -56,12 +41,7 @@ class PeopleGoingController extends Controller
         return PeopleGoingResource::collection($people_going);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    //---------------------Leave the event / Deletes person from going to event--------------------------
     public function destroy($id)
     {
         $person = PeopleGoing::findOrFail($id);

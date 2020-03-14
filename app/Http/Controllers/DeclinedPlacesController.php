@@ -12,16 +12,13 @@ class DeclinedPlacesController extends Controller
     public function update(Request $request, $id)
     {
         $declinedPlace = DeclinedPlaces::findOrFail($request->id);
-        $declinedPlace->title = $request->input('title');
-        $declinedPlace->about = $request->input('about');
 
         $place =  new PlaceQueue;
         $place->title = $request->input('title');
         $place->about = $request->input('about');
-        $place->about = $request->input('about');
         $place->lat = $request->input('lat');
         $place->lng = $request->input('lng');
-        $place->type = $declinedPlace->type;
+        $place->type = $request->input('type');
         if($request->input('paid')){
             $place->paid = 1;
         }
@@ -29,11 +26,11 @@ class DeclinedPlacesController extends Controller
             $place->paid = 0;
         }
         
-        $place->personid = $declinedPlace->personid;
+        $place->personid = $request->personid;
 
         if($place->save()){
             $declinedPlace->delete();
-            return redirect('/home');
+            return ['Success'];
         }
     }
 

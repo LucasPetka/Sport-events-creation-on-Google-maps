@@ -2,6 +2,8 @@
 
 <div>
 
+    <notifications group="foo" classes="my-style" position="top left" style="margin-top:55px;" />
+
 <!-- People going MODAL -->
 <div class="modal fade" id="people_going" tabindex="-1" role="dialog" aria-labelledby="people_goingTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
@@ -34,7 +36,21 @@
 </div>
 
 
-<p><b> <a href="#" data-toggle="modal" data-target="#people_going"> <i class="fas fa-user"></i> {{ people_going.length }} people going </a></b></p>
+<div class="row mb-3">
+    <div class="col-6">
+    <b> <a href="#" data-toggle="modal" data-target="#people_going"> <i class="fas fa-user"></i> {{ people_going.length }} people going </a></b>
+    </div>
+    <div class="col-6">
+        <editevent :user="user" :event="event"></editevent>
+        <div v-if="ifJoined(event.place_id, event.id, user.id) == 0">
+            <button id="join_btn" type="button" class="btn btn-success float-right" :disabled="isLoading" v-on:click="addPerson(event.place_id, event.id, user.id, $event)"><i class="fas fa-user-plus"></i> Join</button>
+        </div>
+        <div v-else>
+            <button type="button" class="btn btn-secondary float-right" :disabled="isLoading" v-on:click="deletePerson(event.place_id, event.id, user.id, $event)"><i class="fas fa-check"></i> Joined</button>
+        </div>
+    </div>
+</div>
+
 
 <div class="row">
 
@@ -81,8 +97,12 @@
 </template>
 
 <script>
+const editevent = () => import("../components/EditEvent.vue");
 
 export default {
+    components: {
+        'editevent': editevent,
+    },
 
     props:['user', 'event'],
 
@@ -91,9 +111,14 @@ export default {
             messages: [],
             newMessage: '',
             users: [],
+            isLoading:false,
             people_going: [],
             activeUser: false,
-            typeTime: false
+            typeTime: false,
+            person: {
+                place_id:'',
+                event_id:'',
+            },
         }
     },
 
@@ -142,19 +167,14 @@ export default {
                 user: this.user,
                 message: this.newMessage
             })
-
             axios.post('../messages', {message: this.newMessage, event_id: this.event.id });
-
             this.newMessage = '';
         },
 
         sendTyping(){
-
             Echo.join('event.' + this.event.id)
                 .whisper('type', this.user);
-
         },
-
 
         fetchPeopleGoing() {
                 fetch('../api/people_going/'+ this.event.id)
@@ -165,6 +185,102 @@ export default {
                     return this.people_going.length;
                 })
             
+        },
+
+        getCookie(name) {
+            var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+            return v ? v[2] : null;
+        },
+
+        //Check if person already joined to current event
+        ifJoined: function(place, event, user){
+
+            var ans = 0;
+            this.people_going.forEach(myFunction);
+            function myFunction(person, index) {
+                if(person.place_id == place && person.event_id == event && person.person_id.id == user){
+                    ans = 1;
+                } else{
+                    if(ans == 1){
+                        ans= 1;
+                    }
+                    else{
+                    ans = 0;
+                    }
+                }
+            }
+            return ans;
+        },
+
+
+        //Add person to the event
+        addPerson(place, event, person, but) {
+            
+            this.isLoading = true
+            setTimeout(() => {
+                this.isLoading = false
+            }, 2000);
+
+            this.person.place_id = place;
+            this.person.event_id = event;
+        
+            fetch('../api/person?api_token=' + this.getCookie("api_token"), {
+                method: 'post',
+                body: JSON.stringify(this.person),
+                headers: {
+                    'content-type': 'application/json'
+                }
+            })
+            .then(res => res.json())
+            .then( data=> {
+                this.person.place_id = '';
+                this.person.event_id = '';
+
+                this.fetchPeopleGoing();
+
+            })
+            .catch(err =>console.log(err));
+
+            Vue.notify({
+                group: 'foo',
+                title: 'Congrats!!',
+                type: 'success',
+                text: 'You have joined an event !'
+                });
+
+        },
+
+        //Delete person from event
+        deletePerson: function(place, event, person, but) {
+
+            this.isLoading = true
+            setTimeout(() => {
+                this.isLoading = false
+            }, 2000);
+
+            const first = this.people_going.filter( oneper => oneper.person_id.id == person);
+            const second = first.filter( oneper => oneper.event_id == event);
+            const third = second.filter( oneper => oneper.place_id == place);
+
+            var id = third[0].id;
+         
+            fetch('../api/person/'+ id + '?api_token=' + this.getCookie("api_token"), {
+                method: 'delete'
+            })
+                .then(res => res.json())
+                .then(data => {
+
+                    this.fetchPeopleGoing();
+
+                })
+                .catch(err => console.log(err));
+
+                Vue.notify({
+                group: 'foo',
+                title: 'Notification',
+                type: 'error',
+                text: 'You left the event !'
+                });
         },
 
     }

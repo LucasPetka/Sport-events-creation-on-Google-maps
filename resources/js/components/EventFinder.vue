@@ -1,10 +1,7 @@
 <template>
         <div>
-            <!--LABUKAS : {{ user_location }}-->
-
-    
             <div class="row">  
-            <div class="col-6">   
+            <div class="col-lg-6">   
             <div class="card">
                 <div class="card-body">
 
@@ -27,8 +24,14 @@
                         <vue-slider :adsorb="true" class="mr-3 ml-3 mb-5 mb-3" v-model="rules.distance" :min="1" :max="20" :tooltip-formatter="formatter" :tooltip="'always'" :tooltip-placement="'bottom'"></vue-slider>
 
                         <div class="mb-1 bg-light">Event dates</div>
-                        <span class="text-muted">From</span> <datepicker class="mb-4 mt-2 d-inline-block mr-4" placeholder="Select Date" :format="format" :value="rules.date_from" v-model="rules.date_from"></datepicker>
-                        <span class="text-muted">To</span> <datepicker class="mb-4 mt-2 d-inline-block" placeholder="Select Date" :format="format" :value="rules.date_until" v-model="rules.date_until"></datepicker>
+                        <div class="row mb-3 justify-content-center">
+                            <div class="col-lg-5">
+                                <div style="width:35px" class="text-muted d-inline-block">From</div> <datepicker class="mb-1 mt-2 d-inline-block" placeholder="Select Date" :format="format" :value="rules.date_from" v-model="rules.date_from"></datepicker>
+                            </div>
+                            <div class="col-lg-5">
+                                <div style="width:35px" class="text-muted d-inline-block">To</div> <datepicker class="mb-1 mt-2 d-inline-block" placeholder="Select Date" :format="format" :value="rules.date_until" v-model="rules.date_until"></datepicker>
+                            </div>
+                        </div>
 
                         <div class="mb-2 bg-light">Sport Types</div>
                         <div v-for="type in allTypes.data" :key="type.id" class="custom-control custom-checkbox d-inline-block mr-3">
@@ -64,7 +67,7 @@
             </div>
             </div>  
 
-            <div class="col-6">
+            <div class="col-lg-6">
 
                 <div class="btn-toolbar justify-content-center mb-3" role="toolbar" aria-label="Toolbar with button groups">
                     <div class="btn-group mr-2" role="group" aria-label="First group">

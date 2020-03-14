@@ -10,6 +10,8 @@ Vue.component('chats', require('./components/Chats.vue').default);
 Vue.component('pagination', require('./components/Pagination.vue').default);
 Vue.component('payment', require('./components/Payment.vue').default);
 Vue.component('eventfinder', require('./components/EventFinder.vue').default);
+Vue.component('editevent', require('./components/EditEvent.vue').default);
+Vue.component('showprofileinfo', require('./components/ShowProfileInfo.vue').default);
 
 import Vue from 'vue'
 

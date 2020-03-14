@@ -24,25 +24,26 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     Route::get('types', 'TypeController@index');
     //List Places
     Route::get('places/{nelat}/{swlat}/{nelng}/{swlng}', 'Places\PlaceController@index');
-    //Route::get('placescord/{nelat}/{swlat}/{nelng}/{swlng}', 'PlaceController@placesCord');
+
+    //============================PLACES=======================================
+    Route::group(['middleware' => 'auth:api'], function() {
+        //Create new Place
+        Route::post('place', 'Places\PlaceController@store');
+        //Update place
+        Route::put('place', 'Places\PlaceController@store');
+        //Delete place
+        Route::delete('place/{id}', 'Places\PlaceController@destroy');
+        //Create new Place
+        Route::post('placequeue', 'Places\PlaceQueueController@store');
+
+    });
 
 
-Route::group(['middleware' => 'auth:api'], function() {
-    //Create new Place
-    Route::post('place', 'Places\PlaceController@store');
-    //Update place
-    Route::put('place', 'Places\PlaceController@store');
-    //Delete place
-    Route::delete('place/{id}', 'Places\PlaceController@destroy');
 
-    //Create new Place
-    Route::post('placequeue', 'Places\PlaceQueueController@store');
-
-});
-
-    
-    //Find event by sort
+    //======================Find event by sort====================
     Route::post('find_events', 'EventFindController@findEvents');
+
+    //===========================EVENTS==============================
     //List Events
     Route::get('events', 'EventController@index');
     //List Events by place
@@ -53,23 +54,25 @@ Route::group(['middleware' => 'auth:api'], function() {
     //Get which event happening right now or which event is closest one
     Route::get('nearevent/{id}', 'EventController@closestEvent');
 
-Route::group(['middleware' => 'auth:api'], function() {
-    //Create new Event
-    Route::post('event', 'EventController@store');
-    //Update Event
-    Route::put('event', 'EventController@store');
-    //Delete Event
-    Route::delete('event/{id}', 'EventController@destroy');
-});
+    Route::group(['middleware' => 'auth:api'], function() {
+        //Create new Event
+        Route::post('event', 'EventController@store');
+        //Update Event
+        Route::put('event', 'EventController@store');
+        //Delete Event
+        Route::delete('event/{id}', 'EventController@destroy');
+    });
 
-    //People Going
+
+
+
+    //==============================People Going=============================================
     Route::get('people_going', 'PeopleGoingController@index');
-
     Route::get('people_going/{id}', 'PeopleGoingController@returnByEvent');
 
-Route::group(['middleware' => 'auth:api'], function() {
-    //Add person to event
-    Route::post('person', 'PeopleGoingController@store');
-    //Remove person from event
-    Route::delete('person/{id}', 'PeopleGoingController@destroy');
-});
+    Route::group(['middleware' => 'auth:api'], function() {
+        //Add person to event
+        Route::post('person', 'PeopleGoingController@store');
+        //Remove person from event
+        Route::delete('person/{id}', 'PeopleGoingController@destroy');
+    });

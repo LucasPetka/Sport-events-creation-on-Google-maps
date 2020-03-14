@@ -448,7 +448,6 @@ export default {
         d.setMinutes(30);
         dat.setMinutes(30);
         dat.setHours(d.getHours() + 1);
-
         dateee = d.getHours() +":"+ d.getMinutes();
         this.event_time[0] = dateee;
         dateee = dat.getHours() +":"+ dat.getMinutes();

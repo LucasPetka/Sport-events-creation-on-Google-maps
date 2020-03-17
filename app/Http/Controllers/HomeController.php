@@ -52,6 +52,7 @@ class HomeController extends Controller
         ->join('places', 'places.id', '=', 'people_going.place_id')
         ->join('types', 'types.id', '=', 'places.type')
         ->select('events.*', 'types.image', 'places.lat', 'places.lng')
+        ->orderBy('time_from', 'asc')
         ->get();
         return $goingtoevents->toJson();
     }
@@ -84,6 +85,28 @@ class HomeController extends Controller
         ->get();
 
         return $submited_places->toJson();
+    }
+
+    function returnDeclinedEvents(){
+        $user = Auth::user();
+        $declined_events = DB::table('declined_events')->where('declined_events.person_id','=',$user->id)
+        ->join('places', 'places.id', '=', 'declined_events.place_id')
+        ->join('types', 'types.id', '=', 'places.type')
+        ->select('declined_events.*', 'types.image', 'places.lat', 'places.lng')
+        ->get();
+
+        return $declined_events->toJson();
+    }
+
+    function returnSubmitedEvents(){
+        $user = Auth::user();
+        $submited_events = DB::table('eventqueue')->where('eventqueue.person_id','=',$user->id)
+        ->join('places', 'places.id', '=', 'eventqueue.place_id')
+        ->join('types', 'types.id', '=', 'places.type')
+        ->select('eventqueue.*', 'types.image', 'places.lat', 'places.lng')
+        ->get();
+
+        return $submited_events->toJson();
     }
 
 

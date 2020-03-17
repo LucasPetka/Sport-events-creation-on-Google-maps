@@ -65,6 +65,12 @@
                       </a>
                     </li>
                     <li class="nav-item">
+                      <a class="nav-link active" href="/admin/events">
+                        <i class="fas fa-calendar-alt"></i>
+                        Events to confirm ({{ count($events) }}) <span class="sr-only">(current)</span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
                       <a class="nav-link" href="/admin/users">
                         <i class="fas fa-user"></i>
                         Users

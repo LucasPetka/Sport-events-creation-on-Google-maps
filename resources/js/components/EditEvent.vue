@@ -23,12 +23,12 @@
                         <div class="modal-body">
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Title</label>
-                                <input v-model="event_for_sending.title" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter title" required>
+                                <input v-model="event_for_sending.title" type="text" class="form-control" id="exampleInputEmail1" maxlength="45" aria-describedby="emailHelp" placeholder="Enter title" required>
                             </div>
 
                             <div class="form-group">
                                 <label for="exampleFormControlTextarea1">About</label>
-                                <textarea v-model="event_for_sending.about" class="form-control" id="exampleFormControlTextarea1" rows="6" required></textarea>
+                                <textarea v-model="event_for_sending.about" class="form-control" id="exampleFormControlTextarea1" maxlength="350" rows="6" required></textarea>
                             </div>
 
 
@@ -38,15 +38,21 @@
                             </ul>
                                
 
-                            <vue-slider  :adsorb="true" v-if="event_time != ''" v-on:drag-end="parseDate(1)" class="mr-3 ml-3 mb-5" v-model="event_time" :data="data" :marks="marks" :enable-cross="false"></vue-slider>
+                            <vue-slider  :adsorb="true" v-if="event_time != ''" v-on:drag-end="parseDate(event.id)" class="mr-3 ml-3 mb-5" v-model="event_time" :data="data" :marks="marks" :enable-cross="false"></vue-slider>
 
 
-                            <div id="time_error"></div>
+                            <div class="row">
+                                <div :id="'time_error'+event.id" class="mx-auto"></div>
+                            </div>
+                            <div class="row">
+                                <div :id="'time_error_second'+event.id" class="mx-auto"></div>
+                            </div>
+
                         </div>
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button id="add_event_btn" type="submit" class="btn btn-success float-right" :disabled="isLoading"> Update </button>
+                            <button :id="'add_event_btn'  + event.id" type="submit" class="btn btn-success float-right" :disabled="isLoading"> Update </button>
                         </div>
                     </div>
                 </div>
@@ -91,6 +97,15 @@ export default {
     created(){
         this.fillArrayWithTimes();   
         this.event_for_sending = this.event;
+    },
+
+    mounted(){
+
+        $("[id^='addEvent']").on('hide.bs.modal', (e) => {
+           $("[id^='time_error']").html("");
+           $("[id^='time_error_second']").html("");
+        });
+
     },
 
 
@@ -147,32 +162,36 @@ export default {
         },
 
         //---------------------Parse data in right format to choose when event starts and when ends--------------------
-        parseDate(choose){
+        parseDate(event_id){
+
             if(this.event_time[0] == this.event_time[1]){
-                $("#time_error").html("<span class='text-danger'><small>Times should not be equal!</small></span>");
-                $("#add_event_btn").attr("disabled", true);
+                $("#time_error" + event_id).html("<span class='text-danger'><small>Times should not be equal!</small></span>");
+                $("#add_event_btn"  + event_id).attr("disabled", true);
             }
             else if(this.event_time[0] > this.event_time[1]) {
-                $("#time_error").html("<span class='text-danger'><small>Second time should be later!</small></span>");
-                $("#add_event_btn").attr("disabled", true);
+                $("#time_error" + event_id).html("<span class='text-danger'><small>Second time should be later!</small></span>");
+                $("#add_event_btn"  + event_id).attr("disabled", true);
             }
             else{
-                $("#time_error").html("");
-                $('#add_event_btn').removeAttr("disabled");
+                $("#time_error" + event_id).html("");
+                $('#add_event_btn'  + event_id).removeAttr("disabled");
             }
 
             $.ajax({
                 type: "GET",
-                url: "/validate_time?start="+ this.date +" "+ this.event_time[0]+"&end="+ this.date +" "+ this.event_time[1]+"&place_id="+this.event.place_id,     
+                url: "/validate_time?start="+ this.date +" "+ this.event_time[0]+"&end="+ this.date +" "+ this.event_time[1]+"&place_id="+this.event.place_id+"&event_id="+this.event.id,     
                 success: function(result){
 
+                    console.log(result.found);
+
                     if(!result.found){
-                        $("#time_error").html("");
+                        $("#time_error_second" + event_id).html("");
                         $('#add_event_btn').removeAttr("disabled");
+
                     }  
                     else{
-                        $("#time_error").html("<span class='text-danger'><small>Time overlaping with other events</small></span>");
-                        $("#add_event_btn").attr("disabled", true);
+                        $("#time_error_second" + event_id).html("<span class='text-danger'><small>Time overlaping with other events</small></span>");
+                        $("#add_event_btn"  + event_id).attr("disabled", true);
                     }
                     
                 }
@@ -203,14 +222,27 @@ export default {
             });
 
             const content = await Response.json();
+
+            if(content == true){
+                Vue.notify({
+                    group: 'foo',
+                    title: 'Congrats!!',
+                    type: 'success',
+                    text: 'You have updated an event !'
+                });  
+            }
+            else{
+                Vue.notify({
+                    group: 'foo',
+                    title: 'Error!!',
+                    type: 'error',
+                    text: 'There was incorect values in the form!'
+                });  
+            }
+
             })();
 
-            Vue.notify({
-                group: 'foo',
-                title: 'Congrats!!',
-                type: 'success',
-                text: 'You have updated an event !'
-            });  
+            
 
             $('#addEvent'+this.event_for_sending.id).modal('hide');
 
@@ -237,6 +269,30 @@ export default {
 
 body.modal-open {
     overflow: visible;
+}
+
+.my-style {
+    padding: 15px;
+    margin-left: 10px;
+    margin-top: 10px;
+    width: 290px;
+ 
+    font-size: 14px;
+    border-radius: 5px;
+    border-left: solid rgb(99, 156, 88) 5px;
+
+
+    color: #ffffff;
+    background: #82CC75;
+}
+
+.success {
+    background: #82CC75;
+}
+
+.error {
+    background: #DC4146;
+    border-left: solid rgb(177, 52, 56) 5px;
 }
 
 </style>

@@ -3408,6 +3408,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['event', 'user'],
   data: function data() {
@@ -3435,6 +3441,12 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     this.fillArrayWithTimes();
     this.event_for_sending = this.event;
+  },
+  mounted: function mounted() {
+    $("[id^='addEvent']").on('hide.bs.modal', function (e) {
+      $("[id^='time_error']").html("");
+      $("[id^='time_error_second']").html("");
+    });
   },
   methods: {
     fillArrayWithTimes: function fillArrayWithTimes() {
@@ -3492,28 +3504,30 @@ __webpack_require__.r(__webpack_exports__);
       $('#addEvent' + this.event.id).modal('hide');
     },
     //---------------------Parse data in right format to choose when event starts and when ends--------------------
-    parseDate: function parseDate(choose) {
+    parseDate: function parseDate(event_id) {
       if (this.event_time[0] == this.event_time[1]) {
-        $("#time_error").html("<span class='text-danger'><small>Times should not be equal!</small></span>");
-        $("#add_event_btn").attr("disabled", true);
+        $("#time_error" + event_id).html("<span class='text-danger'><small>Times should not be equal!</small></span>");
+        $("#add_event_btn" + event_id).attr("disabled", true);
       } else if (this.event_time[0] > this.event_time[1]) {
-        $("#time_error").html("<span class='text-danger'><small>Second time should be later!</small></span>");
-        $("#add_event_btn").attr("disabled", true);
+        $("#time_error" + event_id).html("<span class='text-danger'><small>Second time should be later!</small></span>");
+        $("#add_event_btn" + event_id).attr("disabled", true);
       } else {
-        $("#time_error").html("");
-        $('#add_event_btn').removeAttr("disabled");
+        $("#time_error" + event_id).html("");
+        $('#add_event_btn' + event_id).removeAttr("disabled");
       }
 
       $.ajax({
         type: "GET",
-        url: "/validate_time?start=" + this.date + " " + this.event_time[0] + "&end=" + this.date + " " + this.event_time[1] + "&place_id=" + this.event.place_id,
+        url: "/validate_time?start=" + this.date + " " + this.event_time[0] + "&end=" + this.date + " " + this.event_time[1] + "&place_id=" + this.event.place_id + "&event_id=" + this.event.id,
         success: function success(result) {
+          console.log(result.found);
+
           if (!result.found) {
-            $("#time_error").html("");
+            $("#time_error_second" + event_id).html("");
             $('#add_event_btn').removeAttr("disabled");
           } else {
-            $("#time_error").html("<span class='text-danger'><small>Time overlaping with other events</small></span>");
-            $("#add_event_btn").attr("disabled", true);
+            $("#time_error_second" + event_id).html("<span class='text-danger'><small>Time overlaping with other events</small></span>");
+            $("#add_event_btn" + event_id).attr("disabled", true);
           }
         }
       });
@@ -3553,7 +3567,23 @@ __webpack_require__.r(__webpack_exports__);
               case 5:
                 content = _context2.sent;
 
-              case 6:
+                if (content == true) {
+                  Vue.notify({
+                    group: 'foo',
+                    title: 'Congrats!!',
+                    type: 'success',
+                    text: 'You have updated an event !'
+                  });
+                } else {
+                  Vue.notify({
+                    group: 'foo',
+                    title: 'Error!!',
+                    type: 'error',
+                    text: 'There was incorect values in the form!'
+                  });
+                }
+
+              case 7:
               case "end":
                 return _context2.stop();
             }
@@ -3561,12 +3591,6 @@ __webpack_require__.r(__webpack_exports__);
         });
       })();
 
-      Vue.notify({
-        group: 'foo',
-        title: 'Congrats!!',
-        type: 'success',
-        text: 'You have updated an event !'
-      });
       $('#addEvent' + this.event_for_sending.id).modal('hide');
       this.$emit('fetchCreatedEvents');
       this.event_for_sending.id = '';
@@ -4727,6 +4751,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
 var Calendar = function Calendar() {
   return Promise.resolve(/*! import() */).then(__webpack_require__.bind(null, /*! ../components/Calendar.vue */ "./resources/js/components/Calendar.vue"));
 };
@@ -4820,6 +4849,10 @@ var Gmap = function Gmap() {
     $('#places_sort').on('hide.bs.collapse', function (e) {
       _this.search_expanded = false;
     });
+    $('#addEvent').on('hide.bs.modal', function (e) {
+      $("#time_error").html("");
+      $("#time_error_second").html("");
+    });
   },
   computed: Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])(['allPlaces', 'allTypes']),
   //===============================METHODS=======================================================
@@ -4888,6 +4921,7 @@ var Gmap = function Gmap() {
       this.event.person_id = this.currentUser.id;
       this.event.organizator = this.currentUser.name;
       this.event_time = [this.event_time[0], this.event_time[1]];
+      this.parseDate();
       $('#addEvent').modal('show');
     },
     //-----------------Closes event creation label---------------------------
@@ -4895,7 +4929,7 @@ var Gmap = function Gmap() {
       $('#addEvent').modal('hide');
     },
     //---------------------Parse data in right format to choose when event starts and when ends--------------------
-    parseDate: function parseDate(choose) {
+    parseDate: function parseDate() {
       if (this.event_time[0] == this.event_time[1]) {
         $("#time_error").html("<span class='text-danger'><small>Times should not be equal!</small></span>");
         $("#add_event_btn").attr("disabled", true);
@@ -4909,13 +4943,15 @@ var Gmap = function Gmap() {
 
       $.ajax({
         type: "GET",
-        url: "/validate_time?start=" + this.date + " " + this.event_time[0] + "&end=" + this.date + " " + this.event_time[1] + "&place_id=" + this.event.place_id,
+        url: "/validate_time?start=" + this.date + " " + this.event_time[0] + "&end=" + this.date + " " + this.event_time[1] + "&place_id=" + this.event.place_id + "&event_id=" + this.event.id,
         success: function success(result) {
+          console.log(result);
+
           if (!result.found) {
-            $("#time_error").html("");
+            $("#time_error_second").html("");
             $('#add_event_btn').removeAttr("disabled");
           } else {
-            $("#time_error").html("<span class='text-danger'><small>Time overlaping with other events</small></span>");
+            $("#time_error_second").html("<span class='text-danger'><small>Time overlaping with other events</small></span>");
             $("#add_event_btn").attr("disabled", true);
           }
         }
@@ -5004,42 +5040,62 @@ var Gmap = function Gmap() {
         _this4.isLoading = false;
       }, 2000);
 
-      if (this.place.title == '' || this.place.about == '' || this.place.type == '' || this.place.lat == '' || this.place.lng == '') {
-        Vue.notify({
-          group: 'foo',
-          title: 'Alert',
-          type: 'error',
-          duration: 3000,
-          text: 'The form was not completed, try again'
-        });
-      } else {
-        fetch('api/placequeue?api_token=' + this.getCookie("api_token"), {
-          method: 'post',
-          body: JSON.stringify(this.place),
-          headers: {
-            'content-type': 'application/json'
-          }
-        }).then(function (res) {
-          return res.json();
-        }).then(function (data) {
-          _this4.place.title = '';
-          _this4.place.about = '';
-          _this4.place.lat = '';
-          _this4.place.lng = '';
-          _this4.place.type = '';
-          _this4.place.paid = '';
-        })["catch"](function (err) {
-          return console.log(err);
-        });
-        Vue.notify({
-          group: 'foo',
-          title: 'Congrats!!',
-          type: 'success',
-          duration: 10000,
-          text: 'The new place has been sent for inspection and if everything is okay will be uploaded'
-        });
-      }
+      (function _callee() {
+        var Response, content;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function _callee$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(fetch('api/placequeue?api_token=' + _this4.getCookie("api_token"), {
+                  method: 'post',
+                  body: JSON.stringify(_this4.place),
+                  headers: {
+                    'Accept': 'application/json',
+                    'content-type': 'application/json'
+                  }
+                }));
 
+              case 2:
+                Response = _context2.sent;
+                _context2.next = 5;
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(Response.json());
+
+              case 5:
+                content = _context2.sent;
+
+                if (content == true) {
+                  Vue.notify({
+                    group: 'foo',
+                    title: 'Congrats!!',
+                    type: 'success',
+                    duration: 10000,
+                    text: 'The new place has been sent for inspection and if everything is okay will be uploaded'
+                  });
+                } else {
+                  Vue.notify({
+                    group: 'foo',
+                    title: 'Error!!',
+                    type: 'error',
+                    duration: 10000,
+                    text: content.message
+                  });
+                }
+
+              case 7:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        });
+      })();
+
+      this.place.title = '';
+      this.place.about = '';
+      this.place.lat = '';
+      this.place.lng = '';
+      this.place.type = '';
+      this.place.paid = '';
       this.$refs.gmapp.hidePointer();
       this.closeAdd();
       this.closeShow();
@@ -5057,51 +5113,6 @@ var Gmap = function Gmap() {
         this.event.time_from = this.date + " " + this.event_time[0];
         this.event.time_until = this.date + " " + this.event_time[1];
 
-        (function _callee() {
-          var Response, content;
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function _callee$(_context2) {
-            while (1) {
-              switch (_context2.prev = _context2.next) {
-                case 0:
-                  _context2.next = 2;
-                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(fetch('api/event?api_token=' + _this5.getCookie("api_token"), {
-                    method: 'post',
-                    body: JSON.stringify(_this5.event),
-                    headers: {
-                      'Accept': 'application/json',
-                      'content-type': 'application/json'
-                    }
-                  }));
-
-                case 2:
-                  Response = _context2.sent;
-                  _context2.next = 5;
-                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(Response.json());
-
-                case 5:
-                  content = _context2.sent;
-                  _context2.next = 8;
-                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(_this5.$refs.calendar.fetchSpot(_this5.show.id));
-
-                case 8:
-                case "end":
-                  return _context2.stop();
-              }
-            }
-          });
-        })();
-
-        Vue.notify({
-          group: 'foo',
-          title: 'Congrats!!',
-          type: 'success',
-          duration: 10000,
-          text: 'You have created an event !'
-        });
-      } else {
-        this.event.time_from = this.date + " " + this.event_time[0];
-        this.event.time_until = this.date + " " + this.event_time[1];
-
         (function _callee2() {
           var Response, content;
           return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function _callee2$(_context3) {
@@ -5110,7 +5121,7 @@ var Gmap = function Gmap() {
                 case 0:
                   _context3.next = 2;
                   return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(fetch('api/event?api_token=' + _this5.getCookie("api_token"), {
-                    method: 'put',
+                    method: 'post',
                     body: JSON.stringify(_this5.event),
                     headers: {
                       'Accept': 'application/json',
@@ -5129,22 +5140,87 @@ var Gmap = function Gmap() {
                   return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(_this5.$refs.calendar.fetchSpot(_this5.show.id));
 
                 case 8:
+                  if (content == true) {
+                    Vue.notify({
+                      group: 'foo',
+                      title: 'Congrats!!',
+                      type: 'success',
+                      duration: 10000,
+                      text: 'Event has been sent for inspection. Will be added if everything is okay.'
+                    });
+                  } else {
+                    Vue.notify({
+                      group: 'foo',
+                      title: 'Error!!',
+                      type: 'error',
+                      text: 'There was incorect values in the form!'
+                    });
+                  }
+
+                case 9:
                 case "end":
                   return _context3.stop();
               }
             }
           });
         })();
+      } else {
+        this.event.time_from = this.date + " " + this.event_time[0];
+        this.event.time_until = this.date + " " + this.event_time[1];
 
-        this.edit = false;
-        Vue.notify({
-          group: 'foo',
-          title: 'Congrats!!',
-          type: 'success',
-          text: 'You have updated an event !'
-        });
+        (function _callee3() {
+          var Response, content;
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function _callee3$(_context4) {
+            while (1) {
+              switch (_context4.prev = _context4.next) {
+                case 0:
+                  _context4.next = 2;
+                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(fetch('api/event?api_token=' + _this5.getCookie("api_token"), {
+                    method: 'put',
+                    body: JSON.stringify(_this5.event),
+                    headers: {
+                      'Accept': 'application/json',
+                      'content-type': 'application/json'
+                    }
+                  }));
+
+                case 2:
+                  Response = _context4.sent;
+                  _context4.next = 5;
+                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(Response.json());
+
+                case 5:
+                  content = _context4.sent;
+                  _context4.next = 8;
+                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(_this5.$refs.calendar.fetchSpot(_this5.show.id));
+
+                case 8:
+                  if (content == true) {
+                    Vue.notify({
+                      group: 'foo',
+                      title: 'Congrats!!',
+                      type: 'success',
+                      text: 'You have updated an event !'
+                    });
+                  } else {
+                    Vue.notify({
+                      group: 'foo',
+                      title: 'Notification!!',
+                      type: 'error',
+                      text: 'There was incorect values in the form!'
+                    });
+                  }
+
+                case 9:
+                case "end":
+                  return _context4.stop();
+              }
+            }
+          });
+        })();
       }
 
+      this.edit = false;
       this.event.id = '';
       this.event.place_id = '';
       this.event.title = '';
@@ -5499,6 +5575,151 @@ var _assets_options_json__WEBPACK_IMPORTED_MODULE_1___namespace = /*#__PURE__*/_
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var editevent = function editevent() {
   return Promise.resolve(/*! import() */).then(__webpack_require__.bind(null, /*! ../components/EditEvent.vue */ "./resources/js/components/EditEvent.vue"));
 };
@@ -5521,6 +5742,8 @@ var smallmap = function smallmap() {
       acceptedPlaces: [],
       submitedPlaces: [],
       declinedPlaces: [],
+      submitedEvents: [],
+      declinedEvents: [],
       center: {
         lat: 0.0,
         lng: 0.0
@@ -5551,10 +5774,18 @@ var smallmap = function smallmap() {
           zoomControl: false
         }
       },
-      pageOfItems: []
+      submited_events_pageOfItems: [],
+      declined_events_pageOfItems: [],
+      created_events_pageOfItems: [],
+      goingto_events_pageOfItems: [],
+      accepted_places_pageOfItems: [],
+      declined_places_pageOfItems: [],
+      submited_places_pageOfItems: []
     };
   },
   created: function created() {
+    this.fetchSubmitedEvents();
+    this.fetchDeclinedEvents();
     this.fetchCreatedEvents();
     this.fetchGoingToEvents();
     this.fetchAcceptedPlaces();
@@ -5562,10 +5793,6 @@ var smallmap = function smallmap() {
     this.fetchSubmitedPlaces();
   },
   methods: {
-    onChangePage: function onChangePage(pageOfItems) {
-      // update page of items
-      this.pageOfItems = pageOfItems;
-    },
     updateCoordinates: function updateCoordinates(location) {
       this.place_coordinates = {
         lat: location.latLng.lat(),
@@ -5621,14 +5848,31 @@ var smallmap = function smallmap() {
 
               case 5:
                 content = _context.sent;
-                _context.next = 8;
+
+                if (content == true) {
+                  Vue.notify({
+                    group: 'foo',
+                    title: 'Congrats!!',
+                    type: 'success',
+                    text: 'Place have been submited again !'
+                  });
+                } else {
+                  Vue.notify({
+                    group: 'foo',
+                    title: 'Error!!',
+                    type: 'error',
+                    text: 'Incorrect form'
+                  });
+                }
+
+                _context.next = 9;
                 return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(_this.fetchDeclinedPlaces());
 
-              case 8:
-                _context.next = 10;
+              case 9:
+                _context.next = 11;
                 return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(_this.fetchSubmitedPlaces());
 
-              case 10:
+              case 11:
               case "end":
                 return _context.stop();
             }
@@ -5637,6 +5881,60 @@ var smallmap = function smallmap() {
       })();
 
       $('#editPlace').modal('hide');
+    },
+    deletePlace: function deletePlace(place_id) {
+      var _this2 = this;
+
+      (function _callee2() {
+        var Response, content;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(fetch('/decplace/' + place_id, {
+                  method: 'delete',
+                  headers: {
+                    'Accept': 'application/json',
+                    'content-type': 'application/json',
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                  }
+                }));
+
+              case 2:
+                Response = _context2.sent;
+                _context2.next = 5;
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(Response.json());
+
+              case 5:
+                content = _context2.sent;
+
+                if (content == true) {
+                  Vue.notify({
+                    group: 'foo',
+                    title: 'Congrats!!',
+                    type: 'success',
+                    text: 'Place have been deleted !'
+                  });
+                } else {
+                  Vue.notify({
+                    group: 'foo',
+                    title: 'Error!!',
+                    type: 'error',
+                    text: 'Unable to delete place..'
+                  });
+                }
+
+                _context2.next = 9;
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(_this2.fetchDeclinedPlaces());
+
+              case 9:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        });
+      })();
     },
     //Gets position of the marker
     getPosition: function getPosition(place) {
@@ -5656,39 +5954,75 @@ var smallmap = function smallmap() {
       return formatted_Time;
     },
     fetchCreatedEvents: function fetchCreatedEvents() {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.get('../returncreatedevents').then(function (response) {
-        _this2.createdEvents = response.data;
+        _this3.createdEvents = response.data;
       });
     },
     fetchGoingToEvents: function fetchGoingToEvents() {
-      var _this3 = this;
+      var _this4 = this;
 
       axios.get('../returngoingtoevents').then(function (response) {
-        _this3.goingToEvents = response.data;
+        _this4.goingToEvents = response.data;
       });
     },
     fetchAcceptedPlaces: function fetchAcceptedPlaces() {
-      var _this4 = this;
+      var _this5 = this;
 
       axios.get('../returnacceptedplaces').then(function (response) {
-        _this4.acceptedPlaces = response.data;
+        _this5.acceptedPlaces = response.data;
       });
     },
     fetchDeclinedPlaces: function fetchDeclinedPlaces() {
-      var _this5 = this;
+      var _this6 = this;
 
       axios.get('../returndeclinedplaces').then(function (response) {
-        _this5.declinedPlaces = response.data;
+        _this6.declinedPlaces = response.data;
       });
     },
     fetchSubmitedPlaces: function fetchSubmitedPlaces() {
-      var _this6 = this;
+      var _this7 = this;
 
       axios.get('../returnsubmitedplaces').then(function (response) {
-        _this6.submitedPlaces = response.data;
+        _this7.submitedPlaces = response.data;
       });
+    },
+    fetchDeclinedEvents: function fetchDeclinedEvents() {
+      var _this8 = this;
+
+      axios.get('../returndeclinedevents').then(function (response) {
+        _this8.declinedEvents = response.data;
+      });
+    },
+    fetchSubmitedEvents: function fetchSubmitedEvents() {
+      var _this9 = this;
+
+      axios.get('../returnsubmitedevents').then(function (response) {
+        _this9.submitedEvents = response.data;
+      });
+    },
+    //=================PAGINATION=======================
+    submited_events_onChangePage: function submited_events_onChangePage(pageOfItems) {
+      this.submited_events_pageOfItems = pageOfItems;
+    },
+    declined_events_onChangePage: function declined_events_onChangePage(pageOfItems) {
+      this.declined_events_pageOfItems = pageOfItems;
+    },
+    created_events_onChangePage: function created_events_onChangePage(pageOfItems) {
+      this.created_events_pageOfItems = pageOfItems;
+    },
+    goingto_events_onChangePage: function goingto_events_onChangePage(pageOfItems) {
+      this.goingto_events_pageOfItems = pageOfItems;
+    },
+    accepted_places_onChangePage: function accepted_places_onChangePage(pageOfItems) {
+      this.accepted_places_pageOfItems = pageOfItems;
+    },
+    declined_places_onChangePage: function declined_places_onChangePage(pageOfItems) {
+      this.declined_places_pageOfItems = pageOfItems;
+    },
+    submited_places_onChangePage: function submited_places_onChangePage(pageOfItems) {
+      this.submited_places_pageOfItems = pageOfItems;
     }
   }
 });
@@ -12265,7 +12599,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\nbody.modal-open {\n    overflow: visible;\n}\n\n", ""]);
+exports.push([module.i, "\nbody.modal-open {\n    overflow: visible;\n}\n.my-style {\n    padding: 15px;\n    margin-left: 10px;\n    margin-top: 10px;\n    width: 290px;\n \n    font-size: 14px;\n    border-radius: 5px;\n    border-left: solid rgb(99, 156, 88) 5px;\n\n\n    color: #ffffff;\n    background: #82CC75;\n}\n.success {\n    background: #82CC75;\n}\n.error {\n    background: #DC4146;\n    border-left: solid rgb(177, 52, 56) 5px;\n}\n\n", ""]);
 
 // exports
 
@@ -12341,7 +12675,26 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* width */\n::-webkit-scrollbar {\n  width: 10px;\n}\n\n/* Track */\n::-webkit-scrollbar-track {\n  background: #f1f1f1;\n}\n \n/* Handle */\n::-webkit-scrollbar-thumb {\n  background: rgb(182, 182, 182);\n}\n\n/* Handle on hover */\n::-webkit-scrollbar-thumb:hover {\n  background: rgb(136, 136, 136);\n}\n#time_error{\n    margin-left: auto;\n    margin-right: auto;\n    width: 100%;\n    text-align: center;\n}\n#map {\n    width: 100% !important; \n    height:100% !important;\n}\n.my-style {\n    padding: 15px;\n    margin-left: 10px;\n    margin-top: 10px;\n    width: 290px;\n \n    font-size: 14px;\n    border-radius: 5px;\n    border-left: solid rgb(99, 156, 88) 5px;\n\n\n    color: #ffffff;\n    background: #82CC75;\n}\n.success {\n    background: #82CC75;\n}\n.error {\n    background: #DC4146;\n    border-left: solid rgb(177, 52, 56) 5px;\n}\n#sidebar{\n    height: 94vh;\n    overflow-y: auto;\n}\n#geras{\n    position: absolute;\n    color:white;\n    font-size: 25px;\n    opacity: 0.1;\n}\n#search_button{\n    z-index: 50;\n}\n#places_sort{\n    z-index: 51;\n    width:100%;\n}\n#loading-screen {\n    z-index: 100;\n    position: absolute; top: 0; right: 0; bottom: 0; left: 0;\n    background-color: #82cc75;\n}\n@media only screen and (max-width: 900px) {\n#map {\n    width: 100% !important; \n    height:100% !important;\n}\n#show{\n    width: 100% !important;\n}\n#createDiv{\n    width: 95% !important;\n}\n#sidebar{\n    height: auto;\n    overflow-y: hidden;\n}\n}\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* width */\n::-webkit-scrollbar {\n  width: 10px;\n}\n\n/* Track */\n::-webkit-scrollbar-track {\n  background: #f1f1f1;\n}\n \n/* Handle */\n::-webkit-scrollbar-thumb {\n  background: rgb(182, 182, 182);\n}\n\n/* Handle on hover */\n::-webkit-scrollbar-thumb:hover {\n  background: rgb(136, 136, 136);\n}\n#map {\n    width: 100% !important; \n    height:100% !important;\n}\n.my-style {\n    padding: 15px;\n    margin-left: 10px;\n    margin-top: 10px;\n    width: 290px;\n \n    font-size: 14px;\n    border-radius: 5px;\n    border-left: solid rgb(99, 156, 88) 5px;\n\n\n    color: #ffffff;\n    background: #82CC75;\n}\n.success {\n    background: #82CC75;\n}\n.error {\n    background: #DC4146;\n    border-left: solid rgb(177, 52, 56) 5px;\n}\n#sidebar{\n    height: 94vh;\n    overflow-y: auto;\n}\n#geras{\n    position: absolute;\n    color:white;\n    font-size: 25px;\n    opacity: 0.1;\n}\n#search_button{\n    z-index: 50;\n}\n#places_sort{\n    z-index: 51;\n    width:100%;\n}\n#loading-screen {\n    z-index: 100;\n    position: absolute; top: 0; right: 0; bottom: 0; left: 0;\n    background-color: #82cc75;\n}\n@media only screen and (max-width: 900px) {\n#map {\n    width: 100% !important; \n    height:100% !important;\n}\n#show{\n    width: 100% !important;\n}\n#createDiv{\n    width: 95% !important;\n}\n#sidebar{\n    height: auto;\n    overflow-y: hidden;\n}\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ShowProfileInfo.vue?vue&type=style&index=0&id=d43afbc2&scoped=true&lang=css&":
+/*!*********************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ShowProfileInfo.vue?vue&type=style&index=0&id=d43afbc2&scoped=true&lang=css& ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.nav-tabs .nav-link.active[data-v-d43afbc2], .nav-tabs .nav-item.show .nav-link[data-v-d43afbc2] {\n    color: #ffffff;\n    background-color: #3490dc;\n    border-color: #dee2e6 #dee2e6 #cccccc;\n}\n.nav-tabs .nav-link[data-v-d43afbc2] {\n    border: 1px solid transparent;\n    border-top-left-radius: 0.25rem;\n    border-top-right-radius: 0.25rem;\n    background: #F8FAFC;\n}\n.nav-tabs[data-v-d43afbc2] {\n    border-bottom: 0px solid #f8fafc;\n}\n.my-style[data-v-d43afbc2] {\n    padding: 15px;\n    margin-left: 10px;\n    margin-top: 10px;\n    width: 290px;\n \n    font-size: 14px;\n    border-radius: 5px;\n    border-left: solid rgb(99, 156, 88) 5px;\n\n\n    color: #ffffff;\n    background: #82CC75;\n}\n.success[data-v-d43afbc2] {\n    background: #82CC75;\n}\n.error[data-v-d43afbc2] {\n    background: #DC4146;\n    border-left: solid rgb(177, 52, 56) 5px;\n}\n\n", ""]);
 
 // exports
 
@@ -52998,6 +53351,36 @@ if(false) {}
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ShowProfileInfo.vue?vue&type=style&index=0&id=d43afbc2&scoped=true&lang=css&":
+/*!*************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ShowProfileInfo.vue?vue&type=style&index=0&id=d43afbc2&scoped=true&lang=css& ***!
+  \*************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../node_modules/css-loader??ref--6-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--6-2!../../../node_modules/vue-loader/lib??vue-loader-options!./ShowProfileInfo.vue?vue&type=style&index=0&id=d43afbc2&scoped=true&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ShowProfileInfo.vue?vue&type=style&index=0&id=d43afbc2&scoped=true&lang=css&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/lib/addStyles.js":
 /*!****************************************************!*\
   !*** ./node_modules/style-loader/lib/addStyles.js ***!
@@ -54691,6 +55074,7 @@ var render = function() {
                             attrs: {
                               type: "text",
                               id: "exampleInputEmail1",
+                              maxlength: "45",
                               "aria-describedby": "emailHelp",
                               placeholder: "Enter title",
                               required: ""
@@ -54730,6 +55114,7 @@ var render = function() {
                             staticClass: "form-control",
                             attrs: {
                               id: "exampleFormControlTextarea1",
+                              maxlength: "350",
                               rows: "6",
                               required: ""
                             },
@@ -54783,7 +55168,7 @@ var render = function() {
                               },
                               on: {
                                 "drag-end": function($event) {
-                                  return _vm.parseDate(1)
+                                  return _vm.parseDate(_vm.event.id)
                                 }
                               },
                               model: {
@@ -54796,7 +55181,19 @@ var render = function() {
                             })
                           : _vm._e(),
                         _vm._v(" "),
-                        _c("div", { attrs: { id: "time_error" } })
+                        _c("div", { staticClass: "row" }, [
+                          _c("div", {
+                            staticClass: "mx-auto",
+                            attrs: { id: "time_error" + _vm.event.id }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "row" }, [
+                          _c("div", {
+                            staticClass: "mx-auto",
+                            attrs: { id: "time_error_second" + _vm.event.id }
+                          })
+                        ])
                       ],
                       1
                     ),
@@ -54816,7 +55213,7 @@ var render = function() {
                         {
                           staticClass: "btn btn-success float-right",
                           attrs: {
-                            id: "add_event_btn",
+                            id: "add_event_btn" + _vm.event.id,
                             type: "submit",
                             disabled: _vm.isLoading
                           }
@@ -56102,11 +56499,9 @@ var render = function() {
                       { staticClass: "modal-body" },
                       [
                         _c("div", { staticClass: "form-group" }, [
-                          _c(
-                            "label",
-                            { attrs: { for: "exampleInputEmail1" } },
-                            [_vm._v("Title")]
-                          ),
+                          _c("label", { attrs: { for: "add_event_title" } }, [
+                            _vm._v("Title")
+                          ]),
                           _vm._v(" "),
                           _c("input", {
                             directives: [
@@ -56120,8 +56515,8 @@ var render = function() {
                             staticClass: "form-control",
                             attrs: {
                               type: "text",
-                              id: "exampleInputEmail1",
-                              "aria-describedby": "emailHelp",
+                              id: "add_event_title",
+                              maxlength: "45",
                               placeholder: "Enter title",
                               required: ""
                             },
@@ -56142,11 +56537,9 @@ var render = function() {
                         ]),
                         _vm._v(" "),
                         _c("div", { staticClass: "form-group" }, [
-                          _c(
-                            "label",
-                            { attrs: { for: "exampleFormControlTextarea1" } },
-                            [_vm._v("About")]
-                          ),
+                          _c("label", { attrs: { for: "add_event_about" } }, [
+                            _vm._v("About")
+                          ]),
                           _vm._v(" "),
                           _c("textarea", {
                             directives: [
@@ -56159,7 +56552,8 @@ var render = function() {
                             ],
                             staticClass: "form-control",
                             attrs: {
-                              id: "exampleFormControlTextarea1",
+                              id: "add_event_about",
+                              maxlength: "350",
                               rows: "6",
                               required: ""
                             },
@@ -56213,7 +56607,7 @@ var render = function() {
                               },
                               on: {
                                 "drag-end": function($event) {
-                                  return _vm.parseDate(1)
+                                  return _vm.parseDate()
                                 }
                               },
                               model: {
@@ -56226,7 +56620,9 @@ var render = function() {
                             })
                           : _vm._e(),
                         _vm._v(" "),
-                        _c("div", { attrs: { id: "time_error" } })
+                        _vm._m(3),
+                        _vm._v(" "),
+                        _vm._m(4)
                       ],
                       1
                     ),
@@ -56310,7 +56706,7 @@ var render = function() {
                 },
                 [
                   _c("div", { staticClass: "modal-content" }, [
-                    _vm._m(3),
+                    _vm._m(5),
                     _vm._v(" "),
                     _c("div", { staticClass: "modal-body" }, [
                       _c("div", { staticClass: "input-group mb-3" }, [
@@ -56327,6 +56723,7 @@ var render = function() {
                           attrs: {
                             type: "text",
                             placeholder: "Title",
+                            maxlength: "45",
                             required: ""
                           },
                           domProps: { value: _vm.place.title },
@@ -56355,6 +56752,7 @@ var render = function() {
                           attrs: {
                             rows: "6",
                             placeholder: "About...",
+                            maxlength: "350",
                             required: ""
                           },
                           domProps: { value: _vm.place.about },
@@ -56370,7 +56768,7 @@ var render = function() {
                       ]),
                       _vm._v(" "),
                       _c("div", { staticClass: "input-group mb-3" }, [
-                        _vm._m(4),
+                        _vm._m(6),
                         _vm._v(" "),
                         _c(
                           "select",
@@ -56384,7 +56782,7 @@ var render = function() {
                               }
                             ],
                             staticClass: "custom-select",
-                            attrs: { id: "inputGroupSelect01", required: "" },
+                            attrs: { id: "sport_type", required: "" },
                             on: {
                               change: function($event) {
                                 var $$selectedVal = Array.prototype.filter
@@ -56712,7 +57110,7 @@ var render = function() {
                         "div",
                         { staticClass: "card m-3 width:100%; height:100%;" },
                         [
-                          _vm._m(5),
+                          _vm._m(7),
                           _vm._v(" "),
                           _c(
                             "div",
@@ -56742,7 +57140,7 @@ var render = function() {
                               _vm._v(" "),
                               this.status === 1
                                 ? _c("div")
-                                : _c("div", [_vm._m(6)])
+                                : _c("div", [_vm._m(8)])
                             ],
                             1
                           )
@@ -56794,6 +57192,22 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "mx-auto", attrs: { id: "time_error" } })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "mx-auto", attrs: { id: "time_error_second" } })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "modal-header" }, [
       _c(
         "h5",
@@ -56822,10 +57236,7 @@ var staticRenderFns = [
     return _c("div", { staticClass: "input-group-prepend" }, [
       _c(
         "label",
-        {
-          staticClass: "input-group-text",
-          attrs: { for: "inputGroupSelect01" }
-        },
+        { staticClass: "input-group-text", attrs: { for: "sport_type" } },
         [_vm._v("Sport")]
       )
     ])
@@ -56881,10 +57292,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ShowProfileInfo.vue?vue&type=template&id=d43afbc2&":
-/*!******************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ShowProfileInfo.vue?vue&type=template&id=d43afbc2& ***!
-  \******************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ShowProfileInfo.vue?vue&type=template&id=d43afbc2&scoped=true&":
+/*!******************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ShowProfileInfo.vue?vue&type=template&id=d43afbc2&scoped=true& ***!
+  \******************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -56896,658 +57307,229 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c(
-      "form",
-      {
-        on: {
-          submit: function($event) {
-            $event.preventDefault()
-            return _vm.reSubmit($event)
-          }
-        }
-      },
-      [
-        _c(
-          "div",
-          {
-            staticClass: "modal fade",
-            attrs: {
-              id: "editPlace",
-              tabindex: "-1",
-              role: "dialog",
-              "aria-labelledby": "exampleModalLabel",
-              "aria-hidden": "true"
-            }
-          },
-          [
-            _c(
-              "div",
-              {
-                staticClass: "modal-dialog modal-dialog-centered",
-                attrs: { role: "document" }
-              },
-              [
-                _c("div", { staticClass: "modal-content" }, [
-                  _vm._m(0),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "modal-body" },
-                    [
-                      _c("div", { staticClass: "form-group" }, [
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.place.title,
-                              expression: "place.title"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: {
-                            type: "text",
-                            placeholder: "Title",
-                            name: "title"
-                          },
-                          domProps: { value: _vm.place.title },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.$set(_vm.place, "title", $event.target.value)
-                            }
-                          }
-                        })
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "form-group" }, [
-                        _c("textarea", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.place.about,
-                              expression: "place.about"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: {
-                            rows: "6",
-                            placeholder: "Title",
-                            name: "about"
-                          },
-                          domProps: { value: _vm.place.about },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.$set(_vm.place, "about", $event.target.value)
-                            }
-                          }
-                        })
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        { staticClass: "custom-control custom-checkbox mb-3" },
-                        [
-                          _c(
-                            "div",
-                            {
-                              staticClass:
-                                "custom-control custom-checkbox float-left mr-4"
-                            },
-                            [
-                              _c("input", {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.place.paid,
-                                    expression: "place.paid"
-                                  }
-                                ],
-                                staticClass: "custom-control-input",
-                                attrs: {
-                                  type: "checkbox",
-                                  name: "paid",
-                                  id: "paid"
-                                },
-                                domProps: {
-                                  checked: Array.isArray(_vm.place.paid)
-                                    ? _vm._i(_vm.place.paid, null) > -1
-                                    : _vm.place.paid
-                                },
-                                on: {
-                                  change: function($event) {
-                                    var $$a = _vm.place.paid,
-                                      $$el = $event.target,
-                                      $$c = $$el.checked ? true : false
-                                    if (Array.isArray($$a)) {
-                                      var $$v = null,
-                                        $$i = _vm._i($$a, $$v)
-                                      if ($$el.checked) {
-                                        $$i < 0 &&
-                                          _vm.$set(
-                                            _vm.place,
-                                            "paid",
-                                            $$a.concat([$$v])
-                                          )
-                                      } else {
-                                        $$i > -1 &&
-                                          _vm.$set(
-                                            _vm.place,
-                                            "paid",
-                                            $$a
-                                              .slice(0, $$i)
-                                              .concat($$a.slice($$i + 1))
-                                          )
-                                      }
-                                    } else {
-                                      _vm.$set(_vm.place, "paid", $$c)
-                                    }
-                                  }
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c(
-                                "label",
-                                {
-                                  staticClass: "custom-control-label",
-                                  attrs: { for: "paid" }
-                                },
-                                [_vm._v("Paid")]
-                              )
-                            ]
-                          )
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "gmap-map",
-                        {
-                          ref: "gmapp",
-                          staticClass: "rounded",
-                          staticStyle: {
-                            overflow: "hidden",
-                            width: "100%",
-                            height: "300px"
-                          },
-                          attrs: {
-                            center: _vm.getPosition(_vm.center),
-                            zoom: 14,
-                            options: _vm.mapStyle
-                          }
-                        },
-                        [
-                          _c("gmap-marker", {
-                            attrs: {
-                              draggable: true,
-                              position: _vm.getPosition(_vm.place_coordinates)
-                            },
-                            on: { drag: _vm.updateCoordinates }
-                          })
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _vm._m(1)
-                ])
-              ]
-            )
-          ]
-        )
-      ]
-    ),
-    _vm._v(" "),
-    _c("div", { staticClass: "row mb-3" }, [
-      _c("div", { staticClass: "col-12" }, [
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-primary m-1 float-right",
-            attrs: {
-              type: "button",
-              "data-toggle": "collapse",
-              "data-target": "#createdEvents",
-              "aria-expanded": "false",
-              "aria-controls": "createdEvents"
-            }
-          },
-          [
-            _c("i", { staticClass: "far fa-calendar-alt" }),
-            _vm._v("  Your created events "),
-            _c("span", { staticClass: "badge badge-light" }, [
-              _vm._v(_vm._s(_vm.createdEvents.length))
-            ])
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-primary m-1 float-right",
-            attrs: {
-              type: "button",
-              "data-toggle": "collapse",
-              "data-target": "#goingto",
-              "aria-expanded": "false",
-              "aria-controls": "goingto"
-            }
-          },
-          [
-            _c("i", { staticClass: "fas fa-calendar-check" }),
-            _vm._v(" Events you have joined "),
-            _c("span", { staticClass: "badge badge-light" }, [
-              _vm._v(_vm._s(_vm.goingToEvents.length))
-            ])
-          ]
-        ),
-        _vm._v(" "),
-        _vm._m(2)
-      ])
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "accordion", attrs: { id: "accordionExample" } }, [
+  return _c(
+    "div",
+    [
+      _c("notifications", {
+        staticStyle: { "margin-top": "55px" },
+        attrs: { group: "foo", classes: "my-style", position: "top left" }
+      }),
+      _vm._v(" "),
       _c(
-        "div",
+        "form",
         {
-          staticClass: "collapse",
-          attrs: { id: "createdPlaces", "data-parent": "#accordionExample" }
+          on: {
+            submit: function($event) {
+              $event.preventDefault()
+              return _vm.reSubmit($event)
+            }
+          }
         },
         [
-          _c("p", { staticClass: "h4 text-center" }, [_vm._v("Places")]),
-          _vm._v(" "),
-          _vm._m(3),
-          _vm._v(" "),
           _c(
             "div",
-            { staticClass: "tab-content", attrs: { id: "nav-tabContent" } },
+            {
+              staticClass: "modal fade",
+              attrs: {
+                id: "editPlace",
+                tabindex: "-1",
+                role: "dialog",
+                "aria-labelledby": "exampleModalLabel",
+                "aria-hidden": "true"
+              }
+            },
             [
               _c(
                 "div",
                 {
-                  staticClass: "tab-pane fade show active",
-                  attrs: {
-                    id: "nav-home",
-                    role: "tabpanel",
-                    "aria-labelledby": "nav-home-tab"
-                  }
+                  staticClass: "modal-dialog modal-dialog-centered",
+                  attrs: { role: "document" }
                 },
                 [
-                  _vm.submitedPlaces.length != 0
-                    ? _c(
-                        "div",
-                        _vm._l(_vm.submitedPlaces, function(place) {
-                          return _c(
-                            "div",
-                            { key: place.id, staticClass: "card mt-2 mb-3" },
-                            [
-                              _c("div", { staticClass: "card-body" }, [
-                                _vm._v(
-                                  "\n                                    " +
-                                    _vm._s(place.title) +
-                                    "\n                                    "
-                                ),
-                                _c("div", { staticClass: "float-right" }, [
-                                  _c("img", {
-                                    attrs: {
-                                      src:
-                                        "../storage/sport_logo/" + place.image
-                                    }
-                                  })
-                                ]),
-                                _vm._v(" "),
-                                _c("hr"),
-                                _vm._v(" "),
-                                _c("div", { staticClass: "row" }, [
-                                  _c("div", { staticClass: "col-8" }, [
-                                    _vm._v(
-                                      "\n                                            " +
-                                        _vm._s(place.about) +
-                                        "\n                                        "
-                                    )
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("div", { staticClass: "col-4" }, [
-                                    _c(
-                                      "button",
-                                      {
-                                        staticClass:
-                                          "btn btn-outline-success btn-lg float-right",
-                                        attrs: {
-                                          type: "button",
-                                          "data-toggle": "modal",
-                                          "data-target":
-                                            "#submited_map" + place.id
-                                        }
-                                      },
-                                      [
-                                        _c("i", {
-                                          staticClass: "fas fa-map-marked-alt"
-                                        })
-                                      ]
-                                    )
-                                  ]),
-                                  _vm._v(" "),
-                                  _c(
-                                    "div",
+                  _c("div", { staticClass: "modal-content" }, [
+                    _vm._m(0),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "modal-body" },
+                      [
+                        _c("div", { staticClass: "form-group" }, [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.place.title,
+                                expression: "place.title"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: {
+                              type: "text",
+                              maxlength: "45",
+                              placeholder: "Title",
+                              name: "title"
+                            },
+                            domProps: { value: _vm.place.title },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(
+                                  _vm.place,
+                                  "title",
+                                  $event.target.value
+                                )
+                              }
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "form-group" }, [
+                          _c("textarea", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.place.about,
+                                expression: "place.about"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: {
+                              rows: "6",
+                              maxlength: "350",
+                              placeholder: "Title",
+                              name: "about"
+                            },
+                            domProps: { value: _vm.place.about },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(
+                                  _vm.place,
+                                  "about",
+                                  $event.target.value
+                                )
+                              }
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          {
+                            staticClass: "custom-control custom-checkbox mb-3"
+                          },
+                          [
+                            _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "custom-control custom-checkbox float-left mr-4"
+                              },
+                              [
+                                _c("input", {
+                                  directives: [
                                     {
-                                      staticClass: "modal fade",
-                                      attrs: {
-                                        id: "submited_map" + place.id,
-                                        tabindex: "-1",
-                                        role: "dialog",
-                                        "aria-labelledby":
-                                          "exampleModalCenterTitle",
-                                        "aria-hidden": "true"
-                                      }
-                                    },
-                                    [
-                                      _c(
-                                        "div",
-                                        {
-                                          staticClass:
-                                            "modal-dialog modal-dialog-centered",
-                                          attrs: { role: "document" }
-                                        },
-                                        [
-                                          _c(
-                                            "div",
-                                            { staticClass: "modal-content" },
-                                            [
-                                              _c(
-                                                "div",
-                                                { staticClass: "modal-header" },
-                                                [
-                                                  _c(
-                                                    "h5",
-                                                    {
-                                                      staticClass:
-                                                        "modal-title",
-                                                      attrs: {
-                                                        id:
-                                                          "exampleModalLongTitle"
-                                                      }
-                                                    },
-                                                    [
-                                                      _vm._v(
-                                                        _vm._s(place.title)
-                                                      )
-                                                    ]
-                                                  ),
-                                                  _vm._v(" "),
-                                                  _vm._m(4, true)
-                                                ]
-                                              ),
-                                              _vm._v(" "),
-                                              _c(
-                                                "div",
-                                                {
-                                                  staticClass: "modal-body p-0"
-                                                },
-                                                [
-                                                  _c("smallmap", {
-                                                    attrs: {
-                                                      place: place,
-                                                      size:
-                                                        "width:auto; height: 450px;"
-                                                    }
-                                                  })
-                                                ],
-                                                1
-                                              )
-                                            ]
-                                          )
-                                        ]
-                                      )
-                                    ]
-                                  )
-                                ])
-                              ])
-                            ]
-                          )
-                        }),
-                        0
-                      )
-                    : _c("p", { staticClass: "text-center mt-4 text-muted" }, [
-                        _vm._v(" No submited places.. ")
-                      ])
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticClass: "tab-pane fade",
-                  attrs: {
-                    id: "nav-profile",
-                    role: "tabpanel",
-                    "aria-labelledby": "nav-profile-tab"
-                  }
-                },
-                [
-                  _vm.acceptedPlaces.length != 0
-                    ? _c(
-                        "div",
-                        _vm._l(_vm.acceptedPlaces, function(place) {
-                          return _c(
-                            "div",
-                            { key: place.id, staticClass: "card mt-2 mb-3" },
-                            [
-                              _c("div", { staticClass: "card-body" }, [
-                                _vm._v(
-                                  "\n                                    " +
-                                    _vm._s(place.title) +
-                                    "\n                                    "
-                                ),
-                                _c("div", { staticClass: "float-right" }, [
-                                  _c("img", {
-                                    attrs: {
-                                      src:
-                                        "../storage/sport_logo/" + place.image
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.place.paid,
+                                      expression: "place.paid"
                                     }
-                                  })
-                                ]),
-                                _vm._v(" "),
-                                _c("hr"),
-                                _vm._v(" "),
-                                _c("div", { staticClass: "row" }, [
-                                  _c("div", { staticClass: "col-8" }, [
-                                    _vm._v(
-                                      "\n                                            " +
-                                        _vm._s(place.about) +
-                                        "\n                                        "
-                                    )
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("div", { staticClass: "col-4" }, [
-                                    _c(
-                                      "button",
-                                      {
-                                        staticClass:
-                                          "btn btn-outline-success btn-lg float-right",
-                                        attrs: {
-                                          type: "button",
-                                          "data-toggle": "modal",
-                                          "data-target":
-                                            "#accepted_map" + place.id
+                                  ],
+                                  staticClass: "custom-control-input",
+                                  attrs: {
+                                    type: "checkbox",
+                                    name: "paid",
+                                    id: "paid"
+                                  },
+                                  domProps: {
+                                    checked: Array.isArray(_vm.place.paid)
+                                      ? _vm._i(_vm.place.paid, null) > -1
+                                      : _vm.place.paid
+                                  },
+                                  on: {
+                                    change: function($event) {
+                                      var $$a = _vm.place.paid,
+                                        $$el = $event.target,
+                                        $$c = $$el.checked ? true : false
+                                      if (Array.isArray($$a)) {
+                                        var $$v = null,
+                                          $$i = _vm._i($$a, $$v)
+                                        if ($$el.checked) {
+                                          $$i < 0 &&
+                                            _vm.$set(
+                                              _vm.place,
+                                              "paid",
+                                              $$a.concat([$$v])
+                                            )
+                                        } else {
+                                          $$i > -1 &&
+                                            _vm.$set(
+                                              _vm.place,
+                                              "paid",
+                                              $$a
+                                                .slice(0, $$i)
+                                                .concat($$a.slice($$i + 1))
+                                            )
                                         }
-                                      },
-                                      [
-                                        _c("i", {
-                                          staticClass: "fas fa-map-marked-alt"
-                                        })
-                                      ]
-                                    )
-                                  ]),
-                                  _vm._v(" "),
-                                  _c(
-                                    "div",
-                                    {
-                                      staticClass: "modal fade",
-                                      attrs: {
-                                        id: "accepted_map" + place.id,
-                                        tabindex: "-1",
-                                        role: "dialog",
-                                        "aria-labelledby":
-                                          "exampleModalCenterTitle",
-                                        "aria-hidden": "true"
+                                      } else {
+                                        _vm.$set(_vm.place, "paid", $$c)
                                       }
-                                    },
-                                    [
-                                      _c(
-                                        "div",
-                                        {
-                                          staticClass:
-                                            "modal-dialog modal-dialog-centered",
-                                          attrs: { role: "document" }
-                                        },
-                                        [
-                                          _c(
-                                            "div",
-                                            { staticClass: "modal-content" },
-                                            [
-                                              _c(
-                                                "div",
-                                                { staticClass: "modal-header" },
-                                                [
-                                                  _c(
-                                                    "h5",
-                                                    {
-                                                      staticClass:
-                                                        "modal-title",
-                                                      attrs: {
-                                                        id:
-                                                          "exampleModalLongTitle"
-                                                      }
-                                                    },
-                                                    [
-                                                      _vm._v(
-                                                        _vm._s(place.title)
-                                                      )
-                                                    ]
-                                                  ),
-                                                  _vm._v(" "),
-                                                  _vm._m(5, true)
-                                                ]
-                                              ),
-                                              _vm._v(" "),
-                                              _c(
-                                                "div",
-                                                {
-                                                  staticClass: "modal-body p-0"
-                                                },
-                                                [
-                                                  _c("smallmap", {
-                                                    attrs: {
-                                                      place: place,
-                                                      size:
-                                                        "width:auto; height: 450px;"
-                                                    }
-                                                  })
-                                                ],
-                                                1
-                                              )
-                                            ]
-                                          )
-                                        ]
-                                      )
-                                    ]
-                                  )
-                                ])
-                              ])
-                            ]
-                          )
-                        }),
-                        0
-                      )
-                    : _c("p", { staticClass: "text-center mt-4 text-muted" }, [
-                        _vm._v(" No accepted places.. ")
-                      ])
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticClass: "tab-pane fade",
-                  attrs: {
-                    id: "nav-contact",
-                    role: "tabpanel",
-                    "aria-labelledby": "nav-contact-tab"
-                  }
-                },
-                [
-                  _vm.declinedPlaces.length != 0
-                    ? _c(
-                        "div",
-                        _vm._l(_vm.declinedPlaces, function(place) {
-                          return _c(
-                            "div",
-                            { key: place.id, staticClass: "card mt-2 mb-3" },
-                            [
-                              _c("div", { staticClass: "card-body" }, [
-                                _vm._v(
-                                  "\n                                " +
-                                    _vm._s(place.title) +
-                                    "\n                                "
-                                ),
-                                _c("div", { staticClass: "float-right" }, [
-                                  _c("img", {
-                                    attrs: {
-                                      src:
-                                        "../storage/sport_logo/" + place.image
                                     }
-                                  })
-                                ]),
+                                  }
+                                }),
                                 _vm._v(" "),
-                                _c("hr"),
-                                _vm._v(" "),
-                                _c("div", { staticClass: "row" }, [
-                                  _c("div", { staticClass: "col-8" }, [
-                                    _vm._v(
-                                      "\n                                        " +
-                                        _vm._s(place.about) +
-                                        "\n                                    "
-                                    )
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("div", { staticClass: "col-4" }, [
-                                    _vm._m(6, true),
-                                    _vm._v(" "),
-                                    _c(
-                                      "button",
-                                      {
-                                        staticClass:
-                                          "btn btn-outline-primary btn-lg float-right m-1",
-                                        attrs: { type: "button" },
-                                        on: {
-                                          click: function($event) {
-                                            return _vm.openResubmit(place)
-                                          }
-                                        }
-                                      },
-                                      [_c("i", { staticClass: "far fa-edit" })]
-                                    )
-                                  ])
-                                ])
-                              ])
-                            ]
-                          )
-                        }),
-                        0
-                      )
-                    : _c("p", { staticClass: "text-center mt-4 text-muted" }, [
-                        _vm._v(" No declined places.. ")
-                      ])
+                                _c(
+                                  "label",
+                                  {
+                                    staticClass: "custom-control-label",
+                                    attrs: { for: "paid" }
+                                  },
+                                  [_vm._v("Paid")]
+                                )
+                              ]
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "gmap-map",
+                          {
+                            ref: "gmapp",
+                            staticClass: "rounded",
+                            staticStyle: {
+                              overflow: "hidden",
+                              width: "100%",
+                              height: "300px"
+                            },
+                            attrs: {
+                              center: _vm.getPosition(_vm.center),
+                              zoom: 14,
+                              options: _vm.mapStyle
+                            }
+                          },
+                          [
+                            _c("gmap-marker", {
+                              attrs: {
+                                draggable: true,
+                                position: _vm.getPosition(_vm.place_coordinates)
+                              },
+                              on: { drag: _vm.updateCoordinates }
+                            })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _vm._m(1)
+                  ])
                 ]
               )
             ]
@@ -57555,129 +57537,994 @@ var render = function() {
         ]
       ),
       _vm._v(" "),
+      _c("div", { staticClass: "row mb-3" }, [
+        _c("div", { staticClass: "col-12" }, [
+          _vm._m(2),
+          _vm._v(" "),
+          _vm._m(3),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-primary m-1 float-right",
+              attrs: {
+                type: "button",
+                "data-toggle": "collapse",
+                "data-target": "#goingto",
+                "aria-expanded": "false",
+                "aria-controls": "goingto"
+              }
+            },
+            [
+              _c("i", { staticClass: "fas fa-calendar-check" }),
+              _vm._v(" Participating "),
+              _c("span", { staticClass: "badge badge-light" }, [
+                _vm._v(_vm._s(_vm.goingToEvents.length))
+              ])
+            ]
+          )
+        ])
+      ]),
+      _vm._v(" "),
       _c(
         "div",
-        {
-          staticClass: "collapse",
-          attrs: { id: "goingto", "data-parent": "#accordionExample" }
-        },
+        { staticClass: "accordion", attrs: { id: "accordionExample" } },
         [
-          _c("p", { staticClass: "h4 text-center" }, [_vm._v("Going to")]),
-          _vm._v(" "),
-          _c("hr"),
-          _vm._v(" "),
-          _vm.goingToEvents != 0
-            ? _c(
-                "div",
-                _vm._l(_vm.goingToEvents, function(event) {
-                  return _c(
-                    "div",
-                    { key: event.id, staticClass: "card mb-3" },
-                    [
-                      _c("div", { staticClass: "card-header" }, [
+          _c(
+            "div",
+            {
+              staticClass: "collapse",
+              attrs: { id: "createdPlaces", "data-parent": "#accordionExample" }
+            },
+            [
+              _c("p", { staticClass: "h4 ml-5 mb-0 pb-0 text-right" }, [
+                _vm._v("Places")
+              ]),
+              _vm._v(" "),
+              _c("nav", { staticClass: "mt-2" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass: "nav nav-tabs",
+                    attrs: { id: "nav-tab", role: "tablist" }
+                  },
+                  [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "nav-item nav-link active mr-1",
+                        attrs: {
+                          id: "nav-home-tab",
+                          "data-toggle": "tab",
+                          href: "#nav-home",
+                          role: "tab",
+                          "aria-controls": "nav-home",
+                          "aria-selected": "true"
+                        }
+                      },
+                      [
+                        _c("i", { staticClass: "far fa-paper-plane" }),
+                        _vm._v(" Submited "),
                         _c(
-                          "a",
-                          {
-                            staticClass: "nav-link m-0 p-0",
-                            attrs: {
-                              target: "_blank",
-                              href: "/event/" + event.id
-                            }
-                          },
-                          [
-                            _c("img", {
-                              attrs: {
-                                src: "../storage/sport_logo/" + event.image
-                              }
-                            }),
-                            _vm._v(
-                              "  " +
-                                _vm._s(event.title) +
-                                "\n                        "
-                            )
-                          ]
+                          "span",
+                          { staticClass: "badge badge-pill badge-dark active" },
+                          [_vm._v(_vm._s(_vm.submitedPlaces.length))]
                         )
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "card-body" }, [
-                        _c("div", { staticClass: "row" }, [
-                          _c("div", { staticClass: "col-lg-8" }, [
-                            _vm._v(
-                              "\n                                " +
-                                _vm._s(event.about) +
-                                "\n                            "
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "col-lg-3" }, [
-                            _c("hr", { staticClass: "mt-0" }),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "mb-1" }, [
-                              _c("i", { staticClass: "far fa-calendar-alt" }),
-                              _vm._v(" " + _vm._s(_vm.getDate(event.time_from)))
-                            ]),
-                            _vm._v(" "),
-                            _c("div", [
-                              _c("i", { staticClass: "far fa-clock" }),
-                              _vm._v(
-                                " " +
-                                  _vm._s(_vm.getTime(event.time_from)) +
-                                  " - " +
-                                  _vm._s(_vm.getTime(event.time_until))
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "a",
+                      {
+                        staticClass: "nav-item nav-link mr-1",
+                        attrs: {
+                          id: "nav-profile-tab",
+                          "data-toggle": "tab",
+                          href: "#nav-profile",
+                          role: "tab",
+                          "aria-controls": "nav-profile",
+                          "aria-selected": "false"
+                        }
+                      },
+                      [
+                        _c("i", { staticClass: "far fa-check-circle" }),
+                        _vm._v(" Accepted "),
+                        _c(
+                          "span",
+                          { staticClass: "badge badge-pill badge-dark" },
+                          [_vm._v(_vm._s(_vm.acceptedPlaces.length))]
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "a",
+                      {
+                        staticClass: "nav-item nav-link",
+                        attrs: {
+                          id: "nav-contact-tab",
+                          "data-toggle": "tab",
+                          href: "#nav-contact",
+                          role: "tab",
+                          "aria-controls": "nav-contact",
+                          "aria-selected": "false"
+                        }
+                      },
+                      [
+                        _c("i", { staticClass: "far fa-times-circle" }),
+                        _vm._v(" Declined "),
+                        _c(
+                          "span",
+                          { staticClass: "badge badge-pill badge-dark" },
+                          [_vm._v(_vm._s(_vm.declinedPlaces.length))]
+                        )
+                      ]
+                    )
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "tab-content", attrs: { id: "nav-tabContent" } },
+                [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "tab-pane fade show active",
+                      attrs: {
+                        id: "nav-home",
+                        role: "tabpanel",
+                        "aria-labelledby": "nav-home-tab"
+                      }
+                    },
+                    [
+                      _vm.submitedPlaces.length != 0
+                        ? _c(
+                            "div",
+                            [
+                              _vm._l(_vm.submited_places_pageOfItems, function(
+                                place
+                              ) {
+                                return _c(
+                                  "div",
+                                  {
+                                    key: place.id,
+                                    staticClass: "card mt-2 mb-3"
+                                  },
+                                  [
+                                    _c("div", { staticClass: "card-body" }, [
+                                      _vm._v(
+                                        "\n                                    " +
+                                          _vm._s(place.title) +
+                                          "\n                                    "
+                                      ),
+                                      _c(
+                                        "div",
+                                        { staticClass: "float-right" },
+                                        [
+                                          _c("img", {
+                                            attrs: {
+                                              src:
+                                                "../storage/sport_logo/" +
+                                                place.image
+                                            }
+                                          })
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c("hr"),
+                                      _vm._v(" "),
+                                      _c("div", { staticClass: "row" }, [
+                                        _c("div", { staticClass: "col-8" }, [
+                                          _vm._v(
+                                            "\n                                            " +
+                                              _vm._s(place.about) +
+                                              "\n                                        "
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("div", { staticClass: "col-4" }, [
+                                          _c(
+                                            "button",
+                                            {
+                                              staticClass:
+                                                "btn btn-outline-success btn-lg float-right",
+                                              attrs: {
+                                                type: "button",
+                                                "data-toggle": "modal",
+                                                "data-target":
+                                                  "#submited_map" + place.id
+                                              }
+                                            },
+                                            [
+                                              _c("i", {
+                                                staticClass:
+                                                  "fas fa-map-marked-alt"
+                                              })
+                                            ]
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass: "modal fade",
+                                            attrs: {
+                                              id: "submited_map" + place.id,
+                                              tabindex: "-1",
+                                              role: "dialog",
+                                              "aria-labelledby":
+                                                "exampleModalCenterTitle",
+                                              "aria-hidden": "true"
+                                            }
+                                          },
+                                          [
+                                            _c(
+                                              "div",
+                                              {
+                                                staticClass:
+                                                  "modal-dialog modal-dialog-centered",
+                                                attrs: { role: "document" }
+                                              },
+                                              [
+                                                _c(
+                                                  "div",
+                                                  {
+                                                    staticClass: "modal-content"
+                                                  },
+                                                  [
+                                                    _c(
+                                                      "div",
+                                                      {
+                                                        staticClass:
+                                                          "modal-header"
+                                                      },
+                                                      [
+                                                        _c(
+                                                          "h5",
+                                                          {
+                                                            staticClass:
+                                                              "modal-title",
+                                                            attrs: {
+                                                              id:
+                                                                "exampleModalLongTitle"
+                                                            }
+                                                          },
+                                                          [
+                                                            _vm._v(
+                                                              _vm._s(
+                                                                place.title
+                                                              )
+                                                            )
+                                                          ]
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _vm._m(4, true)
+                                                      ]
+                                                    ),
+                                                    _vm._v(" "),
+                                                    _c(
+                                                      "div",
+                                                      {
+                                                        staticClass:
+                                                          "modal-body p-0"
+                                                      },
+                                                      [
+                                                        _c("smallmap", {
+                                                          attrs: {
+                                                            place: place,
+                                                            size:
+                                                              "width:auto; height: 450px;"
+                                                          }
+                                                        })
+                                                      ],
+                                                      1
+                                                    )
+                                                  ]
+                                                )
+                                              ]
+                                            )
+                                          ]
+                                        )
+                                      ])
+                                    ])
+                                  ]
+                                )
+                              }),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                { staticClass: "row justify-content-around" },
+                                [
+                                  _c("jw-pagination", {
+                                    attrs: {
+                                      pageSize: 3,
+                                      items: _vm.submitedPlaces
+                                    },
+                                    on: {
+                                      changePage:
+                                        _vm.submited_places_onChangePage
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            2
+                          )
+                        : _c(
+                            "p",
+                            { staticClass: "text-center mt-4 text-muted" },
+                            [_vm._v(" No submited places.. ")]
+                          )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "tab-pane fade",
+                      attrs: {
+                        id: "nav-profile",
+                        role: "tabpanel",
+                        "aria-labelledby": "nav-profile-tab"
+                      }
+                    },
+                    [
+                      _vm.acceptedPlaces.length != 0
+                        ? _c(
+                            "div",
+                            [
+                              _vm._l(_vm.accepted_places_pageOfItems, function(
+                                place
+                              ) {
+                                return _c(
+                                  "div",
+                                  {
+                                    key: place.id,
+                                    staticClass: "card mt-2 mb-3"
+                                  },
+                                  [
+                                    _c("div", { staticClass: "card-body" }, [
+                                      _vm._v(
+                                        "\n                                    " +
+                                          _vm._s(place.title) +
+                                          "\n                                    "
+                                      ),
+                                      _c(
+                                        "div",
+                                        { staticClass: "float-right" },
+                                        [
+                                          _c("img", {
+                                            attrs: {
+                                              src:
+                                                "../storage/sport_logo/" +
+                                                place.image
+                                            }
+                                          })
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c("hr"),
+                                      _vm._v(" "),
+                                      _c("div", { staticClass: "row" }, [
+                                        _c("div", { staticClass: "col-8" }, [
+                                          _vm._v(
+                                            "\n                                            " +
+                                              _vm._s(place.about) +
+                                              "\n                                        "
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("div", { staticClass: "col-4" }, [
+                                          _c(
+                                            "button",
+                                            {
+                                              staticClass:
+                                                "btn btn-outline-success btn-lg float-right",
+                                              attrs: {
+                                                type: "button",
+                                                "data-toggle": "modal",
+                                                "data-target":
+                                                  "#accepted_map" + place.id
+                                              }
+                                            },
+                                            [
+                                              _c("i", {
+                                                staticClass:
+                                                  "fas fa-map-marked-alt"
+                                              })
+                                            ]
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass: "modal fade",
+                                            attrs: {
+                                              id: "accepted_map" + place.id,
+                                              tabindex: "-1",
+                                              role: "dialog",
+                                              "aria-labelledby":
+                                                "exampleModalCenterTitle",
+                                              "aria-hidden": "true"
+                                            }
+                                          },
+                                          [
+                                            _c(
+                                              "div",
+                                              {
+                                                staticClass:
+                                                  "modal-dialog modal-dialog-centered",
+                                                attrs: { role: "document" }
+                                              },
+                                              [
+                                                _c(
+                                                  "div",
+                                                  {
+                                                    staticClass: "modal-content"
+                                                  },
+                                                  [
+                                                    _c(
+                                                      "div",
+                                                      {
+                                                        staticClass:
+                                                          "modal-header"
+                                                      },
+                                                      [
+                                                        _c(
+                                                          "h5",
+                                                          {
+                                                            staticClass:
+                                                              "modal-title",
+                                                            attrs: {
+                                                              id:
+                                                                "exampleModalLongTitle"
+                                                            }
+                                                          },
+                                                          [
+                                                            _vm._v(
+                                                              _vm._s(
+                                                                place.title
+                                                              )
+                                                            )
+                                                          ]
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _vm._m(5, true)
+                                                      ]
+                                                    ),
+                                                    _vm._v(" "),
+                                                    _c(
+                                                      "div",
+                                                      {
+                                                        staticClass:
+                                                          "modal-body p-0"
+                                                      },
+                                                      [
+                                                        _c("smallmap", {
+                                                          attrs: {
+                                                            place: place,
+                                                            size:
+                                                              "width:auto; height: 450px;"
+                                                          }
+                                                        })
+                                                      ],
+                                                      1
+                                                    )
+                                                  ]
+                                                )
+                                              ]
+                                            )
+                                          ]
+                                        )
+                                      ])
+                                    ])
+                                  ]
+                                )
+                              }),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                { staticClass: "row justify-content-around" },
+                                [
+                                  _c("jw-pagination", {
+                                    attrs: {
+                                      pageSize: 3,
+                                      items: _vm.acceptedPlaces
+                                    },
+                                    on: {
+                                      changePage:
+                                        _vm.accepted_places_onChangePage
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            2
+                          )
+                        : _c(
+                            "p",
+                            { staticClass: "text-center mt-4 text-muted" },
+                            [_vm._v(" No accepted places.. ")]
+                          )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "tab-pane fade",
+                      attrs: {
+                        id: "nav-contact",
+                        role: "tabpanel",
+                        "aria-labelledby": "nav-contact-tab"
+                      }
+                    },
+                    [
+                      _vm.declinedPlaces.length != 0
+                        ? _c(
+                            "div",
+                            [
+                              _vm._l(_vm.declined_places_pageOfItems, function(
+                                place
+                              ) {
+                                return _c(
+                                  "div",
+                                  {
+                                    key: place.id,
+                                    staticClass: "card mt-2 mb-3"
+                                  },
+                                  [
+                                    _c("div", { staticClass: "card-body" }, [
+                                      _vm._v(
+                                        "\n                                " +
+                                          _vm._s(place.title) +
+                                          "\n                                "
+                                      ),
+                                      _c(
+                                        "div",
+                                        { staticClass: "float-right" },
+                                        [
+                                          _c("img", {
+                                            attrs: {
+                                              src:
+                                                "../storage/sport_logo/" +
+                                                place.image
+                                            }
+                                          })
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c("hr"),
+                                      _vm._v(" "),
+                                      _c("div", { staticClass: "row" }, [
+                                        _c("div", { staticClass: "col-8" }, [
+                                          _vm._v(
+                                            "\n                                        " +
+                                              _vm._s(place.about) +
+                                              "\n                                    "
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("div", { staticClass: "col-4" }, [
+                                          _c(
+                                            "button",
+                                            {
+                                              staticClass:
+                                                "btn btn-outline-danger btn-lg float-right m-1",
+                                              attrs: { type: "button" },
+                                              on: {
+                                                click: function($event) {
+                                                  return _vm.deletePlace(
+                                                    place.id
+                                                  )
+                                                }
+                                              }
+                                            },
+                                            [
+                                              _c("i", {
+                                                staticClass: "fas fa-times"
+                                              })
+                                            ]
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "button",
+                                            {
+                                              staticClass:
+                                                "btn btn-outline-primary btn-lg float-right m-1",
+                                              attrs: { type: "button" },
+                                              on: {
+                                                click: function($event) {
+                                                  return _vm.openResubmit(place)
+                                                }
+                                              }
+                                            },
+                                            [
+                                              _c("i", {
+                                                staticClass: "far fa-edit"
+                                              })
+                                            ]
+                                          )
+                                        ])
+                                      ])
+                                    ])
+                                  ]
+                                )
+                              }),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                { staticClass: "row justify-content-around" },
+                                [
+                                  _c("jw-pagination", {
+                                    attrs: {
+                                      pageSize: 3,
+                                      items: _vm.declinedPlaces
+                                    },
+                                    on: {
+                                      changePage:
+                                        _vm.declined_places_onChangePage
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            2
+                          )
+                        : _c(
+                            "p",
+                            { staticClass: "text-center mt-4 text-muted" },
+                            [_vm._v(" No declined places.. ")]
+                          )
+                    ]
+                  )
+                ]
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "collapse show",
+              attrs: { id: "goingto", "data-parent": "#accordionExample" }
+            },
+            [
+              _c("p", { staticClass: "h4 ml-5 mb-3 mb-0 pb-0" }, [
+                _vm._v("Going to")
+              ]),
+              _vm._v(" "),
+              _vm.goingToEvents != 0
+                ? _c(
+                    "div",
+                    [
+                      _vm._l(_vm.goingto_events_pageOfItems, function(event) {
+                        return _c(
+                          "div",
+                          { key: event.id, staticClass: "card mb-3 shadow-sm" },
+                          [
+                            _c("div", { staticClass: "card-header" }, [
+                              _c(
+                                "a",
+                                {
+                                  staticClass: "nav-link m-0 p-0",
+                                  attrs: {
+                                    target: "_blank",
+                                    href: "/event/" + event.id
+                                  }
+                                },
+                                [
+                                  _c("img", {
+                                    attrs: {
+                                      src:
+                                        "../storage/sport_logo/" + event.image
+                                    }
+                                  }),
+                                  _vm._v(
+                                    "  " +
+                                      _vm._s(event.title) +
+                                      "\n                        "
+                                  )
+                                ]
                               )
                             ]),
                             _vm._v(" "),
-                            _c("hr", { staticClass: "mb-0" })
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "col-lg-1 pl-1" }, [
-                            _c(
-                              "button",
-                              {
-                                staticClass:
-                                  "btn btn-outline-success float-right",
-                                attrs: {
-                                  type: "button",
-                                  "data-toggle": "modal",
-                                  "data-target": "#created_map" + event.id
-                                }
-                              },
-                              [
-                                _c("i", {
-                                  staticClass: "fas fa-map-marked-alt"
-                                })
-                              ]
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c(
+                            _c("div", { staticClass: "card-body" }, [
+                              _c("div", { staticClass: "row" }, [
+                                _c("div", { staticClass: "col-lg-8" }, [
+                                  _vm._v(
+                                    "\n                                " +
+                                      _vm._s(event.about) +
+                                      "\n                            "
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "col-lg-3" }, [
+                                  _c("hr", { staticClass: "mt-0" }),
+                                  _vm._v(" "),
+                                  _c("div", { staticClass: "mb-1" }, [
+                                    _c("i", {
+                                      staticClass: "far fa-calendar-alt"
+                                    }),
+                                    _vm._v(
+                                      " " + _vm._s(_vm.getDate(event.time_from))
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("div", [
+                                    _c("i", { staticClass: "far fa-clock" }),
+                                    _vm._v(
+                                      " " +
+                                        _vm._s(_vm.getTime(event.time_from)) +
+                                        " - " +
+                                        _vm._s(_vm.getTime(event.time_until))
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("hr", { staticClass: "mb-0" })
+                                ]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "col-lg-1 pl-1" }, [
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass:
+                                        "btn btn-outline-success float-right",
+                                      attrs: {
+                                        type: "button",
+                                        "data-toggle": "modal",
+                                        "data-target": "#created_map" + event.id
+                                      }
+                                    },
+                                    [
+                                      _c("i", {
+                                        staticClass: "fas fa-map-marked-alt"
+                                      })
+                                    ]
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass: "modal fade",
+                                    attrs: {
+                                      id: "created_map" + event.id,
+                                      tabindex: "-1",
+                                      role: "dialog",
+                                      "aria-labelledby":
+                                        "exampleModalCenterTitle",
+                                      "aria-hidden": "true"
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass:
+                                          "modal-dialog modal-dialog-centered",
+                                        attrs: { role: "document" }
+                                      },
+                                      [
+                                        _c(
+                                          "div",
+                                          { staticClass: "modal-content" },
+                                          [
+                                            _c(
+                                              "div",
+                                              { staticClass: "modal-header" },
+                                              [
+                                                _c(
+                                                  "h5",
+                                                  {
+                                                    staticClass: "modal-title",
+                                                    attrs: {
+                                                      id:
+                                                        "exampleModalLongTitle"
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("img", {
+                                                      attrs: {
+                                                        src:
+                                                          "../storage/sport_logo/" +
+                                                          event.image
+                                                      }
+                                                    }),
+                                                    _vm._v(
+                                                      "  " + _vm._s(event.title)
+                                                    )
+                                                  ]
+                                                ),
+                                                _vm._v(" "),
+                                                _vm._m(6, true)
+                                              ]
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "div",
+                                              { staticClass: "modal-body p-0" },
+                                              [
+                                                _c("smallmap", {
+                                                  attrs: {
+                                                    place: event,
+                                                    size:
+                                                      "width:100%; height:450px;"
+                                                  }
+                                                })
+                                              ],
+                                              1
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    )
+                                  ]
+                                )
+                              ])
+                            ])
+                          ]
+                        )
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "row justify-content-around" },
+                        [
+                          _c("jw-pagination", {
+                            attrs: { pageSize: 3, items: _vm.goingToEvents },
+                            on: { changePage: _vm.goingto_events_onChangePage }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    2
+                  )
+                : _c("p", { staticClass: "text-center mt-4 text-muted" }, [
+                    _vm._v(" No events created.. ")
+                  ])
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "collapse",
+              attrs: { id: "createdEvents", "data-parent": "#accordionExample" }
+            },
+            [
+              _c("p", { staticClass: "h4 ml-5 mb-0 pb-0 text-right" }, [
+                _vm._v("Events")
+              ]),
+              _vm._v(" "),
+              _c("nav", { staticClass: "mt-2 mb-2" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass: "nav nav-tabs",
+                    attrs: { id: "nav-tab2", role: "tablist" }
+                  },
+                  [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "nav-item nav-link active mr-1",
+                        attrs: {
+                          id: "nav-submited-tab",
+                          "data-toggle": "tab",
+                          href: "#nav-submited",
+                          role: "tab",
+                          "aria-controls": "nav-submited",
+                          "aria-selected": "true"
+                        }
+                      },
+                      [
+                        _c("i", { staticClass: "far fa-paper-plane" }),
+                        _vm._v(" Submited "),
+                        _c(
+                          "span",
+                          { staticClass: "badge badge-pill badge-dark" },
+                          [_vm._v(_vm._s(_vm.submitedEvents.length))]
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "a",
+                      {
+                        staticClass: "nav-item nav-link mr-1",
+                        attrs: {
+                          id: "nav-accepted-tab",
+                          "data-toggle": "tab",
+                          href: "#nav-accepted",
+                          role: "tab",
+                          "aria-controls": "nav-accepted",
+                          "aria-selected": "false"
+                        }
+                      },
+                      [
+                        _c("i", { staticClass: "far fa-check-circle" }),
+                        _vm._v(" Accepted "),
+                        _c(
+                          "span",
+                          { staticClass: "badge badge-pill badge-dark" },
+                          [_vm._v(_vm._s(_vm.createdEvents.length))]
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "a",
+                      {
+                        staticClass: "nav-item nav-link",
+                        attrs: {
+                          id: "nav-declined-tab",
+                          "data-toggle": "tab",
+                          href: "#nav-declined",
+                          role: "tab",
+                          "aria-controls": "nav-declined",
+                          "aria-selected": "false"
+                        }
+                      },
+                      [
+                        _c("i", { staticClass: "far fa-times-circle" }),
+                        _vm._v(" Declined "),
+                        _c(
+                          "span",
+                          { staticClass: "badge badge-pill badge-dark" },
+                          [_vm._v(_vm._s(_vm.declinedEvents.length))]
+                        )
+                      ]
+                    )
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass: "tab-content",
+                  attrs: { id: "nav-tabContent2" }
+                },
+                [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "tab-pane fade show active",
+                      attrs: {
+                        id: "nav-submited",
+                        role: "tabpanel",
+                        "aria-labelledby": "nav-submited-tab"
+                      }
+                    },
+                    [
+                      _vm.submitedEvents != 0
+                        ? _c(
                             "div",
-                            {
-                              staticClass: "modal fade",
-                              attrs: {
-                                id: "created_map" + event.id,
-                                tabindex: "-1",
-                                role: "dialog",
-                                "aria-labelledby": "exampleModalCenterTitle",
-                                "aria-hidden": "true"
-                              }
-                            },
                             [
-                              _c(
-                                "div",
-                                {
-                                  staticClass:
-                                    "modal-dialog modal-dialog-centered",
-                                  attrs: { role: "document" }
-                                },
-                                [
-                                  _c("div", { staticClass: "modal-content" }, [
-                                    _c("div", { staticClass: "modal-header" }, [
+                              _vm._l(_vm.submited_events_pageOfItems, function(
+                                event
+                              ) {
+                                return _c(
+                                  "div",
+                                  { key: event.id, staticClass: "card mb-3" },
+                                  [
+                                    _c("div", { staticClass: "card-header" }, [
                                       _c(
-                                        "h5",
+                                        "a",
                                         {
-                                          staticClass: "modal-title",
-                                          attrs: { id: "exampleModalLongTitle" }
+                                          staticClass: "nav-link m-0 p-0",
+                                          attrs: {
+                                            target: "_blank",
+                                            href: "/event/" + event.id
+                                          }
                                         },
                                         [
                                           _c("img", {
@@ -57687,258 +58534,735 @@ var render = function() {
                                                 event.image
                                             }
                                           }),
-                                          _vm._v("  " + _vm._s(event.title))
+                                          _vm._v(
+                                            "  " +
+                                              _vm._s(event.title) +
+                                              "\n                                    "
+                                          )
                                         ]
-                                      ),
-                                      _vm._v(" "),
-                                      _vm._m(7, true)
+                                      )
                                     ]),
                                     _vm._v(" "),
-                                    _c(
-                                      "div",
-                                      { staticClass: "modal-body p-0" },
-                                      [
-                                        _c("smallmap", {
-                                          attrs: {
-                                            place: event,
-                                            size: "width:100%; height:450px;"
-                                          }
-                                        })
-                                      ],
-                                      1
-                                    )
-                                  ])
-                                ]
-                              )
-                            ]
-                          )
-                        ])
-                      ])
-                    ]
-                  )
-                }),
-                0
-              )
-            : _c("p", { staticClass: "text-center mt-4 text-muted" }, [
-                _vm._v(" No events created.. ")
-              ])
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass: "collapse show",
-          attrs: { id: "createdEvents", "data-parent": "#accordionExample" }
-        },
-        [
-          _c("p", { staticClass: "h4 text-center" }, [_vm._v("Created")]),
-          _vm._v(" "),
-          _c("hr"),
-          _vm._v(" "),
-          _vm.createdEvents != 0
-            ? _c(
-                "div",
-                [
-                  _vm._l(_vm.pageOfItems, function(event) {
-                    return _c(
-                      "div",
-                      { key: event.id, staticClass: "card mb-3" },
-                      [
-                        _c("div", { staticClass: "card-header" }, [
-                          _c(
-                            "a",
-                            {
-                              staticClass: "nav-link m-0 p-0",
-                              attrs: {
-                                target: "_blank",
-                                href: "/event/" + event.id
-                              }
-                            },
-                            [
-                              _c("img", {
-                                attrs: {
-                                  src: "../storage/sport_logo/" + event.image
-                                }
-                              }),
-                              _vm._v(
-                                "  " +
-                                  _vm._s(event.title) +
-                                  "\n                        "
-                              )
-                            ]
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "card-body" }, [
-                          _c("div", { staticClass: "row" }, [
-                            _c("div", { staticClass: "col-lg-8" }, [
-                              _vm._v(
-                                "\n                                " +
-                                  _vm._s(event.about) +
-                                  "\n                            "
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "col-lg-3" }, [
-                              _c("hr", { staticClass: "mt-0" }),
-                              _vm._v(" "),
-                              _c("div", { staticClass: "mb-1" }, [
-                                _c("i", { staticClass: "far fa-calendar-alt" }),
-                                _vm._v(
-                                  " " + _vm._s(_vm.getDate(event.time_from))
-                                )
-                              ]),
-                              _vm._v(" "),
-                              _c("div", [
-                                _c("i", { staticClass: "far fa-clock" }),
-                                _vm._v(
-                                  " " +
-                                    _vm._s(_vm.getTime(event.time_from)) +
-                                    " - " +
-                                    _vm._s(_vm.getTime(event.time_until))
-                                )
-                              ]),
-                              _vm._v(" "),
-                              _c("hr", { staticClass: "mb-0" })
-                            ]),
-                            _vm._v(" "),
-                            _c(
-                              "div",
-                              { staticClass: "col-lg-1 pl-1" },
-                              [
-                                _c("editevent", {
-                                  attrs: { user: _vm.user, event: event },
-                                  on: {
-                                    fetchCreatedEvents: function($event) {
-                                      return _vm.fetchCreatedEvents()
-                                    }
-                                  }
-                                }),
-                                _vm._v(" "),
-                                _c(
-                                  "button",
-                                  {
-                                    staticClass:
-                                      "btn btn-outline-success float-right",
-                                    attrs: {
-                                      type: "button",
-                                      "data-toggle": "modal",
-                                      "data-target": "#created_mappp" + event.id
-                                    }
-                                  },
-                                  [
-                                    _c("i", {
-                                      staticClass: "fas fa-map-marked-alt"
-                                    })
-                                  ]
-                                )
-                              ],
-                              1
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "div",
-                              {
-                                staticClass: "modal fade",
-                                attrs: {
-                                  id: "created_mappp" + event.id,
-                                  tabindex: "-1",
-                                  role: "dialog",
-                                  "aria-labelledby": "exampleModalCenterTitle",
-                                  "aria-hidden": "true"
-                                }
-                              },
-                              [
-                                _c(
-                                  "div",
-                                  {
-                                    staticClass:
-                                      "modal-dialog modal-dialog-centered",
-                                    attrs: { role: "document" }
-                                  },
-                                  [
-                                    _c(
-                                      "div",
-                                      { staticClass: "modal-content" },
-                                      [
+                                    _c("div", { staticClass: "card-body" }, [
+                                      _c("div", { staticClass: "row" }, [
+                                        _c("div", { staticClass: "col-lg-8" }, [
+                                          _vm._v(
+                                            "\n                                            " +
+                                              _vm._s(event.about) +
+                                              "\n                                        "
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("div", { staticClass: "col-lg-3" }, [
+                                          _c("hr", { staticClass: "mt-0" }),
+                                          _vm._v(" "),
+                                          _c("div", { staticClass: "mb-1" }, [
+                                            _c("i", {
+                                              staticClass: "far fa-calendar-alt"
+                                            }),
+                                            _vm._v(
+                                              " " +
+                                                _vm._s(
+                                                  _vm.getDate(event.time_from)
+                                                )
+                                            )
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("div", [
+                                            _c("i", {
+                                              staticClass: "far fa-clock"
+                                            }),
+                                            _vm._v(
+                                              " " +
+                                                _vm._s(
+                                                  _vm.getTime(event.time_from)
+                                                ) +
+                                                " - " +
+                                                _vm._s(
+                                                  _vm.getTime(event.time_until)
+                                                )
+                                            )
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("hr", { staticClass: "mb-0" })
+                                        ]),
+                                        _vm._v(" "),
                                         _c(
                                           "div",
-                                          { staticClass: "modal-header" },
+                                          { staticClass: "col-lg-1 pl-1" },
                                           [
                                             _c(
-                                              "h5",
+                                              "button",
                                               {
-                                                staticClass: "modal-title",
+                                                staticClass:
+                                                  "btn btn-outline-success float-right",
                                                 attrs: {
-                                                  id: "exampleModalLongTitle"
+                                                  type: "button",
+                                                  "data-toggle": "modal",
+                                                  "data-target":
+                                                    "#created_mappp" + event.id
                                                 }
                                               },
                                               [
-                                                _c("img", {
-                                                  attrs: {
-                                                    src:
-                                                      "../storage/sport_logo/" +
-                                                      event.image
-                                                  }
-                                                }),
-                                                _vm._v(
-                                                  "  " + _vm._s(event.title)
-                                                )
+                                                _c("i", {
+                                                  staticClass:
+                                                    "fas fa-map-marked-alt"
+                                                })
                                               ]
-                                            ),
-                                            _vm._v(" "),
-                                            _vm._m(8, true)
+                                            )
                                           ]
                                         ),
                                         _vm._v(" "),
                                         _c(
                                           "div",
-                                          { staticClass: "modal-body p-0" },
+                                          {
+                                            staticClass: "modal fade",
+                                            attrs: {
+                                              id: "created_mappp" + event.id,
+                                              tabindex: "-1",
+                                              role: "dialog",
+                                              "aria-labelledby":
+                                                "exampleModalCenterTitle",
+                                              "aria-hidden": "true"
+                                            }
+                                          },
                                           [
-                                            _c("smallmap", {
-                                              attrs: {
-                                                place: event,
-                                                size:
-                                                  "width:100%; height:450px;"
-                                              }
-                                            })
-                                          ],
-                                          1
+                                            _c(
+                                              "div",
+                                              {
+                                                staticClass:
+                                                  "modal-dialog modal-dialog-centered",
+                                                attrs: { role: "document" }
+                                              },
+                                              [
+                                                _c(
+                                                  "div",
+                                                  {
+                                                    staticClass: "modal-content"
+                                                  },
+                                                  [
+                                                    _c(
+                                                      "div",
+                                                      {
+                                                        staticClass:
+                                                          "modal-header"
+                                                      },
+                                                      [
+                                                        _c(
+                                                          "h5",
+                                                          {
+                                                            staticClass:
+                                                              "modal-title",
+                                                            attrs: {
+                                                              id:
+                                                                "exampleModalLongTitle"
+                                                            }
+                                                          },
+                                                          [
+                                                            _c("img", {
+                                                              attrs: {
+                                                                src:
+                                                                  "../storage/sport_logo/" +
+                                                                  event.image
+                                                              }
+                                                            }),
+                                                            _vm._v(
+                                                              "  " +
+                                                                _vm._s(
+                                                                  event.title
+                                                                )
+                                                            )
+                                                          ]
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _vm._m(7, true)
+                                                      ]
+                                                    ),
+                                                    _vm._v(" "),
+                                                    _c(
+                                                      "div",
+                                                      {
+                                                        staticClass:
+                                                          "modal-body p-0"
+                                                      },
+                                                      [
+                                                        _c("smallmap", {
+                                                          attrs: {
+                                                            place: event,
+                                                            size:
+                                                              "width:100%; height:450px;"
+                                                          }
+                                                        })
+                                                      ],
+                                                      1
+                                                    )
+                                                  ]
+                                                )
+                                              ]
+                                            )
+                                          ]
                                         )
-                                      ]
-                                    )
+                                      ])
+                                    ])
                                   ]
                                 )
-                              ]
-                            )
-                          ])
-                        ])
-                      ]
-                    )
-                  }),
+                              }),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                { staticClass: "row justify-content-around" },
+                                [
+                                  _c("jw-pagination", {
+                                    attrs: {
+                                      pageSize: 3,
+                                      items: _vm.submitedEvents
+                                    },
+                                    on: {
+                                      changePage:
+                                        _vm.submited_events_onChangePage
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            2
+                          )
+                        : _c(
+                            "p",
+                            { staticClass: "text-center mt-4 text-muted" },
+                            [_vm._v(" No events created.. ")]
+                          )
+                    ]
+                  ),
                   _vm._v(" "),
                   _c(
                     "div",
-                    { staticClass: "row justify-content-around" },
+                    {
+                      staticClass: "tab-pane fade",
+                      attrs: {
+                        id: "nav-accepted",
+                        role: "tabpanel",
+                        "aria-labelledby": "nav-accepted-tab"
+                      }
+                    },
                     [
-                      _c("jw-pagination", {
-                        attrs: { pageSize: 3, items: _vm.createdEvents },
-                        on: { changePage: _vm.onChangePage }
-                      })
-                    ],
-                    1
+                      _vm.createdEvents != 0
+                        ? _c(
+                            "div",
+                            [
+                              _vm._l(_vm.created_events_pageOfItems, function(
+                                event
+                              ) {
+                                return _c(
+                                  "div",
+                                  { key: event.id, staticClass: "card mb-3" },
+                                  [
+                                    _c("div", { staticClass: "card-header" }, [
+                                      _c(
+                                        "a",
+                                        {
+                                          staticClass: "nav-link m-0 p-0",
+                                          attrs: {
+                                            target: "_blank",
+                                            href: "/event/" + event.id
+                                          }
+                                        },
+                                        [
+                                          _c("img", {
+                                            attrs: {
+                                              src:
+                                                "../storage/sport_logo/" +
+                                                event.image
+                                            }
+                                          }),
+                                          _vm._v(
+                                            "  " +
+                                              _vm._s(event.title) +
+                                              "\n                                    "
+                                          )
+                                        ]
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("div", { staticClass: "card-body" }, [
+                                      _c("div", { staticClass: "row" }, [
+                                        _c("div", { staticClass: "col-lg-8" }, [
+                                          _vm._v(
+                                            "\n                                            " +
+                                              _vm._s(event.about) +
+                                              "\n                                        "
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("div", { staticClass: "col-lg-3" }, [
+                                          _c("hr", { staticClass: "mt-0" }),
+                                          _vm._v(" "),
+                                          _c("div", { staticClass: "mb-1" }, [
+                                            _c("i", {
+                                              staticClass: "far fa-calendar-alt"
+                                            }),
+                                            _vm._v(
+                                              " " +
+                                                _vm._s(
+                                                  _vm.getDate(event.time_from)
+                                                )
+                                            )
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("div", [
+                                            _c("i", {
+                                              staticClass: "far fa-clock"
+                                            }),
+                                            _vm._v(
+                                              " " +
+                                                _vm._s(
+                                                  _vm.getTime(event.time_from)
+                                                ) +
+                                                " - " +
+                                                _vm._s(
+                                                  _vm.getTime(event.time_until)
+                                                )
+                                            )
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("hr", { staticClass: "mb-0" })
+                                        ]),
+                                        _vm._v(" "),
+                                        _c(
+                                          "div",
+                                          { staticClass: "col-lg-1 pl-1" },
+                                          [
+                                            _c("editevent", {
+                                              attrs: {
+                                                user: _vm.user,
+                                                event: event
+                                              },
+                                              on: {
+                                                fetchCreatedEvents: function(
+                                                  $event
+                                                ) {
+                                                  return _vm.fetchCreatedEvents()
+                                                }
+                                              }
+                                            }),
+                                            _vm._v(" "),
+                                            _c(
+                                              "button",
+                                              {
+                                                staticClass:
+                                                  "btn btn-outline-success float-right",
+                                                attrs: {
+                                                  type: "button",
+                                                  "data-toggle": "modal",
+                                                  "data-target":
+                                                    "#created_mappp" + event.id
+                                                }
+                                              },
+                                              [
+                                                _c("i", {
+                                                  staticClass:
+                                                    "fas fa-map-marked-alt"
+                                                })
+                                              ]
+                                            )
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass: "modal fade",
+                                            attrs: {
+                                              id: "created_mappp" + event.id,
+                                              tabindex: "-1",
+                                              role: "dialog",
+                                              "aria-labelledby":
+                                                "exampleModalCenterTitle",
+                                              "aria-hidden": "true"
+                                            }
+                                          },
+                                          [
+                                            _c(
+                                              "div",
+                                              {
+                                                staticClass:
+                                                  "modal-dialog modal-dialog-centered",
+                                                attrs: { role: "document" }
+                                              },
+                                              [
+                                                _c(
+                                                  "div",
+                                                  {
+                                                    staticClass: "modal-content"
+                                                  },
+                                                  [
+                                                    _c(
+                                                      "div",
+                                                      {
+                                                        staticClass:
+                                                          "modal-header"
+                                                      },
+                                                      [
+                                                        _c(
+                                                          "h5",
+                                                          {
+                                                            staticClass:
+                                                              "modal-title",
+                                                            attrs: {
+                                                              id:
+                                                                "exampleModalLongTitle"
+                                                            }
+                                                          },
+                                                          [
+                                                            _c("img", {
+                                                              attrs: {
+                                                                src:
+                                                                  "../storage/sport_logo/" +
+                                                                  event.image
+                                                              }
+                                                            }),
+                                                            _vm._v(
+                                                              "  " +
+                                                                _vm._s(
+                                                                  event.title
+                                                                )
+                                                            )
+                                                          ]
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _vm._m(8, true)
+                                                      ]
+                                                    ),
+                                                    _vm._v(" "),
+                                                    _c(
+                                                      "div",
+                                                      {
+                                                        staticClass:
+                                                          "modal-body p-0"
+                                                      },
+                                                      [
+                                                        _c("smallmap", {
+                                                          attrs: {
+                                                            place: event,
+                                                            size:
+                                                              "width:100%; height:450px;"
+                                                          }
+                                                        })
+                                                      ],
+                                                      1
+                                                    )
+                                                  ]
+                                                )
+                                              ]
+                                            )
+                                          ]
+                                        )
+                                      ])
+                                    ])
+                                  ]
+                                )
+                              }),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                {
+                                  staticClass: "row justify-content-around mb-5"
+                                },
+                                [
+                                  _c("jw-pagination", {
+                                    attrs: {
+                                      pageSize: 3,
+                                      maxPages: 3,
+                                      items: _vm.createdEvents
+                                    },
+                                    on: {
+                                      changePage:
+                                        _vm.created_events_onChangePage
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            2
+                          )
+                        : _c(
+                            "p",
+                            { staticClass: "text-center mt-4 text-muted" },
+                            [_vm._v(" No events created.. ")]
+                          )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "tab-pane fade",
+                      attrs: {
+                        id: "nav-declined",
+                        role: "tabpanel",
+                        "aria-labelledby": "nav-declined-tab"
+                      }
+                    },
+                    [
+                      _vm.declinedEvents != 0
+                        ? _c(
+                            "div",
+                            [
+                              _vm._l(_vm.declined_events_pageOfItems, function(
+                                event
+                              ) {
+                                return _c(
+                                  "div",
+                                  { key: event.id, staticClass: "card mb-3" },
+                                  [
+                                    _c("div", { staticClass: "card-header" }, [
+                                      _c(
+                                        "a",
+                                        {
+                                          staticClass: "nav-link m-0 p-0",
+                                          attrs: {
+                                            target: "_blank",
+                                            href: "/event/" + event.id
+                                          }
+                                        },
+                                        [
+                                          _c("img", {
+                                            attrs: {
+                                              src:
+                                                "../storage/sport_logo/" +
+                                                event.image
+                                            }
+                                          }),
+                                          _vm._v(
+                                            "  " +
+                                              _vm._s(event.title) +
+                                              "\n                                    "
+                                          )
+                                        ]
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("div", { staticClass: "card-body" }, [
+                                      _c("div", { staticClass: "row" }, [
+                                        _c("div", { staticClass: "col-lg-8" }, [
+                                          _vm._v(
+                                            "\n                                            " +
+                                              _vm._s(event.about) +
+                                              "\n                                        "
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("div", { staticClass: "col-lg-3" }, [
+                                          _c("hr", { staticClass: "mt-0" }),
+                                          _vm._v(" "),
+                                          _c("div", { staticClass: "mb-1" }, [
+                                            _c("i", {
+                                              staticClass: "far fa-calendar-alt"
+                                            }),
+                                            _vm._v(
+                                              " " +
+                                                _vm._s(
+                                                  _vm.getDate(event.time_from)
+                                                )
+                                            )
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("div", [
+                                            _c("i", {
+                                              staticClass: "far fa-clock"
+                                            }),
+                                            _vm._v(
+                                              " " +
+                                                _vm._s(
+                                                  _vm.getTime(event.time_from)
+                                                ) +
+                                                " - " +
+                                                _vm._s(
+                                                  _vm.getTime(event.time_until)
+                                                )
+                                            )
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("hr", { staticClass: "mb-0" })
+                                        ]),
+                                        _vm._v(" "),
+                                        _c(
+                                          "div",
+                                          { staticClass: "col-lg-1 pl-1" },
+                                          [
+                                            _c("editevent", {
+                                              attrs: {
+                                                user: _vm.user,
+                                                event: event
+                                              },
+                                              on: {
+                                                fetchCreatedEvents: function(
+                                                  $event
+                                                ) {
+                                                  return _vm.fetchCreatedEvents()
+                                                }
+                                              }
+                                            }),
+                                            _vm._v(" "),
+                                            _c(
+                                              "button",
+                                              {
+                                                staticClass:
+                                                  "btn btn-outline-success float-right",
+                                                attrs: {
+                                                  type: "button",
+                                                  "data-toggle": "modal",
+                                                  "data-target":
+                                                    "#created_mappp" + event.id
+                                                }
+                                              },
+                                              [
+                                                _c("i", {
+                                                  staticClass:
+                                                    "fas fa-map-marked-alt"
+                                                })
+                                              ]
+                                            )
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass: "modal fade",
+                                            attrs: {
+                                              id: "created_mappp" + event.id,
+                                              tabindex: "-1",
+                                              role: "dialog",
+                                              "aria-labelledby":
+                                                "exampleModalCenterTitle",
+                                              "aria-hidden": "true"
+                                            }
+                                          },
+                                          [
+                                            _c(
+                                              "div",
+                                              {
+                                                staticClass:
+                                                  "modal-dialog modal-dialog-centered",
+                                                attrs: { role: "document" }
+                                              },
+                                              [
+                                                _c(
+                                                  "div",
+                                                  {
+                                                    staticClass: "modal-content"
+                                                  },
+                                                  [
+                                                    _c(
+                                                      "div",
+                                                      {
+                                                        staticClass:
+                                                          "modal-header"
+                                                      },
+                                                      [
+                                                        _c(
+                                                          "h5",
+                                                          {
+                                                            staticClass:
+                                                              "modal-title",
+                                                            attrs: {
+                                                              id:
+                                                                "exampleModalLongTitle"
+                                                            }
+                                                          },
+                                                          [
+                                                            _c("img", {
+                                                              attrs: {
+                                                                src:
+                                                                  "../storage/sport_logo/" +
+                                                                  event.image
+                                                              }
+                                                            }),
+                                                            _vm._v(
+                                                              "  " +
+                                                                _vm._s(
+                                                                  event.title
+                                                                )
+                                                            )
+                                                          ]
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _vm._m(9, true)
+                                                      ]
+                                                    ),
+                                                    _vm._v(" "),
+                                                    _c(
+                                                      "div",
+                                                      {
+                                                        staticClass:
+                                                          "modal-body p-0"
+                                                      },
+                                                      [
+                                                        _c("smallmap", {
+                                                          attrs: {
+                                                            place: event,
+                                                            size:
+                                                              "width:100%; height:450px;"
+                                                          }
+                                                        })
+                                                      ],
+                                                      1
+                                                    )
+                                                  ]
+                                                )
+                                              ]
+                                            )
+                                          ]
+                                        )
+                                      ])
+                                    ])
+                                  ]
+                                )
+                              }),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                {
+                                  staticClass: "row justify-content-around mb-5"
+                                },
+                                [
+                                  _c("jw-pagination", {
+                                    attrs: {
+                                      pageSize: 3,
+                                      items: _vm.declinedEvents
+                                    },
+                                    on: {
+                                      changePage:
+                                        _vm.declined_events_onChangePage
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            2
+                          )
+                        : _c(
+                            "p",
+                            { staticClass: "text-center mt-4 text-muted" },
+                            [_vm._v(" No events created.. ")]
+                          )
+                    ]
                   )
-                ],
-                2
+                ]
               )
-            : _c("p", { staticClass: "text-center mt-4 text-muted" }, [
-                _vm._v(" No events created.. ")
-              ])
+            ]
+          )
         ]
       )
-    ])
-  ])
+    ],
+    1
+  )
 }
 var staticRenderFns = [
   function() {
@@ -57998,6 +59322,28 @@ var staticRenderFns = [
         attrs: {
           type: "button",
           "data-toggle": "collapse",
+          "data-target": "#createdEvents",
+          "aria-expanded": "false",
+          "aria-controls": "createdEvents"
+        }
+      },
+      [
+        _c("i", { staticClass: "far fa-calendar-alt" }),
+        _vm._v(" Events\n            ")
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "btn btn-success m-1 float-right",
+        attrs: {
+          type: "button",
+          "data-toggle": "collapse",
           "data-target": "#createdPlaces",
           "aria-expanded": "false",
           "aria-controls": "createdPlaces"
@@ -58013,64 +59359,18 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("nav", { staticClass: "mt-2" }, [
-      _c(
-        "div",
-        {
-          staticClass: "nav nav-tabs",
-          attrs: { id: "nav-tab", role: "tablist" }
-        },
-        [
-          _c(
-            "a",
-            {
-              staticClass: "nav-item nav-link active",
-              attrs: {
-                id: "nav-home-tab",
-                "data-toggle": "tab",
-                href: "#nav-home",
-                role: "tab",
-                "aria-controls": "nav-home",
-                "aria-selected": "true"
-              }
-            },
-            [_vm._v("Submited places")]
-          ),
-          _vm._v(" "),
-          _c(
-            "a",
-            {
-              staticClass: "nav-item nav-link",
-              attrs: {
-                id: "nav-profile-tab",
-                "data-toggle": "tab",
-                href: "#nav-profile",
-                role: "tab",
-                "aria-controls": "nav-profile",
-                "aria-selected": "false"
-              }
-            },
-            [_vm._v("Accepted places")]
-          ),
-          _vm._v(" "),
-          _c(
-            "a",
-            {
-              staticClass: "nav-item nav-link",
-              attrs: {
-                id: "nav-contact-tab",
-                "data-toggle": "tab",
-                href: "#nav-contact",
-                role: "tab",
-                "aria-controls": "nav-contact",
-                "aria-selected": "false"
-              }
-            },
-            [_vm._v("Declined places")]
-          )
-        ]
-      )
-    ])
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "modal",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
   },
   function() {
     var _vm = this
@@ -58113,10 +59413,14 @@ var staticRenderFns = [
     return _c(
       "button",
       {
-        staticClass: "btn btn-outline-danger btn-lg float-right m-1",
-        attrs: { type: "button" }
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "modal",
+          "aria-label": "Close"
+        }
       },
-      [_c("i", { staticClass: "fas fa-times" })]
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
     )
   },
   function() {
@@ -76208,9 +77512,11 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _ShowProfileInfo_vue_vue_type_template_id_d43afbc2___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ShowProfileInfo.vue?vue&type=template&id=d43afbc2& */ "./resources/js/components/ShowProfileInfo.vue?vue&type=template&id=d43afbc2&");
+/* harmony import */ var _ShowProfileInfo_vue_vue_type_template_id_d43afbc2_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ShowProfileInfo.vue?vue&type=template&id=d43afbc2&scoped=true& */ "./resources/js/components/ShowProfileInfo.vue?vue&type=template&id=d43afbc2&scoped=true&");
 /* harmony import */ var _ShowProfileInfo_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ShowProfileInfo.vue?vue&type=script&lang=js& */ "./resources/js/components/ShowProfileInfo.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _ShowProfileInfo_vue_vue_type_style_index_0_id_d43afbc2_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ShowProfileInfo.vue?vue&type=style&index=0&id=d43afbc2&scoped=true&lang=css& */ "./resources/js/components/ShowProfileInfo.vue?vue&type=style&index=0&id=d43afbc2&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
 
 
 
@@ -76218,13 +77524,13 @@ __webpack_require__.r(__webpack_exports__);
 
 /* normalize component */
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
   _ShowProfileInfo_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _ShowProfileInfo_vue_vue_type_template_id_d43afbc2___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _ShowProfileInfo_vue_vue_type_template_id_d43afbc2___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _ShowProfileInfo_vue_vue_type_template_id_d43afbc2_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _ShowProfileInfo_vue_vue_type_template_id_d43afbc2_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
-  null,
+  "d43afbc2",
   null
   
 )
@@ -76250,19 +77556,35 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/ShowProfileInfo.vue?vue&type=template&id=d43afbc2&":
-/*!************************************************************************************!*\
-  !*** ./resources/js/components/ShowProfileInfo.vue?vue&type=template&id=d43afbc2& ***!
-  \************************************************************************************/
+/***/ "./resources/js/components/ShowProfileInfo.vue?vue&type=style&index=0&id=d43afbc2&scoped=true&lang=css&":
+/*!**************************************************************************************************************!*\
+  !*** ./resources/js/components/ShowProfileInfo.vue?vue&type=style&index=0&id=d43afbc2&scoped=true&lang=css& ***!
+  \**************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ShowProfileInfo_vue_vue_type_style_index_0_id_d43afbc2_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/style-loader!../../../node_modules/css-loader??ref--6-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--6-2!../../../node_modules/vue-loader/lib??vue-loader-options!./ShowProfileInfo.vue?vue&type=style&index=0&id=d43afbc2&scoped=true&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ShowProfileInfo.vue?vue&type=style&index=0&id=d43afbc2&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ShowProfileInfo_vue_vue_type_style_index_0_id_d43afbc2_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ShowProfileInfo_vue_vue_type_style_index_0_id_d43afbc2_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ShowProfileInfo_vue_vue_type_style_index_0_id_d43afbc2_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ShowProfileInfo_vue_vue_type_style_index_0_id_d43afbc2_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ShowProfileInfo_vue_vue_type_style_index_0_id_d43afbc2_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
+/***/ "./resources/js/components/ShowProfileInfo.vue?vue&type=template&id=d43afbc2&scoped=true&":
+/*!************************************************************************************************!*\
+  !*** ./resources/js/components/ShowProfileInfo.vue?vue&type=template&id=d43afbc2&scoped=true& ***!
+  \************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ShowProfileInfo_vue_vue_type_template_id_d43afbc2___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./ShowProfileInfo.vue?vue&type=template&id=d43afbc2& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ShowProfileInfo.vue?vue&type=template&id=d43afbc2&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ShowProfileInfo_vue_vue_type_template_id_d43afbc2___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ShowProfileInfo_vue_vue_type_template_id_d43afbc2_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./ShowProfileInfo.vue?vue&type=template&id=d43afbc2&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ShowProfileInfo.vue?vue&type=template&id=d43afbc2&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ShowProfileInfo_vue_vue_type_template_id_d43afbc2_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ShowProfileInfo_vue_vue_type_template_id_d43afbc2___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ShowProfileInfo_vue_vue_type_template_id_d43afbc2_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

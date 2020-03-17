@@ -34,7 +34,6 @@ class MessageSent implements ShouldBroadcast
     public function broadcastOn()
     {
 
-
         return new PresenceChannel('event.'.$this->message->event_id);
     }
 }

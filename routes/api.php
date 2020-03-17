@@ -41,38 +41,38 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 
     //======================Find event by sort====================
-    Route::post('find_events', 'EventFindController@findEvents');
+    Route::post('find_events', 'Events\EventFindController@findEvents');
 
     //===========================EVENTS==============================
     //List Events
-    Route::get('events', 'EventController@index');
+    Route::get('events', 'Events\EventController@index');
     //List Events by place
-    Route::get('events/{id}', 'EventController@get_events_by_place');
+    Route::get('events/{id}', 'Events\EventController@get_events_by_place');
     //Get Event
-    Route::get('event/{id}', 'EventController@show');
+    Route::get('event/{id}', 'Events\EventController@show');
 
     //Get which event happening right now or which event is closest one
-    Route::get('nearevent/{id}', 'EventController@closestEvent');
+    Route::get('nearevent/{id}', 'Events\EventController@closestEvent');
 
     Route::group(['middleware' => 'auth:api'], function() {
         //Create new Event
-        Route::post('event', 'EventController@store');
+        Route::post('event', 'Events\EventController@store');
         //Update Event
-        Route::put('event', 'EventController@store');
+        Route::put('event', 'Events\EventController@store');
         //Delete Event
-        Route::delete('event/{id}', 'EventController@destroy');
+        Route::delete('event/{id}', 'Events\EventController@destroy');
     });
 
 
 
 
     //==============================People Going=============================================
-    Route::get('people_going', 'PeopleGoingController@index');
-    Route::get('people_going/{id}', 'PeopleGoingController@returnByEvent');
+    Route::get('people_going', 'Events\PeopleGoingController@index');
+    Route::get('people_going/{id}', 'Events\PeopleGoingController@returnByEvent');
 
     Route::group(['middleware' => 'auth:api'], function() {
         //Add person to event
-        Route::post('person', 'PeopleGoingController@store');
+        Route::post('person', 'Events\PeopleGoingController@store');
         //Remove person from event
-        Route::delete('person/{id}', 'PeopleGoingController@destroy');
+        Route::delete('person/{id}', 'Events\PeopleGoingController@destroy');
     });

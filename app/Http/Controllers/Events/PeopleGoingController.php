@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Events;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\PeopleGoing;
 use App\Http\Resources\PeopleGoing as PeopleGoingResource;
 use Auth;

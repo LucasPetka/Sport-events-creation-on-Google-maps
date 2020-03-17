@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Events;
 
 use Carbon\Carbon;
-
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Event;
 use App\User;

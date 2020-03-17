@@ -71,13 +71,13 @@
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Title</label>
-                                <input v-model="event.title" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter title" required>
+                                <label for="add_event_title">Title</label>
+                                <input v-model="event.title" type="text" class="form-control" id="add_event_title" maxlength="45" placeholder="Enter title" required>
                             </div>
 
                             <div class="form-group">
-                                <label for="exampleFormControlTextarea1">About</label>
-                                <textarea v-model="event.about" class="form-control" id="exampleFormControlTextarea1" rows="6" required></textarea>
+                                <label for="add_event_about">About</label>
+                                <textarea v-model="event.about" class="form-control" id="add_event_about" maxlength="350" rows="6" required></textarea>
                             </div>
 
 
@@ -87,10 +87,15 @@
                             </ul>
                                
 
-                            <vue-slider  :adsorb="true" v-if="event_time != ''" v-on:drag-end="parseDate(1)" class="mr-3 ml-3 mb-5" v-model="event_time" :data="data" :marks="marks" :enable-cross="false"></vue-slider>
+                            <vue-slider  :adsorb="true" v-if="event_time != ''" v-on:drag-end="parseDate()" class="mr-3 ml-3 mb-5" v-model="event_time" :data="data" :marks="marks" :enable-cross="false"></vue-slider>
 
+                            <div class="row">
+                                <div id="time_error" class="mx-auto"></div>
+                            </div>
+                            <div class="row">
+                                <div id="time_error_second" class="mx-auto"></div>
+                            </div>
 
-                            <div id="time_error"></div>
                         </div>
 
                         <div class="modal-footer">
@@ -116,19 +121,19 @@
                             </div>
                             <div class="modal-body">
                                 <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="Title" v-model="place.title" required>
+                                <input type="text" class="form-control" placeholder="Title" maxlength="45" v-model="place.title" required>
                                 </div>
 
                                 <div class="input-group mb-3">
-                                    <textarea class="form-control" rows="6" placeholder="About..." v-model="place.about" required></textarea>
+                                    <textarea class="form-control" rows="6" placeholder="About..." maxlength="350" v-model="place.about" required></textarea>
                                 </div>
 
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
-                                        <label class="input-group-text" for="inputGroupSelect01">Sport</label>
+                                        <label class="input-group-text" for="sport_type">Sport</label>
                                     </div>
                     
-                                    <select class="custom-select" id="inputGroupSelect01" v-model="place.type" required>
+                                    <select class="custom-select" id="sport_type" v-model="place.type" required>
                                         <option v-for="type in allTypes.data" :key="type.id" :value="type.id"> {{ type.name }}</option>
                                     </select>
                                 </div>
@@ -327,6 +332,12 @@ export default {
            this.search_expanded = false;
         });
 
+        $('#addEvent').on('hide.bs.modal', (e) => {
+           $("#time_error").html("");
+           $("#time_error_second").html("");
+        });
+
+
     },
 
     computed: mapGetters(['allPlaces', 'allTypes']),
@@ -396,6 +407,8 @@ export default {
         this.event.organizator = this.currentUser.name;
         this.event_time = [this.event_time[0], this.event_time[1]];
 
+        this.parseDate();
+
 
         $('#addEvent').modal('show');
     },
@@ -406,7 +419,7 @@ export default {
     },
 
     //---------------------Parse data in right format to choose when event starts and when ends--------------------
-    parseDate(choose){
+    parseDate(){
         if(this.event_time[0] == this.event_time[1]){
             $("#time_error").html("<span class='text-danger'><small>Times should not be equal!</small></span>");
             $("#add_event_btn").attr("disabled", true);
@@ -422,15 +435,17 @@ export default {
 
         $.ajax({
             type: "GET",
-            url: "/validate_time?start="+ this.date +" "+ this.event_time[0]+"&end="+ this.date +" "+ this.event_time[1]+"&place_id="+this.event.place_id,     
+            url: "/validate_time?start="+ this.date +" "+ this.event_time[0]+"&end="+ this.date +" "+ this.event_time[1]+"&place_id="+this.event.place_id+"&event_id="+this.event.id,     
             success: function(result){
 
+                console.log(result);
+
                 if(!result.found){
-                    $("#time_error").html("");
+                    $("#time_error_second").html("");
                     $('#add_event_btn').removeAttr("disabled");
                 }  
                 else{
-                    $("#time_error").html("<span class='text-danger'><small>Time overlaping with other events</small></span>");
+                    $("#time_error_second").html("<span class='text-danger'><small>Time overlaping with other events</small></span>");
                     $("#add_event_btn").attr("disabled", true);
                 }
                 
@@ -527,48 +542,50 @@ export default {
             this.isLoading = false
         }, 2000);
 
-        if(this.place.title == '' || this.place.about == '' || this.place.type == '' || this.place.lat == '' || this.place.lng == ''){
-
-            Vue.notify({
-                group: 'foo',
-                title: 'Alert',
-                type: 'error',
-                duration: 3000,
-                text: 'The form was not completed, try again'
-            });
-        
-        }
-        else{
-            fetch('api/placequeue?api_token=' + this.getCookie("api_token"), {
+        (async () => {
+            const Response = await fetch('api/placequeue?api_token=' + this.getCookie("api_token"), {
                 method: 'post',
                 body: JSON.stringify(this.place),
                 headers: {
+                    'Accept': 'application/json',
                     'content-type': 'application/json'
-                }
-            })
-            .then(res => res.json())
-            .then( data=> {
-                this.place.title = '';
-                this.place.about = '';
-                this.place.lat = '';
-                this.place.lng = '';
-                this.place.type = '';
-                this.place.paid = '';
-            })
-            .catch(err =>console.log(err));
-
-            Vue.notify({
-                group: 'foo',
-                title: 'Congrats!!',
-                type: 'success',
-                duration: 10000,
-                text: 'The new place has been sent for inspection and if everything is okay will be uploaded'
+                }     
             });
-        }
 
-            this.$refs.gmapp.hidePointer();
-            this.closeAdd();
-            this.closeShow();
+            const content = await Response.json();
+
+            if(content == true){
+                Vue.notify({
+                    group: 'foo',
+                    title: 'Congrats!!',
+                    type: 'success',
+                    duration: 10000,
+                    text: 'The new place has been sent for inspection and if everything is okay will be uploaded'
+                });  
+            }
+            else{
+                Vue.notify({
+                    group: 'foo',
+                    title: 'Error!!',
+                    type: 'error',
+                    duration: 10000,
+                    text: content.message
+                });
+            }
+            
+            })();
+
+        this.place.title = '';
+        this.place.about = '';
+        this.place.lat = '';
+        this.place.lng = '';
+        this.place.type = '';
+        this.place.paid = '';
+        
+
+        this.$refs.gmapp.hidePointer();
+        this.closeAdd();
+        this.closeShow();
 
     },
 
@@ -597,16 +614,27 @@ export default {
 
             const content = await Response.json();
             await this.$refs.calendar.fetchSpot(this.show.id);
-            })();
 
-
-            Vue.notify({
+            if(content == true){
+                Vue.notify({
                     group: 'foo',
                     title: 'Congrats!!',
                     type: 'success',
                     duration: 10000,
-                    text: 'You have created an event !'
-                    });
+                    text: 'Event has been sent for inspection. Will be added if everything is okay.'
+                });  
+            }
+            else{
+                Vue.notify({
+                    group: 'foo',
+                    title: 'Error!!',
+                    type: 'error',
+                    text: 'There was incorect values in the form!'
+                });  
+            }
+            
+            })();
+
    
         } else{
 
@@ -625,18 +653,29 @@ export default {
 
         const content = await Response.json();
         await this.$refs.calendar.fetchSpot(this.show.id);
-        })();
-
-        this.edit = false;
-
-
-        Vue.notify({
+        
+        if(content == true){
+            Vue.notify({
                 group: 'foo',
                 title: 'Congrats!!',
                 type: 'success',
                 text: 'You have updated an event !'
-                });  
+            });  
         }
+        else{
+            Vue.notify({
+                group: 'foo',
+                title: 'Notification!!',
+                type: 'error',
+                text: 'There was incorect values in the form!'
+            });  
+        }
+
+        })();
+
+        }
+
+        this.edit = false;
 
         this.event.id= '';
         this.event.place_id = '';
@@ -676,13 +715,6 @@ export default {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: rgb(136, 136, 136); 
-}
-
-#time_error{
-    margin-left: auto;
-    margin-right: auto;
-    width: 100%;
-    text-align: center;
 }
 
 #map {

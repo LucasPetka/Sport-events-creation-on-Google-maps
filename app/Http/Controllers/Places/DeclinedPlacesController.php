@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Places;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\DeclinedPlaces;
 use App\PlaceQueue;
+use Illuminate\Support\Facades\Validator;
 
 class DeclinedPlacesController extends Controller
 {
@@ -12,6 +14,18 @@ class DeclinedPlacesController extends Controller
     public function update(Request $request, $id)
     {
         $declinedPlace = DeclinedPlaces::findOrFail($request->id);
+
+        $validator = Validator::make($request->all(),[
+            'title'=>'required|max:45',
+            'about'=>'required|max:350',
+            'lat'=>'required',
+            'lng'=>'required',
+            'type'=>'required|max:3'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json( "false", 200);
+        }
 
         $place =  new PlaceQueue;
         $place->title = $request->input('title');
@@ -30,15 +44,25 @@ class DeclinedPlacesController extends Controller
 
         if($place->save()){
             $declinedPlace->delete();
-            return ['Success'];
+            return "true";
         }
+        else{
+            return "false";
+        }
+
     }
 
     public function destroy($id)
     {
         $declinedPlace = DeclinedPlaces::find($id);
-        $declinedPlace->delete();
+        
 
-        return redirect('/home');
+        if($declinedPlace->delete()){
+            return "true";
+        }
+        else{
+            return "false";
+        }
+        
     }
 }

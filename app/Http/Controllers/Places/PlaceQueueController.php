@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\PlaceQueue;
 use App\Http\Resources\PlaceQueue as PlaceResource;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class PlaceQueueController extends Controller
 {
@@ -42,6 +43,22 @@ class PlaceQueueController extends Controller
             $place->paid = 0;
         }
 
+        $validator = Validator::make($request->all(),[
+            'title'=>'required|max:45',
+            'about'=>'required|max:350',
+            'lat'=>'required',
+            'lng'=>'required',
+            'type'=>'required|max:3'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(array(
+                'success' => false,
+                'message' => 'There was incorect values in the form!',
+                'errors' => $validator->getMessageBag()->toArray()
+            ), 200);
+        }
+
         $place->id = $request->input('place_id');
         $place->title = $request->input('title');
         $place->about = $request->input('about');
@@ -51,9 +68,8 @@ class PlaceQueueController extends Controller
         $place->personid = Auth::id();
 
         if($place->save()){
-            return new PlaceResource($place);
+            return "true";
         }
-
 
     }
 

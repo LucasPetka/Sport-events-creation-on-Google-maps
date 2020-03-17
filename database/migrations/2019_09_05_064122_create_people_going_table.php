@@ -20,9 +20,9 @@ class CreatePeopleGoingTable extends Migration
             $table->unsignedInteger('person_id');
             $table->timestamps();
 
-            $table->foreign('place_id')->references('id')->on('places');
-            $table->foreign('event_id')->references('id')->on('events');
-            $table->foreign('person_id')->references('id')->on('users');
+            $table->foreign('place_id')->references('id')->on('places')->onDelete('cascade');
+            $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
+            $table->foreign('person_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

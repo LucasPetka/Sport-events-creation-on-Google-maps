@@ -2757,6 +2757,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 var Datepicker = function Datepicker() {
   return __webpack_require__.e(/*! import() */ 0).then(__webpack_require__.bind(null, /*! vuejs-datepicker */ "./node_modules/vuejs-datepicker/dist/vuejs-datepicker.esm.js"));
 };
@@ -2846,7 +2848,10 @@ var editevent = function editevent() {
       this.show_events = foundEvents.filter(function (event) {
         return _this.getDate(event.time_from) == _this.getDate(_this.todays_date);
       });
-      this.$emit('getDate', this.todays_date.toISOString());
+      this.$emit('getDate', {
+        'date': this.todays_date.toISOString(),
+        'events': this.show_events
+      });
       this.$emit('closeAdd');
     },
     //Shows fixed format of time
@@ -3378,12 +3383,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['event', 'user', 'acceptedOrDeclined'],
   data: function data() {
     return {
       weekDays: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
       isLoading: false,
+      process: function process(dotsPos) {
+        return [];
+      },
+      events: [],
       event_mod: {
         id: '',
         place_id: '',
@@ -3479,9 +3489,10 @@ __webpack_require__.r(__webpack_exports__);
               this.event_time[1] = dateee;
               this.event_time = [this.event_time[0], this.event_time[1]];
               this.getDate(d);
+              this.fetchEvents(even.place_id, id, this.date);
               $('#addEvent' + this.event.id).appendTo("body").modal('show');
 
-            case 21:
+            case 22:
             case "end":
               return _context.stop();
           }
@@ -3503,6 +3514,35 @@ __webpack_require__.r(__webpack_exports__);
     //-----------------Closes event creation label---------------------------
     closeAddEvent: function closeAddEvent() {
       $('#addEvent' + this.event.id).modal('hide');
+    },
+    fetchEvents: function fetchEvents(id, event_id, date) {
+      var _this = this;
+
+      fetch('../api/events/' + id + '/' + event_id + '/' + date).then(function (res) {
+        return res.json();
+      }).then(function (res) {
+        var processArray = [];
+        res.forEach(function (event) {
+          var start_time = _this.getTime(event.time_from);
+
+          var end_time = _this.getTime(event.time_until);
+
+          var first = _this.data.indexOf(start_time) * 2.85714285714;
+          var second = _this.data.indexOf(end_time) * 2.85714285714;
+          processArray.push([first, second, {
+            backgroundColor: 'red'
+          }]);
+        });
+
+        _this.process = function (dotsPos) {
+          return processArray;
+        };
+      });
+    },
+    getTime: function getTime(date) {
+      var current_datetime = new Date(date);
+      var formatted_Time = ('0' + current_datetime.getHours()).slice(-2) + ":" + ('0' + current_datetime.getMinutes()).slice(-2);
+      return formatted_Time;
     },
     //---------------------Parse data in right format to choose when event starts and when ends--------------------
     parseDate: function parseDate(event_id) {
@@ -3535,11 +3575,11 @@ __webpack_require__.r(__webpack_exports__);
     },
     //-----------------------------------------Create new event-----------------------------------------------
     addEvent: function addEvent() {
-      var _this = this;
+      var _this2 = this;
 
       this.isLoading = true;
       setTimeout(function () {
-        _this.isLoading = false;
+        _this2.isLoading = false;
       }, 2000);
       this.event_for_sending.time_from = this.date + " " + this.event_time[0];
       this.event_for_sending.time_until = this.date + " " + this.event_time[1];
@@ -3551,9 +3591,9 @@ __webpack_require__.r(__webpack_exports__);
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.next = 2;
-                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(fetch('../api/event?api_token=' + _this.getCookie("api_token"), {
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(fetch('../api/event?api_token=' + _this2.getCookie("api_token"), {
                   method: 'put',
-                  body: JSON.stringify(_this.event_for_sending),
+                  body: JSON.stringify(_this2.event_for_sending),
                   headers: {
                     'Accept': 'application/json',
                     'content-type': 'application/json'
@@ -3603,7 +3643,7 @@ __webpack_require__.r(__webpack_exports__);
       this.event_for_sending.person_id = '';
     },
     deleteDeclinedEvent: function deleteDeclinedEvent(event_id) {
-      var _this2 = this;
+      var _this3 = this;
 
       (function _callee2() {
         var Response, content;
@@ -3647,7 +3687,7 @@ __webpack_require__.r(__webpack_exports__);
 
                 $('#confirmation_modal' + event_id).modal('hide');
 
-                _this2.$emit('fetch');
+                _this3.$emit('fetch');
 
               case 9:
               case "end":
@@ -3659,7 +3699,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     //Delete event from database
     deleteEvent: function deleteEvent(eventId) {
-      var _this3 = this;
+      var _this4 = this;
 
       (function _callee3() {
         var Response, content;
@@ -3668,7 +3708,7 @@ __webpack_require__.r(__webpack_exports__);
             switch (_context4.prev = _context4.next) {
               case 0:
                 _context4.next = 2;
-                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(fetch('api/event/' + eventId + '?api_token=' + _this3.getCookie("api_token"), {
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(fetch('api/event/' + eventId + '?api_token=' + _this4.getCookie("api_token"), {
                   method: 'delete',
                   headers: {
                     'Accept': 'application/json',
@@ -3701,7 +3741,7 @@ __webpack_require__.r(__webpack_exports__);
                   });
                 }
 
-                _this3.$emit('fetch');
+                _this4.$emit('fetch');
 
                 $('#confirmation_modal' + eventId).modal('hide');
 
@@ -3715,11 +3755,11 @@ __webpack_require__.r(__webpack_exports__);
     },
     //-----------------------------------------Re-submit new event-----------------------------------------------
     resubmitEvent: function resubmitEvent() {
-      var _this4 = this;
+      var _this5 = this;
 
       this.isLoading = true;
       setTimeout(function () {
-        _this4.isLoading = false;
+        _this5.isLoading = false;
       }, 2000);
       this.event_for_sending.time_from = this.date + " " + this.event_time[0];
       this.event_for_sending.time_until = this.date + " " + this.event_time[1];
@@ -3733,7 +3773,7 @@ __webpack_require__.r(__webpack_exports__);
                 _context5.next = 2;
                 return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(fetch('../resubmit_event', {
                   method: 'post',
-                  body: JSON.stringify(_this4.event_for_sending),
+                  body: JSON.stringify(_this5.event_for_sending),
                   headers: {
                     'Accept': 'application/json',
                     'content-type': 'application/json',
@@ -4936,6 +4976,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var Calendar = function Calendar() {
   return Promise.resolve(/*! import() */).then(__webpack_require__.bind(null, /*! ../components/Calendar.vue */ "./resources/js/components/Calendar.vue"));
 };
@@ -4954,10 +5004,10 @@ var Gmap = function Gmap() {
   //checks if someone loged in and gets all information about user
   data: function data() {
     return {
-      // process1: dotsPos => [
-      //     ['06:00', '07:30', { backgroundColor: 'red' }],
-      //     [35, 40, { backgroundColor: 'red' }]
-      // ],
+      weekDays: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+      process: function process(dotsPos) {
+        return [];
+      },
       search_expanded: false,
       isLoading: null,
       event_time: ['', ''],
@@ -5107,20 +5157,47 @@ var Gmap = function Gmap() {
     },
     //---------------------Gets date in day chooser--------------------------------
     getDate: function getDate(dateee) {
-      var d = new Date(dateee);
-      var dat = new Date(dateee);
+      var _this2 = this;
+
+      var d = new Date(dateee.date);
+      var dat = new Date(dateee.date);
       this.date = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
       d.setMinutes(30);
       dat.setMinutes(30);
-      dat.setHours(d.getHours() + 1);
-      dateee = d.getHours() + ":" + d.getMinutes();
-      this.event_time[0] = dateee;
-      dateee = dat.getHours() + ":" + dat.getMinutes();
-      this.event_time[1] = dateee;
+      dat.setHours(d.getHours() + 2);
+      dateee.date = d.getHours() + ":" + d.getMinutes();
+      this.event_time[0] = dateee.date;
+      dateee.date = dat.getHours() + ":" + dat.getMinutes();
+      this.event_time[1] = dateee.date;
+      var processArray = [];
+      dateee.events.forEach(function (event) {
+        var start_time = _this2.getTime(event.time_from);
+
+        var end_time = _this2.getTime(event.time_until);
+
+        var first = _this2.data.indexOf(start_time) * 2.85714285714;
+        var second = _this2.data.indexOf(end_time) * 2.85714285714;
+        processArray.push([first, second, {
+          backgroundColor: 'red'
+        }]);
+      });
+
+      this.process = function (dotsPos) {
+        return processArray;
+      };
+    },
+    getTime: function getTime(date) {
+      var current_datetime = new Date(date);
+      var formatted_Time = ('0' + current_datetime.getHours()).slice(-2) + ":" + ('0' + current_datetime.getMinutes()).slice(-2);
+      return formatted_Time;
+    },
+    getWeekDay: function getWeekDay(date) {
+      var current_datetime = new Date(date);
+      return this.weekDays[current_datetime.getDay()];
     },
     //-----------------Show spot all info with all events happening in there--------------------
     showSpot: function showSpot(arg) {
-      var _this2 = this;
+      var _this3 = this;
 
       var foundPlace = this.allPlaces.data.find(function (place) {
         return place.id == arg[0];
@@ -5128,7 +5205,7 @@ var Gmap = function Gmap() {
       this.show = foundPlace;
       this.$refs.calendar.fetchSpot(this.show.id);
       var foundType = this.allTypes.data.find(function (type) {
-        return type.id == _this2.show.type;
+        return type.id == _this3.show.type;
       });
       this.type = foundType;
       var show = document.querySelector('#show');
@@ -5147,7 +5224,7 @@ var Gmap = function Gmap() {
     },
     //---------------------------------------Deletes place-------------------------------------------------
     deletePlace: function deletePlace(id) {
-      var _this3 = this;
+      var _this4 = this;
 
       console.log(this.getCookie("api_token"));
 
@@ -5157,7 +5234,7 @@ var Gmap = function Gmap() {
         }).then(function (res) {
           return res.json();
         }).then(function (data) {
-          _this3.$refs.gmapp.fetchPlaces_sort();
+          _this4.$refs.gmapp.fetchPlaces_sort();
         })["catch"](function (err) {
           return console.log(err);
         });
@@ -5180,12 +5257,12 @@ var Gmap = function Gmap() {
     },
     //------------------------------------------Adds new place--------------------------------------------
     addPlace: function addPlace() {
-      var _this4 = this;
+      var _this5 = this;
 
       this.place.personid = this.$props.currentUser.id;
       this.isLoading = true;
       setTimeout(function () {
-        _this4.isLoading = false;
+        _this5.isLoading = false;
       }, 2000);
 
       (function _callee() {
@@ -5195,9 +5272,9 @@ var Gmap = function Gmap() {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(fetch('api/placequeue?api_token=' + _this4.getCookie("api_token"), {
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(fetch('api/placequeue?api_token=' + _this5.getCookie("api_token"), {
                   method: 'post',
-                  body: JSON.stringify(_this4.place),
+                  body: JSON.stringify(_this5.place),
                   headers: {
                     'Accept': 'application/json',
                     'content-type': 'application/json'
@@ -5250,11 +5327,11 @@ var Gmap = function Gmap() {
     },
     //-----------------------------------------Create new event-----------------------------------------------
     addEvent: function addEvent() {
-      var _this5 = this;
+      var _this6 = this;
 
       this.isLoading = true;
       setTimeout(function () {
-        _this5.isLoading = false;
+        _this6.isLoading = false;
       }, 2000);
       this.event.time_from = this.date + " " + this.event_time[0];
       this.event.time_until = this.date + " " + this.event_time[1];
@@ -5266,9 +5343,9 @@ var Gmap = function Gmap() {
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.next = 2;
-                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(fetch('api/event?api_token=' + _this5.getCookie("api_token"), {
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(fetch('api/event?api_token=' + _this6.getCookie("api_token"), {
                   method: 'post',
-                  body: JSON.stringify(_this5.event),
+                  body: JSON.stringify(_this6.event),
                   headers: {
                     'Accept': 'application/json',
                     'content-type': 'application/json'
@@ -5283,7 +5360,7 @@ var Gmap = function Gmap() {
               case 5:
                 content = _context2.sent;
                 _context2.next = 8;
-                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(_this5.$refs.calendar.fetchSpot(_this5.show.id));
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(_this6.$refs.calendar.fetchSpot(_this6.show.id));
 
               case 8:
                 if (content == true) {
@@ -5342,6 +5419,36 @@ __webpack_require__.r(__webpack_exports__);
 var _assets_options_json__WEBPACK_IMPORTED_MODULE_1___namespace = /*#__PURE__*/__webpack_require__.t(/*! ../assets/options.json */ "./resources/js/assets/options.json", 1);
 
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -6121,6 +6228,13 @@ var smallmap = function smallmap() {
     },
     submited_places_onChangePage: function submited_places_onChangePage(pageOfItems) {
       this.submited_places_pageOfItems = pageOfItems;
+    },
+    isMobile: function isMobile() {
+      if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        return true;
+      } else {
+        return false;
+      }
     }
   }
 });
@@ -12697,7 +12811,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\nbody.modal-open {\n    overflow: visible;\n}\n.my-style {\n    padding: 15px;\n    margin-left: 10px;\n    margin-top: 10px;\n    width: 290px;\n \n    font-size: 14px;\n    border-radius: 5px;\n    border-left: solid rgb(99, 156, 88) 5px;\n\n\n    color: #ffffff;\n    background: #82CC75;\n}\n.success {\n    background: #82CC75;\n}\n.error {\n    background: #DC4146;\n    border-left: solid rgb(177, 52, 56) 5px;\n}\n\n", ""]);
+exports.push([module.i, "\n.custom-dot {\n    width: 15px;\n    height: 15px;\n    border-radius: 50%;\n    background-color: rgb(201, 201, 201);\n    border: solid 2px rgb(122, 122, 122);\n    -webkit-transition: all .3s;\n    transition: all .3s;\n}\n.custom-dot:hover {\n    background-color: #313638;\n    border: solid 1px rgb(122, 122, 122);\n}\n.custom-dot.focus {\n    background-color: rgba(201, 201, 201, 0.726);\n    border: solid #313638;\n    border-radius: 0%;\n    margin-left: 3px;\n    width: 3px;\n    height: 25px;\n}\nbody.modal-open {\n    overflow: visible;\n}\n.my-style {\n    padding: 15px;\n    margin-left: 10px;\n    margin-top: 10px;\n    width: 290px;\n \n    font-size: 14px;\n    border-radius: 5px;\n    border-left: solid rgb(99, 156, 88) 5px;\n\n\n    color: #ffffff;\n    background: #82CC75;\n}\n.success {\n    background: #82CC75;\n}\n.error {\n    background: #DC4146;\n    border-left: solid rgb(177, 52, 56) 5px;\n}\n\n", ""]);
 
 // exports
 
@@ -12773,7 +12887,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* width */\n::-webkit-scrollbar {\n  width: 10px;\n}\n\n/* Track */\n::-webkit-scrollbar-track {\n  background: #f1f1f1;\n}\n \n/* Handle */\n::-webkit-scrollbar-thumb {\n  background: rgb(182, 182, 182);\n}\n\n/* Handle on hover */\n::-webkit-scrollbar-thumb:hover {\n  background: rgb(136, 136, 136);\n}\n#map {\n    width: 100% !important; \n    height:100% !important;\n}\n.my-style {\n    padding: 15px;\n    margin-left: 10px;\n    margin-top: 10px;\n    width: 290px;\n \n    font-size: 14px;\n    border-radius: 5px;\n    border-left: solid rgb(99, 156, 88) 5px;\n\n\n    color: #ffffff;\n    background: #82CC75;\n}\n.success {\n    background: #82CC75;\n}\n.error {\n    background: #DC4146;\n    border-left: solid rgb(177, 52, 56) 5px;\n}\n#sidebar{\n    height: 94vh;\n    overflow-y: auto;\n}\n#geras{\n    position: absolute;\n    color:white;\n    font-size: 25px;\n    opacity: 0.1;\n}\n#search_button{\n    z-index: 50;\n}\n#places_sort{\n    z-index: 51;\n    width:100%;\n}\n#loading-screen {\n    z-index: 100;\n    position: absolute; top: 0; right: 0; bottom: 0; left: 0;\n    background-color: #82cc75;\n}\n@media only screen and (max-width: 900px) {\n#map {\n    width: 100% !important; \n    height:100% !important;\n}\n#show{\n    width: 100% !important;\n}\n#createDiv{\n    width: 95% !important;\n}\n#sidebar{\n    height: auto;\n    overflow-y: hidden;\n}\n}\n", ""]);
+exports.push([module.i, "\n.custom-dot {\n    width: 15px;\n    height: 15px;\n    border-radius: 50%;\n    background-color: rgb(201, 201, 201);\n    border: solid 2px rgb(122, 122, 122);\n    -webkit-transition: all .3s;\n    transition: all .3s;\n}\n.custom-dot:hover {\n    background-color: #313638;\n    border: solid 1px rgb(122, 122, 122);\n}\n.custom-dot.focus {\n    background-color: rgba(201, 201, 201, 0.726);\n    border: solid #313638;\n    border-radius: 0%;\n    margin-left: 3px;\n    width: 3px;\n    height: 25px;\n}\n\n/* width */\n::-webkit-scrollbar {\n  width: 10px;\n}\n\n/* Track */\n::-webkit-scrollbar-track {\n  background: #f1f1f1;\n}\n \n/* Handle */\n::-webkit-scrollbar-thumb {\n  background: rgb(182, 182, 182);\n}\n\n/* Handle on hover */\n::-webkit-scrollbar-thumb:hover {\n  background: rgb(136, 136, 136);\n}\n#map {\n    width: 100% !important; \n    height:100% !important;\n}\n.my-style {\n    padding: 15px;\n    margin-left: 10px;\n    margin-top: 10px;\n    width: 290px;\n \n    font-size: 14px;\n    border-radius: 5px;\n    border-left: solid rgb(99, 156, 88) 5px;\n\n\n    color: #ffffff;\n    background: #82CC75;\n}\n.success {\n    background: #82CC75;\n}\n.error {\n    background: #DC4146;\n    border-left: solid rgb(177, 52, 56) 5px;\n}\n#sidebar{\n    height: 94vh;\n    overflow-y: auto;\n}\n#geras{\n    position: absolute;\n    color:white;\n    font-size: 25px;\n    opacity: 0.1;\n}\n#search_button{\n    z-index: 50;\n}\n#places_sort{\n    z-index: 51;\n    width:100%;\n}\n#loading-screen {\n    z-index: 100;\n    position: absolute; top: 0; right: 0; bottom: 0; left: 0;\n    background-color: #82cc75;\n}\n@media only screen and (max-width: 900px) {\n#map {\n    width: 100% !important; \n    height:100% !important;\n}\n#show{\n    width: 100% !important;\n}\n#createDiv{\n    width: 95% !important;\n}\n#sidebar{\n    height: auto;\n    overflow-y: hidden;\n}\n}\n", ""]);
 
 // exports
 
@@ -54529,83 +54643,87 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _vm.status === 1
-                  ? _c(
-                      "div",
-                      [
-                        _vm.ifJoined(
-                          event.place_id,
-                          event.id,
-                          _vm.currentUser.id
-                        ) == 0
-                          ? _c("div", [
-                              _c(
-                                "button",
-                                {
-                                  staticClass: "btn btn-success float-left",
-                                  attrs: {
-                                    id: "join_btn",
-                                    type: "button",
-                                    disabled: _vm.isLoading
-                                  },
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.addPerson(
-                                        event.place_id,
-                                        event.id,
-                                        _vm.currentUser.id,
-                                        $event
-                                      )
-                                    }
-                                  }
+                  ? _c("div", [
+                      _vm.ifJoined(
+                        event.place_id,
+                        event.id,
+                        _vm.currentUser.id
+                      ) == 0
+                        ? _c("div", [
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-success float-left",
+                                attrs: {
+                                  id: "join_btn",
+                                  type: "button",
+                                  disabled: _vm.isLoading
                                 },
-                                [
-                                  _c("i", { staticClass: "fas fa-user-plus" }),
-                                  _vm._v(" Join")
-                                ]
-                              )
-                            ])
-                          : _c("div", [
-                              _c(
-                                "button",
-                                {
-                                  staticClass: "btn btn-secondary float-left",
-                                  attrs: {
-                                    type: "button",
-                                    disabled: _vm.isLoading
-                                  },
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.deletePerson(
-                                        event.place_id,
-                                        event.id,
-                                        _vm.currentUser.id,
-                                        $event
-                                      )
-                                    }
+                                on: {
+                                  click: function($event) {
+                                    return _vm.addPerson(
+                                      event.place_id,
+                                      event.id,
+                                      _vm.currentUser.id,
+                                      $event
+                                    )
                                   }
+                                }
+                              },
+                              [
+                                _c("i", { staticClass: "fas fa-user-plus" }),
+                                _vm._v(" Join")
+                              ]
+                            )
+                          ])
+                        : _c("div", [
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-secondary float-left",
+                                attrs: {
+                                  type: "button",
+                                  disabled: _vm.isLoading
                                 },
-                                [
-                                  _c("i", { staticClass: "fas fa-check" }),
-                                  _vm._v(" Joined")
-                                ]
-                              )
-                            ]),
-                        _vm._v(" "),
-                        _c("editevent", {
-                          attrs: {
-                            user: _vm.currentUser,
-                            acceptedOrDeclined: false,
-                            event: event
-                          },
-                          on: {
-                            fetch: function($event) {
-                              return _vm.fetchSpot(event.place_id)
-                            }
-                          }
-                        })
-                      ],
-                      1
-                    )
+                                on: {
+                                  click: function($event) {
+                                    return _vm.deletePerson(
+                                      event.place_id,
+                                      event.id,
+                                      _vm.currentUser.id,
+                                      $event
+                                    )
+                                  }
+                                }
+                              },
+                              [
+                                _c("i", { staticClass: "fas fa-check" }),
+                                _vm._v(" Joined")
+                              ]
+                            )
+                          ]),
+                      _vm._v(" "),
+                      _vm.currentUser.id == event.person_id.id
+                        ? _c(
+                            "div",
+                            [
+                              _c("editevent", {
+                                attrs: {
+                                  user: _vm.currentUser,
+                                  acceptedOrDeclined: false,
+                                  event: event
+                                },
+                                on: {
+                                  fetch: function($event) {
+                                    return _vm.fetchSpot(event.place_id)
+                                  }
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        : _vm._e()
+                    ])
                   : _vm._e()
               ])
             ]
@@ -55104,37 +55222,33 @@ var render = function() {
         attrs: { group: "foo", classes: "my-style", position: "top left" }
       }),
       _vm._v(" "),
-      _vm.user.id == _vm.event.person_id.id
-        ? _c("div", [
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-primary float-right ml-3 mb-2",
-                attrs: { type: "button" },
-                on: {
-                  click: function($event) {
-                    return _vm.editEvent(_vm.event.id)
-                  }
-                }
-              },
-              [_c("i", { staticClass: "fas fa-edit" })]
-            ),
-            _vm._v(" "),
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-danger float-right ml-3 mb-2",
-                attrs: { type: "button" },
-                on: {
-                  click: function($event) {
-                    return _vm.openConfirmation(_vm.event)
-                  }
-                }
-              },
-              [_c("i", { staticClass: "fas fa-trash-alt" })]
-            )
-          ])
-        : _vm._e(),
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-primary float-right ml-3 mb-2",
+          attrs: { type: "button" },
+          on: {
+            click: function($event) {
+              return _vm.editEvent(_vm.event.id)
+            }
+          }
+        },
+        [_c("i", { staticClass: "fas fa-edit" })]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-danger float-right ml-3 mb-2",
+          attrs: { type: "button" },
+          on: {
+            click: function($event) {
+              return _vm.openConfirmation(_vm.event)
+            }
+          }
+        },
+        [_c("i", { staticClass: "fas fa-trash-alt" })]
+      ),
       _vm._v(" "),
       _c(
         "form",
@@ -55279,7 +55393,7 @@ var render = function() {
                             "ul",
                             {
                               staticClass:
-                                "list-group list-group-horizontal mb-4 mx-auto"
+                                "list-group list-group-horizontal mb-5 mx-auto"
                             },
                             [
                               _c("li", { staticClass: "list-group-item" }, [
@@ -55316,7 +55430,13 @@ var render = function() {
                           ? _c("vue-slider", {
                               staticClass: "mr-3 ml-3 mb-5",
                               attrs: {
+                                "tooltip-style": {
+                                  backgroundColor: "#313638",
+                                  borderColor: "#313638"
+                                },
                                 adsorb: true,
+                                process: _vm.process,
+                                tooltip: "always",
                                 data: _vm.data,
                                 marks: _vm.marks,
                                 "enable-cross": false
@@ -55326,6 +55446,28 @@ var render = function() {
                                   return _vm.parseDate(_vm.event.id)
                                 }
                               },
+                              scopedSlots: _vm._u(
+                                [
+                                  {
+                                    key: "dot",
+                                    fn: function(ref) {
+                                      var value = ref.value
+                                      var focus = ref.focus
+                                      return [
+                                        _c("div", {
+                                          class: [
+                                            "custom-dot",
+                                            { focus: focus }
+                                          ]
+                                        })
+                                      ]
+                                    }
+                                  }
+                                ],
+                                null,
+                                false,
+                                1562942546
+                              ),
                               model: {
                                 value: _vm.event_time,
                                 callback: function($$v) {
@@ -55442,7 +55584,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", [
     _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-lg-6" }, [
+      _c("div", { staticClass: "col-lg-6 mb-4" }, [
         _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-body" }, [
             _c(
@@ -55803,7 +55945,7 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "col-lg-6" }, [
+      _c("div", { staticClass: "col-lg-6 mb-5" }, [
         _vm._m(0),
         _vm._v(" "),
         _c("div", { attrs: { id: "accordion" } }, [
@@ -55908,7 +56050,7 @@ var render = function() {
                     }),
                     0
                   )
-                : _c("div", { staticClass: "text-center" }, [
+                : _c("div", { staticClass: "text-center mb-4" }, [
                     _c("span", { staticClass: "text-muted" }, [
                       _vm._v("Sorry, no events found..")
                     ])
@@ -56713,34 +56855,49 @@ var render = function() {
                           })
                         ]),
                         _vm._v(" "),
-                        _c(
-                          "ul",
-                          {
-                            staticClass: "list-group list-group-horizontal mb-4"
-                          },
-                          [
-                            _c("li", { staticClass: "list-group-item" }, [
-                              _c("i", { staticClass: "far fa-calendar-alt" }),
-                              _vm._v(" " + _vm._s(_vm.date))
-                            ]),
-                            _vm._v(" "),
-                            _c("li", { staticClass: "list-group-item" }, [
-                              _c("i", { staticClass: "far fa-clock" }),
-                              _vm._v(
-                                " " +
-                                  _vm._s(_vm.event_time[0]) +
-                                  " -  " +
-                                  _vm._s(_vm.event_time[1])
-                              )
-                            ])
-                          ]
-                        ),
+                        _c("div", { staticClass: "row" }, [
+                          _c(
+                            "ul",
+                            {
+                              staticClass:
+                                "list-group list-group-horizontal mb-5 mx-auto"
+                            },
+                            [
+                              _c("li", { staticClass: "list-group-item" }, [
+                                _c("i", { staticClass: "far fa-calendar-alt" }),
+                                _vm._v(" " + _vm._s(_vm.date))
+                              ]),
+                              _vm._v(" "),
+                              _c("li", { staticClass: "list-group-item" }, [
+                                _vm._v(
+                                  " " + _vm._s(_vm.getWeekDay(_vm.date)) + " "
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("li", { staticClass: "list-group-item" }, [
+                                _c("i", { staticClass: "far fa-clock" }),
+                                _vm._v(
+                                  " " +
+                                    _vm._s(_vm.event_time[0]) +
+                                    " -  " +
+                                    _vm._s(_vm.event_time[1])
+                                )
+                              ])
+                            ]
+                          )
+                        ]),
                         _vm._v(" "),
                         _vm.event_time != ""
                           ? _c("vue-slider", {
                               staticClass: "mr-3 ml-3 mb-5",
                               attrs: {
+                                "tooltip-style": {
+                                  backgroundColor: "#313638",
+                                  borderColor: "#313638"
+                                },
                                 adsorb: true,
+                                process: _vm.process,
+                                tooltip: "always",
                                 data: _vm.data,
                                 marks: _vm.marks,
                                 "enable-cross": false
@@ -56750,6 +56907,28 @@ var render = function() {
                                   return _vm.parseDate()
                                 }
                               },
+                              scopedSlots: _vm._u(
+                                [
+                                  {
+                                    key: "dot",
+                                    fn: function(ref) {
+                                      var value = ref.value
+                                      var focus = ref.focus
+                                      return [
+                                        _c("div", {
+                                          class: [
+                                            "custom-dot",
+                                            { focus: focus }
+                                          ]
+                                        })
+                                      ]
+                                    }
+                                  }
+                                ],
+                                null,
+                                false,
+                                1562942546
+                              ),
                               model: {
                                 value: _vm.event_time,
                                 callback: function($$v) {
@@ -57716,88 +57895,178 @@ var render = function() {
                 _vm._v("Places")
               ]),
               _vm._v(" "),
-              _c("nav", { staticClass: "mt-2" }, [
-                _c(
-                  "div",
-                  {
-                    staticClass: "nav nav-tabs",
-                    attrs: { id: "nav-tab", role: "tablist" }
-                  },
-                  [
-                    _c(
-                      "a",
-                      {
-                        staticClass: "nav-item nav-link active mr-1",
-                        attrs: {
-                          id: "nav-home-tab",
-                          "data-toggle": "tab",
-                          href: "#nav-home",
-                          role: "tab",
-                          "aria-controls": "nav-home",
-                          "aria-selected": "true"
-                        }
-                      },
-                      [
-                        _c("i", { staticClass: "far fa-paper-plane" }),
-                        _vm._v(" Submited "),
-                        _c(
-                          "span",
-                          { staticClass: "badge badge-pill badge-dark active" },
-                          [_vm._v(_vm._s(_vm.submitedPlaces.length))]
-                        )
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "a",
-                      {
-                        staticClass: "nav-item nav-link mr-1",
-                        attrs: {
-                          id: "nav-profile-tab",
-                          "data-toggle": "tab",
-                          href: "#nav-profile",
-                          role: "tab",
-                          "aria-controls": "nav-profile",
-                          "aria-selected": "false"
-                        }
-                      },
-                      [
-                        _c("i", { staticClass: "far fa-check-circle" }),
-                        _vm._v(" Accepted "),
-                        _c(
-                          "span",
-                          { staticClass: "badge badge-pill badge-dark" },
-                          [_vm._v(_vm._s(_vm.acceptedPlaces.length))]
-                        )
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "a",
-                      {
-                        staticClass: "nav-item nav-link",
-                        attrs: {
-                          id: "nav-contact-tab",
-                          "data-toggle": "tab",
-                          href: "#nav-contact",
-                          role: "tab",
-                          "aria-controls": "nav-contact",
-                          "aria-selected": "false"
-                        }
-                      },
-                      [
-                        _c("i", { staticClass: "far fa-times-circle" }),
-                        _vm._v(" Declined "),
-                        _c(
-                          "span",
-                          { staticClass: "badge badge-pill badge-dark" },
-                          [_vm._v(_vm._s(_vm.declinedPlaces.length))]
-                        )
-                      ]
-                    )
-                  ]
-                )
-              ]),
+              !_vm.isMobile()
+                ? _c("div", [
+                    _c("nav", { staticClass: "mt-2" }, [
+                      _c(
+                        "div",
+                        {
+                          staticClass: "nav nav-tabs",
+                          attrs: { id: "nav-tab", role: "tablist" }
+                        },
+                        [
+                          _c(
+                            "a",
+                            {
+                              staticClass: "nav-item nav-link active mr-1",
+                              attrs: {
+                                id: "nav-home-tab",
+                                "data-toggle": "tab",
+                                href: "#nav-home",
+                                role: "tab",
+                                "aria-controls": "nav-home",
+                                "aria-selected": "true"
+                              }
+                            },
+                            [
+                              _c("i", { staticClass: "far fa-paper-plane" }),
+                              _vm._v(" Submited "),
+                              _c(
+                                "span",
+                                {
+                                  staticClass:
+                                    "badge badge-pill badge-dark active"
+                                },
+                                [_vm._v(_vm._s(_vm.submitedPlaces.length))]
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "a",
+                            {
+                              staticClass: "nav-item nav-link mr-1",
+                              attrs: {
+                                id: "nav-profile-tab",
+                                "data-toggle": "tab",
+                                href: "#nav-profile",
+                                role: "tab",
+                                "aria-controls": "nav-profile",
+                                "aria-selected": "false"
+                              }
+                            },
+                            [
+                              _c("i", { staticClass: "far fa-check-circle" }),
+                              _vm._v(" Accepted "),
+                              _c(
+                                "span",
+                                { staticClass: "badge badge-pill badge-dark" },
+                                [_vm._v(_vm._s(_vm.acceptedPlaces.length))]
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "a",
+                            {
+                              staticClass: "nav-item nav-link",
+                              attrs: {
+                                id: "nav-contact-tab",
+                                "data-toggle": "tab",
+                                href: "#nav-contact",
+                                role: "tab",
+                                "aria-controls": "nav-contact",
+                                "aria-selected": "false"
+                              }
+                            },
+                            [
+                              _c("i", { staticClass: "far fa-times-circle" }),
+                              _vm._v(" Declined "),
+                              _c(
+                                "span",
+                                { staticClass: "badge badge-pill badge-dark" },
+                                [_vm._v(_vm._s(_vm.declinedPlaces.length))]
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ])
+                  ])
+                : _c("div", [
+                    _c("nav", { staticClass: "mt-2" }, [
+                      _c(
+                        "div",
+                        {
+                          staticClass: "nav nav-tabs",
+                          attrs: { id: "nav-tab", role: "tablist" }
+                        },
+                        [
+                          _c(
+                            "a",
+                            {
+                              staticClass: "nav-item nav-link active mr-1",
+                              attrs: {
+                                id: "nav-home-tab",
+                                "data-toggle": "tab",
+                                href: "#nav-home",
+                                role: "tab",
+                                "aria-controls": "nav-home",
+                                "aria-selected": "true"
+                              }
+                            },
+                            [
+                              _vm._v(" Submited "),
+                              _c(
+                                "span",
+                                {
+                                  staticClass:
+                                    "badge badge-pill badge-dark active"
+                                },
+                                [_vm._v(_vm._s(_vm.submitedPlaces.length))]
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "a",
+                            {
+                              staticClass: "nav-item nav-link mr-1",
+                              attrs: {
+                                id: "nav-profile-tab",
+                                "data-toggle": "tab",
+                                href: "#nav-profile",
+                                role: "tab",
+                                "aria-controls": "nav-profile",
+                                "aria-selected": "false"
+                              }
+                            },
+                            [
+                              _vm._v(" Accepted "),
+                              _c(
+                                "span",
+                                { staticClass: "badge badge-pill badge-dark" },
+                                [_vm._v(_vm._s(_vm.acceptedPlaces.length))]
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "a",
+                            {
+                              staticClass: "nav-item nav-link",
+                              attrs: {
+                                id: "nav-contact-tab",
+                                "data-toggle": "tab",
+                                href: "#nav-contact",
+                                role: "tab",
+                                "aria-controls": "nav-contact",
+                                "aria-selected": "false"
+                              }
+                            },
+                            [
+                              _vm._v(" Declined "),
+                              _c(
+                                "span",
+                                { staticClass: "badge badge-pill badge-dark" },
+                                [_vm._v(_vm._s(_vm.declinedPlaces.length))]
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ])
+                  ]),
               _vm._v(" "),
               _c(
                 "div",
@@ -57972,7 +58241,9 @@ var render = function() {
                               _vm._v(" "),
                               _c(
                                 "div",
-                                { staticClass: "row justify-content-around" },
+                                {
+                                  staticClass: "row justify-content-around mb-5"
+                                },
                                 [
                                   _c("jw-pagination", {
                                     attrs: {
@@ -58167,7 +58438,9 @@ var render = function() {
                               _vm._v(" "),
                               _c(
                                 "div",
-                                { staticClass: "row justify-content-around" },
+                                {
+                                  staticClass: "row justify-content-around mb-5"
+                                },
                                 [
                                   _c("jw-pagination", {
                                     attrs: {
@@ -58300,7 +58573,9 @@ var render = function() {
                               _vm._v(" "),
                               _c(
                                 "div",
-                                { staticClass: "row justify-content-around" },
+                                {
+                                  staticClass: "row justify-content-around mb-5"
+                                },
                                 [
                                   _c("jw-pagination", {
                                     attrs: {
@@ -58522,7 +58797,7 @@ var render = function() {
                       _vm._v(" "),
                       _c(
                         "div",
-                        { staticClass: "row justify-content-around" },
+                        { staticClass: "row justify-content-around mb-5" },
                         [
                           _c("jw-pagination", {
                             attrs: { pageSize: 3, items: _vm.goingToEvents },
@@ -58551,88 +58826,172 @@ var render = function() {
                 _vm._v("Events")
               ]),
               _vm._v(" "),
-              _c("nav", { staticClass: "mt-2 mb-2" }, [
-                _c(
-                  "div",
-                  {
-                    staticClass: "nav nav-tabs",
-                    attrs: { id: "nav-tab2", role: "tablist" }
-                  },
-                  [
-                    _c(
-                      "a",
-                      {
-                        staticClass: "nav-item nav-link active mr-1",
-                        attrs: {
-                          id: "nav-submited-tab",
-                          "data-toggle": "tab",
-                          href: "#nav-submited",
-                          role: "tab",
-                          "aria-controls": "nav-submited",
-                          "aria-selected": "true"
-                        }
-                      },
-                      [
-                        _c("i", { staticClass: "far fa-paper-plane" }),
-                        _vm._v(" Submited "),
-                        _c(
-                          "span",
-                          { staticClass: "badge badge-pill badge-dark" },
-                          [_vm._v(_vm._s(_vm.submitedEvents.length))]
-                        )
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "a",
-                      {
-                        staticClass: "nav-item nav-link mr-1",
-                        attrs: {
-                          id: "nav-accepted-tab",
-                          "data-toggle": "tab",
-                          href: "#nav-accepted",
-                          role: "tab",
-                          "aria-controls": "nav-accepted",
-                          "aria-selected": "false"
-                        }
-                      },
-                      [
-                        _c("i", { staticClass: "far fa-check-circle" }),
-                        _vm._v(" Accepted "),
-                        _c(
-                          "span",
-                          { staticClass: "badge badge-pill badge-dark" },
-                          [_vm._v(_vm._s(_vm.createdEvents.length))]
-                        )
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "a",
-                      {
-                        staticClass: "nav-item nav-link",
-                        attrs: {
-                          id: "nav-declined-tab",
-                          "data-toggle": "tab",
-                          href: "#nav-declined",
-                          role: "tab",
-                          "aria-controls": "nav-declined",
-                          "aria-selected": "false"
-                        }
-                      },
-                      [
-                        _c("i", { staticClass: "far fa-times-circle" }),
-                        _vm._v(" Declined "),
-                        _c(
-                          "span",
-                          { staticClass: "badge badge-pill badge-dark" },
-                          [_vm._v(_vm._s(_vm.declinedEvents.length))]
-                        )
-                      ]
-                    )
-                  ]
-                )
-              ]),
+              !_vm.isMobile()
+                ? _c("div", [
+                    _c("nav", { staticClass: "mt-2 mb-2" }, [
+                      _c(
+                        "div",
+                        {
+                          staticClass: "nav nav-tabs",
+                          attrs: { id: "nav-tab2", role: "tablist" }
+                        },
+                        [
+                          _c(
+                            "a",
+                            {
+                              staticClass: "nav-item nav-link active mr-1",
+                              attrs: {
+                                id: "nav-submited-tab",
+                                "data-toggle": "tab",
+                                href: "#nav-submited",
+                                role: "tab",
+                                "aria-controls": "nav-submited",
+                                "aria-selected": "true"
+                              }
+                            },
+                            [
+                              _c("i", { staticClass: "far fa-paper-plane" }),
+                              _vm._v(" Submited "),
+                              _c(
+                                "span",
+                                { staticClass: "badge badge-pill badge-dark" },
+                                [_vm._v(_vm._s(_vm.submitedEvents.length))]
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "a",
+                            {
+                              staticClass: "nav-item nav-link mr-1",
+                              attrs: {
+                                id: "nav-accepted-tab",
+                                "data-toggle": "tab",
+                                href: "#nav-accepted",
+                                role: "tab",
+                                "aria-controls": "nav-accepted",
+                                "aria-selected": "false"
+                              }
+                            },
+                            [
+                              _c("i", { staticClass: "far fa-check-circle" }),
+                              _vm._v(" Accepted "),
+                              _c(
+                                "span",
+                                { staticClass: "badge badge-pill badge-dark" },
+                                [_vm._v(_vm._s(_vm.createdEvents.length))]
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "a",
+                            {
+                              staticClass: "nav-item nav-link",
+                              attrs: {
+                                id: "nav-declined-tab",
+                                "data-toggle": "tab",
+                                href: "#nav-declined",
+                                role: "tab",
+                                "aria-controls": "nav-declined",
+                                "aria-selected": "false"
+                              }
+                            },
+                            [
+                              _c("i", { staticClass: "far fa-times-circle" }),
+                              _vm._v(" Declined "),
+                              _c(
+                                "span",
+                                { staticClass: "badge badge-pill badge-dark" },
+                                [_vm._v(_vm._s(_vm.declinedEvents.length))]
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ])
+                  ])
+                : _c("div", [
+                    _c("nav", { staticClass: "mt-2 mb-2" }, [
+                      _c(
+                        "div",
+                        {
+                          staticClass: "nav nav-tabs",
+                          attrs: { id: "nav-tab2", role: "tablist" }
+                        },
+                        [
+                          _c(
+                            "a",
+                            {
+                              staticClass: "nav-item nav-link active mr-1",
+                              attrs: {
+                                id: "nav-submited-tab",
+                                "data-toggle": "tab",
+                                href: "#nav-submited",
+                                role: "tab",
+                                "aria-controls": "nav-submited",
+                                "aria-selected": "true"
+                              }
+                            },
+                            [
+                              _vm._v(" Submited "),
+                              _c(
+                                "span",
+                                { staticClass: "badge badge-pill badge-dark" },
+                                [_vm._v(_vm._s(_vm.submitedEvents.length))]
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "a",
+                            {
+                              staticClass: "nav-item nav-link mr-1",
+                              attrs: {
+                                id: "nav-accepted-tab",
+                                "data-toggle": "tab",
+                                href: "#nav-accepted",
+                                role: "tab",
+                                "aria-controls": "nav-accepted",
+                                "aria-selected": "false"
+                              }
+                            },
+                            [
+                              _vm._v(" Accepted "),
+                              _c(
+                                "span",
+                                { staticClass: "badge badge-pill badge-dark" },
+                                [_vm._v(_vm._s(_vm.createdEvents.length))]
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "a",
+                            {
+                              staticClass: "nav-item nav-link",
+                              attrs: {
+                                id: "nav-declined-tab",
+                                "data-toggle": "tab",
+                                href: "#nav-declined",
+                                role: "tab",
+                                "aria-controls": "nav-declined",
+                                "aria-selected": "false"
+                              }
+                            },
+                            [
+                              _vm._v(" Declined "),
+                              _c(
+                                "span",
+                                { staticClass: "badge badge-pill badge-dark" },
+                                [_vm._v(_vm._s(_vm.declinedEvents.length))]
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ])
+                  ]),
               _vm._v(" "),
               _c(
                 "div",
@@ -58855,7 +59214,9 @@ var render = function() {
                               _vm._v(" "),
                               _c(
                                 "div",
-                                { staticClass: "row justify-content-around" },
+                                {
+                                  staticClass: "row justify-content-around mb-5"
+                                },
                                 [
                                   _c("jw-pagination", {
                                     attrs: {
@@ -59029,18 +59390,28 @@ var render = function() {
                                           "div",
                                           { staticClass: "col-lg-2 pl-1 mt-2" },
                                           [
-                                            _c("editevent", {
-                                              attrs: {
-                                                user: _vm.user,
-                                                acceptedOrDeclined: false,
-                                                event: event
-                                              },
-                                              on: {
-                                                fetch: function($event) {
-                                                  return _vm.fetchCreatedEvents()
-                                                }
-                                              }
-                                            }),
+                                            _vm.user.id == event.person_id
+                                              ? _c(
+                                                  "div",
+                                                  [
+                                                    _c("editevent", {
+                                                      attrs: {
+                                                        user: _vm.user,
+                                                        acceptedOrDeclined: false,
+                                                        event: event
+                                                      },
+                                                      on: {
+                                                        fetch: function(
+                                                          $event
+                                                        ) {
+                                                          return _vm.fetchCreatedEvents()
+                                                        }
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                )
+                                              : _vm._e(),
                                             _vm._v(" "),
                                             _c(
                                               "button",
@@ -59061,8 +59432,7 @@ var render = function() {
                                                 })
                                               ]
                                             )
-                                          ],
-                                          1
+                                          ]
                                         ),
                                         _vm._v(" "),
                                         _c(
@@ -59286,19 +59656,29 @@ var render = function() {
                                           "div",
                                           { staticClass: "col-lg-2 pl-1" },
                                           [
-                                            _c("editevent", {
-                                              attrs: {
-                                                user: _vm.user,
-                                                acceptedOrDeclined: true,
-                                                event: event
-                                              },
-                                              on: {
-                                                fetch: function($event) {
-                                                  _vm.fetchDeclinedEvents(),
-                                                    _vm.fetchSubmitedEvents()
-                                                }
-                                              }
-                                            }),
+                                            _vm.user.id == event.person_id
+                                              ? _c(
+                                                  "div",
+                                                  [
+                                                    _c("editevent", {
+                                                      attrs: {
+                                                        user: _vm.user,
+                                                        acceptedOrDeclined: true,
+                                                        event: event
+                                                      },
+                                                      on: {
+                                                        fetch: function(
+                                                          $event
+                                                        ) {
+                                                          _vm.fetchDeclinedEvents(),
+                                                            _vm.fetchSubmitedEvents()
+                                                        }
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                )
+                                              : _vm._e(),
                                             _vm._v(" "),
                                             _c(
                                               "button",
@@ -59319,8 +59699,7 @@ var render = function() {
                                                 })
                                               ]
                                             )
-                                          ],
-                                          1
+                                          ]
                                         ),
                                         _vm._v(" "),
                                         _c(

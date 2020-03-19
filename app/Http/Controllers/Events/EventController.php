@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Auth;
 use Illuminate\Support\Facades\Validator;
+use DateTime;
 
 //---USER
 use App\User;
@@ -42,6 +43,18 @@ class EventController extends Controller
     {
         $events = Event::with('user')->where('place_id', $id)->orderBy('time_from', 'asc')->get();
         return EventResource::collection($events);
+    }
+
+    //---Return all events in specific place and day
+    function get_events_by_place_and_date($id, $event_id, $date){
+
+        $events = DB::table('events')->select('*')
+        ->where('place_id','=',$id)
+        ->where('id','!=',$event_id)
+        ->whereDate('time_from', $date)
+        ->get();
+
+        return $events->toJson();
     }
 
 

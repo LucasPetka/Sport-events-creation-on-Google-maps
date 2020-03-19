@@ -37,7 +37,7 @@ class HomeController extends Controller
         return view('home')->with(compact('user','types'));
     }
 
-
+    
     function returnCreatedEvents(){
         $user = Auth::user();
         $createdevents = DB::table('events')->where('events.person_id','=',$user->id)

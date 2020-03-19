@@ -1,7 +1,7 @@
 <template>
         <div>
             <div class="row">  
-            <div class="col-lg-6">   
+            <div class="col-lg-6 mb-4">   
             <div class="card">
                 <div class="card-body">
 
@@ -67,7 +67,7 @@
             </div>
             </div>  
 
-            <div class="col-lg-6">
+            <div class="col-lg-6 mb-5">
 
                 <div class="btn-toolbar justify-content-center mb-3" role="toolbar" aria-label="Toolbar with button groups">
                     <div class="btn-group mr-2" role="group" aria-label="First group">
@@ -108,7 +108,7 @@
                             </div>
                         </div>
                         </div>
-                        <div class="text-center" v-else>
+                        <div class="text-center mb-4" v-else>
                             <span class="text-muted">Sorry, no events found..</span>
                         </div>
 

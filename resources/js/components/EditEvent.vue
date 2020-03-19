@@ -21,10 +21,9 @@
 
     <notifications group="foo" classes="my-style" position="top left" style="margin-top:55px;" />
 
-    <div v-if="user.id == event.person_id.id">
+    
         <button type="button" class="btn btn-primary float-right ml-3 mb-2" v-on:click="editEvent(event.id)"> <i class="fas fa-edit"></i> </button>
         <button type="button" class="btn btn-danger float-right ml-3 mb-2" v-on:click="openConfirmation(event)"> <i class="fas fa-trash-alt"></i></button>
-    </div>
 
 
     <!-- ==============================Edit MODAL============================================== -->
@@ -53,16 +52,18 @@
                             </div>
 
                         <div class="row">
-                            <ul class="list-group list-group-horizontal mb-4 mx-auto">
+                            <ul class="list-group list-group-horizontal mb-5 mx-auto">
                                 <li class="list-group-item"><i class="far fa-calendar-alt"></i> {{ date }}</li>
                                 <li class="list-group-item"> {{ getWeekDay(event_for_sending.time_from) }} </li>
                                 <li class="list-group-item"><i class="far fa-clock"></i> {{ event_time[0] }} -  {{ event_time[1] }}</li>
                             </ul>
                         </div>
                                
-
-                            <vue-slider  :adsorb="true" v-if="event_time != ''" v-on:drag-end="parseDate(event.id)" class="mr-3 ml-3 mb-5" v-model="event_time" :data="data" :marks="marks" :enable-cross="false"></vue-slider>
-
+                            <vue-slider :tooltip-style="{ backgroundColor: '#313638', borderColor: '#313638' }"  :adsorb="true" v-if="event_time != ''" :process="process" :tooltip="'always'" v-on:drag-end="parseDate(event.id)" class="mr-3 ml-3 mb-5" v-model="event_time" :data="data" :marks="marks" :enable-cross="false">
+                                 <template v-slot:dot="{ value, focus }">
+                                    <div :class="['custom-dot', { focus }]"></div>
+                                </template>
+                            </vue-slider>
 
                             <div class="row">
                                 <div :id="'time_error'+event.id" class="mx-auto"></div>
@@ -98,6 +99,8 @@ export default {
         return{
             weekDays:['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday',],
             isLoading: false,
+            process: dotsPos => [],
+            events: [],
             event_mod: {
                 id:'',
                 place_id:'',
@@ -185,8 +188,9 @@ export default {
             this.event_time[1] = dateee;
 
             this.event_time = [this.event_time[0], this.event_time[1]];
-
             this.getDate(d);
+
+            this.fetchEvents(even.place_id, id, this.date);
 
             $('#addEvent'+this.event.id).appendTo("body").modal('show');
             
@@ -211,6 +215,31 @@ export default {
         //-----------------Closes event creation label---------------------------
         closeAddEvent: function(){
             $('#addEvent'+this.event.id).modal('hide');
+        },
+
+        fetchEvents(id, event_id, date){
+            fetch('../api/events/' + id + '/' + event_id + '/' + date)
+            .then(res => res.json())
+            .then(res => {
+
+                var processArray = [];
+                res.forEach(event => {
+                    var start_time = this.getTime(event.time_from);
+                    var end_time = this.getTime(event.time_until);
+                    var first = this.data.indexOf(start_time) * 2.85714285714;
+                    var second = this.data.indexOf(end_time) * 2.85714285714;
+                    processArray.push([first, second, { backgroundColor: 'red' }]);
+                });
+
+                this.process = (dotsPos => processArray);
+            })
+        },
+
+
+        getTime(date){
+            let current_datetime = new Date(date)
+            let formatted_Time = ('0' + current_datetime.getHours()).slice(-2) + ":" + ('0' + current_datetime.getMinutes()).slice(-2)
+            return formatted_Time;
         },
 
         //---------------------Parse data in right format to choose when event starts and when ends--------------------
@@ -452,6 +481,27 @@ export default {
 </script>
 
 <style>
+
+.custom-dot {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: rgb(201, 201, 201);
+    border: solid 2px rgb(122, 122, 122);
+    transition: all .3s;
+}
+.custom-dot:hover {
+    background-color: #313638;
+    border: solid 1px rgb(122, 122, 122);
+}
+.custom-dot.focus {
+    background-color: rgba(201, 201, 201, 0.726);
+    border: solid #313638;
+    border-radius: 0%;
+    margin-left: 3px;
+    width: 3px;
+    height: 25px;
+}
 
 body.modal-open {
     overflow: visible;

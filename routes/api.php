@@ -48,6 +48,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     Route::get('events', 'Events\EventController@index');
     //List Events by place
     Route::get('events/{id}', 'Events\EventController@get_events_by_place');
+    //List Events by place and date
+    Route::get('events/{id}/{event_id}/{date}', 'Events\EventController@get_events_by_place_and_date');
     //Get Event
     Route::get('event/{id}', 'Events\EventController@show');
     //Get Declined Event

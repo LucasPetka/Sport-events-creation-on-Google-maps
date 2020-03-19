@@ -1,6 +1,8 @@
 <template>
 <div>
 
+
+    <!-- =========================================SORT PLACES DROPDOWN BAR==============================================-->
     <div class="container-fluid position-absolute" style="z-index:2;">
         <div class="row">
             <div class="col-4"></div>
@@ -80,13 +82,21 @@
                             </div>
 
 
-                            <ul class="list-group list-group-horizontal mb-4">
-                                <li class="list-group-item"><i class="far fa-calendar-alt"></i> {{ date }}</li>
-                                <li class="list-group-item"><i class="far fa-clock"></i> {{ event_time[0] }} -  {{ event_time[1] }}</li>
-                            </ul>
+                            <div class="row">
+                                <ul class="list-group list-group-horizontal mb-5 mx-auto">
+                                    <li class="list-group-item"><i class="far fa-calendar-alt"></i> {{ date }}</li>
+                                    <li class="list-group-item"> {{ getWeekDay(date) }} </li>
+                                    <li class="list-group-item"><i class="far fa-clock"></i> {{ event_time[0] }} -  {{ event_time[1] }}</li>
+                                </ul>
+                            </div>
                                
 
-                            <vue-slider  :adsorb="true" v-if="event_time != ''" v-on:drag-end="parseDate()" class="mr-3 ml-3 mb-5" v-model="event_time" :data="data" :marks="marks" :enable-cross="false"></vue-slider>
+                            <vue-slider :tooltip-style="{ backgroundColor: '#313638', borderColor: '#313638' }"  :adsorb="true" v-if="event_time != ''" :process="process" :tooltip="'always'" v-on:drag-end="parseDate()" class="mr-3 ml-3 mb-5" v-model="event_time" :data="data" :marks="marks" :enable-cross="false">
+
+                                 <template v-slot:dot="{ value, focus }">
+                                    <div :class="['custom-dot', { focus }]"></div>
+                                </template>
+                            </vue-slider>
 
                             <div class="row">
                                 <div id="time_error" class="mx-auto"></div>
@@ -252,10 +262,8 @@ export default {
 
     data(){
         return{
-            // process1: dotsPos => [
-            //     ['06:00', '07:30', { backgroundColor: 'red' }],
-            //     [35, 40, { backgroundColor: 'red' }]
-            // ],
+            weekDays:['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday',],
+            process: dotsPos => [],
             search_expanded:false,
             isLoading: null,
             event_time:['', ''],
@@ -432,16 +440,38 @@ export default {
 
     //---------------------Gets date in day chooser--------------------------------
     getDate: function(dateee){
-        var d = new Date(dateee);
-        var dat = new Date(dateee);
+        var d = new Date(dateee.date);
+        var dat = new Date(dateee.date);
         this.date =  d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
         d.setMinutes(30);
         dat.setMinutes(30);
-        dat.setHours(d.getHours() + 1);
-        dateee = d.getHours() +":"+ d.getMinutes();
-        this.event_time[0] = dateee;
-        dateee = dat.getHours() +":"+ dat.getMinutes();
-        this.event_time[1] = dateee;
+        dat.setHours(d.getHours() + 2);
+        dateee.date = d.getHours() +":"+ d.getMinutes();
+        this.event_time[0] = dateee.date;
+        dateee.date = dat.getHours() +":"+ dat.getMinutes();
+        this.event_time[1] = dateee.date;
+
+        var processArray = [];
+        dateee.events.forEach(event => {
+            var start_time = this.getTime(event.time_from);
+            var end_time = this.getTime(event.time_until);
+            var first = this.data.indexOf(start_time) * 2.85714285714;
+            var second = this.data.indexOf(end_time) * 2.85714285714;
+            processArray.push([first, second, { backgroundColor: 'red' }]);
+        });
+
+        this.process = (dotsPos => processArray);
+    },
+
+    getTime(date){
+        let current_datetime = new Date(date)
+        let formatted_Time = ('0' + current_datetime.getHours()).slice(-2) + ":" + ('0' + current_datetime.getMinutes()).slice(-2)
+        return formatted_Time;
+    },
+
+    getWeekDay(date){
+        let current_datetime = new Date(date);
+        return this.weekDays[current_datetime.getDay()];
     },
 
     //-----------------Show spot all info with all events happening in there--------------------
@@ -627,6 +657,27 @@ export default {
 
 
 <style>
+
+.custom-dot {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: rgb(201, 201, 201);
+    border: solid 2px rgb(122, 122, 122);
+    transition: all .3s;
+}
+.custom-dot:hover {
+    background-color: #313638;
+    border: solid 1px rgb(122, 122, 122);
+}
+.custom-dot.focus {
+    background-color: rgba(201, 201, 201, 0.726);
+    border: solid #313638;
+    border-radius: 0%;
+    margin-left: 3px;
+    width: 3px;
+    height: 25px;
+}
 
 /* width */
 ::-webkit-scrollbar {

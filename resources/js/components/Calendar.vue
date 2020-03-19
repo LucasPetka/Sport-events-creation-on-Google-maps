@@ -30,7 +30,9 @@
                             <button type="button" class="btn btn-secondary float-left" :disabled="isLoading" v-on:click="deletePerson(event.place_id, event.id, currentUser.id, $event)"><i class="fas fa-check"></i> Joined</button>
                         </div>
                     
-                        <editevent :user="currentUser" v-on:fetch="fetchSpot(event.place_id)" :acceptedOrDeclined="false" :event="event"></editevent>
+                        <div v-if="currentUser.id == event.person_id.id">
+                            <editevent :user="currentUser" v-on:fetch="fetchSpot(event.place_id)" :acceptedOrDeclined="false" :event="event"></editevent>
+                        </div>
                     </div>
                     
                 </div>
@@ -150,7 +152,8 @@ export default {
 
         const foundEvents = this.events.filter( event => event.place_id == this.place_id);
         this.show_events = foundEvents.filter(event => this.getDate(event.time_from) == this.getDate(this.todays_date));
-        this.$emit('getDate', this.todays_date.toISOString());
+        this.$emit('getDate', {'date':this.todays_date.toISOString(), 'events':this.show_events});
+        
         this.$emit('closeAdd');
         },
 

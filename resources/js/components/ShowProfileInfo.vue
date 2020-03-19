@@ -89,7 +89,7 @@
                                     <hr>
                                     <div class="row">
                                         <div class="col-8">
-                                            {{ place.about }}
+                                            {{ place.about.slice(0, 140) }}...
                                         </div>
                                         <div class="col-4">
                                             <button type="button" class="btn btn-outline-success btn-lg float-right" data-toggle="modal" :data-target="'#submited_map' + place.id ">
@@ -133,7 +133,7 @@
                                     <hr>
                                     <div class="row">
                                         <div class="col-8">
-                                            {{ place.about }}
+                                            {{ place.about.slice(0, 140) }}...
                                         </div>
                                         <div class="col-4">
                                             <button type="button" class="btn btn-outline-success btn-lg float-right" data-toggle="modal" :data-target="'#accepted_map' + place.id ">
@@ -177,15 +177,15 @@
                                 <hr>
                                 <div class="row">
                                     <div class="col-8">
-                                        {{ place.about }}
+                                        {{ place.about.slice(0, 140) }}...
                                     </div>
 
 
                                     <div class="col-4">
-                                        <button type="button" v-on:click="deletePlace(place.id)" class="btn btn-outline-danger btn-lg float-right m-1" >
+                                        <button type="button" v-on:click="deletePlace(place.id)" class="btn btn-outline-danger float-right m-1" >
                                             <i class="fas fa-times"></i>
                                         </button>
-                                        <button type="button" v-on:click="openResubmit(place)" class="btn btn-outline-primary btn-lg float-right m-1">
+                                        <button type="button" v-on:click="openResubmit(place)" class="btn btn-outline-primary float-right m-1">
                                             <i class="far fa-edit"></i>
                                         </button>
                                     </div>
@@ -223,12 +223,13 @@
                         <div class="row">
 
                             <div class="col-lg-8">
-                                {{ event.about }}
+                                {{ event.about.slice(0, 140) }}...
                             </div>
 
                             <div class="col-lg-3">
                                 <hr class="mt-0">
                                     <div class="mb-1"><i class="far fa-calendar-alt"></i> {{ getDate(event.time_from) }}</div>
+                                    <div class="mb-1">{{ getWeekDay(event.time_from) }}</div>
                                     <div><i class="far fa-clock"></i> {{ getTime(event.time_from) }} - {{ getTime(event.time_until) }}</div>                        
                                 <hr class="mb-0">
                             </div>
@@ -285,20 +286,19 @@
                     <div v-if="submitedEvents != 0">
                         <div v-for="event in submited_events_pageOfItems" :key="event.id" class="card mb-3">
                                 <div class="card-header">
-                                    <a target="_blank" :href="'/event/' + event.id" class="nav-link m-0 p-0">
                                         <img :src="'../storage/sport_logo/' + event.image ">  {{ event.title }}
-                                    </a>
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
 
                                         <div class="col-lg-8">
-                                            {{ event.about }}
+                                            {{ event.about.slice(0, 140) }}...
                                         </div>
 
                                         <div class="col-lg-3">
                                             <hr class="mt-0">
                                                 <div class="mb-1"><i class="far fa-calendar-alt"></i> {{ getDate(event.time_from) }}</div>
+                                                <div class="mb-1">{{ getWeekDay(event.time_from) }}</div>
                                                 <div><i class="far fa-clock"></i> {{ getTime(event.time_from) }} - {{ getTime(event.time_until) }}</div>                        
                                             <hr class="mb-0">
                                         </div>
@@ -340,26 +340,30 @@
                     <div v-if="createdEvents != 0">
                         <div v-for="event in created_events_pageOfItems" :key="event.id" class="card mb-3">
                                 <div class="card-header">
-                                    <a target="_blank" :href="'/event/' + event.id" class="nav-link m-0 p-0">
+                                    <a target="_blank" :href="'/event/' + event.id" class="nav-link m-0 p-0 float-left">
                                         <img :src="'../storage/sport_logo/' + event.image ">  {{ event.title }}
-                                    </a>
+                                    </a> 
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
 
-                                        <div class="col-lg-8">
-                                            {{ event.about }}
+                                        <div class="col-lg-7">
+                                            {{ event.about.slice(0, 140) }}...
+                                            <h6 v-if="event.people_going > 1 || event.people_going == 0" class="text-left mt-3"> <i class="fas fa-user"></i> {{ event.people_going }} people going</h6>
+                                            <h6 v-else class="text-left mt-3"> <i class="fas fa-user"></i> {{ event.people_going }} person going</h6>
+
                                         </div>
 
                                         <div class="col-lg-3">
-                                            <hr class="mt-0">
+                                            <hr class="mt-0 mb-1">
                                                 <div class="mb-1"><i class="far fa-calendar-alt"></i> {{ getDate(event.time_from) }}</div>
+                                                <div class="mb-1">{{ getWeekDay(event.time_from) }}</div>
                                                 <div><i class="far fa-clock"></i> {{ getTime(event.time_from) }} - {{ getTime(event.time_until) }}</div>                        
-                                            <hr class="mb-0">
+                                            <hr class="mb-0 mt-1">
                                         </div>
 
-                                        <div class="col-lg-1 pl-1"> 
-                                            <editevent :user="user" v-on:fetchCreatedEvents="fetchCreatedEvents()" :event="event"></editevent>
+                                        <div class="col-lg-2 pl-1 mt-2"> 
+                                            <editevent :user="user" v-on:fetch="fetchCreatedEvents()" :acceptedOrDeclined="false" :event="event"></editevent>
                                             <button type="button" class="btn btn-outline-success float-right" data-toggle="modal" :data-target="'#created_mappp' + event.id">
                                                 <i class="fas fa-map-marked-alt"></i>
                                             </button>
@@ -386,7 +390,7 @@
                             </div>
 
                             <div class="row justify-content-around mb-5">
-                                <jw-pagination :pageSize="3" :maxPages="3"  :items="createdEvents" @changePage="created_events_onChangePage"></jw-pagination>
+                                <jw-pagination :pageSize="2" :maxPages="3"  :items="createdEvents" @changePage="created_events_onChangePage"></jw-pagination>
                             </div>
                         </div>
                     <p v-else class="text-center mt-4 text-muted"> No events created.. </p>  
@@ -397,26 +401,25 @@
                     <div v-if="declinedEvents != 0">
                         <div v-for="event in declined_events_pageOfItems" :key="event.id" class="card mb-3">
                                 <div class="card-header">
-                                    <a target="_blank" :href="'/event/' + event.id" class="nav-link m-0 p-0">
-                                        <img :src="'../storage/sport_logo/' + event.image ">  {{ event.title }}
-                                    </a>
+                                    <img :src="'../storage/sport_logo/' + event.image ">  {{ event.title }}     
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
 
-                                        <div class="col-lg-8">
-                                            {{ event.about }}
+                                        <div class="col-lg-7">
+                                            {{ event.about.slice(0, 140) }}...
                                         </div>
 
                                         <div class="col-lg-3">
                                             <hr class="mt-0">
                                                 <div class="mb-1"><i class="far fa-calendar-alt"></i> {{ getDate(event.time_from) }}</div>
+                                                <div class="mb-1">{{ getWeekDay(event.time_from) }}</div>
                                                 <div><i class="far fa-clock"></i> {{ getTime(event.time_from) }} - {{ getTime(event.time_until) }}</div>                        
                                             <hr class="mb-0">
                                         </div>
 
-                                        <div class="col-lg-1 pl-1"> 
-                                            <editevent :user="user" v-on:fetchCreatedEvents="fetchCreatedEvents()" :event="event"></editevent>
+                                        <div class="col-lg-2 pl-1"> 
+                                            <editevent :user="user" v-on:fetch="fetchDeclinedEvents(), fetchSubmitedEvents()" :acceptedOrDeclined="true" :event="event"></editevent>
                                             <button type="button" class="btn btn-outline-success float-right" data-toggle="modal" :data-target="'#created_mappp' + event.id">
                                                 <i class="fas fa-map-marked-alt"></i>
                                             </button>
@@ -481,6 +484,7 @@ export default {
 
     data(){
         return{
+            weekDays:['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday',],
             createdEvents: [],
             goingToEvents: [],
             acceptedPlaces: [],
@@ -648,6 +652,12 @@ export default {
             let current_datetime = new Date(date)
             let formatted_date = current_datetime.getFullYear() + "-" + ('0' + (current_datetime.getMonth()+1)).slice(-2) + "-" + ('0' + current_datetime.getDate()).slice(-2)
             return formatted_date;
+        },
+
+        getWeekDay(date){
+            let current_datetime = new Date(date);
+
+            return this.weekDays[current_datetime.getDay()];
         },
 
         getTime(date){

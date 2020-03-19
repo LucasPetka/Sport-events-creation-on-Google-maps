@@ -2,20 +2,41 @@
 
 <div>
 
+    <!-- ==============================Confirmation MODAL============================================== -->
+    <div class="modal fade" :id="'confirmation_modal' + event.id" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+        <div class="modal-body">
+            <p class="h5 text-center mb-0 pb-0">Are you sure you want to delete this event?</p><br>
+            <p class="text-muted text-center mb-0 pb-0"><small> {{ event_mod.title }} </small></p>
+        </div>
+        <div class="modal-footer justify-content-center">
+            <button v-if="acceptedOrDeclined == false" type="button" class="btn btn-danger" v-on:click="deleteEvent(event_mod.id)">Delete</button>
+            <button v-else type="button" class="btn btn-danger" v-on:click="deleteDeclinedEvent(event_mod.id)">Delete</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        </div>
+        </div>
+    </div>
+    </div>
+
     <notifications group="foo" classes="my-style" position="top left" style="margin-top:55px;" />
 
-    <div v-if="user.id == event.person_id">
-        <button type="button" class="btn btn-primary float-right ml-3 mb-2" v-on:click="editEvent(event.id)"> <i class="far fa-edit"></i> </button>
+    <div v-if="user.id == event.person_id.id">
+        <button type="button" class="btn btn-primary float-right ml-3 mb-2" v-on:click="editEvent(event.id)"> <i class="fas fa-edit"></i> </button>
+        <button type="button" class="btn btn-danger float-right ml-3 mb-2" v-on:click="openConfirmation(event)"> <i class="fas fa-trash-alt"></i></button>
     </div>
 
 
+    <!-- ==============================Edit MODAL============================================== -->
     <form @submit.prevent="addEvent">
             <div class="modal fade" :id="'addEvent'+event.id" tabindex="-1" role="dialog" aria-labelledby="addEventCenterTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
 
-                            <h5 class="modal-title" id="addEventLongTitle">Edit Event</h5>
+                            <h5 v-if="acceptedOrDeclined" class="modal-title" id="addEventLongTitle">Re-submit Event</h5>
+                            <h5 v-else class="modal-title" id="addEventLongTitle">Edit Event</h5>
+
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -31,11 +52,13 @@
                                 <textarea v-model="event_for_sending.about" class="form-control" id="exampleFormControlTextarea1" maxlength="350" rows="6" required></textarea>
                             </div>
 
-
-                            <ul class="list-group list-group-horizontal mb-4">
+                        <div class="row">
+                            <ul class="list-group list-group-horizontal mb-4 mx-auto">
                                 <li class="list-group-item"><i class="far fa-calendar-alt"></i> {{ date }}</li>
+                                <li class="list-group-item"> {{ getWeekDay(event_for_sending.time_from) }} </li>
                                 <li class="list-group-item"><i class="far fa-clock"></i> {{ event_time[0] }} -  {{ event_time[1] }}</li>
                             </ul>
+                        </div>
                                
 
                             <vue-slider  :adsorb="true" v-if="event_time != ''" v-on:drag-end="parseDate(event.id)" class="mr-3 ml-3 mb-5" v-model="event_time" :data="data" :marks="marks" :enable-cross="false"></vue-slider>
@@ -52,7 +75,8 @@
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button :id="'add_event_btn'  + event.id" type="submit" class="btn btn-success float-right" :disabled="isLoading"> Update </button>
+                            <button v-if="acceptedOrDeclined" :id="'add_event_btn'  + event.id" v-on:click="resubmitEvent" class="btn btn-success float-right" :disabled="isLoading"> Re-submit </button>
+                            <button v-else :id="'add_event_btn'  + event.id" v-on:click="addEvent" class="btn btn-success float-right" :disabled="isLoading"> Update </button>
                         </div>
                     </div>
                 </div>
@@ -68,11 +92,22 @@
 
 export default {
 
-    props:['event', 'user'],
+    props:['event', 'user', 'acceptedOrDeclined'],
 
     data(){
         return{
-            isLoading:false,
+            weekDays:['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday',],
+            isLoading: false,
+            event_mod: {
+                id:'',
+                place_id:'',
+                title:'',
+                about:'',
+                time_from:'',
+                time_until:'',
+                organizator:'',
+                people_going:0,
+            },
             event_time:['', ''],
             event_for_sending:[],
             data: [],
@@ -111,6 +146,11 @@ export default {
 
     methods: {
 
+        openConfirmation: function(event){
+            this.event_mod = event;
+            $('#confirmation_modal' + event.id).appendTo("body").modal('show');
+        },
+
          fillArrayWithTimes: function(){
             const hours = 24;
             var times_arr = [];
@@ -124,7 +164,14 @@ export default {
         //------------------------Opens edit event creation label-------------------
         async editEvent(id){
 
-            const response = await axios.get('../api/event/'+ id);
+            var response = [];
+
+            if(this.acceptedOrDeclined == false){
+                response = await axios.get('../api/event/'+ id);
+            }
+            else{
+                response = await axios.get('../api/declinedevent/'+ id);
+            }
 
             var even = response.data.data;
 
@@ -141,7 +188,7 @@ export default {
 
             this.getDate(d);
 
-            $('#addEvent'+this.event.id).modal('show');
+            $('#addEvent'+this.event.id).appendTo("body").modal('show');
             
         },
 
@@ -150,6 +197,11 @@ export default {
             this.date =  d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
         },
 
+        getWeekDay(date){
+            let current_datetime = new Date(date);
+
+            return this.weekDays[current_datetime.getDay()];
+        },
 
         getCookie(name) {
             var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
@@ -246,7 +298,141 @@ export default {
 
             $('#addEvent'+this.event_for_sending.id).modal('hide');
 
-            this.$emit('fetchCreatedEvents');
+            this.$emit('fetch');
+            
+            this.event_for_sending.id= '';
+            this.event_for_sending.place_id = '';
+            this.event_for_sending.title = '';
+            this.event_for_sending.about = '';
+            this.event_for_sending.time_from = '';
+            this.event_for_sending.time_until = '';
+            this.event_for_sending.person_id = '';
+        },
+
+        deleteDeclinedEvent(event_id){
+            (async () => {
+            const Response = await fetch('/decevent/' + event_id, {
+                method: 'delete',
+                    headers: {
+                        'Accept': 'application/json',
+                        'content-type': 'application/json',
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }     
+            });
+
+                const content = await Response.json();
+
+                if(content == true){
+                Vue.notify({
+                    group: 'foo',
+                    title: 'Congrats!!',
+                    type: 'success',
+                    text: 'Event have been deleted !'
+                });  
+                }
+                else{
+                    Vue.notify({
+                        group: 'foo',
+                        title: 'Error!!',
+                        type: 'error',
+                        text: 'Unable to delete event..'
+                    });  
+                }
+                
+                $('#confirmation_modal' + event_id).modal('hide');
+
+                this.$emit('fetch');
+            })();
+
+        },
+
+         //Delete event from database
+        deleteEvent: function(eventId) {
+
+            (async () => {
+            const Response = await fetch('api/event/'+ eventId + '?api_token=' + this.getCookie("api_token"), {
+                method: 'delete',
+                    headers: {
+                        'Accept': 'application/json',
+                        'content-type': 'application/json',
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }     
+            });
+
+                const content = await Response.json();
+
+                if(content == true){
+                Vue.notify({
+                    group: 'foo',
+                    title: 'Congrats!!',
+                    type: 'success',
+                    text: 'Event have been deleted !'
+                });  
+                }
+                else{
+                    Vue.notify({
+                        group: 'foo',
+                        title: 'Error!!',
+                        type: 'error',
+                        text: 'Unable to delete event..'
+                    });  
+                }
+
+
+                this.$emit('fetch');
+                $('#confirmation_modal' + eventId).modal('hide');
+
+            })();
+
+
+        },
+
+        //-----------------------------------------Re-submit new event-----------------------------------------------
+        resubmitEvent() {
+
+            this.isLoading = true
+            setTimeout(() => {
+                this.isLoading = false
+            }, 2000);
+
+            this.event_for_sending.time_from = this.date + " " + this.event_time[0];
+            this.event_for_sending.time_until = this.date + " " + this.event_time[1];
+
+            (async () => {
+                const Response = await fetch('../resubmit_event', {
+                    method: 'post',
+                        body: JSON.stringify(this.event_for_sending),
+                        headers: {
+                            'Accept': 'application/json',
+                            'content-type': 'application/json',
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }     
+            });
+
+            const content = await Response.json();
+
+            if(content == true){
+                Vue.notify({
+                    group: 'foo',
+                    title: 'Congrats!!',
+                    type: 'success',
+                    text: 'You have re-submited an event, wait for confirmation.'
+                });  
+            }
+            else{
+                Vue.notify({
+                    group: 'foo',
+                    title: 'Error!!',
+                    type: 'error',
+                    text: 'There was incorect values in the form!'
+                });  
+            }
+
+            })();
+
+            $('#addEvent'+this.event_for_sending.id).modal('hide');
+
+            this.$emit('fetch');
             
             this.event_for_sending.id= '';
             this.event_for_sending.place_id = '';

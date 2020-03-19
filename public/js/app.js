@@ -2757,50 +2757,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 var Datepicker = function Datepicker() {
   return __webpack_require__.e(/*! import() */ 0).then(__webpack_require__.bind(null, /*! vuejs-datepicker */ "./node_modules/vuejs-datepicker/dist/vuejs-datepicker.esm.js"));
+};
+
+var editevent = function editevent() {
+  return Promise.resolve(/*! import() */).then(__webpack_require__.bind(null, /*! ../components/EditEvent.vue */ "./resources/js/components/EditEvent.vue"));
 };
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
+    'editevent': editevent,
     Datepicker: Datepicker
   },
   props: ['status', 'currentUser'],
   //checks if someone loged in and gets all information about user
   data: function data() {
     return {
-      event_mod: {
-        id: '',
-        place_id: '',
-        title: '',
-        about: '',
-        time_from: '',
-        time_until: '',
-        organizator: '',
-        people_going: 0
-      },
       isLoading: null,
       format: 'yyyy-MM-dd',
       todays_date: new Date(),
@@ -2841,10 +2815,6 @@ var Datepicker = function Datepicker() {
     getDate: function getDate(date) {
       var new_date = new Date(date);
       return new_date.getUTCFullYear(0) + '-' + new_date.getUTCMonth(0) + '-' + new_date.getUTCDate(0);
-    },
-    openConfirmation: function openConfirmation(event) {
-      this.event_mod = event;
-      $('#confirmation_modal').appendTo("body").modal('show');
     },
     //Check if person already joined to current event
     ifJoined: function ifJoined(place, event, user) {
@@ -3012,39 +2982,6 @@ var Datepicker = function Datepicker() {
         type: 'error',
         text: 'You left the event !'
       });
-    },
-    //Edit event
-    editEvent: function editEvent(eventId) {
-      this.$emit('editEvent', eventId);
-    },
-    //Delete event from database
-    deleteEvent: function deleteEvent(eventId) {
-      var _this6 = this;
-
-      fetch('api/event/' + eventId + '?api_token=' + this.getCookie("api_token"), {
-        method: 'delete'
-      }).then(function (res) {
-        return res.json();
-      }).then(function (data) {
-        fetch('api/events').then(function (res) {
-          return res.json();
-        }).then(function (res) {
-          _this6.events = res.data;
-
-          _this6.showEvents();
-
-          _this6.fetchSpot(_this6.place_id);
-        });
-      })["catch"](function (err) {
-        return console.log(err);
-      });
-      Vue.notify({
-        group: 'foo',
-        title: 'Notification',
-        type: 'error',
-        text: 'You have deleted an event'
-      });
-      $('#confirmation_modal').modal('hide');
     }
   })
 });
@@ -3216,6 +3153,9 @@ var editevent = function editevent() {
       axios.get('../messages/' + this.event.id).then(function (response) {
         _this2.messages = response.data;
       });
+    },
+    refresh: function refresh() {
+      window.location.reload();
     },
     sendMessage: function sendMessage() {
       this.messages.push({
@@ -3414,11 +3354,46 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['event', 'user'],
+  props: ['event', 'user', 'acceptedOrDeclined'],
   data: function data() {
     return {
+      weekDays: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
       isLoading: false,
+      event_mod: {
+        id: '',
+        place_id: '',
+        title: '',
+        about: '',
+        time_from: '',
+        time_until: '',
+        organizator: '',
+        people_going: 0
+      },
       event_time: ['', ''],
       event_for_sending: [],
       data: [],
@@ -3449,6 +3424,10 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   methods: {
+    openConfirmation: function openConfirmation(event) {
+      this.event_mod = event;
+      $('#confirmation_modal' + event.id).appendTo("body").modal('show');
+    },
     fillArrayWithTimes: function fillArrayWithTimes() {
       var hours = 24;
       var times_arr = [];
@@ -3467,11 +3446,29 @@ __webpack_require__.r(__webpack_exports__);
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _context.next = 2;
+              response = [];
+
+              if (!(this.acceptedOrDeclined == false)) {
+                _context.next = 7;
+                break;
+              }
+
+              _context.next = 4;
               return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get('../api/event/' + id));
 
-            case 2:
+            case 4:
               response = _context.sent;
+              _context.next = 10;
+              break;
+
+            case 7:
+              _context.next = 9;
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get('../api/declinedevent/' + id));
+
+            case 9:
+              response = _context.sent;
+
+            case 10:
               even = response.data.data;
               this.event_for_sending = even;
               d = new Date(even.time_from);
@@ -3482,9 +3479,9 @@ __webpack_require__.r(__webpack_exports__);
               this.event_time[1] = dateee;
               this.event_time = [this.event_time[0], this.event_time[1]];
               this.getDate(d);
-              $('#addEvent' + this.event.id).modal('show');
+              $('#addEvent' + this.event.id).appendTo("body").modal('show');
 
-            case 14:
+            case 21:
             case "end":
               return _context.stop();
           }
@@ -3494,6 +3491,10 @@ __webpack_require__.r(__webpack_exports__);
     getDate: function getDate(date) {
       var d = new Date(date);
       this.date = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+    },
+    getWeekDay: function getWeekDay(date) {
+      var current_datetime = new Date(date);
+      return this.weekDays[current_datetime.getDay()];
     },
     getCookie: function getCookie(name) {
       var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
@@ -3592,7 +3593,188 @@ __webpack_require__.r(__webpack_exports__);
       })();
 
       $('#addEvent' + this.event_for_sending.id).modal('hide');
-      this.$emit('fetchCreatedEvents');
+      this.$emit('fetch');
+      this.event_for_sending.id = '';
+      this.event_for_sending.place_id = '';
+      this.event_for_sending.title = '';
+      this.event_for_sending.about = '';
+      this.event_for_sending.time_from = '';
+      this.event_for_sending.time_until = '';
+      this.event_for_sending.person_id = '';
+    },
+    deleteDeclinedEvent: function deleteDeclinedEvent(event_id) {
+      var _this2 = this;
+
+      (function _callee2() {
+        var Response, content;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function _callee2$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(fetch('/decevent/' + event_id, {
+                  method: 'delete',
+                  headers: {
+                    'Accept': 'application/json',
+                    'content-type': 'application/json',
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                  }
+                }));
+
+              case 2:
+                Response = _context3.sent;
+                _context3.next = 5;
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(Response.json());
+
+              case 5:
+                content = _context3.sent;
+
+                if (content == true) {
+                  Vue.notify({
+                    group: 'foo',
+                    title: 'Congrats!!',
+                    type: 'success',
+                    text: 'Event have been deleted !'
+                  });
+                } else {
+                  Vue.notify({
+                    group: 'foo',
+                    title: 'Error!!',
+                    type: 'error',
+                    text: 'Unable to delete event..'
+                  });
+                }
+
+                $('#confirmation_modal' + event_id).modal('hide');
+
+                _this2.$emit('fetch');
+
+              case 9:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        });
+      })();
+    },
+    //Delete event from database
+    deleteEvent: function deleteEvent(eventId) {
+      var _this3 = this;
+
+      (function _callee3() {
+        var Response, content;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function _callee3$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _context4.next = 2;
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(fetch('api/event/' + eventId + '?api_token=' + _this3.getCookie("api_token"), {
+                  method: 'delete',
+                  headers: {
+                    'Accept': 'application/json',
+                    'content-type': 'application/json',
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                  }
+                }));
+
+              case 2:
+                Response = _context4.sent;
+                _context4.next = 5;
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(Response.json());
+
+              case 5:
+                content = _context4.sent;
+
+                if (content == true) {
+                  Vue.notify({
+                    group: 'foo',
+                    title: 'Congrats!!',
+                    type: 'success',
+                    text: 'Event have been deleted !'
+                  });
+                } else {
+                  Vue.notify({
+                    group: 'foo',
+                    title: 'Error!!',
+                    type: 'error',
+                    text: 'Unable to delete event..'
+                  });
+                }
+
+                _this3.$emit('fetch');
+
+                $('#confirmation_modal' + eventId).modal('hide');
+
+              case 9:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        });
+      })();
+    },
+    //-----------------------------------------Re-submit new event-----------------------------------------------
+    resubmitEvent: function resubmitEvent() {
+      var _this4 = this;
+
+      this.isLoading = true;
+      setTimeout(function () {
+        _this4.isLoading = false;
+      }, 2000);
+      this.event_for_sending.time_from = this.date + " " + this.event_time[0];
+      this.event_for_sending.time_until = this.date + " " + this.event_time[1];
+
+      (function _callee4() {
+        var Response, content;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function _callee4$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                _context5.next = 2;
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(fetch('../resubmit_event', {
+                  method: 'post',
+                  body: JSON.stringify(_this4.event_for_sending),
+                  headers: {
+                    'Accept': 'application/json',
+                    'content-type': 'application/json',
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                  }
+                }));
+
+              case 2:
+                Response = _context5.sent;
+                _context5.next = 5;
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(Response.json());
+
+              case 5:
+                content = _context5.sent;
+
+                if (content == true) {
+                  Vue.notify({
+                    group: 'foo',
+                    title: 'Congrats!!',
+                    type: 'success',
+                    text: 'You have re-submited an event, wait for confirmation.'
+                  });
+                } else {
+                  Vue.notify({
+                    group: 'foo',
+                    title: 'Error!!',
+                    type: 'error',
+                    text: 'There was incorect values in the form!'
+                  });
+                }
+
+              case 7:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        });
+      })();
+
+      $('#addEvent' + this.event_for_sending.id).modal('hide');
+      this.$emit('fetch');
       this.event_for_sending.id = '';
       this.event_for_sending.place_id = '';
       this.event_for_sending.title = '';
@@ -4754,8 +4936,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
 var Calendar = function Calendar() {
   return Promise.resolve(/*! import() */).then(__webpack_require__.bind(null, /*! ../components/Calendar.vue */ "./resources/js/components/Calendar.vue"));
 };
@@ -4881,38 +5061,6 @@ var Gmap = function Gmap() {
     //-------------------------Closes PLACE ADD label-------------------------------
     closeAdd: function closeAdd() {
       $('#addPlace').modal('hide');
-    },
-    //------------------------Opens edit event creation label-------------------
-    editEvent: function editEvent(id) {
-      var response, even, d, dat, dateee;
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function editEvent$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              this.edit = true;
-              _context.next = 3;
-              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get('api/event/' + id));
-
-            case 3:
-              response = _context.sent;
-              console.log(response.data.data.title);
-              even = response.data.data;
-              this.event = even;
-              d = new Date(even.time_from);
-              dat = new Date(even.time_until);
-              dateee = ('0' + d.getHours()).slice(-2) + ":" + ('0' + d.getMinutes()).slice(-2);
-              this.event_time[0] = dateee;
-              dateee = ('0' + dat.getHours()).slice(-2) + ":" + ('0' + dat.getMinutes()).slice(-2);
-              this.event_time[1] = dateee;
-              this.event_time = [this.event_time[0], this.event_time[1]];
-              $('#addEvent').modal('show');
-
-            case 15:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, null, this);
     },
     //------------------------Opens add event creation label-------------------
     openAddEvent: function openAddEvent() {
@@ -5042,11 +5190,11 @@ var Gmap = function Gmap() {
 
       (function _callee() {
         var Response, content;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function _callee$(_context2) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function _callee$(_context) {
           while (1) {
-            switch (_context2.prev = _context2.next) {
+            switch (_context.prev = _context.next) {
               case 0:
-                _context2.next = 2;
+                _context.next = 2;
                 return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(fetch('api/placequeue?api_token=' + _this4.getCookie("api_token"), {
                   method: 'post',
                   body: JSON.stringify(_this4.place),
@@ -5057,12 +5205,12 @@ var Gmap = function Gmap() {
                 }));
 
               case 2:
-                Response = _context2.sent;
-                _context2.next = 5;
+                Response = _context.sent;
+                _context.next = 5;
                 return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(Response.json());
 
               case 5:
-                content = _context2.sent;
+                content = _context.sent;
 
                 if (content == true) {
                   Vue.notify({
@@ -5084,7 +5232,7 @@ var Gmap = function Gmap() {
 
               case 7:
               case "end":
-                return _context2.stop();
+                return _context.stop();
             }
           }
         });
@@ -5108,119 +5256,61 @@ var Gmap = function Gmap() {
       setTimeout(function () {
         _this5.isLoading = false;
       }, 2000);
+      this.event.time_from = this.date + " " + this.event_time[0];
+      this.event.time_until = this.date + " " + this.event_time[1];
 
-      if (this.edit === false) {
-        this.event.time_from = this.date + " " + this.event_time[0];
-        this.event.time_until = this.date + " " + this.event_time[1];
-
-        (function _callee2() {
-          var Response, content;
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function _callee2$(_context3) {
-            while (1) {
-              switch (_context3.prev = _context3.next) {
-                case 0:
-                  _context3.next = 2;
-                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(fetch('api/event?api_token=' + _this5.getCookie("api_token"), {
-                    method: 'post',
-                    body: JSON.stringify(_this5.event),
-                    headers: {
-                      'Accept': 'application/json',
-                      'content-type': 'application/json'
-                    }
-                  }));
-
-                case 2:
-                  Response = _context3.sent;
-                  _context3.next = 5;
-                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(Response.json());
-
-                case 5:
-                  content = _context3.sent;
-                  _context3.next = 8;
-                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(_this5.$refs.calendar.fetchSpot(_this5.show.id));
-
-                case 8:
-                  if (content == true) {
-                    Vue.notify({
-                      group: 'foo',
-                      title: 'Congrats!!',
-                      type: 'success',
-                      duration: 10000,
-                      text: 'Event has been sent for inspection. Will be added if everything is okay.'
-                    });
-                  } else {
-                    Vue.notify({
-                      group: 'foo',
-                      title: 'Error!!',
-                      type: 'error',
-                      text: 'There was incorect values in the form!'
-                    });
+      (function _callee2() {
+        var Response, content;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(fetch('api/event?api_token=' + _this5.getCookie("api_token"), {
+                  method: 'post',
+                  body: JSON.stringify(_this5.event),
+                  headers: {
+                    'Accept': 'application/json',
+                    'content-type': 'application/json'
                   }
+                }));
 
-                case 9:
-                case "end":
-                  return _context3.stop();
-              }
+              case 2:
+                Response = _context2.sent;
+                _context2.next = 5;
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(Response.json());
+
+              case 5:
+                content = _context2.sent;
+                _context2.next = 8;
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(_this5.$refs.calendar.fetchSpot(_this5.show.id));
+
+              case 8:
+                if (content == true) {
+                  Vue.notify({
+                    group: 'foo',
+                    title: 'Congrats!!',
+                    type: 'success',
+                    duration: 10000,
+                    text: 'Event has been sent for inspection. Will be added if everything is okay.'
+                  });
+                } else {
+                  Vue.notify({
+                    group: 'foo',
+                    title: 'Error!!',
+                    type: 'error',
+                    text: 'There was incorect values in the form!'
+                  });
+                }
+
+              case 9:
+              case "end":
+                return _context2.stop();
             }
-          });
-        })();
-      } else {
-        this.event.time_from = this.date + " " + this.event_time[0];
-        this.event.time_until = this.date + " " + this.event_time[1];
+          }
+        });
+      })();
 
-        (function _callee3() {
-          var Response, content;
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function _callee3$(_context4) {
-            while (1) {
-              switch (_context4.prev = _context4.next) {
-                case 0:
-                  _context4.next = 2;
-                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(fetch('api/event?api_token=' + _this5.getCookie("api_token"), {
-                    method: 'put',
-                    body: JSON.stringify(_this5.event),
-                    headers: {
-                      'Accept': 'application/json',
-                      'content-type': 'application/json'
-                    }
-                  }));
-
-                case 2:
-                  Response = _context4.sent;
-                  _context4.next = 5;
-                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(Response.json());
-
-                case 5:
-                  content = _context4.sent;
-                  _context4.next = 8;
-                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(_this5.$refs.calendar.fetchSpot(_this5.show.id));
-
-                case 8:
-                  if (content == true) {
-                    Vue.notify({
-                      group: 'foo',
-                      title: 'Congrats!!',
-                      type: 'success',
-                      text: 'You have updated an event !'
-                    });
-                  } else {
-                    Vue.notify({
-                      group: 'foo',
-                      title: 'Notification!!',
-                      type: 'error',
-                      text: 'There was incorect values in the form!'
-                    });
-                  }
-
-                case 9:
-                case "end":
-                  return _context4.stop();
-              }
-            }
-          });
-        })();
-      }
-
-      this.edit = false;
       this.event.id = '';
       this.event.place_id = '';
       this.event.title = '';
@@ -5720,6 +5810,9 @@ var _assets_options_json__WEBPACK_IMPORTED_MODULE_1___namespace = /*#__PURE__*/_
 //
 //
 //
+//
+//
+//
 var editevent = function editevent() {
   return Promise.resolve(/*! import() */).then(__webpack_require__.bind(null, /*! ../components/EditEvent.vue */ "./resources/js/components/EditEvent.vue"));
 };
@@ -5737,6 +5830,7 @@ var smallmap = function smallmap() {
   props: ['user'],
   data: function data() {
     return {
+      weekDays: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
       createdEvents: [],
       goingToEvents: [],
       acceptedPlaces: [],
@@ -5947,6 +6041,10 @@ var smallmap = function smallmap() {
       var current_datetime = new Date(date);
       var formatted_date = current_datetime.getFullYear() + "-" + ('0' + (current_datetime.getMonth() + 1)).slice(-2) + "-" + ('0' + current_datetime.getDate()).slice(-2);
       return formatted_date;
+    },
+    getWeekDay: function getWeekDay(date) {
+      var current_datetime = new Date(date);
+      return this.weekDays[current_datetime.getDay()];
     },
     getTime: function getTime(date) {
       var current_datetime = new Date(date);
@@ -12675,7 +12773,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* width */\n::-webkit-scrollbar {\n  width: 10px;\n}\n\n/* Track */\n::-webkit-scrollbar-track {\n  background: #f1f1f1;\n}\n \n/* Handle */\n::-webkit-scrollbar-thumb {\n  background: rgb(182, 182, 182);\n}\n\n/* Handle on hover */\n::-webkit-scrollbar-thumb:hover {\n  background: rgb(136, 136, 136);\n}\n#map {\n    width: 100% !important; \n    height:100% !important;\n}\n.my-style {\n    padding: 15px;\n    margin-left: 10px;\n    margin-top: 10px;\n    width: 290px;\n \n    font-size: 14px;\n    border-radius: 5px;\n    border-left: solid rgb(99, 156, 88) 5px;\n\n\n    color: #ffffff;\n    background: #82CC75;\n}\n.success {\n    background: #82CC75;\n}\n.error {\n    background: #DC4146;\n    border-left: solid rgb(177, 52, 56) 5px;\n}\n#sidebar{\n    height: 94vh;\n    overflow-y: auto;\n}\n#geras{\n    position: absolute;\n    color:white;\n    font-size: 25px;\n    opacity: 0.1;\n}\n#search_button{\n    z-index: 50;\n}\n#places_sort{\n    z-index: 51;\n    width:100%;\n}\n#loading-screen {\n    z-index: 100;\n    position: absolute; top: 0; right: 0; bottom: 0; left: 0;\n    background-color: #82cc75;\n}\n@media only screen and (max-width: 900px) {\n#map {\n    width: 100% !important; \n    height:100% !important;\n}\n#show{\n    width: 100% !important;\n}\n#createDiv{\n    width: 95% !important;\n}\n#sidebar{\n    height: auto;\n    overflow-y: hidden;\n}\n}\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* width */\n::-webkit-scrollbar {\n  width: 10px;\n}\n\n/* Track */\n::-webkit-scrollbar-track {\n  background: #f1f1f1;\n}\n \n/* Handle */\n::-webkit-scrollbar-thumb {\n  background: rgb(182, 182, 182);\n}\n\n/* Handle on hover */\n::-webkit-scrollbar-thumb:hover {\n  background: rgb(136, 136, 136);\n}\n#map {\n    width: 100% !important; \n    height:100% !important;\n}\n.my-style {\n    padding: 15px;\n    margin-left: 10px;\n    margin-top: 10px;\n    width: 290px;\n \n    font-size: 14px;\n    border-radius: 5px;\n    border-left: solid rgb(99, 156, 88) 5px;\n\n\n    color: #ffffff;\n    background: #82CC75;\n}\n.success {\n    background: #82CC75;\n}\n.error {\n    background: #DC4146;\n    border-left: solid rgb(177, 52, 56) 5px;\n}\n#sidebar{\n    height: 94vh;\n    overflow-y: auto;\n}\n#geras{\n    position: absolute;\n    color:white;\n    font-size: 25px;\n    opacity: 0.1;\n}\n#search_button{\n    z-index: 50;\n}\n#places_sort{\n    z-index: 51;\n    width:100%;\n}\n#loading-screen {\n    z-index: 100;\n    position: absolute; top: 0; right: 0; bottom: 0; left: 0;\n    background-color: #82cc75;\n}\n@media only screen and (max-width: 900px) {\n#map {\n    width: 100% !important; \n    height:100% !important;\n}\n#show{\n    width: 100% !important;\n}\n#createDiv{\n    width: 95% !important;\n}\n#sidebar{\n    height: auto;\n    overflow-y: hidden;\n}\n}\n", ""]);
 
 // exports
 
@@ -54319,72 +54417,6 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c(
-      "div",
-      {
-        staticClass: "modal fade",
-        attrs: {
-          id: "confirmation_modal",
-          tabindex: "-1",
-          role: "dialog",
-          "aria-labelledby": "exampleModalCenterTitle",
-          "aria-hidden": "true"
-        }
-      },
-      [
-        _c(
-          "div",
-          {
-            staticClass: "modal-dialog modal-dialog-centered",
-            attrs: { role: "document" }
-          },
-          [
-            _c("div", { staticClass: "modal-content" }, [
-              _c("div", { staticClass: "modal-body" }, [
-                _c("p", { staticClass: "h5 text-center mb-0 pb-0" }, [
-                  _vm._v("Are you sure you want to delete this event?")
-                ]),
-                _c("br"),
-                _vm._v(" "),
-                _c("p", { staticClass: "text-muted text-center mb-0 pb-0" }, [
-                  _c("small", [_vm._v(" " + _vm._s(_vm.event_mod.title) + " ")])
-                ])
-              ]),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "modal-footer justify-content-center" },
-                [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-danger",
-                      attrs: { type: "button" },
-                      on: {
-                        click: function($event) {
-                          return _vm.deleteEvent(_vm.event_mod.id)
-                        }
-                      }
-                    },
-                    [_vm._v("Delete")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-secondary",
-                      attrs: { type: "button", "data-dismiss": "modal" }
-                    },
-                    [_vm._v("Cancel")]
-                  )
-                ]
-              )
-            ])
-          ]
-        )
-      ]
-    ),
-    _vm._v(" "),
     _c("div", { staticClass: "row" }, [
       _c(
         "div",
@@ -54497,98 +54529,83 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _vm.status === 1
-                  ? _c("div", [
-                      _vm.ifJoined(
-                        event.place_id,
-                        event.id,
-                        _vm.currentUser.id
-                      ) == 0
-                        ? _c("div", [
-                            _c(
-                              "button",
-                              {
-                                staticClass: "btn btn-success float-left",
-                                attrs: {
-                                  id: "join_btn",
-                                  type: "button",
-                                  disabled: _vm.isLoading
+                  ? _c(
+                      "div",
+                      [
+                        _vm.ifJoined(
+                          event.place_id,
+                          event.id,
+                          _vm.currentUser.id
+                        ) == 0
+                          ? _c("div", [
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-success float-left",
+                                  attrs: {
+                                    id: "join_btn",
+                                    type: "button",
+                                    disabled: _vm.isLoading
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.addPerson(
+                                        event.place_id,
+                                        event.id,
+                                        _vm.currentUser.id,
+                                        $event
+                                      )
+                                    }
+                                  }
                                 },
-                                on: {
-                                  click: function($event) {
-                                    return _vm.addPerson(
-                                      event.place_id,
-                                      event.id,
-                                      _vm.currentUser.id,
-                                      $event
-                                    )
+                                [
+                                  _c("i", { staticClass: "fas fa-user-plus" }),
+                                  _vm._v(" Join")
+                                ]
+                              )
+                            ])
+                          : _c("div", [
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-secondary float-left",
+                                  attrs: {
+                                    type: "button",
+                                    disabled: _vm.isLoading
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.deletePerson(
+                                        event.place_id,
+                                        event.id,
+                                        _vm.currentUser.id,
+                                        $event
+                                      )
+                                    }
                                   }
-                                }
-                              },
-                              [
-                                _c("i", { staticClass: "fas fa-user-plus" }),
-                                _vm._v(" Join")
-                              ]
-                            )
-                          ])
-                        : _c("div", [
-                            _c(
-                              "button",
-                              {
-                                staticClass: "btn btn-secondary float-left",
-                                attrs: {
-                                  type: "button",
-                                  disabled: _vm.isLoading
                                 },
-                                on: {
-                                  click: function($event) {
-                                    return _vm.deletePerson(
-                                      event.place_id,
-                                      event.id,
-                                      _vm.currentUser.id,
-                                      $event
-                                    )
-                                  }
-                                }
-                              },
-                              [
-                                _c("i", { staticClass: "fas fa-check" }),
-                                _vm._v(" Joined")
-                              ]
-                            )
-                          ]),
-                      _vm._v(" "),
-                      _vm.currentUser.id == event.person_id.id
-                        ? _c("div", [
-                            _c(
-                              "button",
-                              {
-                                staticClass: "btn btn-danger float-right ml-2",
-                                attrs: { type: "button" },
-                                on: {
-                                  click: function($event) {
-                                    return _vm.openConfirmation(event)
-                                  }
-                                }
-                              },
-                              [_c("i", { staticClass: "fas fa-trash-alt" })]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "button",
-                              {
-                                staticClass: "btn btn-primary float-right",
-                                attrs: { type: "button" },
-                                on: {
-                                  click: function($event) {
-                                    return _vm.editEvent(event.id)
-                                  }
-                                }
-                              },
-                              [_c("i", { staticClass: "far fa-edit" })]
-                            )
-                          ])
-                        : _vm._e()
-                    ])
+                                [
+                                  _c("i", { staticClass: "fas fa-check" }),
+                                  _vm._v(" Joined")
+                                ]
+                              )
+                            ]),
+                        _vm._v(" "),
+                        _c("editevent", {
+                          attrs: {
+                            user: _vm.currentUser,
+                            acceptedOrDeclined: false,
+                            event: event
+                          },
+                          on: {
+                            fetch: function($event) {
+                              return _vm.fetchSpot(event.place_id)
+                            }
+                          }
+                        })
+                      ],
+                      1
+                    )
                   : _vm._e()
               ])
             ]
@@ -54754,7 +54771,14 @@ var render = function() {
           "div",
           { staticClass: "col-6" },
           [
-            _c("editevent", { attrs: { user: _vm.user, event: _vm.event } }),
+            _c("editevent", {
+              attrs: {
+                user: _vm.user,
+                acceptedOrDeclined: false,
+                event: _vm.event
+              },
+              on: { fetchCreatedEvents: _vm.refresh }
+            }),
             _vm._v(" "),
             _vm.ifJoined(_vm.event.place_id, _vm.event.id, _vm.user.id) == 0
               ? _c("div", [
@@ -54993,12 +55017,94 @@ var render = function() {
   return _c(
     "div",
     [
+      _c(
+        "div",
+        {
+          staticClass: "modal fade",
+          attrs: {
+            id: "confirmation_modal" + _vm.event.id,
+            tabindex: "-1",
+            role: "dialog",
+            "aria-labelledby": "exampleModalCenterTitle",
+            "aria-hidden": "true"
+          }
+        },
+        [
+          _c(
+            "div",
+            {
+              staticClass: "modal-dialog modal-dialog-centered",
+              attrs: { role: "document" }
+            },
+            [
+              _c("div", { staticClass: "modal-content" }, [
+                _c("div", { staticClass: "modal-body" }, [
+                  _c("p", { staticClass: "h5 text-center mb-0 pb-0" }, [
+                    _vm._v("Are you sure you want to delete this event?")
+                  ]),
+                  _c("br"),
+                  _vm._v(" "),
+                  _c("p", { staticClass: "text-muted text-center mb-0 pb-0" }, [
+                    _c("small", [
+                      _vm._v(" " + _vm._s(_vm.event_mod.title) + " ")
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "modal-footer justify-content-center" },
+                  [
+                    _vm.acceptedOrDeclined == false
+                      ? _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-danger",
+                            attrs: { type: "button" },
+                            on: {
+                              click: function($event) {
+                                return _vm.deleteEvent(_vm.event_mod.id)
+                              }
+                            }
+                          },
+                          [_vm._v("Delete")]
+                        )
+                      : _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-danger",
+                            attrs: { type: "button" },
+                            on: {
+                              click: function($event) {
+                                return _vm.deleteDeclinedEvent(_vm.event_mod.id)
+                              }
+                            }
+                          },
+                          [_vm._v("Delete")]
+                        ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-secondary",
+                        attrs: { type: "button", "data-dismiss": "modal" }
+                      },
+                      [_vm._v("Cancel")]
+                    )
+                  ]
+                )
+              ])
+            ]
+          )
+        ]
+      ),
+      _vm._v(" "),
       _c("notifications", {
         staticStyle: { "margin-top": "55px" },
         attrs: { group: "foo", classes: "my-style", position: "top left" }
       }),
       _vm._v(" "),
-      _vm.user.id == _vm.event.person_id
+      _vm.user.id == _vm.event.person_id.id
         ? _c("div", [
             _c(
               "button",
@@ -55011,7 +55117,21 @@ var render = function() {
                   }
                 }
               },
-              [_c("i", { staticClass: "far fa-edit" })]
+              [_c("i", { staticClass: "fas fa-edit" })]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-danger float-right ml-3 mb-2",
+                attrs: { type: "button" },
+                on: {
+                  click: function($event) {
+                    return _vm.openConfirmation(_vm.event)
+                  }
+                }
+              },
+              [_c("i", { staticClass: "fas fa-trash-alt" })]
             )
           ])
         : _vm._e(),
@@ -55048,7 +55168,27 @@ var render = function() {
                 },
                 [
                   _c("div", { staticClass: "modal-content" }, [
-                    _vm._m(0),
+                    _c("div", { staticClass: "modal-header" }, [
+                      _vm.acceptedOrDeclined
+                        ? _c(
+                            "h5",
+                            {
+                              staticClass: "modal-title",
+                              attrs: { id: "addEventLongTitle" }
+                            },
+                            [_vm._v("Re-submit Event")]
+                          )
+                        : _c(
+                            "h5",
+                            {
+                              staticClass: "modal-title",
+                              attrs: { id: "addEventLongTitle" }
+                            },
+                            [_vm._v("Edit Event")]
+                          ),
+                      _vm._v(" "),
+                      _vm._m(0)
+                    ]),
                     _vm._v(" "),
                     _c(
                       "div",
@@ -55134,28 +55274,43 @@ var render = function() {
                           })
                         ]),
                         _vm._v(" "),
-                        _c(
-                          "ul",
-                          {
-                            staticClass: "list-group list-group-horizontal mb-4"
-                          },
-                          [
-                            _c("li", { staticClass: "list-group-item" }, [
-                              _c("i", { staticClass: "far fa-calendar-alt" }),
-                              _vm._v(" " + _vm._s(_vm.date))
-                            ]),
-                            _vm._v(" "),
-                            _c("li", { staticClass: "list-group-item" }, [
-                              _c("i", { staticClass: "far fa-clock" }),
-                              _vm._v(
-                                " " +
-                                  _vm._s(_vm.event_time[0]) +
-                                  " -  " +
-                                  _vm._s(_vm.event_time[1])
-                              )
-                            ])
-                          ]
-                        ),
+                        _c("div", { staticClass: "row" }, [
+                          _c(
+                            "ul",
+                            {
+                              staticClass:
+                                "list-group list-group-horizontal mb-4 mx-auto"
+                            },
+                            [
+                              _c("li", { staticClass: "list-group-item" }, [
+                                _c("i", { staticClass: "far fa-calendar-alt" }),
+                                _vm._v(" " + _vm._s(_vm.date))
+                              ]),
+                              _vm._v(" "),
+                              _c("li", { staticClass: "list-group-item" }, [
+                                _vm._v(
+                                  " " +
+                                    _vm._s(
+                                      _vm.getWeekDay(
+                                        _vm.event_for_sending.time_from
+                                      )
+                                    ) +
+                                    " "
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("li", { staticClass: "list-group-item" }, [
+                                _c("i", { staticClass: "far fa-clock" }),
+                                _vm._v(
+                                  " " +
+                                    _vm._s(_vm.event_time[0]) +
+                                    " -  " +
+                                    _vm._s(_vm.event_time[1])
+                                )
+                              ])
+                            ]
+                          )
+                        ]),
                         _vm._v(" "),
                         _vm.event_time != ""
                           ? _c("vue-slider", {
@@ -55208,18 +55363,31 @@ var render = function() {
                         [_vm._v("Close")]
                       ),
                       _vm._v(" "),
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-success float-right",
-                          attrs: {
-                            id: "add_event_btn" + _vm.event.id,
-                            type: "submit",
-                            disabled: _vm.isLoading
-                          }
-                        },
-                        [_vm._v(" Update ")]
-                      )
+                      _vm.acceptedOrDeclined
+                        ? _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-success float-right",
+                              attrs: {
+                                id: "add_event_btn" + _vm.event.id,
+                                disabled: _vm.isLoading
+                              },
+                              on: { click: _vm.resubmitEvent }
+                            },
+                            [_vm._v(" Re-submit ")]
+                          )
+                        : _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-success float-right",
+                              attrs: {
+                                id: "add_event_btn" + _vm.event.id,
+                                disabled: _vm.isLoading
+                              },
+                              on: { click: _vm.addEvent }
+                            },
+                            [_vm._v(" Update ")]
+                          )
                     ])
                   ])
                 ]
@@ -55237,26 +55405,18 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-header" }, [
-      _c(
-        "h5",
-        { staticClass: "modal-title", attrs: { id: "addEventLongTitle" } },
-        [_vm._v("Edit Event")]
-      ),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "close",
-          attrs: {
-            type: "button",
-            "data-dismiss": "modal",
-            "aria-label": "Close"
-          }
-        },
-        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
-      )
-    ])
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "modal",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
   }
 ]
 render._withStripped = true
@@ -56472,27 +56632,7 @@ var render = function() {
                 },
                 [
                   _c("div", { staticClass: "modal-content" }, [
-                    _c("div", { staticClass: "modal-header" }, [
-                      _vm.edit
-                        ? _c(
-                            "h5",
-                            {
-                              staticClass: "modal-title",
-                              attrs: { id: "addEventLongTitle" }
-                            },
-                            [_vm._v("Edit Event")]
-                          )
-                        : _c(
-                            "h5",
-                            {
-                              staticClass: "modal-title",
-                              attrs: { id: "addEventLongTitle" }
-                            },
-                            [_vm._v("Add Event")]
-                          ),
-                      _vm._v(" "),
-                      _vm._m(2)
-                    ]),
+                    _vm._m(2),
                     _vm._v(" "),
                     _c(
                       "div",
@@ -56637,34 +56777,21 @@ var render = function() {
                         [_vm._v("Close")]
                       ),
                       _vm._v(" "),
-                      _vm.edit
-                        ? _c(
-                            "button",
-                            {
-                              staticClass: "btn btn-success float-right",
-                              attrs: {
-                                id: "add_event_btn",
-                                type: "submit",
-                                disabled: _vm.isLoading
-                              }
-                            },
-                            [_vm._v(" Update ")]
-                          )
-                        : _c(
-                            "button",
-                            {
-                              staticClass: "btn btn-success float-right",
-                              attrs: {
-                                id: "add_event_btn",
-                                type: "submit",
-                                disabled: _vm.isLoading
-                              }
-                            },
-                            [
-                              _vm._v("Add "),
-                              _c("i", { staticClass: "fas fa-plus" })
-                            ]
-                          )
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-success float-right",
+                          attrs: {
+                            id: "add_event_btn",
+                            type: "submit",
+                            disabled: _vm.isLoading
+                          }
+                        },
+                        [
+                          _vm._v("Add "),
+                          _c("i", { staticClass: "fas fa-plus" })
+                        ]
+                      )
                     ])
                   ])
                 ]
@@ -57175,18 +57302,26 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "button",
-      {
-        staticClass: "close",
-        attrs: {
-          type: "button",
-          "data-dismiss": "modal",
-          "aria-label": "Close"
-        }
-      },
-      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
-    )
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "h5",
+        { staticClass: "modal-title", attrs: { id: "addEventLongTitle" } },
+        [_vm._v("Add Event")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
   },
   function() {
     var _vm = this
@@ -57719,8 +57854,10 @@ var render = function() {
                                         _c("div", { staticClass: "col-8" }, [
                                           _vm._v(
                                             "\n                                            " +
-                                              _vm._s(place.about) +
-                                              "\n                                        "
+                                              _vm._s(
+                                                place.about.slice(0, 140)
+                                              ) +
+                                              "...\n                                        "
                                           )
                                         ]),
                                         _vm._v(" "),
@@ -57912,8 +58049,10 @@ var render = function() {
                                         _c("div", { staticClass: "col-8" }, [
                                           _vm._v(
                                             "\n                                            " +
-                                              _vm._s(place.about) +
-                                              "\n                                        "
+                                              _vm._s(
+                                                place.about.slice(0, 140)
+                                              ) +
+                                              "...\n                                        "
                                           )
                                         ]),
                                         _vm._v(" "),
@@ -58105,8 +58244,10 @@ var render = function() {
                                         _c("div", { staticClass: "col-8" }, [
                                           _vm._v(
                                             "\n                                        " +
-                                              _vm._s(place.about) +
-                                              "\n                                    "
+                                              _vm._s(
+                                                place.about.slice(0, 140)
+                                              ) +
+                                              "...\n                                    "
                                           )
                                         ]),
                                         _vm._v(" "),
@@ -58115,7 +58256,7 @@ var render = function() {
                                             "button",
                                             {
                                               staticClass:
-                                                "btn btn-outline-danger btn-lg float-right m-1",
+                                                "btn btn-outline-danger float-right m-1",
                                               attrs: { type: "button" },
                                               on: {
                                                 click: function($event) {
@@ -58136,7 +58277,7 @@ var render = function() {
                                             "button",
                                             {
                                               staticClass:
-                                                "btn btn-outline-primary btn-lg float-right m-1",
+                                                "btn btn-outline-primary float-right m-1",
                                               attrs: { type: "button" },
                                               on: {
                                                 click: function($event) {
@@ -58240,8 +58381,8 @@ var render = function() {
                                 _c("div", { staticClass: "col-lg-8" }, [
                                   _vm._v(
                                     "\n                                " +
-                                      _vm._s(event.about) +
-                                      "\n                            "
+                                      _vm._s(event.about.slice(0, 140)) +
+                                      "...\n                            "
                                   )
                                 ]),
                                 _vm._v(" "),
@@ -58254,6 +58395,12 @@ var render = function() {
                                     }),
                                     _vm._v(
                                       " " + _vm._s(_vm.getDate(event.time_from))
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("div", { staticClass: "mb-1" }, [
+                                    _vm._v(
+                                      _vm._s(_vm.getWeekDay(event.time_from))
                                     )
                                   ]),
                                   _vm._v(" "),
@@ -58517,29 +58664,17 @@ var render = function() {
                                   { key: event.id, staticClass: "card mb-3" },
                                   [
                                     _c("div", { staticClass: "card-header" }, [
-                                      _c(
-                                        "a",
-                                        {
-                                          staticClass: "nav-link m-0 p-0",
-                                          attrs: {
-                                            target: "_blank",
-                                            href: "/event/" + event.id
-                                          }
-                                        },
-                                        [
-                                          _c("img", {
-                                            attrs: {
-                                              src:
-                                                "../storage/sport_logo/" +
-                                                event.image
-                                            }
-                                          }),
-                                          _vm._v(
-                                            "  " +
-                                              _vm._s(event.title) +
-                                              "\n                                    "
-                                          )
-                                        ]
+                                      _c("img", {
+                                        attrs: {
+                                          src:
+                                            "../storage/sport_logo/" +
+                                            event.image
+                                        }
+                                      }),
+                                      _vm._v(
+                                        "  " +
+                                          _vm._s(event.title) +
+                                          "\n                                "
                                       )
                                     ]),
                                     _vm._v(" "),
@@ -58548,8 +58683,10 @@ var render = function() {
                                         _c("div", { staticClass: "col-lg-8" }, [
                                           _vm._v(
                                             "\n                                            " +
-                                              _vm._s(event.about) +
-                                              "\n                                        "
+                                              _vm._s(
+                                                event.about.slice(0, 140)
+                                              ) +
+                                              "...\n                                        "
                                           )
                                         ]),
                                         _vm._v(" "),
@@ -58565,6 +58702,14 @@ var render = function() {
                                                 _vm._s(
                                                   _vm.getDate(event.time_from)
                                                 )
+                                            )
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("div", { staticClass: "mb-1" }, [
+                                            _vm._v(
+                                              _vm._s(
+                                                _vm.getWeekDay(event.time_from)
+                                              )
                                             )
                                           ]),
                                           _vm._v(" "),
@@ -58762,7 +58907,8 @@ var render = function() {
                                       _c(
                                         "a",
                                         {
-                                          staticClass: "nav-link m-0 p-0",
+                                          staticClass:
+                                            "nav-link m-0 p-0 float-left",
                                           attrs: {
                                             target: "_blank",
                                             href: "/event/" + event.id
@@ -58787,16 +58933,58 @@ var render = function() {
                                     _vm._v(" "),
                                     _c("div", { staticClass: "card-body" }, [
                                       _c("div", { staticClass: "row" }, [
-                                        _c("div", { staticClass: "col-lg-8" }, [
+                                        _c("div", { staticClass: "col-lg-7" }, [
                                           _vm._v(
                                             "\n                                            " +
-                                              _vm._s(event.about) +
-                                              "\n                                        "
-                                          )
+                                              _vm._s(
+                                                event.about.slice(0, 140)
+                                              ) +
+                                              "...\n                                            "
+                                          ),
+                                          event.people_going > 1 ||
+                                          event.people_going == 0
+                                            ? _c(
+                                                "h6",
+                                                {
+                                                  staticClass: "text-left mt-3"
+                                                },
+                                                [
+                                                  _c("i", {
+                                                    staticClass: "fas fa-user"
+                                                  }),
+                                                  _vm._v(
+                                                    " " +
+                                                      _vm._s(
+                                                        event.people_going
+                                                      ) +
+                                                      " people going"
+                                                  )
+                                                ]
+                                              )
+                                            : _c(
+                                                "h6",
+                                                {
+                                                  staticClass: "text-left mt-3"
+                                                },
+                                                [
+                                                  _c("i", {
+                                                    staticClass: "fas fa-user"
+                                                  }),
+                                                  _vm._v(
+                                                    " " +
+                                                      _vm._s(
+                                                        event.people_going
+                                                      ) +
+                                                      " person going"
+                                                  )
+                                                ]
+                                              )
                                         ]),
                                         _vm._v(" "),
                                         _c("div", { staticClass: "col-lg-3" }, [
-                                          _c("hr", { staticClass: "mt-0" }),
+                                          _c("hr", {
+                                            staticClass: "mt-0 mb-1"
+                                          }),
                                           _vm._v(" "),
                                           _c("div", { staticClass: "mb-1" }, [
                                             _c("i", {
@@ -58807,6 +58995,14 @@ var render = function() {
                                                 _vm._s(
                                                   _vm.getDate(event.time_from)
                                                 )
+                                            )
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("div", { staticClass: "mb-1" }, [
+                                            _vm._v(
+                                              _vm._s(
+                                                _vm.getWeekDay(event.time_from)
+                                              )
                                             )
                                           ]),
                                           _vm._v(" "),
@@ -58826,22 +59022,21 @@ var render = function() {
                                             )
                                           ]),
                                           _vm._v(" "),
-                                          _c("hr", { staticClass: "mb-0" })
+                                          _c("hr", { staticClass: "mb-0 mt-1" })
                                         ]),
                                         _vm._v(" "),
                                         _c(
                                           "div",
-                                          { staticClass: "col-lg-1 pl-1" },
+                                          { staticClass: "col-lg-2 pl-1 mt-2" },
                                           [
                                             _c("editevent", {
                                               attrs: {
                                                 user: _vm.user,
+                                                acceptedOrDeclined: false,
                                                 event: event
                                               },
                                               on: {
-                                                fetchCreatedEvents: function(
-                                                  $event
-                                                ) {
+                                                fetch: function($event) {
                                                   return _vm.fetchCreatedEvents()
                                                 }
                                               }
@@ -58973,7 +59168,7 @@ var render = function() {
                                 [
                                   _c("jw-pagination", {
                                     attrs: {
-                                      pageSize: 3,
+                                      pageSize: 2,
                                       maxPages: 3,
                                       items: _vm.createdEvents
                                     },
@@ -59019,39 +59214,29 @@ var render = function() {
                                   { key: event.id, staticClass: "card mb-3" },
                                   [
                                     _c("div", { staticClass: "card-header" }, [
-                                      _c(
-                                        "a",
-                                        {
-                                          staticClass: "nav-link m-0 p-0",
-                                          attrs: {
-                                            target: "_blank",
-                                            href: "/event/" + event.id
-                                          }
-                                        },
-                                        [
-                                          _c("img", {
-                                            attrs: {
-                                              src:
-                                                "../storage/sport_logo/" +
-                                                event.image
-                                            }
-                                          }),
-                                          _vm._v(
-                                            "  " +
-                                              _vm._s(event.title) +
-                                              "\n                                    "
-                                          )
-                                        ]
+                                      _c("img", {
+                                        attrs: {
+                                          src:
+                                            "../storage/sport_logo/" +
+                                            event.image
+                                        }
+                                      }),
+                                      _vm._v(
+                                        "  " +
+                                          _vm._s(event.title) +
+                                          "     \n                                "
                                       )
                                     ]),
                                     _vm._v(" "),
                                     _c("div", { staticClass: "card-body" }, [
                                       _c("div", { staticClass: "row" }, [
-                                        _c("div", { staticClass: "col-lg-8" }, [
+                                        _c("div", { staticClass: "col-lg-7" }, [
                                           _vm._v(
                                             "\n                                            " +
-                                              _vm._s(event.about) +
-                                              "\n                                        "
+                                              _vm._s(
+                                                event.about.slice(0, 140)
+                                              ) +
+                                              "...\n                                        "
                                           )
                                         ]),
                                         _vm._v(" "),
@@ -59067,6 +59252,14 @@ var render = function() {
                                                 _vm._s(
                                                   _vm.getDate(event.time_from)
                                                 )
+                                            )
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("div", { staticClass: "mb-1" }, [
+                                            _vm._v(
+                                              _vm._s(
+                                                _vm.getWeekDay(event.time_from)
+                                              )
                                             )
                                           ]),
                                           _vm._v(" "),
@@ -59091,18 +59284,18 @@ var render = function() {
                                         _vm._v(" "),
                                         _c(
                                           "div",
-                                          { staticClass: "col-lg-1 pl-1" },
+                                          { staticClass: "col-lg-2 pl-1" },
                                           [
                                             _c("editevent", {
                                               attrs: {
                                                 user: _vm.user,
+                                                acceptedOrDeclined: true,
                                                 event: event
                                               },
                                               on: {
-                                                fetchCreatedEvents: function(
-                                                  $event
-                                                ) {
-                                                  return _vm.fetchCreatedEvents()
+                                                fetch: function($event) {
+                                                  _vm.fetchDeclinedEvents(),
+                                                    _vm.fetchSubmitedEvents()
                                                 }
                                               }
                                             }),

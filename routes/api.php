@@ -50,6 +50,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     Route::get('events/{id}', 'Events\EventController@get_events_by_place');
     //Get Event
     Route::get('event/{id}', 'Events\EventController@show');
+    //Get Declined Event
+    Route::get('declinedevent/{id}', 'Events\EventController@getDeclinedEvent');
 
     //Get which event happening right now or which event is closest one
     Route::get('nearevent/{id}', 'Events\EventController@closestEvent');

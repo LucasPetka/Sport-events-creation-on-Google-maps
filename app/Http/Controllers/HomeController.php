@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 use App\Place;
 use App\User;
@@ -14,6 +15,8 @@ use App\PlaceQueue;
 use App\Event;
 use App\PeopleGoing;
 use App\DeclinedPlaces;
+use App\EventQueue;
+use App\DeclinedEvents;
 
 
 class HomeController extends Controller
@@ -37,11 +40,15 @@ class HomeController extends Controller
 
     function returnCreatedEvents(){
         $user = Auth::user();
-        $createdevents = DB::table('events')->where('person_id','=',$user->id)
+        $createdevents = DB::table('events')->where('events.person_id','=',$user->id)
         ->join('places', 'places.id', '=', 'events.place_id')
         ->join('types', 'types.id', '=', 'places.type')
-        ->select('events.*', 'types.image', 'places.lat', 'places.lng')
+        ->leftJoin('people_going', 'events.id', '=', 'people_going.event_id')
+        ->groupBy('events.id')
+        ->select('events.*', 'types.image', 'places.lat', 'places.lng', DB::raw('count(people_going.event_id) as people_going'))
+        ->orderBy('time_from', 'asc')
         ->get();
+
         return $createdevents->toJson();
     }
 
@@ -107,6 +114,65 @@ class HomeController extends Controller
         ->get();
 
         return $submited_events->toJson();
+    }
+
+
+    function resubmitEvent(Request $request){
+        $declinedEvent = DeclinedEvents::findOrFail($request->id);
+
+        $validator = Validator::make($request->all(),[
+            'place_id'=>'required',
+            'title'=>'required|max:45',
+            'about'=>'required|max:350',
+            'time_from'=>'required',
+            'time_until'=>'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json("false", 200);
+        }
+
+        $exists = Event::where('place_id', $request->place_id)
+            ->where(function ($query) use ($request) {
+                $query->where([['time_from','<', $request->time_from],['time_until','>', $request->time_from],])
+                    ->orWhere([['time_from','<', $request->time_until],['time_until','>', $request->time_until],])
+                    ->orWhere([['time_from','>=', $request->time_from],['time_until','<=', $request->time_until],]);
+            })
+            ->exists();
+
+        if(!$exists){
+            $event =  new EventQueue;
+            $event->place_id = $request->input('place_id');
+            $event->title = $request->input('title');
+            $event->about = $request->input('about');
+            $event->time_from = $request->input('time_from');
+            $event->time_until = $request->input('time_until');
+            $event->person_id = Auth::id();
+
+            if($event->save()){
+                $declinedEvent->delete();
+                return "true";
+            }
+            else{
+                return "false";
+            }
+        }
+        else{
+            return "false";
+        }
+
+    }
+
+    function deleteEvent($id){
+
+        $declinedEvent = DeclinedEvents::find($id);
+        
+        if($declinedEvent->delete()){
+            return "true";
+        }
+        else{
+            return "false";
+        }
     }
 
 

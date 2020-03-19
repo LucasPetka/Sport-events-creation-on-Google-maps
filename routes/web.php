@@ -42,6 +42,8 @@ Route::get('/returndeclinedplaces', 'HomeController@returnDeclinedPlaces')->midd
 Route::get('/returnsubmitedplaces', 'HomeController@returnSubmitedPlaces')->middleware('auth');
 Route::get('/returnsubmitedevents', 'HomeController@returnSubmitedEvents')->middleware('auth');
 Route::get('/returndeclinedevents', 'HomeController@returnDeclinedEvents')->middleware('auth');
+Route::post('/resubmit_event', 'HomeController@resubmitEvent')->middleware('auth');
+Route::delete('/decevent/{id}', 'HomeController@deleteEvent')->middleware('auth');
 
 
 

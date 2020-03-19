@@ -1,23 +1,6 @@
 <template>
         <div>
 
-            <!-- ==============================Confirmation MODAL============================================== -->
-            <div class="modal fade" id="confirmation_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                <div class="modal-body">
-                    <p class="h5 text-center mb-0 pb-0">Are you sure you want to delete this event?</p><br>
-                    <p class="text-muted text-center mb-0 pb-0"><small> {{ event_mod.title }} </small></p>
-                </div>
-                <div class="modal-footer justify-content-center">
-                    <button type="button" class="btn btn-danger" v-on:click="deleteEvent(event_mod.id)">Delete</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                </div>
-                </div>
-            </div>
-            </div>
-
-
             <div class="row">
                 <div class="col-12 m-2" id="calendar">
                         <datepicker placeholder="Select Date" :highlighted="highlighted" :format="format" :value="todays_date" v-model="todays_date" @closed="showEvents()"></datepicker>
@@ -47,11 +30,7 @@
                             <button type="button" class="btn btn-secondary float-left" :disabled="isLoading" v-on:click="deletePerson(event.place_id, event.id, currentUser.id, $event)"><i class="fas fa-check"></i> Joined</button>
                         </div>
                     
-
-                        <div v-if="currentUser.id == event.person_id.id">
-                            <button type="button" class="btn btn-danger float-right ml-2" v-on:click="openConfirmation(event)"> <i class="fas fa-trash-alt"></i> </button>
-                            <button type="button" class="btn btn-primary float-right" v-on:click="editEvent(event.id)"> <i class="far fa-edit"></i> </button>
-                        </div>
+                        <editevent :user="currentUser" v-on:fetch="fetchSpot(event.place_id)" :acceptedOrDeclined="false" :event="event"></editevent>
                     </div>
                     
                 </div>
@@ -69,13 +48,15 @@
 
 <script>
 const Datepicker = () => import("vuejs-datepicker");
+const editevent = () => import("../components/EditEvent.vue");
 
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
 
     components: {
-    Datepicker
+        'editevent': editevent,
+        Datepicker
     },
 
     props: ['status', 'currentUser'], //checks if someone loged in and gets all information about user
@@ -83,16 +64,6 @@ export default {
     
     data(){
         return{
-            event_mod: {
-                id:'',
-                place_id:'',
-                title:'',
-                about:'',
-                time_from:'',
-                time_until:'',
-                organizator:'',
-                people_going:0,
-            },
             isLoading: null,
             format:'yyyy-MM-dd',
             todays_date: new Date(),
@@ -146,12 +117,6 @@ export default {
             return new_date.getUTCFullYear(0) +'-'+ new_date.getUTCMonth(0) + '-' +  new_date.getUTCDate(0);
         },
 
-
-        openConfirmation: function(event){
-            this.event_mod = event;
-            $('#confirmation_modal').appendTo("body").modal('show');
-        },
-        
         //Check if person already joined to current event
         ifJoined: function(place, event, user){
 
@@ -338,43 +303,6 @@ export default {
                 });
 
         },
-
-        //Edit event
-        editEvent: function(eventId){
-            this.$emit('editEvent', eventId);
-        },
-
-        //Delete event from database
-        deleteEvent: function(eventId) {
-         
-            fetch('api/event/'+ eventId + '?api_token=' + this.getCookie("api_token"), {
-                method: 'delete'
-            })
-                .then(res => res.json())
-                .then(data => {
-
-                    fetch('api/events')
-                    .then(res => res.json())
-                    .then(res => {
-                        this.events = res.data;
-                        this.showEvents();
-                        this.fetchSpot(this.place_id);
-                    })
-
-                })
-                .catch(err => console.log(err));
-
-                Vue.notify({
-                group: 'foo',
-                title: 'Notification',
-                type: 'error',
-                text: 'You have deleted an event'
-                });
-
-                $('#confirmation_modal').modal('hide');
-
-        },
-
     }
 }
 </script>

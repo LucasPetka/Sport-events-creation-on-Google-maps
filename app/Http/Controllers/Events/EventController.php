@@ -121,6 +121,13 @@ class EventController extends Controller
         return new EventResource($event);
     }
 
+    public function getDeclinedEvent($id)
+    {
+        $declinedEvent = DeclinedEvents::findOrFail($id);
+
+        return new EventResource($declinedEvent);
+    }
+
 
     public function closestEvent($id)
     {
@@ -144,7 +151,10 @@ class EventController extends Controller
         DB::table('people_going')->where('event_id', '=', $id)->delete();
 
         if($event->delete()){
-        return new EventResource($event);
+            return "true";
+        }
+        else{
+            return "false";
         }
     }
 

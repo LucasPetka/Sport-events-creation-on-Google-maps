@@ -63,8 +63,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
 
-                            <h5 v-if="edit" class="modal-title" id="addEventLongTitle">Edit Event</h5>
-                            <h5 v-else class="modal-title" id="addEventLongTitle">Add Event</h5>
+                            <h5 class="modal-title" id="addEventLongTitle">Add Event</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>
@@ -100,8 +99,7 @@
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button v-if="edit" id="add_event_btn" type="submit" class="btn btn-success float-right" :disabled="isLoading"> Update </button>
-                            <button v-else id="add_event_btn" type="submit" class="btn btn-success float-right" :disabled="isLoading">Add <i class="fas fa-plus"></i></button>
+                            <button id="add_event_btn" type="submit" class="btn btn-success float-right" :disabled="isLoading">Add <i class="fas fa-plus"></i></button>
                         </div>
                     </div>
                 </div>
@@ -375,29 +373,6 @@ export default {
            $('#addPlace').modal('hide'); 
     },
 
-    //------------------------Opens edit event creation label-------------------
-    async editEvent(id){
-        this.edit = true;
-
-        const response = await axios.get('api/event/'+ id);
-        console.log(response.data.data.title);
-        var even = response.data.data;
-
-        this.event = even;
-        var d = new Date(even.time_from);
-        var dat = new Date(even.time_until);
-
-        var dateee = ('0'+d.getHours()).slice(-2) +":"+ ('0'+d.getMinutes()).slice(-2);
-        this.event_time[0] = dateee;
-        var dateee = ('0'+dat.getHours()).slice(-2) +":"+ ('0'+dat.getMinutes()).slice(-2);
-        this.event_time[1] = dateee;
-
-        this.event_time = [this.event_time[0], this.event_time[1]];
-
-        $('#addEvent').modal('show');
-        
-    },
-
     //------------------------Opens add event creation label-------------------
     openAddEvent: function(){
 
@@ -597,8 +572,6 @@ export default {
             this.isLoading = false
         }, 2000);
 
-        if(this.edit === false){
-
             this.event.time_from = this.date + " " + this.event_time[0]
             this.event.time_until = this.date + " " + this.event_time[1];
 
@@ -634,48 +607,6 @@ export default {
             }
             
             })();
-
-   
-        } else{
-
-            this.event.time_from = this.date + " " + this.event_time[0];
-            this.event.time_until = this.date + " " + this.event_time[1];
-
-            (async () => {
-        const Response = await fetch('api/event?api_token=' + this.getCookie("api_token"), {
-             method: 'put',
-                body: JSON.stringify(this.event),
-                headers: {
-                    'Accept': 'application/json',
-                    'content-type': 'application/json'
-                }     
-        });
-
-        const content = await Response.json();
-        await this.$refs.calendar.fetchSpot(this.show.id);
-        
-        if(content == true){
-            Vue.notify({
-                group: 'foo',
-                title: 'Congrats!!',
-                type: 'success',
-                text: 'You have updated an event !'
-            });  
-        }
-        else{
-            Vue.notify({
-                group: 'foo',
-                title: 'Notification!!',
-                type: 'error',
-                text: 'There was incorect values in the form!'
-            });  
-        }
-
-        })();
-
-        }
-
-        this.edit = false;
 
         this.event.id= '';
         this.event.place_id = '';

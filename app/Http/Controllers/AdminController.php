@@ -24,8 +24,8 @@ class AdminController extends Controller
 
     public function index()
     { 
-        $places = PlaceQueue::all();
-        $events = EventQueue::all();
+        $places = PlaceQueue::count();
+        $events = EventQueue::count();
 
 
         return view('admin')->with(compact('places','events'));
@@ -33,25 +33,27 @@ class AdminController extends Controller
 
     public function places()
     { 
-        $places = PlaceQueue::all();
-        $events = EventQueue::all();
+        $places = PlaceQueue::paginate(10);
+        $places_count = PlaceQueue::count();
+        $events = EventQueue::count();
 
-        return view('admin.places')->with(compact('places','events'));
+        return view('admin.places')->with(compact('places', 'places_count', 'events'));
     }
 
     public function events()
     { 
-        $places = PlaceQueue::all();
-        $events = EventQueue::all();
+        $places = PlaceQueue::count();
+        $events_count = EventQueue::count();
+        $events = EventQueue::paginate(10);
         
-        return view('admin.events')->with(compact('places','events'));
+        return view('admin.events')->with(compact('places', 'events_count', 'events'));
     }
 
     public function sportTypes()
     { 
         $types = Type::all();
-        $places = PlaceQueue::all();
-        $events = EventQueue::all();
+        $places = PlaceQueue::count();
+        $events = EventQueue::count();
 
 
         return view('admin.sportTypes')->with(compact('types','places','events'));
@@ -61,8 +63,8 @@ class AdminController extends Controller
     public function users()
     { 
         $users = User::all();
-        $places = PlaceQueue::all();
-        $events = EventQueue::all();
+        $places = PlaceQueue::count();
+        $events = EventQueue::count();
 
 
         return view('admin.users')->with(compact('users', 'places','events'));
@@ -95,12 +97,14 @@ class AdminController extends Controller
         $accepted_place = new AcceptedPlaces;
         $accepted_place->person_id = $place->personid;
         $accepted_place->place_id = $newPlace->id;
-        $accepted_place->save();
 
-
-        $place->delete();
-
-        return redirect('/admin/places');
+        
+        if($accepted_place->save() && $place->delete()){
+            return redirect('/admin/places')->with('success', 'Place has been added!');
+        }
+        else{
+            return redirect('/admin/places')->with('error', 'Place has not been added...');
+        }
     }
 
     public function declinePlace($id)
@@ -115,12 +119,14 @@ class AdminController extends Controller
         $declinedPlace->type = $place->type;
         $declinedPlace->paid = $place->paid;
         $declinedPlace->personid = $place->personid;
-        $declinedPlace->save();
-        
-        
-        $place->delete();
 
-        return redirect('/admin/places');
+        if($declinedPlace->save() && $place->delete()){
+            return redirect('/admin/places')->with('success', 'Place has been declined!');
+        }
+        else{
+            return redirect('/admin/places')->with('error', 'Place has not been declined...');
+        }
+
     }
 
 
@@ -135,11 +141,13 @@ class AdminController extends Controller
         $newEvent->time_from = $event->time_from;
         $newEvent->time_until = $event->time_until;
         $newEvent->person_id = $event->person_id;
-        $newEvent->save();
 
-        $event->delete();
-
-        return redirect('/admin/events');
+        if($newEvent->save() && $event->delete()){
+            return redirect('/admin/events')->with('success', 'Event has been accepted!');
+        }
+        else{
+            return redirect('/admin/events')->with('error', 'Event has not been accepted...');
+        }
     }
 
     public function declineEvent($id)
@@ -153,11 +161,14 @@ class AdminController extends Controller
         $declinedEvent->time_from = $event->time_from;
         $declinedEvent->time_until = $event->time_until;
         $declinedEvent->person_id = $event->person_id;
-        $declinedEvent->save();
         
-        $event->delete();
 
-        return redirect('/admin/events');
+        if($declinedEvent->save() && $event->delete()){
+            return redirect('/admin/events')->with('success', 'Event has been declined!');
+        }
+        else{
+            return redirect('/admin/events')->with('error', 'Event has not been declined...');
+        }
     }
 
 

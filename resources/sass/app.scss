@@ -11,7 +11,7 @@
 #loading-screen {
     z-index: 100;
     position: absolute; top: 0; right: 0; bottom: 0; left: 0;
-    background-color: #82cc75;
+    background-color: #F39448;
 }
   
 #geras{
@@ -26,4 +26,105 @@
     min-height: 100vh; /* These two lines are counted as one :-)       */
     display: flex;
     align-items: center;
+}
+
+.btn-orange {
+    color: #fff;
+    background-color: #F39448;
+    border-color: rgb(240, 155, 86);
+}
+
+.btn-orange:hover {
+    color: #fff;
+    background-color: rgb(240, 132, 45);
+    border-color: #F39448;
+}
+
+.btn-orange-dark {
+    color: #fff;
+    background-color: rgb(37, 57, 56);
+    border-color: #2a413f;
+}
+
+.btn-orange-dark:hover {
+    color: #fff;
+    background-color: rgb(29, 44, 43);
+    border-color: #283b3a;
+}
+
+.btn-orange-secondary {
+    color: #fff;
+    background-color: #596151;
+    border-color: #61665c;
+}
+
+.btn-orange-secondary:hover {
+    color: #fff;
+    background-color: #4d5346;
+    border-color: #676e60;
+}
+
+.text-orange-secondary{
+    color: #47625A;
+}
+
+.badge-orange-secondary {
+    color: #fff;
+    background-color: #47625A;
+}
+
+a {
+    color: #47625A;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+a:hover {
+    color: rgb(223, 131, 56);
+}
+
+.extend{
+    transition: all .2s ease-in-out;
+}
+
+.extend:hover{
+    transform: scale(1.05);
+}
+
+.page-item.active .page-link {
+    z-index: 1;
+    color: #fff;
+    background-color: #F39448 !important;
+    border-color: #F39448 !important;
+}
+
+.btn-link-orange {
+    font-weight: 400;
+    color: #47625A;
+    text-decoration: none;
+}
+
+.btn-link-orange:hover {
+    font-weight: 400;
+    color: rgb(57, 77, 71);
+    text-decoration: none;
+}
+
+
+
+
+.orange{
+    color: #F39448 !important;
+}
+
+.orange:hover{
+    color: #ebe7e7 !important;
+}
+
+.white{
+    color: #ebe7e7 !important;
+}
+
+.white:hover{
+    color: #F39448 !important;
 }

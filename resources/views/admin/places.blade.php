@@ -2,6 +2,25 @@
 
 @section('content')
 
+        <!---------------Successful and Error messages------------------>
+        @if (session('success'))
+          <div class="position-absolute alert alert-success alert-dismissible fade show" style="right:50px;" role="alert">
+              {{ session('success') }}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+        @endif
+        @if (session('error'))
+          <div class="position-absolute alert alert-danger alert-dismissible fade show" style="right:50px;" role="alert">
+              {{ session('error') }}
+
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+        @endif
+
         <h3 class="mt-4"><i class="fas fa-map-marked-alt"></i> Places waiting for confirmation</h3>
         <div class="table-responsive">
           <table class="table table-striped">
@@ -9,7 +28,7 @@
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Title</th>
-                <th scope="col">Sport type</th>
+                <th scope="col">Sport</th>
                 <th scope="col">User</th>
                 <th scope="col">Paid</th>
                 <th scope="col"></th>
@@ -32,8 +51,8 @@
                     @endif
                   </td>
                   <td>
-                      <button type="button" class="btn btn-primary mr-4" data-toggle="modal" data-target="#placeid{{ $place->id }}"> Open </button>
-                      <a href ="/admin/accplace/{{ $place->id }}"  class="btn btn-success mr-2" data-toggle="tooltip" data-placement="top" title="Publish new place" ><i class="fas fa-check"></i></a>
+                      <button type="button" class="btn btn-orange mr-4" data-toggle="modal" data-target="#placeid{{ $place->id }}"> Open </button>
+                      <a href ="/admin/accplace/{{ $place->id }}"  class="btn btn-orange-secondary mr-2" data-toggle="tooltip" data-placement="top" title="Publish new place" ><i class="fas fa-check"></i></a>
                       <a href ="/admin/decplace/{{ $place->id }}"  class="btn btn-danger mr-2" data-toggle="tooltip" data-placement="top" title="Decline this place"><i class="fas fa-times"></i></a>
                   </td>
                 </tr>
@@ -77,7 +96,7 @@
                             <br>
                                 <small>Created by: {{ $place->user->name }}</small>
                             <hr>
-                            <a href ="/admin/accplace/{{ $place->id }}"  class="btn btn-success mr-2"> Accept <i class="fas fa-check"></i></a>
+                            <a href ="/admin/accplace/{{ $place->id }}"  class="btn btn-orange-secondary mr-2"> Accept <i class="fas fa-check"></i></a>
                             <a href ="/admin/decplace/{{ $place->id }}"  class="btn btn-danger mr-2"> Decline <i class="fas fa-times"></i></a>
                         </div>
 
@@ -93,6 +112,13 @@
               </div>
             </div>
           @endforeach
+
+          <div class="row">
+            <div class="mx-auto">
+              {{ $places->links() }}
+            </div>
+          </div>
+          
 
         @else
           <p class="text-center mt-4 text-muted"> No new places submited... </p>

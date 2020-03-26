@@ -37,7 +37,7 @@
             </div>
             <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-success"> Re-submit <i class="fas fa-plus"></i> </button>
+            <button type="submit" class="btn btn-orange-secondary"> Re-submit <i class="fas fa-plus"></i> </button>
             </div>
         </div>
         </div>
@@ -49,13 +49,13 @@
 
     <div class="row mb-3">
         <div class="col-12">
-            <button type="button" class="btn btn-success m-1 float-right" data-toggle="collapse" data-target="#createdEvents" aria-expanded="false" aria-controls="createdEvents">
+            <button type="button" id="ab1" v-on:click="updateNavingation($event)" class="btn btn-orange-secondary m-1 float-right profile_nav" data-toggle="collapse" data-target="#createdEvents" aria-expanded="false" aria-controls="createdEvents">
                 <i class="far fa-calendar-alt"></i> Events
             </button>
-            <button type="button" class="btn btn-success m-1 float-right" data-toggle="collapse" data-target="#createdPlaces" aria-expanded="false" aria-controls="createdPlaces">
+            <button type="button" id="ab2" v-on:click="updateNavingation($event)" class="btn btn-orange-secondary m-1 float-right profile_nav" data-toggle="collapse" data-target="#createdPlaces" aria-expanded="false" aria-controls="createdPlaces">
                 <i class="fas fa-map-marked-alt"></i>  Places  
             </button>
-            <button type="button" class="btn btn-primary m-1 float-right"  data-toggle="collapse" data-target="#goingto" aria-expanded="false" aria-controls="goingto">
+            <button type="button" id="ab3" v-on:click="updateNavingation($event)" class="btn btn-orange m-1 float-right profile_nav"  data-toggle="collapse" data-target="#goingto" aria-expanded="false" aria-controls="goingto">
                 <i class="fas fa-calendar-check"></i> Participating <span class="badge badge-light">{{ goingToEvents.length }}</span>
             </button>
         </div>
@@ -91,15 +91,21 @@
 
             <div class="tab-content" id="nav-tabContent">
 
+                <!-- ================================================ SUBMITED PLACES ==============================================================-->
                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                         <div v-if="submitedPlaces.length != 0">
                             <div v-for="place in submited_places_pageOfItems" :key="place.id" class="card mt-2 mb-3">
-                                <div class="card-body">
-                                    {{ place.title }}
-                                    <div class="float-right"> 
-                                        <img :src="'../storage/sport_logo/' + place.image"> 
+                                <div class="card-header pr-3 pl-1 pt-1 pb-1">
+                                    <div class="row">
+                                        <div class="col-11 pt-1 pl-4">
+                                            <span class="align-middle h5">{{ place.title }}</span>
+                                        </div>
+                                        <div class="col-1">
+                                            <img class="float-right mt-1" :src="'../storage/sport_logo/' + place.image">
+                                        </div>
                                     </div>
-                                    <hr>
+                                </div>
+                                <div class="card-body">
                                     <div class="row">
                                         <div class="col-8">
                                             {{ place.about.slice(0, 140) }}...
@@ -135,15 +141,21 @@
                     
                 </div>
 
+                <!-- =========================================== ACCEPTED PLACES ===========================================================-->
                 <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
                     <div v-if="acceptedPlaces.length != 0">
                         <div v-for="place in accepted_places_pageOfItems" :key="place.id" class="card mt-2 mb-3">
-                                <div class="card-body">
-                                    {{ place.title }}
-                                    <div class="float-right"> 
-                                        <img :src="'../storage/sport_logo/' + place.image"> 
+                                <div class="card-header pr-3 pl-1 pt-1 pb-1">
+                                    <div class="row">
+                                        <div class="col-11 pt-1 pl-4">
+                                            <span class="align-middle h5">{{ place.title }}</span>
+                                        </div>
+                                        <div class="col-1">
+                                            <img class="float-right mt-1" :src="'../storage/sport_logo/' + place.image">
+                                        </div>
                                     </div>
-                                    <hr>
+                                </div>
+                                <div class="card-body">
                                     <div class="row">
                                         <div class="col-8">
                                             {{ place.about.slice(0, 140) }}...
@@ -178,16 +190,22 @@
                         <p v-else class="text-center mt-4 text-muted"> No accepted places.. </p> 
                     
                 </div>
-
+                
+                 <!-- =========================================== DECLINED PLACES ===========================================================-->
                 <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
                     <div v-if="declinedPlaces.length != 0">
                         <div v-for="place in declined_places_pageOfItems" :key="place.id" class="card mt-2 mb-3">
-                            <div class="card-body">
-                                {{ place.title }}
-                                <div class="float-right"> 
-                                    <img :src="'../storage/sport_logo/' + place.image"> 
+                            <div class="card-header pr-3 pl-1 pt-1 pb-1">
+                                <div class="row">
+                                    <div class="col-11 pt-1 pl-4">
+                                        <span class="align-middle h5">{{ place.title }}</span>
+                                    </div>
+                                    <div class="col-1">
+                                        <img class="float-right mt-1" :src="'../storage/sport_logo/' + place.image">
+                                    </div>
                                 </div>
-                                <hr>
+                            </div>
+                            <div class="card-body">
                                 <div class="row">
                                     <div class="col-8">
                                         {{ place.about.slice(0, 140) }}...
@@ -223,7 +241,7 @@
 
         <!-- ======================================================GOING TO EVENTS==============================================================-->
         <div class="collapse show" id="goingto" data-parent="#accordionExample">
-        <p class="h4 ml-5 mb-3 mb-0 pb-0">Going to</p>
+        <p class="h4 ml-5 mb-3 mb-0 pb-0">Participating</p>
         
         <div v-if="loaded == false" class="row">
             <div class="spinner-border text-dark mt-4 mx-auto" role="status">
@@ -233,10 +251,17 @@
         <div v-else>
         <div v-if="goingToEvents != 0">
             <div v-for="event in goingto_events_pageOfItems" :key="event.id" class="card mb-3 shadow-sm">
-                    <div class="card-header">
-                        <a target="_blank" :href="'/event/' + event.id" class="nav-link m-0 p-0">
-                            <img :src="'../storage/sport_logo/' + event.image ">  {{ event.title }}
-                        </a>
+                    <div class="card-header pr-3 pl-1 pt-1 pb-1">
+                        <div class="row">
+                            <div class="col-11">
+                                <a target="_blank" :href="'/event/' + event.id" class="nav-link m-0 extend">
+                                    <span class="align-middle h5">{{ event.title }}</span>
+                                </a>
+                            </div>
+                            <div class="col-1">
+                                <img class="float-right mt-1" :src="'../storage/sport_logo/' + event.image ">
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -318,8 +343,15 @@
                 <div class="tab-pane fade show active" id="nav-submited" role="tabpanel" aria-labelledby="nav-submited-tab">
                     <div v-if="submitedEvents != 0">
                         <div v-for="event in submited_events_pageOfItems" :key="event.id" class="card mb-3">
-                                <div class="card-header">
-                                        <img :src="'../storage/sport_logo/' + event.image ">  {{ event.title }}
+                               <div class="card-header pr-3 pl-1 pt-1 pb-1">
+                                    <div class="row">
+                                        <div class="col-11 pt-1 pl-4">
+                                            <span class="align-middle h5">{{ event.title }}</span>
+                                        </div>
+                                        <div class="col-1">
+                                            <img class="float-right mt-1" :src="'../storage/sport_logo/' + event.image ">
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
@@ -337,7 +369,7 @@
                                         </div>
 
                                         <div class="col-lg-1 pl-1"> 
-                                            <button type="button" class="btn btn-outline-success float-right" data-toggle="modal" :data-target="'#created_mappp' + event.id">
+                                            <button type="button" class="btn btn-success float-right" data-toggle="modal" :data-target="'#created_mappp' + event.id">
                                                 <i class="fas fa-map-marked-alt"></i>
                                             </button>
                                         </div>
@@ -372,10 +404,17 @@
                 <div class="tab-pane fade" id="nav-accepted" role="tabpanel" aria-labelledby="nav-accepted-tab">
                     <div v-if="createdEvents != 0">
                         <div v-for="event in created_events_pageOfItems" :key="event.id" class="card mb-3">
-                                <div class="card-header">
-                                    <a target="_blank" :href="'/event/' + event.id" class="nav-link m-0 p-0 float-left">
-                                        <img :src="'../storage/sport_logo/' + event.image ">  {{ event.title }}
-                                    </a> 
+                                <div class="card-header pr-3 pl-1 pt-1 pb-1">
+                                    <div class="row">
+                                        <div class="col-11">
+                                            <a target="_blank" :href="'/event/' + event.id" class="nav-link m-0 extend">
+                                                <span class="align-middle h5">{{ event.title }}</span>
+                                            </a>
+                                        </div>
+                                        <div class="col-1">
+                                            <img class="float-right mt-1" :src="'../storage/sport_logo/' + event.image ">
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
@@ -395,11 +434,13 @@
                                             <hr class="mb-0 mt-1">
                                         </div>
 
-                                        <div class="col-lg-2 pl-1 mt-2"> 
+                                        <div class="col-lg-1"></div>
+
+                                        <div class="col-lg-1 pl-1 mt-2"> 
                                             <div v-if="user.id == event.person_id">
                                                 <editevent :user="user" v-on:fetch="fetchCreatedEvents()" :acceptedOrDeclined="false" :event="event"></editevent>
                                             </div>
-                                            <button type="button" class="btn btn-outline-success float-right" data-toggle="modal" :data-target="'#created_mappp' + event.id">
+                                            <button type="button" class="btn btn-success float-right" data-toggle="modal" :data-target="'#created_mappp' + event.id">
                                                 <i class="fas fa-map-marked-alt"></i>
                                             </button>
                                         </div>
@@ -435,8 +476,15 @@
                 <div class="tab-pane fade" id="nav-declined" role="tabpanel" aria-labelledby="nav-declined-tab">
                     <div v-if="declinedEvents != 0">
                         <div v-for="event in declined_events_pageOfItems" :key="event.id" class="card mb-3">
-                                <div class="card-header">
-                                    <img :src="'../storage/sport_logo/' + event.image ">  {{ event.title }}     
+                                <div class="card-header pr-3 pl-1 pt-1 pb-1">
+                                    <div class="row">
+                                        <div class="col-11 pt-1 pl-4">
+                                            <span class="align-middle h5">{{ event.title }}</span>
+                                        </div>
+                                        <div class="col-1">
+                                            <img class="float-right mt-1" :src="'../storage/sport_logo/' + event.image ">
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
@@ -457,7 +505,7 @@
                                             <div v-if="user.id == event.person_id">
                                                 <editevent :user="user" v-on:fetch="fetchDeclinedEvents(), fetchSubmitedEvents()" :acceptedOrDeclined="true" :event="event"></editevent>
                                             </div>
-                                            <button type="button" class="btn btn-outline-success float-right" data-toggle="modal" :data-target="'#created_mappp' + event.id">
+                                            <button type="button" class="btn btn-success float-right" data-toggle="modal" :data-target="'#created_mappp' + event.id">
                                                 <i class="fas fa-map-marked-alt"></i>
                                             </button>
                                         </div>
@@ -748,6 +796,22 @@ export default {
             })
         },
 
+        updateNavingation(opa){
+
+            console.log(opa.currentTarget.id);
+            $.each($('.profile_nav'), function() {
+                if(this.id == opa.currentTarget.id){
+                    $('#'+this.id).removeClass("btn-orange-secondary");
+                    $('#'+this.id).addClass("btn-orange");
+                }
+                else{
+                    $('#'+this.id).removeClass("btn-orange");
+                    $('#'+this.id).addClass("btn-orange-secondary");
+                }
+            });
+
+        },
+
 
 
         //=================PAGINATION=======================
@@ -796,7 +860,7 @@ export default {
 
 .nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
     color: #ffffff;
-    background-color: #3490dc;
+    background-color: #f19348;
     border-color: #dee2e6 #dee2e6 #cccccc;
 }
 

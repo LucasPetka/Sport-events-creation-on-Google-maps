@@ -1,7 +1,7 @@
 <template>
         <div>
 
-            <h4 class="mt-3">Recommended</h4>
+            <h4 class="mt-4">Recommended</h4>
 
             <div v-if="loaded == false" class="row">
                 <div class="spinner-border text-dark mt-4 mx-auto" role="status">
@@ -9,10 +9,10 @@
                 </div>
             </div>
             <div v-else>
-                <div v-if="recommended_events.length != 0" class="shadow" style="height:340px; overflow: hidden; overflow-y: auto;">
+                <div v-if="recommended_events.length != 0" style="height:340px; overflow: hidden; overflow-y: auto;">
                 <div v-for="event in recommended_events" :key="event.id" class="card mb-2">
-                    <div class="card-header p-2">
-                        <a target="_blank" :href="'/event/' + event.id" class="nav-link m-0 p-0 float-left">
+                    <div class="card-header p-2 shadow">
+                        <a target="_blank" :href="'/event/' + event.id" class="nav-link m-0 p-0 float-left extend">
                             <img :src="'../../../storage/sport_logo/'+ event.type.image" :alt="event.title"> {{ event.title }}
                         </a>
 

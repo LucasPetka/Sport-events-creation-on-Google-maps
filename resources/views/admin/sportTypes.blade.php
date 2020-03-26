@@ -36,7 +36,7 @@
                 </div>
                 <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                {{Form::submit('Submit', ['class'=>'btn btn-primary'])}}
+                {{Form::submit('Submit', ['class'=>'btn btn-orange'])}}
                 </div>
             </div>
             </div>
@@ -52,7 +52,7 @@
                 <th scope="col">#</th>
                 <th scope="col">Sport ID</th>
                 <th scope="col">Sport name</th>
-                <th scope="col"> <button type="button" class="btn btn-success float-right" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> Sport Type</button> </th>
+                <th scope="col"> <button type="button" class="btn btn-orange-secondary float-right" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> Sport Type</button> </th>
               </tr>
             </thead>
             <tbody>
@@ -64,7 +64,7 @@
                   <td>{{ $type->id }}</td>
                   <td> <img src="../storage/sport_logo/{{ $type->image }}" alt="{{ $type->name }}"> {{ $type->name }} </td>
                   <td>    
-                    <button type="button" class="btn btn-primary float-left"> <i class="far fa-edit"></i> </button> 
+                    <button type="button" class="btn btn-orange float-left"> <i class="far fa-edit"></i> </button> 
                     {!!Form::open(['action' => ['TypeController@destroy', $type->id], 'method' => 'POST', 'class' => 'float-left ml-2'])!!}
                         {{Form::hidden('_method', 'DELETE')}}
                         {{Form::button('<i class="fas fa-trash-alt"></i>', ['type' => 'submit','class' => 'btn btn-danger'])}}

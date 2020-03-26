@@ -24,7 +24,7 @@
 
                     <div v-if="status === 1">
                         <div v-if="ifJoined(event.place_id, event.id, currentUser.id) == 0">
-                            <button id="join_btn" type="button" class="btn btn-success float-left" :disabled="isLoading" v-on:click="addPerson(event.place_id, event.id, currentUser.id, $event)"><i class="fas fa-user-plus"></i> Join</button>
+                            <button id="join_btn" type="button" class="btn btn-orange-secondary float-left" :disabled="isLoading" v-on:click="addPerson(event.place_id, event.id, currentUser.id, $event)"><i class="fas fa-user-plus"></i> Join</button>
                         </div>
                         <div v-else>
                             <button type="button" class="btn btn-secondary float-left" :disabled="isLoading" v-on:click="deletePerson(event.place_id, event.id, currentUser.id, $event)"><i class="fas fa-check"></i> Joined</button>

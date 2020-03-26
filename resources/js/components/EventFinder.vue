@@ -21,7 +21,7 @@
 
 
                         <div class="mb-2 mt-3 bg-light">Search Radius</div>
-                        <vue-slider :adsorb="true" class="mr-3 ml-3 mb-5 mb-3" v-model="rules.distance" :min="1" :max="20" :tooltip-formatter="formatter" :tooltip="'always'" :tooltip-placement="'bottom'"></vue-slider>
+                        <vue-slider :adsorb="true" :process-style="{ backgroundColor: '#F39448' }" :tooltip-style="{ backgroundColor: '#596151', borderColor: '#596151' }" class="mr-3 ml-3 mb-5 mb-3" v-model="rules.distance" :min="1" :max="20" :tooltip-formatter="formatter" :tooltip="'always'" :tooltip-placement="'bottom'"></vue-slider>
 
                         <div class="mb-1 bg-light">Event dates</div>
                         <div class="row mb-3 justify-content-center">
@@ -59,7 +59,7 @@
                             </select>
                         </div>
 
-                        <button type="button" v-on:click="findEvents" class="btn btn-primary btn-block mt-3"> <i class="fas fa-search"></i> Search</button>
+                        <button type="button" v-on:click="findEvents" class="btn btn-orange btn-block mt-3"> <i class="fas fa-search"></i> Search</button>
 
                     </form>
 
@@ -71,8 +71,8 @@
 
                 <div class="btn-toolbar justify-content-center mb-3" role="toolbar" aria-label="Toolbar with button groups">
                     <div class="btn-group mr-2" role="group" aria-label="First group">
-                        <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"><i class="fas fa-search"></i> Search</button>
-                        <button type="button" class="btn btn-secondary" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Recommended <i class="fas fa-thumbs-up"></i></button>
+                        <button type="button" id="btn1" v-on:click="updateNavingation($event)" class="btn btn-orange profile_nav" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"><i class="fas fa-search"></i> Search</button>
+                        <button type="button" id="btn2" v-on:click="updateNavingation($event)" class="btn btn-orange-secondary profile_nav" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Recommended <i class="fas fa-thumbs-up"></i></button>
                     </div>
                 </div>
 
@@ -123,7 +123,7 @@
                         <div v-if="recommended_events.length != 0">
                         <div v-for="event in recommended_events" :key="event.id" class="card mb-2">
                             <div class="card-body p-2">
-                                <a target="_blank" :href="'/event/' + event.id" class="nav-link m-0 p-0">
+                                <a target="_blank" :href="'/event/' + event.id" class="nav-link ml-2 p-0 extend">
                                     <img :src="'../../../storage/sport_logo/'+ event.type.image" :alt="event.title"> {{ event.title }}
                                 </a>
 
@@ -387,6 +387,22 @@ export default {
                 lat: parseFloat(place.lat),
                 lng: parseFloat(place.lng)
             }
+        },
+
+        updateNavingation(event){
+
+            console.log(event.currentTarget.id);
+            $.each($('.profile_nav'), function() {
+                if(this.id == event.currentTarget.id){
+                    $('#'+this.id).removeClass("btn-orange-secondary");
+                    $('#'+this.id).addClass("btn-orange");
+                }
+                else{
+                    $('#'+this.id).removeClass("btn-orange");
+                    $('#'+this.id).addClass("btn-orange-secondary");
+                }
+            });
+
         },
 
         

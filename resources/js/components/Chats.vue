@@ -45,7 +45,7 @@
         <editevent :user="user" v-on:fetchCreatedEvents="refresh" :acceptedOrDeclined="false" :event="event"></editevent>
         </div>
         <div v-if="ifJoined(event.place_id, event.id, user.id) == 0">
-            <button id="join_btn" type="button" class="btn btn-success float-right" :disabled="isLoading" v-on:click="addPerson(event.place_id, event.id, user.id, $event)"><i class="fas fa-user-plus"></i> Join</button>
+            <button id="join_btn" type="button" class="btn btn-orange-secondary float-right" :disabled="isLoading" v-on:click="addPerson(event.place_id, event.id, user.id, $event)"><i class="fas fa-user-plus"></i> Join</button>
         </div>
         <div v-else>
             <button type="button" class="btn btn-secondary float-right" :disabled="isLoading" v-on:click="deletePerson(event.place_id, event.id, user.id, $event)"><i class="fas fa-check"></i> Joined</button>

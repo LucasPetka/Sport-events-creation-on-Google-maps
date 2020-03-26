@@ -40,7 +40,7 @@
                     </div>
                 </div>
                 <div class="col-sm-2 col-lg-1">
-                        <button type="button" id="search_button" class="btn btn-dark pt-2 pb-2" style="border-radius: 0px 0px 5px 5px; white-space:nowrap;" data-toggle="collapse" data-target="#places_sort" aria-expanded="false" aria-controls="places_sort" onclick="this.blur();">
+                        <button type="button" id="search_button" class="btn btn-orange-dark pt-2 pb-2 white" style="border-radius: 0px 0px 5px 5px; white-space:nowrap;" data-toggle="collapse" data-target="#places_sort" aria-expanded="false" aria-controls="places_sort" onclick="this.blur();">
                             
                             <span v-if="search_expanded"><i class="fas fa-search"></i> <small><i class="fas fa-chevron-up"></i></small></span>
                             <span v-else ><i class="fas fa-search"></i> <small><i class="fas fa-chevron-down"></i></small></span>
@@ -109,7 +109,7 @@
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button id="add_event_btn" type="submit" class="btn btn-success float-right" :disabled="isLoading">Add <i class="fas fa-plus"></i></button>
+                            <button id="add_event_btn" type="submit" class="btn btn-orange-secondary float-right" :disabled="isLoading">Add <i class="fas fa-plus"></i></button>
                         </div>
                     </div>
                 </div>
@@ -154,7 +154,7 @@
 
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-success float-right" :disabled="isLoading">Add <i class="fas fa-plus"></i></button>
+                                <button type="submit" class="btn btn-orange-secondary float-right" :disabled="isLoading">Add <i class="fas fa-plus"></i></button>
                             </div>
                         </div>
                     </div>
@@ -730,13 +730,6 @@ export default {
     overflow-y: auto;
 }
 
-#geras{
-    position: absolute;
-    color:white;
-    font-size: 25px;
-    opacity: 0.1;
-
-}
 
 #search_button{
     z-index: 50;
@@ -747,11 +740,6 @@ export default {
     width:100%;
 }
 
-#loading-screen {
-    z-index: 100;
-    position: absolute; top: 0; right: 0; bottom: 0; left: 0;
-    background-color: #82cc75;
-}
 
 @media only screen and (max-width: 900px) {
 

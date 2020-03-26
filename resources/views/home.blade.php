@@ -13,8 +13,8 @@
                     
                     <div class="row mb-3">
                         <div class="col-12">
-                            <button type="button" class="btn btn-primary ml-1 mr-1 float-right">
-                                Notifications <span class="badge badge-light">4</span>
+                            <button type="button" class="btn btn-orange ml-1 mr-1 float-right">
+                                <i class="fas fa-bell"></i> Notifications <span class="badge badge-light">4</span>
                             </button>
                         </div>
                     </div>
@@ -36,7 +36,7 @@
                                 @else
                                     <figcaption class="figure-caption">User</figcaption>
                                 @endif
-                                    <figcaption> <button class="badge badge-success" data-toggle="modal" data-target="#editProfile"><i class="fas fa-user-edit"></i> Update profile </button> </figcaption>
+                                    <figcaption> <button class="badge badge-orange-secondary" data-toggle="modal" data-target="#editProfile"><i class="fas fa-user-edit"></i> Update profile </button> </figcaption>
 
                             </figure>
                         </div>
@@ -88,7 +88,7 @@
                                     </div>
                                     <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                    <button type="submit" class="btn btn-orange">Save changes</button>
                                     </div>
                                 </div>
                                 </div>
@@ -116,7 +116,7 @@
                                     @else
                                         <td> 
                                             Not verified 
-                                            <a class="btn btn-primary float-right mr-5" href="/email/resend" role="button"> <i class="far fa-envelope"></i> Send verification email</a>
+                                            <a class="btn btn-orange float-right mr-5" href="/email/resend" role="button"> <i class="far fa-envelope"></i> Send verification email</a>
                                         </td>   
                                     @endif
                                   </tr>

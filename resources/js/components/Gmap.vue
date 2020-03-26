@@ -11,7 +11,7 @@
       </div>
 
       <div id="refresh_button">
-        <button type="button" class="btn btn-success" v-on:click="loadMarkers()">Refresh markers <i class="fas fa-redo"></i></button>
+        <button type="button" class="btn btn-orange-secondary" v-on:click="loadMarkers()">Refresh markers <i class="fas fa-redo"></i></button>
       </div>
 
     <gmap-map ref="gmapp" :map-type-id="mapType" v-on:rightclick="openMenu($event)" v-on:zoom_changed="updateZoom()" :center="center" v-on:bounds_changed="update_bounds($event)" :zoom="zoom_in" v-bind:options="mapStyle" style=" overflow:hidden; width:100%; height:94vh;">

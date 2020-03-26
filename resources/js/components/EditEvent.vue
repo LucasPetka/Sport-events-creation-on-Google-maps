@@ -23,7 +23,7 @@
 
     
         <button type="button" class="btn btn-primary float-right ml-3 mb-2" v-on:click="editEvent(event.id)"> <i class="fas fa-edit"></i> </button>
-        <button type="button" class="btn btn-danger float-right ml-3 mb-2" v-on:click="openConfirmation(event)"> <i class="fas fa-trash-alt"></i></button>
+        <button type="button" class="btn btn-danger float-right ml-3 mb-2" style="width:42.2px" v-on:click="openConfirmation(event)"> <i class="fas fa-trash-alt"></i></button>
 
 
     <!-- ==============================Edit MODAL============================================== -->
@@ -76,8 +76,8 @@
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button v-if="acceptedOrDeclined" :id="'add_event_btn'  + event.id" v-on:click="resubmitEvent" class="btn btn-success float-right" :disabled="isLoading"> Re-submit </button>
-                            <button v-else :id="'add_event_btn'  + event.id" v-on:click="addEvent" class="btn btn-success float-right" :disabled="isLoading"> Update </button>
+                            <button v-if="acceptedOrDeclined" :id="'add_event_btn'  + event.id" v-on:click="resubmitEvent" class="btn btn-orange-secondary float-right" :disabled="isLoading"> Re-submit </button>
+                            <button v-else :id="'add_event_btn'  + event.id" v-on:click="addEvent" class="btn btn-orange-secondary float-right" :disabled="isLoading"> Update </button>
                         </div>
                     </div>
                 </div>

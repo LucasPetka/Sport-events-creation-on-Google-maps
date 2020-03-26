@@ -88,5 +88,50 @@ class EventFindController extends Controller
         return EventResource::collection($events);
     }
 
+    public function recommendedEvents(Request $request){
+
+        $status = $request->status;
+        $lat = $request->lat;
+        $lng = $request->lng;
+        $liked_sports = json_decode($request->liked_sports);
+        $date = $request->date;
+        $user_id = $request->user_id;
+        $distance = 10;
+
+        if(count($liked_sports) != 0){
+            $places = DB::table('places')->select('*')
+            ->whereRaw('? > ( 6371 * acos ( cos ( radians( ? ) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians( ? ) ) + sin ( radians( ? ) ) * sin( radians( lat ) ) ) )', [$distance, $lat, $lng, $lat])
+            ->whereIn('type', $liked_sports)
+            ->get();
+        }
+        else{
+            $places = DB::table('places')->select('*')
+            ->whereRaw('? > ( 6371 * acos ( cos ( radians( ? ) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians( ? ) ) + sin ( radians( ? ) ) * sin( radians( lat ) ) ) )', [$distance, $lat, $lng, $lat])
+            ->get();
+        }
+
+        $places_arr = [];
+
+        foreach ($places as $key => $place) {
+            array_push($places_arr, $place->id);
+        }
+
+        $events = DB::table('events')->whereIn('events.place_id', $places_arr)
+        ->where('time_from', '>' , $date)
+        ->where('events.person_id', '!=', $user_id)
+        ->join('places', 'places.id', '=', 'events.place_id')
+        ->leftJoin('people_going', 'events.id', '=', 'people_going.event_id')
+        ->groupBy('events.id')
+        ->select('events.*', 'places.lat', 'places.lng', 'places.type', DB::raw('count(people_going.event_id) as count'))
+        ->orderBy('events.time_from', 'asc')
+        ->orderBy('count', 'desc')
+        ->get();
+
+
+
+
+        return EventResource::collection($events);
+    }
+
 
 }

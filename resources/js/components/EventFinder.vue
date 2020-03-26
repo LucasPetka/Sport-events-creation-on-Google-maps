@@ -119,11 +119,42 @@
 
                     </div>
                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-                        <div class="card">
-                            <div class="card-body">
-                                Recommended
+                        
+                        <div v-if="recommended_events.length != 0">
+                        <div v-for="event in recommended_events" :key="event.id" class="card mb-2">
+                            <div class="card-body p-2">
+                                <a target="_blank" :href="'/event/' + event.id" class="nav-link m-0 p-0">
+                                    <img :src="'../../../storage/sport_logo/'+ event.type.image" :alt="event.title"> {{ event.title }}
+                                </a>
+
+                                <hr class="m-2">
+
+                                <div class="p-2">{{ event.about.slice(0, 140) }}...</div>
+
+                                <hr class="m-2">
+
+                                <div class="row p-2">
+                                    <div class="col-3">
+                                        <i class="far fa-calendar-alt"></i> {{ getDate(event.time_from) }}
+                                    </div>
+                                    <div class="col-3">
+                                        <i class="far fa-clock"></i> {{ getTime(event.time_from) }}-{{ getTime(event.time_until) }}
+                                    </div>
+                                    <div class="col-3">
+                                        <i class="fas fa-users"></i> {{ event.people_going }} going
+                                    </div>
+                                    <div class="col-3">
+                                        <i class="fas fa-road"></i> {{ countDistance(event.lat, event.lng) }} km
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                        </div>
+                        <div class="text-center mb-4" v-else>
+                            <span class="text-muted">Sorry, no events to recommend..</span>
+                        </div>
+
+
                     </div>
                 </div>
 
@@ -164,11 +195,13 @@ export default {
             formatter: '{value} km',
             format:'yyyy-MM-dd',
             events: [],
+            recommended_events:[],
             pageOfItems: [],
             data: ['1', '2', '3', '5', '10', '20'],
             rules:{
                 lat: 0, lng: 0, distance: 1, types: [], date_from: new Date(), date_until: new Date(), paid: false, people_going: -1
             },
+            recommended_rules:{lat: 0, lng: 0, status: '', liked_sports:[], date: new Date(), user_id: ''},
             PeopleGoingList: [
             {name: 'Any', value: -1},
             {name: 'More than 0', value: 0},
@@ -265,12 +298,14 @@ export default {
                 this.user_loc_set = true;
 
                 this.findEvents();
+                this.findRecommendedEvents();
 
             }, err =>{    //if something goes wrong when locating just set map center
                 this.user_location = this.ip;
                 this.center = this.ip;
                 this.user_loc_set = true;
                 this.findEvents();
+                this.findRecommendedEvents();
             });
             }
             else{           //if tracking is OFF when just locate set map center
@@ -278,6 +313,7 @@ export default {
                 this.center = this.ip;
                 this.user_loc_set = true;
                 this.findEvents();
+                this.findRecommendedEvents();
             }
         }
         },
@@ -306,6 +342,31 @@ export default {
                 .then(res => {
                     this.events = res.data;
                 })
+        },
+
+        findRecommendedEvents(){
+            this.recommended_rules.lat = this.user_location.lat;
+            this.recommended_rules.lng = this.user_location.lng;
+            this.recommended_rules.status = this.status;
+            this.recommended_rules.liked_sports = this.currentUser.liked_sports;
+            this.recommended_rules.user_id = this.currentUser.id;
+
+            const url = 'api/find_recommended_events';
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json;charset=UTF-8'
+                },
+                body: JSON.stringify(this.recommended_rules)
+            };
+
+                fetch(url, options)
+                .then(res => res.json())
+                .then(res => {
+                    this.recommended_events = res.data;
+                })
+
         },
 
         //updates center

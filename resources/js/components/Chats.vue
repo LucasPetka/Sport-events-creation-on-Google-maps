@@ -41,7 +41,9 @@
     <b> <a href="#" data-toggle="modal" data-target="#people_going"> <i class="fas fa-user"></i> {{ people_going.length }} people going </a></b>
     </div>
     <div class="col-6">
+        <div v-if="user.id == event.person_id.id">
         <editevent :user="user" v-on:fetchCreatedEvents="refresh" :acceptedOrDeclined="false" :event="event"></editevent>
+        </div>
         <div v-if="ifJoined(event.place_id, event.id, user.id) == 0">
             <button id="join_btn" type="button" class="btn btn-success float-right" :disabled="isLoading" v-on:click="addPerson(event.place_id, event.id, user.id, $event)"><i class="fas fa-user-plus"></i> Join</button>
         </div>

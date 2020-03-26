@@ -12,6 +12,8 @@ Vue.component('payment', require('./components/Payment.vue').default);
 Vue.component('eventfinder', require('./components/EventFinder.vue').default);
 Vue.component('editevent', require('./components/EditEvent.vue').default);
 Vue.component('showprofileinfo', require('./components/ShowProfileInfo.vue').default);
+Vue.component('recommendedevents', require('./components/RecommendEvents.vue').default);
+
 
 import Vue from 'vue'
 
@@ -24,10 +26,9 @@ import JwPagination from 'jw-vue-pagination'
 import VueSlider from 'vue-slider-component'
 import 'vue-slider-component/theme/default.css'
 
-
-Vue.component('VueSlider', VueSlider)
+Vue.component('VueSlider', VueSlider);
 Vue.component('jw-pagination', JwPagination);
-Vue.use(VueChatScroll)
+Vue.use(VueChatScroll);
 Vue.use(Notifications);
 Vue.component('GmapCluster', GmapCluster);
 

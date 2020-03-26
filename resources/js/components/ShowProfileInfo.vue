@@ -224,7 +224,13 @@
         <!-- ======================================================GOING TO EVENTS==============================================================-->
         <div class="collapse show" id="goingto" data-parent="#accordionExample">
         <p class="h4 ml-5 mb-3 mb-0 pb-0">Going to</p>
-
+        
+        <div v-if="loaded == false" class="row">
+            <div class="spinner-border text-dark mt-4 mx-auto" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <div v-else>
         <div v-if="goingToEvents != 0">
             <div v-for="event in goingto_events_pageOfItems" :key="event.id" class="card mb-3 shadow-sm">
                     <div class="card-header">
@@ -278,6 +284,7 @@
                 </div>
             </div>
         <p v-else class="text-center mt-4 text-muted"> No events created.. </p>   
+        </div>
         </div>
 
 
@@ -522,6 +529,7 @@ export default {
             declinedPlaces: [],
             submitedEvents: [],
             declinedEvents: [],
+            loaded: false,
             center: { lat: 0.0, lng: 0.0 },
             place: {
                 id:'',
@@ -706,6 +714,7 @@ export default {
         fetchGoingToEvents(){
             axios.get('../returngoingtoevents').then(response =>{
                 this.goingToEvents = response.data;
+                this.loaded = true;
             })
         },
 

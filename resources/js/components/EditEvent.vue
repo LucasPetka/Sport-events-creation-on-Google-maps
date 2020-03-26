@@ -249,10 +249,6 @@ export default {
                 $("#time_error" + event_id).html("<span class='text-danger'><small>Times should not be equal!</small></span>");
                 $("#add_event_btn"  + event_id).attr("disabled", true);
             }
-            else if(this.event_time[0] > this.event_time[1]) {
-                $("#time_error" + event_id).html("<span class='text-danger'><small>Second time should be later!</small></span>");
-                $("#add_event_btn"  + event_id).attr("disabled", true);
-            }
             else{
                 $("#time_error" + event_id).html("");
                 $('#add_event_btn'  + event_id).removeAttr("disabled");

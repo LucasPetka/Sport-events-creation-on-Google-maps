@@ -42,6 +42,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
     //======================Find event by sort====================
     Route::post('find_events', 'Events\EventFindController@findEvents');
+    Route::post('find_recommended_events', 'Events\EventFindController@recommendedEvents');
+
 
     //===========================EVENTS==============================
     //List Events
@@ -56,7 +58,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     Route::get('declinedevent/{id}', 'Events\EventController@getDeclinedEvent');
 
     //Get which event happening right now or which event is closest one
-    Route::get('nearevent/{id}', 'Events\EventController@closestEvent');
+    Route::get('liveevent/{id}', 'Events\EventController@closestEvent');
 
     Route::group(['middleware' => 'auth:api'], function() {
         //Create new Event

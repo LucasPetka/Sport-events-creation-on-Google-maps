@@ -14,9 +14,22 @@
         <button type="button" class="btn btn-success" v-on:click="loadMarkers()">Refresh markers <i class="fas fa-redo"></i></button>
       </div>
 
-    <gmap-map ref="gmapp" v-on:rightclick="openMenu($event)" v-on:zoom_changed="updateZoom()" :center="center" v-on:bounds_changed="update_bounds($event)" :zoom="zoom_in" v-bind:options="mapStyle" style=" overflow:hidden; width:100%; height:94vh;">
-      <gmap-cluster :zoom-on-click="true" :gridSize="40" :maxZoom="16">
-      <gmap-marker v-for="place in allPlaces.data" :visible="place.visible" :key="place.id" :position="getPosition(place)" @click="center=getPosition(place)" v-on:click="showSpot(place.id)" :icon="icon(place)" v-on:mouseover="openInfoWindowTemplate(place)" v-on:mouseout="infoWindow.open=false"></gmap-marker>
+    <gmap-map ref="gmapp" :map-type-id="mapType" v-on:rightclick="openMenu($event)" v-on:zoom_changed="updateZoom()" :center="center" v-on:bounds_changed="update_bounds($event)" :zoom="zoom_in" v-bind:options="mapStyle" style=" overflow:hidden; width:100%; height:94vh;">
+      <gmap-cluster :zoom-on-click="true" :gridSize="20" :maxZoom="16">
+
+      <gmap-marker v-for="place in allPlaces.data" 
+        :visible="place.visible" 
+        :key="place.id" 
+        :position="getPosition(place)" 
+        @click="center=getPosition(place)" 
+        v-on:click="showSpot(place.id)" 
+        :icon="icon(place)" 
+        v-on:mouseover="openInfoWindowTemplate(place), hovered = true" 
+        v-on:mouseout="infoWindow.open = false, hovered = false" >
+      </gmap-marker>
+
+     <!-- v-on:mouseout="infoWindow.open=false"-->
+      
       <gmap-info-window
           :options="{maxWidth:300, pixelOffset:{width:0, height:-25}}"
           :position="infoWindow.position"
@@ -68,19 +81,22 @@ export default {
       open: false,
       template: ''
     }, 
+    markerHoverTime: false,
+    hovered: false,
     addNewmark_coordinates: { lat: 0.0, lng: 0.0 },
     zoom_in: 13,
     bounds: null,
     currentPlace: null,
     marker_visibility: false,
     rules:{type: 'All', distance: 'Any'},   
+    mapType: 'roadmap',
     mapStyle: {
       styles: mapstyle,
       options:{
         minZoom: 10,
         gestureHandling: 'greedy',
         fullscreenControl: false,
-        mapTypeControl: true,
+        mapTypeControl: false,
         scaleControl: false,
         streetViewControl: false,
         zoomControl: false
@@ -91,8 +107,6 @@ export default {
 
   created() {
     this.center = this.location;
-
-    console.log(this.location);
 
     this.fetchTypesx();
     this.geolocation();
@@ -107,30 +121,38 @@ export default {
 
     //Opens info window above marker and sets the position and text
      openInfoWindowTemplate: async function(place) {
-      var res = "";
+       
 
-        if(place.about.length > 100){
-          res = place.about.slice(0, 100) + "...";
-        }else{
-          res = place.about;
+        var res = "";
+
+          if(place.about.length > 100){
+            res = place.about.slice(0, 100) + "...";
+          }else{
+            res = place.about;
+          }
+
+        const response = await axios.get('api/liveevent/' + place.id);
+        var nearest = response.data.data;
+
+        if(nearest.length > 0){
+          this.infoWindow.template = '<h6>'+place.title+'</h6>'+res+'<hr>' +          
+          '<i class="fas fa-road"></i> <small>This place is '+
+          this.measure_distance(place, this.user_location)+' km from you <hr><h6><span class="badge badge-danger">Live</span> '+ nearest[0].title +'</h6></small>';
+        }
+        else{
+          this.infoWindow.template = '<h6>'+place.title+'</h6>'+res+'<hr>' + '<i class="fas fa-road"></i> <small>This place is '+
+          this.measure_distance(place, this.user_location)+' km from you </small>';
         }
 
-      const response = await axios.get('api/nearevent/' + place.id);
+        this.infoWindow.position = this.getPosition(place);
+
+        this.markerHoverTime = setTimeout(() => {
+            if(this.hovered){
+              this.infoWindow.open = true;
+            }
+        }, 500)
       
-      var nearest = response.data.data;
 
-      if(nearest.length > 0){
-        this.infoWindow.template = '<h6>'+place.title+'</h6>'+res+'<hr>' +
-        '<i class="fas fa-road"></i> <small>This place is '+
-        this.measure_distance(place, this.user_location)+' km from you <br><br><span style="color:red; font-size: 13pt; "> LIVE - '+ nearest[0].title +'</span></small>';
-      }
-      else{
-        this.infoWindow.template = '<h6>'+place.title+'</h6>'+res+'<hr>' + '<i class="fas fa-road"></i> <small>This place is '+
-        this.measure_distance(place, this.user_location)+' km from you </small>';
-      }
-
-      this.infoWindow.position = this.getPosition(place);
-      this.infoWindow.open = true;
    },
    
    //Waits for variable BOUNDS and then fetches places in those bounds from DB
@@ -196,6 +218,7 @@ export default {
         }
         else {
           setTimeout(() => {  this.smoothZoom(max, cnt + 1); this.zoom_in = cnt;}, 120)
+          this.updateZoom();
         }
     },  
 
@@ -261,6 +284,14 @@ export default {
     updateZoom: function(){
       this.$refs.gmapp.$mapPromise.then((map) => {
           this.zoom_in = map.getZoom();
+
+          if(this.zoom_in >= 17){
+            this.mapType = "satellite";
+          }
+          else{
+            this.mapType = "roadmap";
+          }
+
       });
     },
 
@@ -299,7 +330,7 @@ export default {
       const foundPlace = this.allPlaces.data.find( place => place.id == key);
       this.place = foundPlace;
       var arg = [key, this.measure_distance(this.place,this.user_location)];
-      this.smoothZoom(17, this.zoom_in);
+      this.smoothZoom(18, this.zoom_in);
       this.$emit('showSpot', arg);
     },
 

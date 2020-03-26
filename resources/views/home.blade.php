@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="container overflow-y-auto">
-    <div class="row justify-content-center mt-5">
+    <div class="row justify-content-center mt-4">
         <div class="col-lg-5 mb-4">
 
             <h1 class="display-4">Profile</h1>
@@ -127,6 +127,10 @@
                 
                 </div>
             </div>
+
+
+            <recommendedevents v-bind:ip='{!! $location !!}' v-bind:status='1' v-bind:current-user='{!! Auth::user()->toJson() !!}' >
+            </recommendedevents>
         </div>
 
         <div class="col-lg-7">

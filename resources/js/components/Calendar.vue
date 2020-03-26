@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="col-12 m-2" id="calendar">
                         <datepicker placeholder="Select Date" :highlighted="highlighted" :format="format" :value="todays_date" v-model="todays_date" @closed="showEvents()"></datepicker>
-                        <button v-on:click="$emit('openAddEvent')" class="btn btn-outline-success pt-2 pb-2 ml-3 float-left">Add Event <i class="fas fa-plus"></i></button>
+                        <button v-if="laterThanYesterday" v-on:click="$emit('openAddEvent')" class="btn btn-outline-success pt-2 pb-2 ml-3 float-left">Add Event <i class="fas fa-plus"></i></button>
                 </div>
             </div>
             
@@ -73,6 +73,7 @@ export default {
             events: [],
             people_going: [],
             edit: false,
+            laterThanYesterday: true,
             show_events: [],
             highlighted: {
                 dates:[],
@@ -148,11 +149,16 @@ export default {
         //Show all events in exact place and day
         showEvents: function(){
 
-        //this.todays_date =
-
         const foundEvents = this.events.filter( event => event.place_id == this.place_id);
         this.show_events = foundEvents.filter(event => this.getDate(event.time_from) == this.getDate(this.todays_date));
         this.$emit('getDate', {'date':this.todays_date.toISOString(), 'events':this.show_events});
+        if(this.getDate(this.todays_date) >= this.getDate(new Date())){
+            this.laterThanYesterday = true;
+        }
+        else{
+            this.laterThanYesterday = false;
+        }
+        
         
         this.$emit('closeAdd');
         },

@@ -62,7 +62,7 @@
 
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-orange-secondary btn-block">
+                                <button type="submit" class="btn btn-orange btn-block">
                                     {{ __('Register') }}
                                 </button>
                             </div>
@@ -72,7 +72,7 @@
                     <hr>
                     <div class="form-group row mb-0">
                         <div class="col-md-8 offset-md-4">
-                            <a href="{{ url('/auth/redirect/facebook') }}" class="btn btn-orange"><i class="fab fa-facebook-f mr-2"></i> Sign up with Facebook</a>
+                            <a href="{{ url('/auth/redirect/facebook') }}" class="btn btn-primary"><i class="fab fa-facebook-f mr-2"></i> Sign up with Facebook</a>
                         </div>
                     </div>
             

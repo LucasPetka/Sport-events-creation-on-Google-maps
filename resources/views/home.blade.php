@@ -115,8 +115,8 @@
                                         <td> Verified ({{ $user->email_verified_at }})</td>
                                     @else
                                         <td> 
-                                            Not verified 
-                                            <a class="btn btn-orange float-right mr-5" href="/email/resend" role="button"> <i class="far fa-envelope"></i> Send verification email</a>
+                                            <i class="fas fa-times"></i> 
+                                            <a class="btn btn-orange float-right" href="/email/resend" role="button"> <i class="far fa-envelope"></i> Resend</a>
                                         </td>   
                                     @endif
                                   </tr>

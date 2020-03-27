@@ -25,7 +25,7 @@ class CreateDeclinedPlacesTable extends Migration
             $table->timestamps();
 
             $table->foreign('personid')->references('id')->on('users');
-            $table->foreign('type')->references('id')->on('types');
+            $table->foreign('type')->references('id')->on('types')->onUpdate('cascade');
         });
     }
 

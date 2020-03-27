@@ -4164,6 +4164,8 @@ var Datepicker = function Datepicker() {
             _this.findEvents();
 
             _this.findRecommendedEvents();
+
+            console.log("trackingON");
           }, function (err) {
             //if something goes wrong when locating just set map center
             _this.user_location = _this.ip;
@@ -4173,6 +4175,8 @@ var Datepicker = function Datepicker() {
             _this.findEvents();
 
             _this.findRecommendedEvents();
+
+            console.log("somtehing wrong: " + err.message);
           });
         } else {
           //if tracking is OFF when just locate set map center
@@ -4181,6 +4185,7 @@ var Datepicker = function Datepicker() {
           this.user_loc_set = true;
           this.findEvents();
           this.findRecommendedEvents();
+          console.log("tracking OFF");
         }
       }
     },
@@ -6288,6 +6293,9 @@ var _assets_options_json__WEBPACK_IMPORTED_MODULE_1___namespace = /*#__PURE__*/_
 //
 //
 //
+//
+//
+//
 var editevent = function editevent() {
   return Promise.resolve(/*! import() */).then(__webpack_require__.bind(null, /*! ../components/EditEvent.vue */ "./resources/js/components/EditEvent.vue"));
 };
@@ -6314,6 +6322,7 @@ var smallmap = function smallmap() {
       submitedEvents: [],
       declinedEvents: [],
       loaded: false,
+      todaysDate: new Date(),
       center: {
         lat: 0.0,
         lng: 0.0
@@ -6578,7 +6587,6 @@ var smallmap = function smallmap() {
       });
     },
     updateNavingation: function updateNavingation(opa) {
-      console.log(opa.currentTarget.id);
       $.each($('.profile_nav'), function () {
         if (this.id == opa.currentTarget.id) {
           $('#' + this.id).removeClass("btn-orange-secondary");
@@ -58951,7 +58959,7 @@ var render = function() {
                         : _c(
                             "p",
                             { staticClass: "text-center mt-4 text-muted" },
-                            [_vm._v(" No submited places.. ")]
+                            [_vm._v(" You haven't submited any places.. ")]
                           )
                     ]
                   ),
@@ -59163,7 +59171,7 @@ var render = function() {
                         : _c(
                             "p",
                             { staticClass: "text-center mt-4 text-muted" },
-                            [_vm._v(" No accepted places.. ")]
+                            [_vm._v(" No places added.. ")]
                           )
                     ]
                   ),
@@ -59330,7 +59338,7 @@ var render = function() {
             },
             [
               _c("p", { staticClass: "h4 ml-5 mb-3 mb-0 pb-0" }, [
-                _vm._v("Participating")
+                _vm._v("Participating in")
               ]),
               _vm._v(" "),
               _vm.loaded == false
@@ -59401,8 +59409,24 @@ var render = function() {
                                         _vm._v(
                                           "\n                                " +
                                             _vm._s(event.about.slice(0, 140)) +
-                                            "...\n                            "
-                                        )
+                                            "...\n                                "
+                                        ),
+                                        new Date(event.time_until) <=
+                                        _vm.todaysDate
+                                          ? _c(
+                                              "div",
+                                              {
+                                                staticClass:
+                                                  "alert alert-danger mt-1 mb-0 p-2 text-center",
+                                                attrs: { role: "alert" }
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "\n                                    Event ended!\n                                "
+                                                )
+                                              ]
+                                            )
+                                          : _vm._e()
                                       ]),
                                       _vm._v(" "),
                                       _c("div", { staticClass: "col-lg-3" }, [
@@ -59592,7 +59616,7 @@ var render = function() {
                       : _c(
                           "p",
                           { staticClass: "text-center mt-4 text-muted" },
-                          [_vm._v(" No events created.. ")]
+                          [_vm._v(" You haven't joined any events.. ")]
                         )
                   ])
             ]
@@ -60041,7 +60065,7 @@ var render = function() {
                         : _c(
                             "p",
                             { staticClass: "text-center mt-4 text-muted" },
-                            [_vm._v(" No events created.. ")]
+                            [_vm._v(" No events submited.. ")]
                           )
                     ]
                   ),
@@ -60667,7 +60691,7 @@ var render = function() {
                         : _c(
                             "p",
                             { staticClass: "text-center mt-4 text-muted" },
-                            [_vm._v(" No events created.. ")]
+                            [_vm._v(" No events declined.. ")]
                           )
                     ]
                   )
@@ -78015,41 +78039,23 @@ module.exports = function(module) {
 
 var map = {
 	"./badminton-h_1582992908.png": "./storage/app/public/sport_logo/badminton-h_1582992908.png",
-	"./badminton_1582061537.png": "./storage/app/public/sport_logo/badminton_1582061537.png",
 	"./badminton_1582992908.png": "./storage/app/public/sport_logo/badminton_1582992908.png",
 	"./baseball-h_1582992828.png": "./storage/app/public/sport_logo/baseball-h_1582992828.png",
-	"./baseball_1582061525.png": "./storage/app/public/sport_logo/baseball_1582061525.png",
 	"./baseball_1582992828.png": "./storage/app/public/sport_logo/baseball_1582992828.png",
-	"./basketball-h_1582913993.png": "./storage/app/public/sport_logo/basketball-h_1582913993.png",
-	"./basketball-h_1582923907.png": "./storage/app/public/sport_logo/basketball-h_1582923907.png",
-	"./basketball-h_1582924406.png": "./storage/app/public/sport_logo/basketball-h_1582924406.png",
-	"./basketball_1582061477.png": "./storage/app/public/sport_logo/basketball_1582061477.png",
-	"./basketball_1582913993.png": "./storage/app/public/sport_logo/basketball_1582913993.png",
-	"./basketball_1582923907.png": "./storage/app/public/sport_logo/basketball_1582923907.png",
-	"./basketball_1582924406.png": "./storage/app/public/sport_logo/basketball_1582924406.png",
-	"./cricket_1582061553.png": "./storage/app/public/sport_logo/cricket_1582061553.png",
+	"./basketball-h_1585325920.png": "./storage/app/public/sport_logo/basketball-h_1585325920.png",
+	"./basketball_1585325920.png": "./storage/app/public/sport_logo/basketball_1585325920.png",
 	"./new.png": "./storage/app/public/sport_logo/new.png",
-	"./pingpong-h_1582914011.png": "./storage/app/public/sport_logo/pingpong-h_1582914011.png",
-	"./pingpong-h_1582989372.png": "./storage/app/public/sport_logo/pingpong-h_1582989372.png",
-	"./pingpong_1582061500.png": "./storage/app/public/sport_logo/pingpong_1582061500.png",
-	"./pingpong_1582914011.png": "./storage/app/public/sport_logo/pingpong_1582914011.png",
-	"./pingpong_1582989372.png": "./storage/app/public/sport_logo/pingpong_1582989372.png",
+	"./pingpong-h_1585326705.png": "./storage/app/public/sport_logo/pingpong-h_1585326705.png",
+	"./pingpong_1585326705.png": "./storage/app/public/sport_logo/pingpong_1585326705.png",
 	"./rugby-h_1582992877.png": "./storage/app/public/sport_logo/rugby-h_1582992877.png",
-	"./rugby_1582061562.png": "./storage/app/public/sport_logo/rugby_1582061562.png",
 	"./rugby_1582992877.png": "./storage/app/public/sport_logo/rugby_1582992877.png",
-	"./soccerball-h_1582913951.png": "./storage/app/public/sport_logo/soccerball-h_1582913951.png",
-	"./soccerball-h_1582923893.png": "./storage/app/public/sport_logo/soccerball-h_1582923893.png",
 	"./soccerball-h_1582989356.png": "./storage/app/public/sport_logo/soccerball-h_1582989356.png",
-	"./soccerball_1581788776.png": "./storage/app/public/sport_logo/soccerball_1581788776.png",
-	"./soccerball_1582913951.png": "./storage/app/public/sport_logo/soccerball_1582913951.png",
-	"./soccerball_1582923893.png": "./storage/app/public/sport_logo/soccerball_1582923893.png",
 	"./soccerball_1582989356.png": "./storage/app/public/sport_logo/soccerball_1582989356.png",
 	"./tennis-h_1582992842.png": "./storage/app/public/sport_logo/tennis-h_1582992842.png",
-	"./tennis_1582061512.png": "./storage/app/public/sport_logo/tennis_1582061512.png",
 	"./tennis_1582992842.png": "./storage/app/public/sport_logo/tennis_1582992842.png",
-	"./volleyball-h_1582992861.png": "./storage/app/public/sport_logo/volleyball-h_1582992861.png",
-	"./volleyball_1582061488.png": "./storage/app/public/sport_logo/volleyball_1582061488.png",
-	"./volleyball_1582992861.png": "./storage/app/public/sport_logo/volleyball_1582992861.png"
+	"./volleyball-h_1585325522.png": "./storage/app/public/sport_logo/volleyball-h_1585325522.png",
+	"./volleyball-h_1585325893.png": "./storage/app/public/sport_logo/volleyball-h_1585325893.png",
+	"./volleyball_1585325893.png": "./storage/app/public/sport_logo/volleyball_1585325893.png"
 };
 
 
@@ -79289,17 +79295,6 @@ module.exports = "/images/badminton-h_1582992908.png?30df4a5cc9ef13cd1d4f0300475
 
 /***/ }),
 
-/***/ "./storage/app/public/sport_logo/badminton_1582061537.png":
-/*!****************************************************************!*\
-  !*** ./storage/app/public/sport_logo/badminton_1582061537.png ***!
-  \****************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "/images/badminton_1582061537.png?5e3c6fb94e3348f8150e99d2bbea3fe8";
-
-/***/ }),
-
 /***/ "./storage/app/public/sport_logo/badminton_1582992908.png":
 /*!****************************************************************!*\
   !*** ./storage/app/public/sport_logo/badminton_1582992908.png ***!
@@ -79322,17 +79317,6 @@ module.exports = "/images/baseball-h_1582992828.png?b87566fdd1d39773fb04eaf182ef
 
 /***/ }),
 
-/***/ "./storage/app/public/sport_logo/baseball_1582061525.png":
-/*!***************************************************************!*\
-  !*** ./storage/app/public/sport_logo/baseball_1582061525.png ***!
-  \***************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "/images/baseball_1582061525.png?b955314eb9b4771c8dc55459cf773409";
-
-/***/ }),
-
 /***/ "./storage/app/public/sport_logo/baseball_1582992828.png":
 /*!***************************************************************!*\
   !*** ./storage/app/public/sport_logo/baseball_1582992828.png ***!
@@ -79344,91 +79328,25 @@ module.exports = "/images/baseball_1582992828.png?b955314eb9b4771c8dc55459cf7734
 
 /***/ }),
 
-/***/ "./storage/app/public/sport_logo/basketball-h_1582913993.png":
+/***/ "./storage/app/public/sport_logo/basketball-h_1585325920.png":
 /*!*******************************************************************!*\
-  !*** ./storage/app/public/sport_logo/basketball-h_1582913993.png ***!
+  !*** ./storage/app/public/sport_logo/basketball-h_1585325920.png ***!
   \*******************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "/images/basketball-h_1582913993.png?7aab7c12b13b2511d60a50ab922795b0";
+module.exports = "/images/basketball-h_1585325920.png?7aab7c12b13b2511d60a50ab922795b0";
 
 /***/ }),
 
-/***/ "./storage/app/public/sport_logo/basketball-h_1582923907.png":
-/*!*******************************************************************!*\
-  !*** ./storage/app/public/sport_logo/basketball-h_1582923907.png ***!
-  \*******************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "/images/basketball-h_1582923907.png?7aab7c12b13b2511d60a50ab922795b0";
-
-/***/ }),
-
-/***/ "./storage/app/public/sport_logo/basketball-h_1582924406.png":
-/*!*******************************************************************!*\
-  !*** ./storage/app/public/sport_logo/basketball-h_1582924406.png ***!
-  \*******************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "/images/basketball-h_1582924406.png?7aab7c12b13b2511d60a50ab922795b0";
-
-/***/ }),
-
-/***/ "./storage/app/public/sport_logo/basketball_1582061477.png":
+/***/ "./storage/app/public/sport_logo/basketball_1585325920.png":
 /*!*****************************************************************!*\
-  !*** ./storage/app/public/sport_logo/basketball_1582061477.png ***!
+  !*** ./storage/app/public/sport_logo/basketball_1585325920.png ***!
   \*****************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "/images/basketball_1582061477.png?3ea563a13d594d5dc49e485fdc95eccb";
-
-/***/ }),
-
-/***/ "./storage/app/public/sport_logo/basketball_1582913993.png":
-/*!*****************************************************************!*\
-  !*** ./storage/app/public/sport_logo/basketball_1582913993.png ***!
-  \*****************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "/images/basketball_1582913993.png?3ea563a13d594d5dc49e485fdc95eccb";
-
-/***/ }),
-
-/***/ "./storage/app/public/sport_logo/basketball_1582923907.png":
-/*!*****************************************************************!*\
-  !*** ./storage/app/public/sport_logo/basketball_1582923907.png ***!
-  \*****************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "/images/basketball_1582923907.png?3ea563a13d594d5dc49e485fdc95eccb";
-
-/***/ }),
-
-/***/ "./storage/app/public/sport_logo/basketball_1582924406.png":
-/*!*****************************************************************!*\
-  !*** ./storage/app/public/sport_logo/basketball_1582924406.png ***!
-  \*****************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "/images/basketball_1582924406.png?3ea563a13d594d5dc49e485fdc95eccb";
-
-/***/ }),
-
-/***/ "./storage/app/public/sport_logo/cricket_1582061553.png":
-/*!**************************************************************!*\
-  !*** ./storage/app/public/sport_logo/cricket_1582061553.png ***!
-  \**************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "/images/cricket_1582061553.png?27388d20d7a22826e24c6d12a5efb259";
+module.exports = "/images/basketball_1585325920.png?3ea563a13d594d5dc49e485fdc95eccb";
 
 /***/ }),
 
@@ -79443,58 +79361,25 @@ module.exports = "/images/new.png?ba03865740f41d5cda4924d0e1fc9a7d";
 
 /***/ }),
 
-/***/ "./storage/app/public/sport_logo/pingpong-h_1582914011.png":
+/***/ "./storage/app/public/sport_logo/pingpong-h_1585326705.png":
 /*!*****************************************************************!*\
-  !*** ./storage/app/public/sport_logo/pingpong-h_1582914011.png ***!
+  !*** ./storage/app/public/sport_logo/pingpong-h_1585326705.png ***!
   \*****************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "/images/pingpong-h_1582914011.png?c4a29b38fac415f431efa0527719cae5";
+module.exports = "/images/pingpong-h_1585326705.png?c4a29b38fac415f431efa0527719cae5";
 
 /***/ }),
 
-/***/ "./storage/app/public/sport_logo/pingpong-h_1582989372.png":
-/*!*****************************************************************!*\
-  !*** ./storage/app/public/sport_logo/pingpong-h_1582989372.png ***!
-  \*****************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "/images/pingpong-h_1582989372.png?c4a29b38fac415f431efa0527719cae5";
-
-/***/ }),
-
-/***/ "./storage/app/public/sport_logo/pingpong_1582061500.png":
+/***/ "./storage/app/public/sport_logo/pingpong_1585326705.png":
 /*!***************************************************************!*\
-  !*** ./storage/app/public/sport_logo/pingpong_1582061500.png ***!
+  !*** ./storage/app/public/sport_logo/pingpong_1585326705.png ***!
   \***************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "/images/pingpong_1582061500.png?57b02fb4c7ede6d037d61415589eb74d";
-
-/***/ }),
-
-/***/ "./storage/app/public/sport_logo/pingpong_1582914011.png":
-/*!***************************************************************!*\
-  !*** ./storage/app/public/sport_logo/pingpong_1582914011.png ***!
-  \***************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "/images/pingpong_1582914011.png?57b02fb4c7ede6d037d61415589eb74d";
-
-/***/ }),
-
-/***/ "./storage/app/public/sport_logo/pingpong_1582989372.png":
-/*!***************************************************************!*\
-  !*** ./storage/app/public/sport_logo/pingpong_1582989372.png ***!
-  \***************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "/images/pingpong_1582989372.png?57b02fb4c7ede6d037d61415589eb74d";
+module.exports = "/images/pingpong_1585326705.png?57b02fb4c7ede6d037d61415589eb74d";
 
 /***/ }),
 
@@ -79509,17 +79394,6 @@ module.exports = "/images/rugby-h_1582992877.png?e399a581f38a1e3df3e4ae137375e1a
 
 /***/ }),
 
-/***/ "./storage/app/public/sport_logo/rugby_1582061562.png":
-/*!************************************************************!*\
-  !*** ./storage/app/public/sport_logo/rugby_1582061562.png ***!
-  \************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "/images/rugby_1582061562.png?f833e17eea80a75768afc4dac66af217";
-
-/***/ }),
-
 /***/ "./storage/app/public/sport_logo/rugby_1582992877.png":
 /*!************************************************************!*\
   !*** ./storage/app/public/sport_logo/rugby_1582992877.png ***!
@@ -79531,28 +79405,6 @@ module.exports = "/images/rugby_1582992877.png?f833e17eea80a75768afc4dac66af217"
 
 /***/ }),
 
-/***/ "./storage/app/public/sport_logo/soccerball-h_1582913951.png":
-/*!*******************************************************************!*\
-  !*** ./storage/app/public/sport_logo/soccerball-h_1582913951.png ***!
-  \*******************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "/images/soccerball-h_1582913951.png?a063fd55f0eb40e76aa60a123420b5d9";
-
-/***/ }),
-
-/***/ "./storage/app/public/sport_logo/soccerball-h_1582923893.png":
-/*!*******************************************************************!*\
-  !*** ./storage/app/public/sport_logo/soccerball-h_1582923893.png ***!
-  \*******************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "/images/soccerball-h_1582923893.png?a063fd55f0eb40e76aa60a123420b5d9";
-
-/***/ }),
-
 /***/ "./storage/app/public/sport_logo/soccerball-h_1582989356.png":
 /*!*******************************************************************!*\
   !*** ./storage/app/public/sport_logo/soccerball-h_1582989356.png ***!
@@ -79561,39 +79413,6 @@ module.exports = "/images/soccerball-h_1582923893.png?a063fd55f0eb40e76aa60a1234
 /***/ (function(module, exports) {
 
 module.exports = "/images/soccerball-h_1582989356.png?a063fd55f0eb40e76aa60a123420b5d9";
-
-/***/ }),
-
-/***/ "./storage/app/public/sport_logo/soccerball_1581788776.png":
-/*!*****************************************************************!*\
-  !*** ./storage/app/public/sport_logo/soccerball_1581788776.png ***!
-  \*****************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "/images/soccerball_1581788776.png?9429e98d23527067401c4bfbb94a8faa";
-
-/***/ }),
-
-/***/ "./storage/app/public/sport_logo/soccerball_1582913951.png":
-/*!*****************************************************************!*\
-  !*** ./storage/app/public/sport_logo/soccerball_1582913951.png ***!
-  \*****************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "/images/soccerball_1582913951.png?9429e98d23527067401c4bfbb94a8faa";
-
-/***/ }),
-
-/***/ "./storage/app/public/sport_logo/soccerball_1582923893.png":
-/*!*****************************************************************!*\
-  !*** ./storage/app/public/sport_logo/soccerball_1582923893.png ***!
-  \*****************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "/images/soccerball_1582923893.png?9429e98d23527067401c4bfbb94a8faa";
 
 /***/ }),
 
@@ -79619,17 +79438,6 @@ module.exports = "/images/tennis-h_1582992842.png?d64ee480d3468e4206e6d151cffaf0
 
 /***/ }),
 
-/***/ "./storage/app/public/sport_logo/tennis_1582061512.png":
-/*!*************************************************************!*\
-  !*** ./storage/app/public/sport_logo/tennis_1582061512.png ***!
-  \*************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "/images/tennis_1582061512.png?0689ae8cd4e0ae11f989ce5a4bce7493";
-
-/***/ }),
-
 /***/ "./storage/app/public/sport_logo/tennis_1582992842.png":
 /*!*************************************************************!*\
   !*** ./storage/app/public/sport_logo/tennis_1582992842.png ***!
@@ -79641,36 +79449,36 @@ module.exports = "/images/tennis_1582992842.png?0689ae8cd4e0ae11f989ce5a4bce7493
 
 /***/ }),
 
-/***/ "./storage/app/public/sport_logo/volleyball-h_1582992861.png":
+/***/ "./storage/app/public/sport_logo/volleyball-h_1585325522.png":
 /*!*******************************************************************!*\
-  !*** ./storage/app/public/sport_logo/volleyball-h_1582992861.png ***!
+  !*** ./storage/app/public/sport_logo/volleyball-h_1585325522.png ***!
   \*******************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "/images/volleyball-h_1582992861.png?69c0b126f7cc0312644d357df1a15685";
+module.exports = "/images/volleyball-h_1585325522.png?69c0b126f7cc0312644d357df1a15685";
 
 /***/ }),
 
-/***/ "./storage/app/public/sport_logo/volleyball_1582061488.png":
+/***/ "./storage/app/public/sport_logo/volleyball-h_1585325893.png":
+/*!*******************************************************************!*\
+  !*** ./storage/app/public/sport_logo/volleyball-h_1585325893.png ***!
+  \*******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/volleyball-h_1585325893.png?69c0b126f7cc0312644d357df1a15685";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/volleyball_1585325893.png":
 /*!*****************************************************************!*\
-  !*** ./storage/app/public/sport_logo/volleyball_1582061488.png ***!
+  !*** ./storage/app/public/sport_logo/volleyball_1585325893.png ***!
   \*****************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "/images/volleyball_1582061488.png?682e28ed0436850553275c4d54f5daca";
-
-/***/ }),
-
-/***/ "./storage/app/public/sport_logo/volleyball_1582992861.png":
-/*!*****************************************************************!*\
-  !*** ./storage/app/public/sport_logo/volleyball_1582992861.png ***!
-  \*****************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "/images/volleyball_1582992861.png?682e28ed0436850553275c4d54f5daca";
+module.exports = "/images/volleyball_1585325893.png?682e28ed0436850553275c4d54f5daca";
 
 /***/ }),
 

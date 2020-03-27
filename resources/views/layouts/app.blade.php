@@ -39,7 +39,7 @@
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
                         <li class="nav-item">
-                            <a class="nav-link mr-4 orange" href="/find_event"><i class="fas fa-search"></i> Event finder</a>
+                            <a class="btn btn-orange mr-5" href="/find_event"><i class="fas fa-search"></i> Event finder</a>
                         </li>
 
                         @guest

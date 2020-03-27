@@ -25,7 +25,7 @@ class CreatePlacesTable extends Migration
             $table->string('highlight_valid')->nullable();
             $table->timestamps();
 
-            $table->foreign('type')->references('id')->on('types');
+            $table->foreign('type')->references('id')->on('types')->onUpdate('cascade');
         });
     }
 

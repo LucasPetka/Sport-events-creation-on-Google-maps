@@ -55,13 +55,18 @@ Route::post('/messages', 'Events\EventController@sendMessage');
 
 //------------------------------ADMIN--------------------------------------------------
 Route::get('/admin', 'AdminController@index')->middleware('admin');
-Route::get('/admin/places', 'AdminController@places')->middleware('admin');
-Route::get('/admin/events', 'AdminController@events')->middleware('admin');
+Route::get('/admin/places_to_confirm', 'AdminController@places')->middleware('admin');
+Route::get('/admin/events_to_confirm', 'AdminController@events')->middleware('admin');
+Route::get('/admin/places', 'AdminController@allPlaces')->middleware('admin');
 Route::get('/admin/users', 'AdminController@users')->middleware('admin');
 Route::get('/admin/sporttypes', 'AdminController@sportTypes')->middleware('admin');
 
+//=======Types
 Route::post('/admin/sporttypes/add', 'TypeController@store')->middleware('admin');
+Route::get('/admin/sporttypes/edit/{id}', 'TypeController@openUpdate')->middleware('admin');
+Route::post('/admin/sporttypes/edit_type/{id}', 'TypeController@update')->middleware('admin');
 Route::delete('/admin/sporttypes/delete/{id}', 'TypeController@destroy')->middleware('admin');
+
 Route::get('/admin/deleteuser/{id}', 'AdminController@deleteUser')->middleware('admin');
 Route::get('/admin/accplace/{id}', 'AdminController@acceptPlace')->middleware('admin');
 Route::get('/admin/decplace/{id}', 'AdminController@declinePlace')->middleware('admin');

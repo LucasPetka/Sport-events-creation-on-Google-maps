@@ -59,7 +59,7 @@
                       </a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link active" href="/admin/places">
+                      <a class="nav-link active" href="/admin/places_to_confirm">
                         <i class="fas fa-map-marked-alt"></i>
                         @if(is_countable($places))
                           Places to confirm ({{ $places_count }}) <span class="sr-only">(current)</span>
@@ -69,7 +69,7 @@
                       </a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link active" href="/admin/events">
+                      <a class="nav-link active" href="/admin/events_to_confirm">
                         <i class="fas fa-calendar-alt"></i>
                         @if(is_countable($events))
                           Events to confirm ({{ $events_count }}) <span class="sr-only">(current)</span>
@@ -78,10 +78,26 @@
                         @endif
                       </a>
                     </li>
+                  </ul>
+
+                  <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                    <span>Static data</span>
+                    <a class="d-flex align-items-center text-muted" href="#">
+                      <span data-feather="plus-circle"></span> 
+                    </a>
+                  </h6>
+
+                  <ul class="nav flex-column">
                     <li class="nav-item">
                       <a class="nav-link" href="/admin/users">
                         <i class="fas fa-user"></i>
                         Users
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="/admin/places">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Places
                       </a>
                     </li>
                     <li class="nav-item">

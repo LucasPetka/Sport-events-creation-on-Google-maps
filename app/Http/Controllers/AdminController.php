@@ -26,9 +26,14 @@ class AdminController extends Controller
     { 
         $places = PlaceQueue::count();
         $events = EventQueue::count();
+        $eventsOnMap = Event::count();
+        $placesOnMap = Place::count();
+        $registeredUsers = User::count();
+        $confirmations = $places + $events;
 
 
-        return view('admin')->with(compact('places','events'));
+
+        return view('admin')->with(compact('places','events','eventsOnMap','placesOnMap','registeredUsers', 'confirmations'));
     }
 
     public function places()
@@ -38,6 +43,15 @@ class AdminController extends Controller
         $events = EventQueue::count();
 
         return view('admin.places')->with(compact('places', 'places_count', 'events'));
+    }
+
+    public function allPlaces()
+    { 
+        $places = Place::paginate(10);
+        $places_count = PlaceQueue::count();
+        $events = EventQueue::count();
+
+        return view('admin.allPlaces')->with(compact('places', 'places_count', 'events'));
     }
 
     public function events()
@@ -62,7 +76,7 @@ class AdminController extends Controller
 
     public function users()
     { 
-        $users = User::all();
+        $users = User::paginate(10);
         $places = PlaceQueue::count();
         $events = EventQueue::count();
 

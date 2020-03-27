@@ -21,7 +21,7 @@
           </div>
         @endif
 
-        <h3 class="mt-4"><i class="fas fa-calendar-alt"></i> Events waiting for confirmation</h3>
+        <h3 class="mt-4"><i class="fas fa-calendar-alt text-orange-secondary"></i> Events waiting for confirmation</h3>
         <div class="table-responsive">
           <table class="table table-striped">
             <thead>
@@ -49,8 +49,8 @@
                         {{ Carbon\Carbon::parse($event->time_from)->format('H:i') }}-{{ Carbon\Carbon::parse($event->time_until)->format('H:i') }}
                     </td>
                     <td>
-                        <button type="button" class="btn btn-orange mr-4" data-toggle="modal" data-target="#placeid{{ $event->id }}"> Open </button>
-                        <a href ="/admin/accevent/{{ $event->id }}"  class="btn btn-orange-secondary mr-2" data-toggle="tooltip" data-placement="top" title="Publish new event" ><i class="fas fa-check"></i></a>
+                        <button type="button" class="btn btn-primary mr-4" data-toggle="modal" data-target="#placeid{{ $event->id }}"> Open </button>
+                        <a href ="/admin/accevent/{{ $event->id }}"  class="btn btn-success mr-2" data-toggle="tooltip" data-placement="top" title="Publish new event" ><i class="fas fa-check"></i></a>
                         <a href ="/admin/decevent/{{ $event->id }}"  class="btn btn-danger mr-2" data-toggle="tooltip" data-placement="top" title="Decline this event"><i class="fas fa-times"></i></a>
                     </td>
                 </tr>

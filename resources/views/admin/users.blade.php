@@ -3,7 +3,7 @@
 @section('content')
 
 
-        <h3 class="mt-4"><i class="fas fa-user"></i> Users</h3>
+        <h3 class="mt-4"><i class="fas fa-user text-orange-secondary"></i> Users</h3>
         <div class="table-responsive">
           <table class="table table-striped">
             <thead>
@@ -38,8 +38,16 @@
                 </tr>
                 @endforeach
               @endif
-
             </tbody>
         </div>
+        
+
+        <div class="row">
+          <div class="mx-auto">
+            {{ $users->links() }}
+          </div>
+        </div>
+
+  
 
   @endsection

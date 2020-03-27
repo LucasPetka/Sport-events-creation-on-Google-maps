@@ -137,7 +137,7 @@
                                 <jw-pagination :pageSize="3"  :items="submitedPlaces" @changePage="submited_places_onChangePage"></jw-pagination>
                             </div>
                         </div>
-                        <p v-else class="text-center mt-4 text-muted"> No submited places.. </p> 
+                        <p v-else class="text-center mt-4 text-muted"> You haven't submited any places.. </p> 
                     
                 </div>
 
@@ -187,7 +187,7 @@
                                 <jw-pagination :pageSize="3"  :items="acceptedPlaces" @changePage="accepted_places_onChangePage"></jw-pagination>
                             </div>
                         </div>
-                        <p v-else class="text-center mt-4 text-muted"> No accepted places.. </p> 
+                        <p v-else class="text-center mt-4 text-muted"> No places added.. </p> 
                     
                 </div>
                 
@@ -241,7 +241,7 @@
 
         <!-- ======================================================GOING TO EVENTS==============================================================-->
         <div class="collapse show" id="goingto" data-parent="#accordionExample">
-        <p class="h4 ml-5 mb-3 mb-0 pb-0">Participating</p>
+        <p class="h4 ml-5 mb-3 mb-0 pb-0">Participating in</p>
         
         <div v-if="loaded == false" class="row">
             <div class="spinner-border text-dark mt-4 mx-auto" role="status">
@@ -268,6 +268,9 @@
 
                             <div class="col-lg-8">
                                 {{ event.about.slice(0, 140) }}...
+                                <div v-if="new Date(event.time_until) <= todaysDate" class="alert alert-danger mt-1 mb-0 p-2 text-center" role="alert">
+                                    Event ended!
+                                </div>
                             </div>
 
                             <div class="col-lg-3">
@@ -308,7 +311,7 @@
                     <jw-pagination :pageSize="3"  :items="goingToEvents" @changePage="goingto_events_onChangePage"></jw-pagination>
                 </div>
             </div>
-        <p v-else class="text-center mt-4 text-muted"> No events created.. </p>   
+        <p v-else class="text-center mt-4 text-muted"> You haven't joined any events.. </p>   
         </div>
         </div>
 
@@ -397,7 +400,7 @@
                                 <jw-pagination :pageSize="3"  :items="submitedEvents" @changePage="submited_events_onChangePage"></jw-pagination>
                             </div>
                         </div>
-                    <p v-else class="text-center mt-4 text-muted"> No events created.. </p>  
+                    <p v-else class="text-center mt-4 text-muted"> No events submited.. </p>  
                 </div> 
 
                 <!--===============================ACCEPTED========================================-->
@@ -534,7 +537,7 @@
                             <jw-pagination :pageSize="3"  :items="declinedEvents" @changePage="declined_events_onChangePage"></jw-pagination>
                         </div>
                         </div>
-                    <p v-else class="text-center mt-4 text-muted"> No events created.. </p>  
+                    <p v-else class="text-center mt-4 text-muted"> No events declined.. </p>  
                 </div>
 
 
@@ -578,6 +581,7 @@ export default {
             submitedEvents: [],
             declinedEvents: [],
             loaded: false,
+            todaysDate: new Date,
             center: { lat: 0.0, lng: 0.0 },
             place: {
                 id:'',
@@ -798,7 +802,6 @@ export default {
 
         updateNavingation(opa){
 
-            console.log(opa.currentTarget.id);
             $.each($('.profile_nav'), function() {
                 if(this.id == opa.currentTarget.id){
                     $('#'+this.id).removeClass("btn-orange-secondary");

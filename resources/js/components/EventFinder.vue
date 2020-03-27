@@ -299,13 +299,16 @@ export default {
 
                 this.findEvents();
                 this.findRecommendedEvents();
+                console.log("trackingON");
 
             }, err =>{    //if something goes wrong when locating just set map center
+                
                 this.user_location = this.ip;
                 this.center = this.ip;
                 this.user_loc_set = true;
                 this.findEvents();
                 this.findRecommendedEvents();
+                console.log("somtehing wrong: " + err.message);
             });
             }
             else{           //if tracking is OFF when just locate set map center
@@ -314,6 +317,7 @@ export default {
                 this.user_loc_set = true;
                 this.findEvents();
                 this.findRecommendedEvents();
+                console.log("tracking OFF");
             }
         }
         },

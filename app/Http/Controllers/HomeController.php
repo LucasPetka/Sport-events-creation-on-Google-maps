@@ -189,7 +189,12 @@ class HomeController extends Controller
 
         $user = Auth::user();
         $user->name = $request->input('username');
-        $user->liked_sports = json_encode($request->input('types'));
+        if(!$request->input('types')){
+            $user->liked_sports = json_encode([]);
+        }
+        else{
+            $user->liked_sports = json_encode($request->input('types'));
+        }
 
         $user->save();
 

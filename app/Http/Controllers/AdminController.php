@@ -12,7 +12,13 @@ use App\DeclinedPlaces;
 use App\DeclinedEvents;
 use App\Type;
 use App\User;
+use Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
+use App\Notifications\PlaceAccept;
+use App\Notifications\PlaceDeclined;
+use App\Notifications\EventAccept;
+use App\Notifications\EventDeclined;
 
 class AdminController extends Controller
 {
@@ -112,12 +118,17 @@ class AdminController extends Controller
         $accepted_place->person_id = $place->personid;
         $accepted_place->place_id = $newPlace->id;
 
+
+
         
-        if($accepted_place->save() && $place->delete()){
-            return redirect('/admin/places')->with('success', 'Place has been added!');
+        if($accepted_place->save()){
+
+            User::find($place->personid)->notify(new PlaceAccept($newPlace));
+            $place->delete();
+            return redirect('/admin/places_to_confirm')->with('success', 'Place has been added!');
         }
         else{
-            return redirect('/admin/places')->with('error', 'Place has not been added...');
+            return redirect('/admin/places_to_confirm')->with('error', 'Place has not been added...');
         }
     }
 
@@ -135,10 +146,13 @@ class AdminController extends Controller
         $declinedPlace->personid = $place->personid;
 
         if($declinedPlace->save() && $place->delete()){
-            return redirect('/admin/places')->with('success', 'Place has been declined!');
+
+            User::find($declinedPlace->personid)->notify(new PlaceDeclined($declinedPlace));
+
+            return redirect('/admin/places_to_confirm')->with('success', 'Place has been declined!');
         }
         else{
-            return redirect('/admin/places')->with('error', 'Place has not been declined...');
+            return redirect('/admin/places_to_confirm')->with('error', 'Place has not been declined...');
         }
 
     }
@@ -157,10 +171,13 @@ class AdminController extends Controller
         $newEvent->person_id = $event->person_id;
 
         if($newEvent->save() && $event->delete()){
-            return redirect('/admin/events')->with('success', 'Event has been accepted!');
+
+            User::find($newEvent->person_id)->notify(new EventAccept($newEvent));
+
+            return redirect('/admin/events_to_confirm')->with('success', 'Event has been accepted!');
         }
         else{
-            return redirect('/admin/events')->with('error', 'Event has not been accepted...');
+            return redirect('/admin/events_to_confirm')->with('error', 'Event has not been accepted...');
         }
     }
 
@@ -178,10 +195,13 @@ class AdminController extends Controller
         
 
         if($declinedEvent->save() && $event->delete()){
-            return redirect('/admin/events')->with('success', 'Event has been declined!');
+            
+            User::find($declinedEvent->person_id)->notify(new EventDeclined($declinedEvent));
+
+            return redirect('/admin/events_to_confirm')->with('success', 'Event has been declined!');
         }
         else{
-            return redirect('/admin/events')->with('error', 'Event has not been declined...');
+            return redirect('/admin/events_to_confirm')->with('error', 'Event has not been declined...');
         }
     }
 

@@ -5,7 +5,7 @@
         <div class="input-group">
           <gmap-autocomplete class="form-control" :select-first-on-enter="true" @place_changed="setPlace"></gmap-autocomplete> 
           <div class="input-group-append">
-            <button class="btn btn-outline-secondary" @click="locate(bounds)">Locate</button>
+            <button class="btn btn-orange" @click="updateUserLocation_byCenter(center)">Set your location</button>
           </div>
         </div>
       </div>
@@ -14,7 +14,7 @@
         <button type="button" class="btn btn-orange-secondary" v-on:click="loadMarkers()">Refresh markers <i class="fas fa-redo"></i></button>
       </div>
 
-    <gmap-map ref="gmapp" :map-type-id="mapType" v-on:rightclick="openMenu($event)" v-on:zoom_changed="updateZoom()" :center="center" v-on:bounds_changed="update_bounds($event)" :zoom="zoom_in" v-bind:options="mapStyle" style=" overflow:hidden; width:100%; height:94vh;">
+    <gmap-map ref="gmapp" :map-type-id="mapType" v-on:rightclick="openMenu($event)" v-on:dragend="loadMarkers()" v-on:zoom_changed="updateZoom()" :center="center" v-on:bounds_changed="update_bounds($event)" :zoom="zoom_in" v-bind:options="mapStyle" style=" overflow:hidden; width:100%; height:94vh;">
       <gmap-cluster :zoom-on-click="true" :gridSize="20" :maxZoom="16">
 
       <gmap-marker v-for="place in allPlaces.data" 
@@ -39,6 +39,7 @@
       </gmap-info-window>
       </gmap-cluster>
       <gmap-marker :visible="marker_visibility" :position="getPosition(addNewmark_coordinates)" :icon="{ url: require('../assets/google_maps/new.png')}" ></gmap-marker>
+      <gmap-marker :position="getPosition(user_location)"  @dragend="updateUserLocation($event.latLng)"  :draggable="true" :icon="{ url: require('../assets/google_maps/current_loc.png')}" ></gmap-marker>
     </gmap-map>
 
     <div class="dropdown-menu dropdown-menu-sm" id="pointerMenu" style="display:none; position: absolute;">
@@ -88,7 +89,7 @@ export default {
     bounds: null,
     currentPlace: null,
     marker_visibility: false,
-    rules:{type: 'All', distance: 'Any'},   
+    rules:{type: 'All', distance: 'Any', paid: 'Any'},   
     mapType: 'roadmap',
     mapStyle: {
       styles: mapstyle,
@@ -170,6 +171,19 @@ export default {
     //sets map center, main location LITHUANIA, but if person has location ON then it shows person location
     geolocation : function() {
 
+      if(this.getCookie("lat") != null && this.getCookie("lng") != null){
+
+        var lat = parseFloat(this.getCookie("lat"));
+        var lng = parseFloat(this.getCookie("lng"));
+
+        this.center = {lat: lat, lng: lng};
+        this.user_location = {lat: lat, lng: lng};
+
+        this.user_loc_set = true;
+        this.checkVariable();
+      }
+
+
       if(!this.user_loc_set){
         if (navigator.geolocation) { //if location tracking is ON
           navigator.geolocation.getCurrentPosition((position) => {
@@ -210,6 +224,35 @@ export default {
       }
     },
 
+    updateUserLocation(location) {
+        this.user_location = {
+            lat: location.lat(),
+            lng: location.lng(),
+        };
+        var today = new Date();
+        var expire = new Date();
+        expire.setTime(today.getTime() + 3600000*24*7);
+        document.cookie = "lat="+ location.lat() +"; expires=" + expire.toGMTString();
+        document.cookie = "lng="+ location.lng() +"; expires=" + expire.toGMTString();
+    },
+
+    updateUserLocation_byCenter(location) {
+        this.user_location = {
+            lat: location.lat,
+            lng: location.lng,
+        };
+        var today = new Date();
+        var expire = new Date();
+        expire.setTime(today.getTime() + 3600000*24*7);
+        document.cookie = "lat="+ location.lat +"; expires=" + expire.toGMTString();
+        document.cookie = "lng="+ location.lng +"; expires=" + expire.toGMTString();
+    },
+
+    //---------------------------Get Cookie-------------------------------------
+    getCookie(name) {
+    var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+    return v ? v[2] : null;
+    },
 
     //smooth zooms in using timeout beetween zoom functions
     smoothZoom(max, cnt) {
@@ -368,7 +411,7 @@ export default {
 
 #geoloc_bar{
   position: absolute;
-  top:120px;
+  top:130px;
   left: 49%;
   -webkit-transform: translate(-49%, -40%);
   transform: translate(-49%, -40%);
@@ -376,11 +419,17 @@ export default {
   background-color: white;
   padding: 10px 15px;
   border-radius: 8px;
-  width: 300px;
+  width: 500px;
 }
 
 #marker {
  display: none;
+}
+
+@media only screen and (max-width: 540px) {
+  #geoloc_bar{
+    width: 95%;
+  }
 }
 
 

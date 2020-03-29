@@ -282,6 +282,20 @@ export default {
         //sets map center, main location LITHUANIA, but if person has location ON then it shows person location
         geolocation : function() {
 
+        if(this.getCookie("lat") != null && this.getCookie("lng") != null){
+
+            var lat = parseFloat(this.getCookie("lat"));
+            var lng = parseFloat(this.getCookie("lng"));
+
+            this.center = {lat: lat, lng: lng};
+            this.user_location = {lat: lat, lng: lng};
+
+            this.user_loc_set = true;
+
+            this.findEvents();
+            this.findRecommendedEvents();
+        }
+
         if(!this.user_loc_set){
             if (navigator.geolocation) { //if location tracking is ON
             navigator.geolocation.getCurrentPosition((position) => {
@@ -391,6 +405,11 @@ export default {
                 lat: parseFloat(place.lat),
                 lng: parseFloat(place.lng)
             }
+        },
+
+        getCookie(name) {
+            var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+            return v ? v[2] : null;
         },
 
         updateNavingation(event){

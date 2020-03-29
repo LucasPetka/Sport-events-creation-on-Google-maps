@@ -25,26 +25,50 @@ class PlaceController extends Controller
         $distance = $request->input('distance');
         $lat = $request->input('lat');
         $lng = $request->input('lng');
+        $paid = $request->input('paid');
 
         $places = DB::table('places')->select('*')->where('lat','<',$nelat)->where('lat','>',$swlat)->where('lng','<',$nelng)->where('lng','>',$swlng);
 
-
-        if(null !== $request->input('distance') && $request->input('type') != "All" && null !== $request->input('type') && $request->input('distance') != "Any"){ 
-            $places = $places->whereRaw('? > ( 6371 * acos ( cos ( radians( ? ) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians( ? ) ) + sin ( radians( ? ) ) * sin( radians( lat ) ) ) )', [$distance, $lat, $lng, $lat])
-            ->where('type','=',$request->input('type'))
-            ->get();
-        }
-        else if(null !== $request->input('distance') && $request->input('distance') != "Any"){
-            $places = $places->whereRaw('? > ( 6371 * acos ( cos ( radians( ? ) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians( ? ) ) + sin ( radians( ? ) ) * sin( radians( lat ) ) ) )', [$distance, $lat, $lng, $lat])
-            ->get();
-        }
-        else if(null !== $request->input('type') && $request->input('type') != "All"){
-            $places = $places->where('type','=',$request->input('type'))
-            ->get();
+        if(null !== $request->input('paid') && $request->input('paid') != "Any"){
+            if(null !== $request->input('distance') && $request->input('type') != "All" && null !== $request->input('type') && $request->input('distance') != "Any"){ 
+                $places = $places->whereRaw('? > ( 6371 * acos ( cos ( radians( ? ) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians( ? ) ) + sin ( radians( ? ) ) * sin( radians( lat ) ) ) )', [$distance, $lat, $lng, $lat])
+                ->where('type','=',$request->input('type'))
+                ->where('paid','=',$request->input('paid'))
+                ->get();
+            }
+            else if(null !== $request->input('distance') && $request->input('distance') != "Any"){
+                $places = $places->whereRaw('? > ( 6371 * acos ( cos ( radians( ? ) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians( ? ) ) + sin ( radians( ? ) ) * sin( radians( lat ) ) ) )', [$distance, $lat, $lng, $lat])
+                ->where('paid','=',$request->input('paid'))
+                ->get();
+            }
+            else if(null !== $request->input('type') && $request->input('type') != "All"){
+                $places = $places->where('type','=',$request->input('type'))
+                ->where('paid','=',$request->input('paid'))
+                ->get();
+            }
+            else{
+                //Get places
+                $places = $places->where('paid','=',$request->input('paid'))->get();
+            }
         }
         else{
-            //Get places
-            $places = $places->get();
+            if(null !== $request->input('distance') && $request->input('type') != "All" && null !== $request->input('type') && $request->input('distance') != "Any"){ 
+                $places = $places->whereRaw('? > ( 6371 * acos ( cos ( radians( ? ) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians( ? ) ) + sin ( radians( ? ) ) * sin( radians( lat ) ) ) )', [$distance, $lat, $lng, $lat])
+                ->where('type','=',$request->input('type'))
+                ->get();
+            }
+            else if(null !== $request->input('distance') && $request->input('distance') != "Any"){
+                $places = $places->whereRaw('? > ( 6371 * acos ( cos ( radians( ? ) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians( ? ) ) + sin ( radians( ? ) ) * sin( radians( lat ) ) ) )', [$distance, $lat, $lng, $lat])
+                ->get();
+            }
+            else if(null !== $request->input('type') && $request->input('type') != "All"){
+                $places = $places->where('type','=',$request->input('type'))
+                ->get();
+            }
+            else{
+                //Get places
+                $places = $places->get();
+            }
         }
 
         //Return collection as a resource

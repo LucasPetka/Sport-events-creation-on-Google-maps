@@ -13,6 +13,7 @@ Vue.component('eventfinder', require('./components/EventFinder.vue').default);
 Vue.component('editevent', require('./components/EditEvent.vue').default);
 Vue.component('showprofileinfo', require('./components/ShowProfileInfo.vue').default);
 Vue.component('recommendedevents', require('./components/RecommendEvents.vue').default);
+Vue.component('notification', require('./components/Notification.vue').default);
 
 
 import Vue from 'vue'

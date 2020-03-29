@@ -2,19 +2,27 @@
   <div>
       <br>
     <div v-if="!paidFor">
-      <h4>Advertisment for this place - ${{ product.price }} gbp</h4>
-      <p>{{ product.description }}</p>
-
-        <div v-for="product_checked in products"  :key="product_checked.id">
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="product" :value="product_checked" v-model="product" :id="'product' + product_checked.id">
-              <label class="form-check-label" :for="'product' + product_checked.id">
-                {{ product_checked.description }}
+      <h4>Advertisment for this place </h4>
+      <hr>
+      <p class="mb-2 text-secondary">Select plan</p>
+        <div class="row">
+            <div v-for="product_checked in products"  :key="product_checked.id" class="col-md-4 col-lg-4 col-sm-4">
+              <label>
+                <input type="radio" name="product" class="card-input-element" :value="product_checked" v-model="product" :id="'product' + product_checked.id" />
+                  <div class="card card-input">
+                    <div class="card-body p-2">
+                      {{ product_checked.description }}
+                      <hr class="m-2">
+                       <span class="float-right font-weight-bold">{{ product_checked.price }} <i class="fas fa-pound-sign"></i></span>
+                    </div>
+                  </div>
               </label>
             </div>
         </div>
 
-      <div ref="paypal"></div>
+        <p class="text-center h5 font-weight-bold text-secondary m-4">{{ product.description }} <span v-if="product.price != ''"> - {{ product.price }} <i class="fas fa-pound-sign"></i></span></p>
+
+      <div v-show="product.price != ''" class="mt-5" ref="paypal"></div>
     </div>
 
 
@@ -38,9 +46,9 @@ export default {
         loaded: false,
         paidFor: false,
         products: [
-            {id: 1, price: 3, description: "advertisment for 1 month"},
-            {id: 2, price: 5.50, description: "advertisment for 2 months"},
-            {id: 3, price: 8, description: "advertisment for 3 months"},
+            {id: 1, price: 3, description: "1 month of advertisment"},
+            {id: 2, price: 5.50, description: "2 months of advertisment"},
+            {id: 3, price: 8, description: "3 months of advertisment"},
         ],
         product:{
           price: '', description:''
@@ -60,8 +68,7 @@ export default {
 
     mounted: function() {
         const script = document.createElement("script");
-        script.src =
-        "https://www.paypal.com/sdk/js?client-id=AUNTb6pouQsWb7VMzm0i1zQ4PmSC6AxNKD9JWz3ohJivtsFssOvR1E-xyVvL4Mpa03Np-lCS3u_t5j-B&currency=GBP";
+        script.src = "https://www.paypal.com/sdk/js?client-id=AUNTb6pouQsWb7VMzm0i1zQ4PmSC6AxNKD9JWz3ohJivtsFssOvR1E-xyVvL4Mpa03Np-lCS3u_t5j-B&currency=GBP";
         script.addEventListener("load", this.setLoaded);
         document.body.appendChild(script);
     },
@@ -142,4 +149,32 @@ li {
 a {
   color: #42b983;
 }
+
+/**
+  Component
+**/
+
+.card-input-element {
+    display: none;
+}
+
+.card-input{
+  transition: all .2s ease-in-out;
+}
+
+.card-input:hover {
+    cursor: pointer;
+    background-color: rgb(241, 241, 241);
+    transform: scale(1.05);
+}
+
+.card-input-element:checked + .card-input {
+     box-shadow: 0 0 3px 5px #F39448;
+}
+
+.card-input-element:checked + .card-header {
+     background-color: 0 0 3px 1px rgb(72, 89, 243);
+}
+
 </style>
+

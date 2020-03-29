@@ -61,6 +61,10 @@ Route::get('/admin/places', 'AdminController@allPlaces')->middleware('admin');
 Route::get('/admin/users', 'AdminController@users')->middleware('admin');
 Route::get('/admin/sporttypes', 'AdminController@sportTypes')->middleware('admin');
 
+//====Notification
+Route::get('/notifications/get', 'NotificationController@get')->middleware('auth');
+Route::post('/notification/read', 'NotificationController@read')->middleware('auth');
+
 //=======Types
 Route::post('/admin/sporttypes/add', 'TypeController@store')->middleware('admin');
 Route::get('/admin/sporttypes/edit/{id}', 'TypeController@openUpdate')->middleware('admin');

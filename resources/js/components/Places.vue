@@ -6,13 +6,13 @@
     <div class="container-fluid position-absolute" style="z-index:2;">
         <div class="row">
             <div class="col-4"></div>
-            <div class="col-sm-12 col-lg-6">
+            <div class="col-sm-12 col-lg-8">
                 <div class="row">
                     <div class="col-sm-12 col-lg-6">
                     <div class="collapse" id="places_sort">
                     <div class="card card-body pt-4 pl-3 pr-3 pb-0">
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-lg-4 col-md-4">
                                 <label for="sport_type-url">Sport type</label>
                                 <div class="input-group mb-3">
                                 <select @change="sort_places" v-model="rules.type" class="custom-select" id="sport_type">
@@ -21,7 +21,7 @@
                                 </select>
                                 </div>
                             </div>
-                            <div class="col-6">
+                            <div class="col-lg-4 col-md-4">
                                 <label for="distance">Distance</label>
                                 <div class="input-group mb-3">
                                 <select @change="sort_places" v-model="rules.distance" class="custom-select" id="distance">
@@ -33,7 +33,17 @@
                                     <option value="25">25 km</option>
                                 </select>
                                 </div>
-                            </div>        
+                            </div>
+                            <div class="col-lg-4 col-md-4">
+                                <label for="paid">Paid</label>
+                                <div class="input-group mb-3">
+                                <select @change="sort_places" v-model="rules.paid" class="custom-select" id="paid">
+                                    <option selected>Any</option>
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
+                                </select>
+                                </div>
+                            </div>         
                         </div>
                     </div>
                     </div>
@@ -147,9 +157,13 @@
                                 </div>
 
                                 <div class="custom-control custom-checkbox float-left mr-4">
-                                    <input v-model="place.paid" type="checkbox" name="paid" class="custom-control-input" id="paid">
-                                    <label class="custom-control-label" for="paid" >Paid</label>
+                                    <input v-model="place.paid" type="checkbox" name="paid" class="custom-control-input" id="paidpp">
+                                    <label class="custom-control-label" for="paidpp" >Paid</label>
                                 </div>
+
+
+
+
                             </div>
 
                             <div class="modal-footer">
@@ -311,7 +325,7 @@ export default {
                 person_id:'',
             },
             rules:{
-                type: 'All', distance: 'Any'
+                type: 'All', distance: 'Any', paid: 'Any'
             },
             measured_distance:null,
             date:'',

@@ -39,7 +39,7 @@
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
                         <li class="nav-item">
-                            <a class="btn btn-orange mr-5" href="/find_event"><i class="fas fa-search"></i> Event finder</a>
+                            <a class="btn btn-orange mr-4" href="/find_event"><i class="fas fa-search"></i> Event finder</a>
                         </li>
 
                         @guest
@@ -53,6 +53,7 @@
                                 </li>
                             @endif
                         @else
+                            
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle white" style="text-transform: capitalize;" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }} <span class="caret"></span>
@@ -68,13 +69,16 @@
                                         <i class="fas fa-sign-out-alt"></i> {{ __('Logout') }}
                                     </a>
 
-                                    
-
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                         @csrf
                                     </form>
                                 </div>
                             </li>
+
+                            <li class="nav-item dropdown ml-2">
+                                <notification  v-bind:user='{!! Auth::user()->toJson() !!}'> </notification>
+                            </li>
+
                         @endguest
                     </ul>
                 </div>

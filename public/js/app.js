@@ -4147,6 +4147,22 @@ var Datepicker = function Datepicker() {
     geolocation: function geolocation() {
       var _this = this;
 
+      if (this.getCookie("lat") != null && this.getCookie("lng") != null) {
+        var lat = parseFloat(this.getCookie("lat"));
+        var lng = parseFloat(this.getCookie("lng"));
+        this.center = {
+          lat: lat,
+          lng: lng
+        };
+        this.user_location = {
+          lat: lat,
+          lng: lng
+        };
+        this.user_loc_set = true;
+        this.findEvents();
+        this.findRecommendedEvents();
+      }
+
       if (!this.user_loc_set) {
         if (navigator.geolocation) {
           //if location tracking is ON
@@ -4253,6 +4269,10 @@ var Datepicker = function Datepicker() {
         lng: parseFloat(place.lng)
       };
     },
+    getCookie: function getCookie(name) {
+      var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+      return v ? v[2] : null;
+    },
     updateNavingation: function updateNavingation(event) {
       console.log(event.currentTarget.id);
       $.each($('.profile_nav'), function () {
@@ -4292,6 +4312,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
 //
 //
 //
@@ -4393,7 +4414,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       marker_visibility: false,
       rules: {
         type: 'All',
-        distance: 'Any'
+        distance: 'Any',
+        paid: 'Any'
       },
       mapType: 'roadmap',
       mapStyle: {
@@ -4474,6 +4496,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     geolocation: function geolocation() {
       var _this2 = this;
 
+      if (this.getCookie("lat") != null && this.getCookie("lng") != null) {
+        var lat = parseFloat(this.getCookie("lat"));
+        var lng = parseFloat(this.getCookie("lng"));
+        this.center = {
+          lat: lat,
+          lng: lng
+        };
+        this.user_location = {
+          lat: lat,
+          lng: lng
+        };
+        this.user_loc_set = true;
+        this.checkVariable();
+      }
+
       if (!this.user_loc_set) {
         if (navigator.geolocation) {
           //if location tracking is ON
@@ -4507,6 +4544,33 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           this.checkVariable();
         }
       }
+    },
+    updateUserLocation: function updateUserLocation(location) {
+      this.user_location = {
+        lat: location.lat(),
+        lng: location.lng()
+      };
+      var today = new Date();
+      var expire = new Date();
+      expire.setTime(today.getTime() + 3600000 * 24 * 7);
+      document.cookie = "lat=" + location.lat() + "; expires=" + expire.toGMTString();
+      document.cookie = "lng=" + location.lng() + "; expires=" + expire.toGMTString();
+    },
+    updateUserLocation_byCenter: function updateUserLocation_byCenter(location) {
+      this.user_location = {
+        lat: location.lat,
+        lng: location.lng
+      };
+      var today = new Date();
+      var expire = new Date();
+      expire.setTime(today.getTime() + 3600000 * 24 * 7);
+      document.cookie = "lat=" + location.lat + "; expires=" + expire.toGMTString();
+      document.cookie = "lng=" + location.lng + "; expires=" + expire.toGMTString();
+    },
+    //---------------------------Get Cookie-------------------------------------
+    getCookie: function getCookie(name) {
+      var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+      return v ? v[2] : null;
     },
     //smooth zooms in using timeout beetween zoom functions
     smoothZoom: function smoothZoom(max, cnt) {
@@ -4642,6 +4706,71 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Notification.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Notification.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['user'],
+  data: function data() {
+    return {
+      notifications: []
+    };
+  },
+  created: function created() {
+    var _this = this;
+
+    axios.get('/notifications/get').then(function (response) {
+      _this.notifications = response.data;
+    });
+    Echo["private"]('App.User.' + this.user.id).notification(function (notification) {
+      _this.notifications.push(notification);
+
+      console.log(notification);
+    });
+  },
+  methods: {
+    markAsRead: function markAsRead(notification) {
+      var data = {
+        id: notification.id
+      };
+      axios.post('notification/read', data).then(function (response) {
+        window.location.href = "/home";
+      });
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Pagination.vue?vue&type=script&lang=js&":
 /*!*********************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Pagination.vue?vue&type=script&lang=js& ***!
@@ -4723,6 +4852,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 // import image from "../assets/lamp.png"
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user', 'place'],
@@ -4733,15 +4870,15 @@ __webpack_require__.r(__webpack_exports__);
       products: [{
         id: 1,
         price: 3,
-        description: "advertisment for 1 month"
+        description: "1 month of advertisment"
       }, {
         id: 2,
         price: 5.50,
-        description: "advertisment for 2 months"
+        description: "2 months of advertisment"
       }, {
         id: 3,
         price: 8,
-        description: "advertisment for 3 months"
+        description: "3 months of advertisment"
       }],
       product: {
         price: '',
@@ -5105,6 +5242,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var Calendar = function Calendar() {
   return Promise.resolve(/*! import() */).then(__webpack_require__.bind(null, /*! ../components/Calendar.vue */ "./resources/js/components/Calendar.vue"));
 };
@@ -5175,7 +5326,8 @@ var Gmap = function Gmap() {
       },
       rules: {
         type: 'All',
-        distance: 'Any'
+        distance: 'Any',
+        paid: 'Any'
       },
       measured_distance: null,
       date: '',
@@ -13239,7 +13391,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n#refresh_button{\n  position: absolute;\n  bottom:20px;\n  left: 49%;\n  -webkit-transform: translate(-49%, -40%);\n  transform: translate(-49%, -40%);\n  z-index: 5;\n}\n#geoloc_bar{\n  position: absolute;\n  top:120px;\n  left: 49%;\n  -webkit-transform: translate(-49%, -40%);\n  transform: translate(-49%, -40%);\n  z-index: 1;\n  background-color: white;\n  padding: 10px 15px;\n  border-radius: 8px;\n  width: 300px;\n}\n#marker {\n display: none;\n}\n\n\n", ""]);
+exports.push([module.i, "\n#refresh_button{\n  position: absolute;\n  bottom:20px;\n  left: 49%;\n  -webkit-transform: translate(-49%, -40%);\n  transform: translate(-49%, -40%);\n  z-index: 5;\n}\n#geoloc_bar{\n  position: absolute;\n  top:130px;\n  left: 49%;\n  -webkit-transform: translate(-49%, -40%);\n  transform: translate(-49%, -40%);\n  z-index: 1;\n  background-color: white;\n  padding: 10px 15px;\n  border-radius: 8px;\n  width: 500px;\n}\n#marker {\n display: none;\n}\n@media only screen and (max-width: 540px) {\n#geoloc_bar{\n    width: 95%;\n}\n}\n\n\n", ""]);
 
 // exports
 
@@ -13258,7 +13410,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\nh3[data-v-7bace86b] {\n  margin: 40px 0 0;\n}\nul[data-v-7bace86b] {\n  list-style-type: none;\n  padding: 0;\n}\nli[data-v-7bace86b] {\n  display: inline-block;\n  margin: 0 10px;\n}\na[data-v-7bace86b] {\n  color: #42b983;\n}\n", ""]);
+exports.push([module.i, "\nh3[data-v-7bace86b] {\n  margin: 40px 0 0;\n}\nul[data-v-7bace86b] {\n  list-style-type: none;\n  padding: 0;\n}\nli[data-v-7bace86b] {\n  display: inline-block;\n  margin: 0 10px;\n}\na[data-v-7bace86b] {\n  color: #42b983;\n}\n\n/**\n  Component\n**/\n.card-input-element[data-v-7bace86b] {\n    display: none;\n}\n.card-input[data-v-7bace86b]{\n  -webkit-transition: all .2s ease-in-out;\n  transition: all .2s ease-in-out;\n}\n.card-input[data-v-7bace86b]:hover {\n    cursor: pointer;\n    background-color: rgb(241, 241, 241);\n    -webkit-transform: scale(1.05);\n            transform: scale(1.05);\n}\n.card-input-element:checked + .card-input[data-v-7bace86b] {\n     box-shadow: 0 0 3px 5px #F39448;\n}\n.card-input-element:checked + .card-header[data-v-7bace86b] {\n     background-color: 0 0 3px 1px rgb(72, 89, 243);\n}\n\n", ""]);
 
 // exports
 
@@ -55280,7 +55432,7 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "col-6" }, [
-          _vm.user.id == _vm.event.person_id.id
+          _vm.user.id == _vm.event.person_id
             ? _c(
                 "div",
                 [
@@ -55904,8 +56056,7 @@ var render = function() {
                         ? _c(
                             "button",
                             {
-                              staticClass:
-                                "btn btn-orange-secondary float-right",
+                              staticClass: "btn btn-success float-right",
                               attrs: {
                                 id: "add_event_btn" + _vm.event.id,
                                 disabled: _vm.isLoading
@@ -55917,8 +56068,7 @@ var render = function() {
                         : _c(
                             "button",
                             {
-                              staticClass:
-                                "btn btn-orange-secondary float-right",
+                              staticClass: "btn btn-success float-right",
                               attrs: {
                                 id: "add_event_btn" + _vm.event.id,
                                 disabled: _vm.isLoading
@@ -56690,14 +56840,14 @@ var render = function() {
               _c(
                 "button",
                 {
-                  staticClass: "btn btn-outline-secondary",
+                  staticClass: "btn btn-orange",
                   on: {
                     click: function($event) {
-                      return _vm.locate(_vm.bounds)
+                      return _vm.updateUserLocation_byCenter(_vm.center)
                     }
                   }
                 },
-                [_vm._v("Locate")]
+                [_vm._v("Set your location")]
               )
             ])
           ],
@@ -56735,6 +56885,9 @@ var render = function() {
           on: {
             rightclick: function($event) {
               return _vm.openMenu($event)
+            },
+            dragend: function($event) {
+              return _vm.loadMarkers()
             },
             zoom_changed: function($event) {
               return _vm.updateZoom()
@@ -56809,6 +56962,19 @@ var render = function() {
               position: _vm.getPosition(_vm.addNewmark_coordinates),
               icon: { url: __webpack_require__(/*! ../assets/google_maps/new.png */ "./resources/js/assets/google_maps/new.png") }
             }
+          }),
+          _vm._v(" "),
+          _c("gmap-marker", {
+            attrs: {
+              position: _vm.getPosition(_vm.user_location),
+              draggable: true,
+              icon: { url: __webpack_require__(/*! ../assets/google_maps/current_loc.png */ "./resources/js/assets/google_maps/current_loc.png") }
+            },
+            on: {
+              dragend: function($event) {
+                return _vm.updateUserLocation($event.latLng)
+              }
+            }
           })
         ],
         1
@@ -56852,6 +57018,114 @@ var render = function() {
     ],
     1
   )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Notification.vue?vue&type=template&id=6a4ce154&":
+/*!***************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Notification.vue?vue&type=template&id=6a4ce154& ***!
+  \***************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c(
+      "a",
+      {
+        staticClass: "nav-link white",
+        staticStyle: { "text-transform": "capitalize" },
+        attrs: {
+          id: "navbarDropdown",
+          href: "#",
+          role: "button",
+          "data-toggle": "dropdown",
+          "aria-haspopup": "true",
+          "aria-expanded": "false"
+        }
+      },
+      [
+        _c("i", { staticClass: "far fa-bell fa-lg" }),
+        _vm._v(" "),
+        _vm.notifications.length > 0
+          ? _c("span", { staticClass: "badge badge-danger" }, [
+              _vm._v(" " + _vm._s(_vm.notifications.length) + " ")
+            ])
+          : _vm._e()
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "dropdown-menu dropdown-menu-right",
+        attrs: {
+          href: "#",
+          role: "button",
+          "data-toggle": "dropdown",
+          "aria-haspopup": "true",
+          "aria-expanded": "false"
+        }
+      },
+      [
+        _vm._l(_vm.notifications, function(notification) {
+          return _c(
+            "a",
+            {
+              key: notification.data.notification_object.id,
+              staticClass: "dropdown-item",
+              on: {
+                click: function($event) {
+                  return _vm.markAsRead(notification)
+                }
+              }
+            },
+            [
+              _vm._v(
+                '\n         "' +
+                  _vm._s(notification.data.notification_object.title) +
+                  '"\n         '
+              ),
+              notification.data.type == "placeAcc"
+                ? _c("span", [_vm._v(" place has been accepted ")])
+                : _vm._e(),
+              _vm._v(" "),
+              notification.data.type == "placeDec"
+                ? _c("span", [_vm._v(" place has been declined ")])
+                : _vm._e(),
+              _vm._v(" "),
+              notification.data.type == "eventAcc"
+                ? _c("span", [_vm._v(" event has been accepted ")])
+                : _vm._e(),
+              _vm._v(" "),
+              notification.data.type == "eventDec"
+                ? _c("span", [_vm._v(" event has been declined ")])
+                : _vm._e()
+            ]
+          )
+        }),
+        _vm._v(" "),
+        _vm.notifications.length == 0
+          ? _c("div", { staticClass: "m-1 text-center" }, [
+              _vm._v(" No notifications... ")
+            ])
+          : _vm._e()
+      ],
+      2
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -56916,70 +57190,108 @@ var render = function() {
     _c("br"),
     _vm._v(" "),
     !_vm.paidFor
-      ? _c(
-          "div",
-          [
-            _c("h4", [
-              _vm._v(
-                "Advertisment for this place - $" +
-                  _vm._s(_vm.product.price) +
-                  " gbp"
-              )
-            ]),
-            _vm._v(" "),
-            _c("p", [_vm._v(_vm._s(_vm.product.description))]),
-            _vm._v(" "),
+      ? _c("div", [
+          _c("h4", [_vm._v("Advertisment for this place ")]),
+          _vm._v(" "),
+          _c("hr"),
+          _vm._v(" "),
+          _c("p", { staticClass: "mb-2 text-secondary" }, [
+            _vm._v("Select plan")
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "row" },
             _vm._l(_vm.products, function(product_checked) {
-              return _c("div", { key: product_checked.id }, [
-                _c("div", { staticClass: "form-check" }, [
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.product,
-                        expression: "product"
+              return _c(
+                "div",
+                {
+                  key: product_checked.id,
+                  staticClass: "col-md-4 col-lg-4 col-sm-4"
+                },
+                [
+                  _c("label", [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.product,
+                          expression: "product"
+                        }
+                      ],
+                      staticClass: "card-input-element",
+                      attrs: {
+                        type: "radio",
+                        name: "product",
+                        id: "product" + product_checked.id
+                      },
+                      domProps: {
+                        value: product_checked,
+                        checked: _vm._q(_vm.product, product_checked)
+                      },
+                      on: {
+                        change: function($event) {
+                          _vm.product = product_checked
+                        }
                       }
-                    ],
-                    staticClass: "form-check-input",
-                    attrs: {
-                      type: "radio",
-                      name: "product",
-                      id: "product" + product_checked.id
-                    },
-                    domProps: {
-                      value: product_checked,
-                      checked: _vm._q(_vm.product, product_checked)
-                    },
-                    on: {
-                      change: function($event) {
-                        _vm.product = product_checked
-                      }
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "label",
-                    {
-                      staticClass: "form-check-label",
-                      attrs: { for: "product" + product_checked.id }
-                    },
-                    [
-                      _vm._v(
-                        "\n              " +
-                          _vm._s(product_checked.description) +
-                          "\n            "
-                      )
-                    ]
-                  )
-                ])
-              ])
+                    }),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "card card-input" }, [
+                      _c("div", { staticClass: "card-body p-2" }, [
+                        _vm._v(
+                          "\n                    " +
+                            _vm._s(product_checked.description) +
+                            "\n                    "
+                        ),
+                        _c("hr", { staticClass: "m-2" }),
+                        _vm._v(" "),
+                        _c(
+                          "span",
+                          { staticClass: "float-right font-weight-bold" },
+                          [
+                            _vm._v(_vm._s(product_checked.price) + " "),
+                            _c("i", { staticClass: "fas fa-pound-sign" })
+                          ]
+                        )
+                      ])
+                    ])
+                  ])
+                ]
+              )
             }),
-            _vm._v(" "),
-            _c("div", { ref: "paypal" })
-          ],
-          2
-        )
+            0
+          ),
+          _vm._v(" "),
+          _c(
+            "p",
+            {
+              staticClass: "text-center h5 font-weight-bold text-secondary m-4"
+            },
+            [
+              _vm._v(_vm._s(_vm.product.description) + " "),
+              _vm.product.price != ""
+                ? _c("span", [
+                    _vm._v(" - " + _vm._s(_vm.product.price) + " "),
+                    _c("i", { staticClass: "fas fa-pound-sign" })
+                  ])
+                : _vm._e()
+            ]
+          ),
+          _vm._v(" "),
+          _c("div", {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.product.price != "",
+                expression: "product.price != ''"
+              }
+            ],
+            ref: "paypal",
+            staticClass: "mt-5"
+          })
+        ])
       : _vm._e(),
     _vm._v(" "),
     _vm.paidFor
@@ -57022,7 +57334,7 @@ var render = function() {
           _c("div", { staticClass: "row" }, [
             _c("div", { staticClass: "col-4" }),
             _vm._v(" "),
-            _c("div", { staticClass: "col-sm-12 col-lg-6" }, [
+            _c("div", { staticClass: "col-sm-12 col-lg-8" }, [
               _c("div", { staticClass: "row" }, [
                 _c("div", { staticClass: "col-sm-12 col-lg-6" }, [
                   _c(
@@ -57034,7 +57346,7 @@ var render = function() {
                         { staticClass: "card card-body pt-4 pl-3 pr-3 pb-0" },
                         [
                           _c("div", { staticClass: "row" }, [
-                            _c("div", { staticClass: "col-6" }, [
+                            _c("div", { staticClass: "col-lg-4 col-md-4" }, [
                               _c(
                                 "label",
                                 { attrs: { for: "sport_type-url" } },
@@ -57105,7 +57417,7 @@ var render = function() {
                               ])
                             ]),
                             _vm._v(" "),
-                            _c("div", { staticClass: "col-6" }, [
+                            _c("div", { staticClass: "col-lg-4 col-md-4" }, [
                               _c("label", { attrs: { for: "distance" } }, [
                                 _vm._v("Distance")
                               ]),
@@ -57176,6 +57488,71 @@ var render = function() {
                                     _vm._v(" "),
                                     _c("option", { attrs: { value: "25" } }, [
                                       _vm._v("25 km")
+                                    ])
+                                  ]
+                                )
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "col-lg-4 col-md-4" }, [
+                              _c("label", { attrs: { for: "paid" } }, [
+                                _vm._v("Paid")
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "input-group mb-3" }, [
+                                _c(
+                                  "select",
+                                  {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.rules.paid,
+                                        expression: "rules.paid"
+                                      }
+                                    ],
+                                    staticClass: "custom-select",
+                                    attrs: { id: "paid" },
+                                    on: {
+                                      change: [
+                                        function($event) {
+                                          var $$selectedVal = Array.prototype.filter
+                                            .call(
+                                              $event.target.options,
+                                              function(o) {
+                                                return o.selected
+                                              }
+                                            )
+                                            .map(function(o) {
+                                              var val =
+                                                "_value" in o
+                                                  ? o._value
+                                                  : o.value
+                                              return val
+                                            })
+                                          _vm.$set(
+                                            _vm.rules,
+                                            "paid",
+                                            $event.target.multiple
+                                              ? $$selectedVal
+                                              : $$selectedVal[0]
+                                          )
+                                        },
+                                        _vm.sort_places
+                                      ]
+                                    }
+                                  },
+                                  [
+                                    _c("option", { attrs: { selected: "" } }, [
+                                      _vm._v("Any")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("option", { attrs: { value: "1" } }, [
+                                      _vm._v("Yes")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("option", { attrs: { value: "0" } }, [
+                                      _vm._v("No")
                                     ])
                                   ]
                                 )
@@ -57633,7 +58010,7 @@ var render = function() {
                             attrs: {
                               type: "checkbox",
                               name: "paid",
-                              id: "paid"
+                              id: "paidpp"
                             },
                             domProps: {
                               checked: Array.isArray(_vm.place.paid)
@@ -57676,7 +58053,7 @@ var render = function() {
                             "label",
                             {
                               staticClass: "custom-control-label",
-                              attrs: { for: "paid" }
+                              attrs: { for: "paidpp" }
                             },
                             [_vm._v("Paid")]
                           )
@@ -60747,7 +61124,7 @@ var staticRenderFns = [
       _vm._v(" "),
       _c(
         "button",
-        { staticClass: "btn btn-orange-secondary", attrs: { type: "submit" } },
+        { staticClass: "btn btn-success", attrs: { type: "submit" } },
         [_vm._v(" Re-submit "), _c("i", { staticClass: "fas fa-plus" })]
       )
     ])
@@ -78044,6 +78421,7 @@ var map = {
 	"./baseball_1582992828.png": "./storage/app/public/sport_logo/baseball_1582992828.png",
 	"./basketball-h_1585325920.png": "./storage/app/public/sport_logo/basketball-h_1585325920.png",
 	"./basketball_1585325920.png": "./storage/app/public/sport_logo/basketball_1585325920.png",
+	"./current_loc.png": "./storage/app/public/sport_logo/current_loc.png",
 	"./new.png": "./storage/app/public/sport_logo/new.png",
 	"./pingpong-h_1585326705.png": "./storage/app/public/sport_logo/pingpong-h_1585326705.png",
 	"./pingpong_1585326705.png": "./storage/app/public/sport_logo/pingpong_1585326705.png",
@@ -78120,6 +78498,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('eventfinder', __webpack_re
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('editevent', __webpack_require__(/*! ./components/EditEvent.vue */ "./resources/js/components/EditEvent.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('showprofileinfo', __webpack_require__(/*! ./components/ShowProfileInfo.vue */ "./resources/js/components/ShowProfileInfo.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('recommendedevents', __webpack_require__(/*! ./components/RecommendEvents.vue */ "./resources/js/components/RecommendEvents.vue")["default"]);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('notification', __webpack_require__(/*! ./components/Notification.vue */ "./resources/js/components/Notification.vue")["default"]);
 
 
 
@@ -78147,6 +78526,17 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   store: _store_index_js__WEBPACK_IMPORTED_MODULE_5__["default"],
   el: '#app'
 });
+
+/***/ }),
+
+/***/ "./resources/js/assets/google_maps/current_loc.png":
+/*!*********************************************************!*\
+  !*** ./resources/js/assets/google_maps/current_loc.png ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/current_loc.png?ca524f03f2205224b2ea0382b1c1357e";
 
 /***/ }),
 
@@ -78648,6 +79038,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Gmap_vue_vue_type_template_id_bdcfc800___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Gmap_vue_vue_type_template_id_bdcfc800___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/Notification.vue":
+/*!**************************************************!*\
+  !*** ./resources/js/components/Notification.vue ***!
+  \**************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Notification_vue_vue_type_template_id_6a4ce154___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Notification.vue?vue&type=template&id=6a4ce154& */ "./resources/js/components/Notification.vue?vue&type=template&id=6a4ce154&");
+/* harmony import */ var _Notification_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Notification.vue?vue&type=script&lang=js& */ "./resources/js/components/Notification.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Notification_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Notification_vue_vue_type_template_id_6a4ce154___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Notification_vue_vue_type_template_id_6a4ce154___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/Notification.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/Notification.vue?vue&type=script&lang=js&":
+/*!***************************************************************************!*\
+  !*** ./resources/js/components/Notification.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Notification_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./Notification.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Notification.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Notification_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/Notification.vue?vue&type=template&id=6a4ce154&":
+/*!*********************************************************************************!*\
+  !*** ./resources/js/components/Notification.vue?vue&type=template&id=6a4ce154& ***!
+  \*********************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Notification_vue_vue_type_template_id_6a4ce154___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./Notification.vue?vue&type=template&id=6a4ce154& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Notification.vue?vue&type=template&id=6a4ce154&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Notification_vue_vue_type_template_id_6a4ce154___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Notification_vue_vue_type_template_id_6a4ce154___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
@@ -79221,7 +79680,7 @@ var actions = {
             ne = bounds.getNorthEast();
             sw = bounds.getSouthWest();
             _context2.next = 6;
-            return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios__WEBPACK_IMPORTED_MODULE_1___default.a.get('api/places/' + ne.lat() + '/' + sw.lat() + '/' + ne.lng() + '/' + sw.lng() + '?type=' + rules.type + '&distance=' + rules.distance + '&lat=' + user_location.lat + '&lng=' + user_location.lng));
+            return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios__WEBPACK_IMPORTED_MODULE_1___default.a.get('api/places/' + ne.lat() + '/' + sw.lat() + '/' + ne.lng() + '/' + sw.lng() + '?type=' + rules.type + '&distance=' + rules.distance + '&paid=' + rules.paid + '&lat=' + user_location.lat + '&lng=' + user_location.lng));
 
           case 6:
             response = _context2.sent;
@@ -79347,6 +79806,17 @@ module.exports = "/images/basketball-h_1585325920.png?7aab7c12b13b2511d60a50ab92
 /***/ (function(module, exports) {
 
 module.exports = "/images/basketball_1585325920.png?3ea563a13d594d5dc49e485fdc95eccb";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/current_loc.png":
+/*!*******************************************************!*\
+  !*** ./storage/app/public/sport_logo/current_loc.png ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/current_loc.png?6893a2d3f393ac3d5c9c3726c27d807d";
 
 /***/ }),
 

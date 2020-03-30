@@ -132,4 +132,23 @@ class PlaceController extends Controller
     }
 
 
+    public function update(Request $request)
+    {
+        $place = Place::findOrFail($request->place_id);
+
+        $place->id = $request->input('place_id');
+        $place->title = $request->input('title');
+        $place->about = $request->input('about');
+        $place->lat = $request->input('lat');
+        $place->lng = $request->input('lng');
+        $place->paid = $request->input('paid');
+
+        if($place->update()){
+            return redirect('/admin/places')->with('success', 'Place has been updated!');
+        }
+
+
+    }
+
+
 }

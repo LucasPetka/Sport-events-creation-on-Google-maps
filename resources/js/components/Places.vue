@@ -64,6 +64,105 @@
     </div>
 
 
+
+    <!-- ============================================================INSTRUCTIONS============================================================================ -->
+    
+    <div class="position-fixed" style="z-index:15; top:400px;">
+        <button type="button" class="btn btn-orange-dark rounded-right orange" style="border-radius: 0px 5px 5px 0px;" data-toggle="modal" data-target="#infoModal"> <i class="fas fa-info fa-lg m-1"></i> </button>
+    </div>
+
+        <!-- Modal -->
+    <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModallLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="infoModalLabel"><i class="fas fa-info fa-lg m-1"></i></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <h5 class="text-center mb-2">About "MoSi" - TESTING VERSION</h5>
+            
+                <p class="text-center text-secondary m-4"> <b>"MoSi"</b> from Latin words <i>"Motus Simul"</i> which means - movement together. </p>
+                <p> This web based application solves the problem for those people who can’t find friends or 
+                new teammates for a game or perhaps people are new in town and don’t 
+                even know where to go to find a stadium or court. The main concept - 
+                an application where you can create and join sports events displayed 
+                on GoogleMaps (which been added by people) to go out and spend 
+                time with new people or find new sport spots around the area if 
+                you are a new community member. <i> You can find instructions below... </i> </p>
+
+                <div id="accordion">
+                <div class="card">
+                    <div class="card-header p-1" id="headingOne">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                        How to find events?
+                        </button>
+                    </h5>
+                    </div>
+
+                    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+                        <b class="m-2">Method #1</b>
+                        <p>
+                            Press on sport place, then open calendar by clicking at date
+                            in a box if there is an event on that date the day number 
+                            will be higlighted. This is the best way to search for events
+                            by seeing what's around you.          
+                        </p>
+                        <b class="m-2">Method #2</b>
+                        <p>
+                            At the top there is an orange button "Event Finder".
+                            In there you can find filter system which will help
+                            you to narrow your search and make it more accurate.       
+                        </p>
+                    </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header p-1" id="headingTwo">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        How to add a new event?
+                        </button>
+                    </h5>
+                    </div>
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                    <div class="card-body">
+                        For adding a new event firstly you have to sign-in or sign-up
+                        if you're still not registered. Press on sport place, 
+                        choose a date by clicking at date with a box and just 
+                        press the green button "+ Add event".
+                    </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header p-1" id="headingThree">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        How to add a new place?
+                        </button>
+                    </h5>
+                    </div>
+                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                    <div class="card-body">
+                        For adding a new event firstly you have to sign-in or sign-up
+                        if you're still not registered. Then by clicking right-click 
+                        the mouse context-menu will pop-up and there you can choose 
+                        option to add a new Place/Marker.
+                    </div>
+                    </div>
+                </div>
+                </div>
+
+        </div>
+        </div>
+    </div>
+    </div>
+
+
    
 
     <notifications group="foo" classes="my-style" position="top left" style="margin-top:55px;" />
@@ -119,7 +218,7 @@
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button id="add_event_btn" type="submit" class="btn btn-orange-secondary float-right" :disabled="isLoading">Add <i class="fas fa-plus"></i></button>
+                            <button id="add_event_btn" type="submit" class="btn btn-orange float-right" :disabled="isLoading">Add <i class="fas fa-plus"></i></button>
                         </div>
                     </div>
                 </div>
@@ -168,7 +267,7 @@
 
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-orange-secondary float-right" :disabled="isLoading">Add <i class="fas fa-plus"></i></button>
+                                <button type="submit" class="btn btn-orange float-right" :disabled="isLoading">Add <i class="fas fa-plus"></i></button>
                             </div>
                         </div>
                     </div>
@@ -228,14 +327,15 @@
                     </div>
                     <div class="card-body p-0">
                         <Calendar v-bind:status='status' v-on:openAddEvent="openAddEvent()" v-bind:currentUser='currentUser' v-on:editEvent="editEvent($event)" v-on:getDate="getDate($event)" v-on:closeAdd="closeAddEvent()" ref="calendar"> </Calendar>
-                        <div v-if="this.status === 1">
-                            <!--<button v-on:click="openAddEvent()" class="btn btn-outline-success pt-2 pb-2 pr-4 pl-4 float-right">Add Event <i class="fas fa-plus"></i></button>-->
-                        </div>
-                        <div v-else>
-                            <div class="alert alert-warning mt-3 pb-5" role="alert">
-                            If you want to join or add events you need to login / register.<br>
-                            <a href ="/register" class="btn btn-outline-secondary float-right ml-2">Register</a>
-                            <a href ="/login"  class="btn btn-outline-secondary float-right mr-2">Login</a>
+                        <div v-if="this.status === 0">
+                            <div class="alert alert-warning mt-3 pb-1 text center" role="alert">
+                            <p class="text-center"> If you want to join or add events you need to login / register. </p>
+                            <div class="form-group">
+                                <div class="col-sm-12 col-sm-offset-2 text-center">
+                                    <a href ="/login"  class="btn btn-outline-secondary mr-2">Login</a>
+                                    <a href ="/register" class="btn btn-outline-secondary ml-2">Register</a>
+                                </div>
+                            </div>
                             </div>
                         </div>
                     </div>
@@ -667,6 +767,17 @@ export default {
 
 
 <style>
+
+.btn-link {
+    font-weight: 800 !important;
+    color: rgb(110, 110, 110) !important;
+    text-decoration: none;
+}
+.btn-link:hover {
+    font-weight: 800;
+    color: #F39448 !important;
+    text-decoration: none;
+}
 
 .custom-dot {
     width: 15px;

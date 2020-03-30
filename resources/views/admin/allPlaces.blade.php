@@ -79,31 +79,41 @@
                     </button>
                   </div>
                   <div class="modal-body pt-0 pb-0">
-                    <form action="" method="post"></form>
+                    {!! Form::open(['action' => 'Places\PlaceController@update', 'method' => 'PUT']) !!}
                     <div class="row">
                         <div class="col-lg-12 p-0">
                             <SmallMap v-bind:place='{{ $place }}' v-bind:drag="true" v-bind:size='"width:auto; height: 300px;"'> </SmallMap>
                         </div>
                         <div class="col-lg-10 mx-auto m-3">
                             <div class="form-group">
-                                <label>Title</label>
-                                <input value=" {{ $place->title }} " type="text" class="form-control" maxlength="45" placeholder="Title" name="title">
+                                {{Form::label('title', 'Title')}}
+                                {{Form::text('title', $place->title, ['class' => 'form-control', 'placeholder' => 'Title','required' => 'required', 'maxlength' => 45])}}
                             </div>
                             <div class="form-group">
-                                <label>About</label>
-                                <textarea rows="6" class="form-control" maxlength="350" placeholder="Title" name="about"> {{ $place->about }} </textarea>       
+                                {{Form::label('about', 'About')}}
+                                {{Form::textarea('about', $place->about, ['class' => 'form-control', 'name' => 'about','required' => 'required', 'maxlength' => 350, ' rows'=> 6])}} 
                             </div>
                             <div class="custom-control custom-checkbox mb-3">
                                 <div class="custom-control custom-checkbox float-left mr-4">
-                                    <input type="checkbox" name="paid" class="custom-control-input" id="paid">
-                                    <label class="custom-control-label" for="paid" >Paid</label>
+                                  @if($place->paid == '0')
+                                    {{ Form::hidden('paid', '0') }}
+                                    {{ Form::checkbox('paid', '1', false, ['class' => 'custom-control-input', 'id'=>'paid'.$place->id ]) }}
+                                  @else
+                                    {{ Form::hidden('paid', '0') }}
+                                    {{ Form::checkbox('paid', '1', true, ['class' => 'custom-control-input', 'id'=>'paid'.$place->id]) }}
+                                  @endif
+
+
+                                    <label class="custom-control-label" for="paid{{ $place->id }}" >Paid</label>
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn btn-orange float-right btn-block mb-3"> Save </button>
-                        </div>
+                            {{ Form::hidden('place_id', $place->id) }}
 
+                            {{Form::submit('Save', ['class'=>'btn btn-orange float-right btn-block mb-3'])}}
+                        </div>
                     </div>
+                    {!! Form::close() !!}
                   </div>
                 </div>
               </div>

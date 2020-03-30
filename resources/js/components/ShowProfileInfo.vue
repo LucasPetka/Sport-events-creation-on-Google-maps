@@ -254,7 +254,7 @@
                     <div class="card-header pr-3 pl-1 pt-1 pb-1">
                         <div class="row">
                             <div class="col-11">
-                                <a target="_blank" :href="'/event/' + event.id" class="nav-link m-0 extend">
+                                <a target="_blank" :href="'/event/' + event.id +'/'+ event.title" class="nav-link m-0 extend">
                                     <span class="align-middle h5">{{ event.title }}</span>
                                 </a>
                             </div>
@@ -410,7 +410,7 @@
                                 <div class="card-header pr-3 pl-1 pt-1 pb-1">
                                     <div class="row">
                                         <div class="col-11">
-                                            <a target="_blank" :href="'/event/' + event.id" class="nav-link m-0 extend">
+                                            <a target="_blank" :href="'/event/' + event.id +'/'+ event.title" class="nav-link m-0 extend">
                                                 <span class="align-middle h5">{{ event.title }}</span>
                                             </a>
                                         </div>

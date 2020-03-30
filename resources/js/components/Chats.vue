@@ -45,7 +45,7 @@
             <editevent :user="user" v-on:fetchCreatedEvents="refresh" :acceptedOrDeclined="false" :event="event"></editevent>
         </div>
         <div v-if="ifJoined(event.place_id, event.id, user.id) == 0">
-            <button id="join_btn" type="button" class="btn btn-orange-secondary float-right" :disabled="isLoading" v-on:click="addPerson(event.place_id, event.id, user.id, $event)"><i class="fas fa-user-plus"></i> Join</button>
+            <button id="join_btn" type="button" class="btn btn-success float-right" :disabled="isLoading" v-on:click="addPerson(event.place_id, event.id, user.id, $event)"><i class="fas fa-user-plus"></i> Join</button>
         </div>
         <div v-else>
             <button type="button" class="btn btn-secondary float-right" :disabled="isLoading" v-on:click="deletePerson(event.place_id, event.id, user.id, $event)"><i class="fas fa-check"></i> Joined</button>
@@ -64,7 +64,7 @@
                     <li class="p-2" v-for="message in messages"  :key="message.id">
                         
                         <span v-if="message.user.provider == null">
-                            <img class="rounded-circle" :src="'../../../images/avatars/'+message.user.avatar" width="30" height="30" alt="">
+                            <img class="rounded-circle" :src="'../../../../images/avatars/'+message.user.avatar" width="30" height="30" alt="">
                         </span>
                         <span v-else>
                             <img class="rounded-circle" :src="message.user.avatar" width="30" height="30" alt="">
@@ -72,11 +72,12 @@
     
                         <strong>{{ message.user.name }}</strong>
                         {{ message.message }}
+                        <small class="float-right text-secondary"> {{ getTime(message.created_at) }} </small>
                     </li>
                 </ul>
             </div>
 
-            <input @keydown="sendTyping" @keyup.enter="sendMessage" v-model="newMessage" type="text" name="message" placeholder="Enter your message..." class="form-control">
+            <input @keydown="sendTyping" @keyup.enter="sendMessage" v-model="newMessage" type="text" name="message" maxlength="400" placeholder="Enter your message..." :disabled="isLoading" class="form-control">
         </div>
 
         <span class="text-muted" v-if="activeUser">{{ activeUser.name }} is typing...</span>
@@ -86,9 +87,14 @@
         <div class="card card-default">
             <div class="card-header">Users online</div>
             <div class="card-body p-0">
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item" v-for="user in users" :key="user.id"> {{ user.name }} </li>
-                </ul>
+                    <span v-for="user in users" :key="user.id">
+                        <span v-if="user.provider == null">
+                            <a target="_blank" :href="'/user/' + user.auth_id"><img class="rounded-circle m-2" :src="'../../../../images/avatars/'+user.avatar" width="30" height="30" :alt="user.name" data-toggle="tooltip" data-placement="top" :title="user.name"></a>
+                        </span>
+                        <span v-else>
+                            <a target="_blank" :href="'/user/' + user.auth_id"><img class="rounded-circle m-2" :src="user.avatar" width="30" height="30" :alt="user.name" data-toggle="tooltip" data-placement="top" :title="user.name"></a>
+                        </span>
+                    </span>
             </div>
         </div>
     </div>
@@ -159,7 +165,7 @@ export default {
     methods: {
 
         fetchMessages(){
-            axios.get('../messages/' + this.event.id).then(response =>{
+            axios.get('../../messages/' + this.event.id).then(response =>{
                 this.messages = response.data;
             })
         },
@@ -168,13 +174,37 @@ export default {
             window.location.reload();
         },
 
+        getTime(date){
+            let current_datetime = new Date(date)
+            let formatted_Time = ('0' + current_datetime.getHours()).slice(-2) + ":" + ('0' + current_datetime.getMinutes()).slice(-2)
+            return formatted_Time;
+        },
+
         sendMessage(){
-            this.messages.push({
-                user: this.user,
-                message: this.newMessage
-            })
-            axios.post('../messages', {message: this.newMessage, event_id: this.event.id });
-            this.newMessage = '';
+            
+            if(this.newMessage.length <= 400 && this.newMessage.length != 0 && this.newMessage.trim()){
+                this.isLoading = true
+                setTimeout(() => {
+                    this.isLoading = false
+                }, 1000);
+
+                console.log(this.newMessage.length);
+                this.messages.push({
+                    user: this.user,
+                    message: this.newMessage,
+                    created_at: new Date()
+                })
+                axios.post('../../messages', {message: this.newMessage, event_id: this.event.id });
+                this.newMessage = '';
+            }
+            else{
+                Vue.notify({
+                    group: 'foo',
+                    title: 'Error!',
+                    type: 'error',
+                    text: 'Incorrect message !'
+                });
+            }
         },
 
         sendTyping(){
@@ -183,7 +213,7 @@ export default {
         },
 
         fetchPeopleGoing() {
-                fetch('../api/people_going/'+ this.event.id)
+                fetch('../../api/people_going/'+ this.event.id)
                 .then(res => res.json())
                 .then(res => {
                     this.people_going = res.data;
@@ -230,7 +260,7 @@ export default {
             this.person.place_id = place;
             this.person.event_id = event;
         
-            fetch('../api/person?api_token=' + this.getCookie("api_token"), {
+            fetch('../../api/person?api_token=' + this.getCookie("api_token"), {
                 method: 'post',
                 body: JSON.stringify(this.person),
                 headers: {
@@ -270,7 +300,7 @@ export default {
 
             var id = third[0].id;
          
-            fetch('../api/person/'+ id + '?api_token=' + this.getCookie("api_token"), {
+            fetch('../../api/person/'+ id + '?api_token=' + this.getCookie("api_token"), {
                 method: 'delete'
             })
                 .then(res => res.json())

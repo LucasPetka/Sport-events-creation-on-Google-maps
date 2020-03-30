@@ -39,6 +39,6 @@ class deleteOldEvents extends Command
      */
     public function handle()
     {
-        DB::table('events')->where('time_from', '<', Carbon::now()->subDays(2))->delete();
+        DB::table('events')->where('time_from', '<', Carbon::now()->subDays(1))->delete();
     }
 }

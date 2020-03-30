@@ -7,13 +7,13 @@ Vue.component('gmap', require('./components/Gmap.vue').default);
 Vue.component('calendar', require('./components/Calendar.vue').default);
 Vue.component('smallmap', require('./components/SmallMap.vue').default);
 Vue.component('chats', require('./components/Chats.vue').default);
-Vue.component('pagination', require('./components/Pagination.vue').default);
 Vue.component('payment', require('./components/Payment.vue').default);
 Vue.component('eventfinder', require('./components/EventFinder.vue').default);
 Vue.component('editevent', require('./components/EditEvent.vue').default);
 Vue.component('showprofileinfo', require('./components/ShowProfileInfo.vue').default);
 Vue.component('recommendedevents', require('./components/RecommendEvents.vue').default);
 Vue.component('notification', require('./components/Notification.vue').default);
+Vue.component('admincharts', require('./components/AdminCharts.vue').default);
 
 
 import Vue from 'vue'

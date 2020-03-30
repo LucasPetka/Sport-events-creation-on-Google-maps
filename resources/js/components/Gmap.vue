@@ -108,10 +108,10 @@ export default {
 
   created() {
     this.center = this.location;
-
     this.fetchTypesx();
     this.geolocation();
     this.checkVariable();
+
   },
 
   computed:  mapGetters(['allPlaces', 'allTypes']),
@@ -181,13 +181,11 @@ export default {
 
         this.user_loc_set = true;
         this.checkVariable();
-      }
+      }else{
 
-
-      if(!this.user_loc_set){
         if (navigator.geolocation) { //if location tracking is ON
           navigator.geolocation.getCurrentPosition((position) => {
-
+            this.bounds = null;
             this.center = {
               lat: position.coords.latitude,
               lng: position.coords.longitude
@@ -221,7 +219,9 @@ export default {
 
           this.checkVariable();
         }
+
       }
+
     },
 
     updateUserLocation(location) {

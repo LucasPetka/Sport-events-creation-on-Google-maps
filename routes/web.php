@@ -48,7 +48,7 @@ Route::delete('/decevent/{id}', 'HomeController@deleteEvent')->middleware('auth'
 
 
 //------------------------------PLACE INTERFACE---------------------------------------
-Route::get('/event/{id}', 'Events\EventController@show_event_page')->middleware('auth');
+Route::get('/event/{id}/{title}', 'Events\EventController@show_event_page')->middleware('auth');
 Route::get('/messages/{id}', 'Events\EventController@fetchMessages');
 Route::post('/messages', 'Events\EventController@sendMessage');
 
@@ -60,10 +60,12 @@ Route::get('/admin/events_to_confirm', 'AdminController@events')->middleware('ad
 Route::get('/admin/places', 'AdminController@allPlaces')->middleware('admin');
 Route::get('/admin/users', 'AdminController@users')->middleware('admin');
 Route::get('/admin/sporttypes', 'AdminController@sportTypes')->middleware('admin');
+Route::put('/admin/updateplace', 'Places\PlaceController@update')->middleware('admin');
 
 //====Notification
 Route::get('/notifications/get', 'NotificationController@get')->middleware('auth');
 Route::post('/notification/read', 'NotificationController@read')->middleware('auth');
+Route::post('/notification/readall', 'NotificationController@readAll')->middleware('auth');
 
 //=======Types
 Route::post('/admin/sporttypes/add', 'TypeController@store')->middleware('admin');

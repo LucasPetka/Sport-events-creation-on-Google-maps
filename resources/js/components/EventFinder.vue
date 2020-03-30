@@ -12,6 +12,7 @@
                         <gmap-map class="rounded" ref="gmapp" :center="center" :zoom="14" v-bind:options="mapStyle" style=" overflow:hidden; width:100%; height:300px;">
                             <gmap-marker @drag="updateCoordinates" :draggable="true" :position="getPosition(user_location)"></gmap-marker>
                             <GmapCircle
+                                ref="circleRef"
                                 :center="getPosition(user_location)"
                                 :radius="1000*rules.distance"
                                 :visible="true"
@@ -19,9 +20,10 @@
                             ></GmapCircle>
                         </gmap-map>
 
+                        <p class="text-muted text-center">You can grab marker and move it all around.</p>
 
                         <div class="mb-2 mt-3 bg-light">Search Radius</div>
-                        <vue-slider :adsorb="true" :process-style="{ backgroundColor: '#F39448' }" :tooltip-style="{ backgroundColor: '#596151', borderColor: '#596151' }" class="mr-3 ml-3 mb-5 mb-3" v-model="rules.distance" :min="1" :max="20" :tooltip-formatter="formatter" :tooltip="'always'" :tooltip-placement="'bottom'"></vue-slider>
+                        <vue-slider :adsorb="true" v-on:change="sliderChange()" :process-style="{ backgroundColor: '#F39448' }" :tooltip-style="{ backgroundColor: '#596151', borderColor: '#596151' }" class="mr-3 ml-3 mb-5 mb-3" v-model="rules.distance" :min="1" :max="20" :tooltip-formatter="formatter" :tooltip="'always'" :tooltip-placement="'bottom'"></vue-slider>
 
                         <div class="mb-1 bg-light">Event dates</div>
                         <div class="row mb-3 justify-content-center">
@@ -81,7 +83,7 @@
                         <div v-if="events.length != 0">
                         <div v-for="event in pageOfItems" :key="event.id" class="card mb-2">
                             <div class="card-body p-2">
-                                <a target="_blank" :href="'/event/' + event.id" class="nav-link m-0 p-0">
+                                <a target="_blank" :href="'/event/' + event.id +'/'+ event.title" class="nav-link ml-2 p-0 extend">
                                     <img :src="'../../../storage/sport_logo/'+ event.type.image" :alt="event.title"> {{ event.title }}
                                 </a>
 
@@ -123,7 +125,7 @@
                         <div v-if="recommended_events.length != 0">
                         <div v-for="event in recommended_events" :key="event.id" class="card mb-2">
                             <div class="card-body p-2">
-                                <a target="_blank" :href="'/event/' + event.id" class="nav-link ml-2 p-0 extend">
+                                <a target="_blank" :href="'/event/' + event.id +'/'+ event.title" class="nav-link ml-2 p-0 extend">
                                     <img :src="'../../../storage/sport_logo/'+ event.type.image" :alt="event.title"> {{ event.title }}
                                 </a>
 
@@ -231,6 +233,7 @@ export default {
     //ONLOAD PAGE DO THIS
     mounted(){
         this.geolocation(); // get location of person
+        this.sliderChange();
     },
 
     //================================METHODS========================================
@@ -243,6 +246,14 @@ export default {
         onChangePage(pageOfItems) {
             // update page of items
             this.pageOfItems = pageOfItems;
+        },
+
+        sliderChange(){
+            this.$refs.circleRef.$circlePromise.then(() => {
+                const {$circleObject} = this.$refs.circleRef; //get google.maps.Circle object
+                const map = $circleObject.getMap();
+                map.fitBounds($circleObject.getBounds());
+            })
         },
 
         updateCoordinates(location) {
@@ -258,7 +269,7 @@ export default {
             return formatted_date;
         },
 
-         getTime(date){
+        getTime(date){
             let current_datetime = new Date(date)
             let formatted_Time = ('0' + current_datetime.getHours()).slice(-2) + ":" + ('0' + current_datetime.getMinutes()).slice(-2)
             return formatted_Time;
@@ -294,45 +305,47 @@ export default {
 
             this.findEvents();
             this.findRecommendedEvents();
-        }
+        }else{
 
-        if(!this.user_loc_set){
-            if (navigator.geolocation) { //if location tracking is ON
-            navigator.geolocation.getCurrentPosition((position) => {
+            if(!this.user_loc_set){
+                if (navigator.geolocation) { //if location tracking is ON
+                navigator.geolocation.getCurrentPosition((position) => {
 
-                this.center = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude
-                };
+                    this.center = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                    };
 
-                this.user_location = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude
-                };
-                this.user_loc_set = true;
+                    this.user_location = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                    };
+                    this.user_loc_set = true;
 
-                this.findEvents();
-                this.findRecommendedEvents();
-                console.log("trackingON");
+                    this.findEvents();
+                    this.findRecommendedEvents();
+                    console.log("trackingON");
 
-            }, err =>{    //if something goes wrong when locating just set map center
-                
-                this.user_location = this.ip;
-                this.center = this.ip;
-                this.user_loc_set = true;
-                this.findEvents();
-                this.findRecommendedEvents();
-                console.log("somtehing wrong: " + err.message);
-            });
+                }, err =>{    //if something goes wrong when locating just set map center
+                    
+                    this.user_location = this.ip;
+                    this.center = this.ip;
+                    this.user_loc_set = true;
+                    this.findEvents();
+                    this.findRecommendedEvents();
+                    console.log("somtehing wrong: " + err.message);
+                });
+                }
+                else{           //if tracking is OFF when just locate set map center
+                    this.user_location = this.ip;
+                    this.center = this.ip;
+                    this.user_loc_set = true;
+                    this.findEvents();
+                    this.findRecommendedEvents();
+                    console.log("tracking OFF");
+                }
             }
-            else{           //if tracking is OFF when just locate set map center
-                this.user_location = this.ip;
-                this.center = this.ip;
-                this.user_loc_set = true;
-                this.findEvents();
-                this.findRecommendedEvents();
-                console.log("tracking OFF");
-            }
+
         }
         },
 

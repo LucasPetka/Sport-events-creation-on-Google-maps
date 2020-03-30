@@ -204,9 +204,9 @@ class EventController extends Controller
     //----------------------------------Event page and messaging controllers-----------------------------
     //===================================================================================================
 
-    public function show_event_page($id)
+    public function show_event_page($id, $title)
     {
-        $event = Event::findOrFail($id);
+        $event = Event::where('id',$id)->where('title', $title)->first();
 
         return view('pages.event')->with(compact('event')); 
     }
@@ -218,14 +218,31 @@ class EventController extends Controller
 
     public function sendMessage(Request $request)
     {
-        $message = auth()->user()->messages()->create([
-            'message' => $request->message,
-            'event_id' => $request->event_id
+        
+        $validator = Validator::make($request->all(),[
+            'event_id'=>'required',
+            'message'=>'required|max:400',
         ]);
 
-        broadcast(new MessageSent($message->load('user')))->toOthers();
+        if ($validator->fails()) {
+            return response()->json(array(
+                'success' => false,
+                'message' => 'Message too long!',
+                'errors' => $validator->getMessageBag()->toArray()
+            ), 200);
+        }else{
+       
+            $message = auth()->user()->messages()->create([
+                'message' => $request->message,
+                'event_id' => $request->event_id
+            ]);
 
-        return ['status' => 'success'];
+            broadcast(new MessageSent($message->load('user')))->toOthers();
+
+            return ['status' => 'success'];
+
+        }
+        
     }
 
 

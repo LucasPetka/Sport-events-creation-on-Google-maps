@@ -34,15 +34,15 @@ class HomeController extends Controller
 
         $types = Type::all();
 
+        $places_uploaded = AcceptedPlaces::where('person_id', $user->id)->count();
+
         $geoip = geoip()->getClientIP();
 
-        if($geoip == '127.0.0.0'){
-        $geoip = geoip()->getLocation('86.30.223.189');
-        }
+        $geoip = geoip()->getLocation($geoip);
         
         $location = '{lat:'.$geoip->lat . ", lng:".$geoip->lon.'}';
 
-        return view('home')->with(compact('user','types','location'));
+        return view('home')->with(compact('user','types','location','places_uploaded'));
     }
 
     

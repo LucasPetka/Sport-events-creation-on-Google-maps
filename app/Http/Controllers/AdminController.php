@@ -19,6 +19,7 @@ use App\Notifications\PlaceAccept;
 use App\Notifications\PlaceDeclined;
 use App\Notifications\EventAccept;
 use App\Notifications\EventDeclined;
+use App\Payment;
 
 class AdminController extends Controller
 {
@@ -36,8 +37,6 @@ class AdminController extends Controller
         $placesOnMap = Place::count();
         $registeredUsers = User::count();
         $confirmations = $places + $events;
-
-
 
         return view('admin')->with(compact('places','events','eventsOnMap','placesOnMap','registeredUsers', 'confirmations'));
     }

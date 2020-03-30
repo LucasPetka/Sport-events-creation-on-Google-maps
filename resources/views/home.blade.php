@@ -13,9 +13,7 @@
                     
                     <div class="row mb-3">
                         <div class="col-12">
-                            <button type="button" class="btn btn-orange ml-1 mr-1 float-right">
-                                <i class="fas fa-bell"></i> Notifications <span class="badge badge-light">4</span>
-                            </button>
+                            <h6 class="font-weight-bold float-right text-secondary extend">Places uploaded <span class="badge badge-orange"> {{ $places_uploaded }} </span></h6>
                         </div>
                     </div>
 

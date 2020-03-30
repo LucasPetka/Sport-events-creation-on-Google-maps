@@ -24,7 +24,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-         $schedule->command('delete-old-events')->daily();
+         $schedule->command('delete-old-events')->hourly();
     }
 
     /**

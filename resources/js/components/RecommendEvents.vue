@@ -12,7 +12,7 @@
                 <div v-if="recommended_events.length != 0" style="height:340px; overflow: hidden; overflow-y: auto;">
                 <div v-for="event in recommended_events" :key="event.id" class="card mb-2">
                     <div class="card-header p-2 shadow">
-                        <a target="_blank" :href="'/event/' + event.id" class="nav-link m-0 p-0 float-left extend">
+                        <a target="_blank" :href="'/event/' + event.id +'/'+ event.title" class="nav-link m-0 p-0 float-left extend">
                             <img :src="'../../../storage/sport_logo/'+ event.type.image" :alt="event.title"> {{ event.title }}
                         </a>
 

@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="col-12 m-2" id="calendar">
                         <datepicker placeholder="Select Date" :highlighted="highlighted" :format="format" :value="todays_date" v-model="todays_date" @closed="showEvents()"></datepicker>
-                        <button v-if="laterThanYesterday" v-on:click="$emit('openAddEvent')" class="btn btn-outline-success pt-2 pb-2 ml-3 float-left">Add Event <i class="fas fa-plus"></i></button>
+                        <button v-if="laterThanYesterday && status == 1" v-on:click="$emit('openAddEvent')" class="btn btn-outline-success pt-2 pb-2 ml-3 float-left">Add Event <i class="fas fa-plus"></i></button>
                 </div>
             </div>
             
@@ -14,7 +14,7 @@
 
                 <div v-for="event in show_events" v-bind:key="event.id" class="card mb-3"  style="width: 90%; margin-left:auto; margin-right:auto;">
                 <div class="card-body">
-                    <h5 class="card-title"> <a target="_blank" :href="'event/' + event.id"> {{ event.title }} </a></h5>
+                    <h5 class="card-title"> <a target="_blank" :href="'event/' + event.id +'/'+ event.title"> {{ event.title }} </a></h5>
                     <h6 class="card-subtitle mb-3 text-muted">{{ countPeopleGoing(event.id) }} people going</h6>
                     <p class="card-text">{{ event.about }}</p>
                     <ul class="list-group list-group-flush">

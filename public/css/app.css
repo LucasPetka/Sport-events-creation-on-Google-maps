@@ -11142,7 +11142,7 @@ a.text-dark:focus {
 
 .btn-orange-dark {
   color: #fff;
-  background-color: #253938;
+  background-color: #29403f;
   border-color: #2a413f;
 }
 
@@ -11171,6 +11171,11 @@ a.text-dark:focus {
 .badge-orange-secondary {
   color: #fff;
   background-color: #47625A;
+}
+
+.badge-orange {
+  color: #fff;
+  background-color: #F39448;
 }
 
 a {

@@ -25,9 +25,7 @@ class EventFindController extends Controller
     {
         $geoip = geoip()->getClientIP();
 
-        if($geoip == '127.0.0.0'){
         $geoip = geoip()->getLocation('86.30.223.189');
-        }
         
         $location = '{lat:'.$geoip->lat . ", lng:".$geoip->lon.'}';
         

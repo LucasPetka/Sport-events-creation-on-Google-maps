@@ -47,7 +47,7 @@ return [
     'facebook' => [
         'client_id' => '921294191617028',
         'client_secret' => '6bdb9536e0ca94bb54f6349a52a4f271',
-        'redirect' => 'http://localhost:8000/callback/facebook',
+        'redirect' => 'https://mosi.lt/callback/facebook',
       ], 
 
 ];

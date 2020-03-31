@@ -18,6 +18,9 @@
 
         <link rel="dns-prefetch" href="https://maps.gstatic.com">
         <link rel="dns-prefetch" href="https://maps.googleapis.com">
+        <link rel="preconnect" href="https://maps.gstatic.com">
+        <link rel="preconnect" href="https://maps.googleapis.com">
+        
     </head>
 <body>
   

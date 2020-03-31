@@ -17,8 +17,8 @@
 
         <link rel="dns-prefetch" href="https://maps.gstatic.com">
         <link rel="dns-prefetch" href="https://maps.googleapis.com">
-
-        
+        <link rel="preconnect" href="https://maps.gstatic.com">
+        <link rel="preconnect" href="https://maps.googleapis.com">
 </head>
 <body style="background-image: url('https://www.transparenttextures.com/patterns/diagmonds-light.png'); height: 100%;">
     <div id="app" class="mh-100">

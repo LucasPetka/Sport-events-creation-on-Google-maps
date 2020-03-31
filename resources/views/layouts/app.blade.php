@@ -15,6 +15,9 @@
         
         <link rel="stylesheet" href="{{ mix('/css/app.css') }}">
 
+        <link rel="dns-prefetch" href="https://maps.gstatic.com">
+        <link rel="dns-prefetch" href="https://maps.googleapis.com">
+
         
 </head>
 <body style="background-image: url('https://www.transparenttextures.com/patterns/diagmonds-light.png'); height: 100%;">

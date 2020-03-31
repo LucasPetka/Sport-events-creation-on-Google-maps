@@ -38,7 +38,11 @@ class HomeController extends Controller
 
         $geoip = geoip()->getClientIP();
 
-        $geoip = geoip()->getLocation($geoip);
+        if($geoip == '127.0.0.0'){
+            $geoip = geoip()->getLocation('212.117.25.184');
+        }else{
+            $geoip = geoip()->getLocation($geoip);
+        }
         
         $location = '{lat:'.$geoip->lat . ", lng:".$geoip->lon.'}';
 

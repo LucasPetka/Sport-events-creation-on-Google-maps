@@ -17,9 +17,11 @@ class PagesController extends Controller
 
         $geoip = geoip()->getClientIP();
 
-        
+        if($geoip == '127.0.0.0'){
+        $geoip = geoip()->getLocation('212.117.25.184');
+        }else{
         $geoip = geoip()->getLocation($geoip);
-        
+        }
         
         $location = '{lat:'.$geoip->lat . ", lng:".$geoip->lon.'}';
         

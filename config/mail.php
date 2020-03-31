@@ -56,7 +56,7 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'no-reply@mosi.lt'),
+        'address' => env('MAIL_FROM_ADDRESS', 'mosi.infoo@gmail.com'),
         'name' => env('MAIL_FROM_NAME', 'MoSi'),
     ],
 
@@ -84,9 +84,9 @@ return [
     |
     */
 
-    'username' => env('MAIL_USERNAME','netnag.t@gmail.com'),
+    'username' => env('MAIL_USERNAME','mosi.infoo@gmail.com'),
 
-    'password' => env('MAIL_PASSWORD','netnag159'),
+    'password' => env('MAIL_PASSWORD','Rokas898*'),
 
     /*
     |--------------------------------------------------------------------------

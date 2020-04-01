@@ -42,6 +42,8 @@
             $auth_id = Str::random(10);
         }while(User::where('auth_id', $auth_id)->exists());
 
+        $emptyarray = array( );
+
 
             if (!$user && !$userByEmail) { // if there is no user with facebook and no uses with same email create new user, else return user that already using that email
                 $user = User::create([
@@ -49,7 +51,7 @@
                     'api_token' => $token,
                     'auth_id' => $auth_id,
                     'email'    => $getInfo->email,
-                    'liked_sports' => [],
+                    'liked_sports' => $emptyarray,
                     'provider' => $provider,
                     'provider_id' => $getInfo->id,
                     'avatar' => $getInfo->avatar,

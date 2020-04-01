@@ -21,6 +21,21 @@
         </div>
         @endif
 
+        @if ($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show">
+                <h5>Error!</h5>
+                <ul class="list-unstyled mb-0 ">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
+
 <div class="container overflow-y-auto">
     <div class="row justify-content-center mt-4">
         <div class="col-lg-5 mb-4">
@@ -44,7 +59,7 @@
                                 @if (isset($user->provider))
                                     <img src="http://graph.facebook.com/{{ $user->provider_id }}/picture?type=large" class="figure-img img-fluid img-thumbnail" width="180px" height="180px" alt="profile-photo">
                                 @else
-                                    <img src="images/avatars/{{ $user->avatar }}" class="figure-img img-fluid img-thumbnail" width="180px" height="180px" alt="profile-photo">
+                                    <img src="storage/avatars/{{ $user->avatar }}" class="figure-img img-fluid img-thumbnail" width="180px" height="180px" alt="profile-photo">
                                 @endif
                                     <figcaption class="figure-caption">{{ $user->name }}</figcaption>
 
@@ -58,7 +73,7 @@
                             </figure>
                         </div>
 
-                            <form action="/update_profile" method="post">
+                            <form action="/update_profile" method="post" enctype="multipart/form-data">
                             <!-- Edit Profile MODAL -->
                             <div class="modal fade" id="editProfile" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                 @csrf
@@ -76,6 +91,10 @@
                                         <label for="username">Username</label>
                                         <input type="text" name="username" class="form-control" id="username" placeholder="Username" value="{{ $user->name }}" maxlength="20" required>
                                     </div>    
+
+                                    <div class="mt-3">
+                                        <input type="file" name="profile_image" id="profile_image">
+                                    </div>
 
                                     <p class="mb-2 mt-5">Sports you like</p>
 

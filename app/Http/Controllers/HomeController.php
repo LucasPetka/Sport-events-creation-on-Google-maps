@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 use App\Place;
 use App\User;
@@ -197,16 +198,33 @@ class HomeController extends Controller
 
         $user = Auth::user();
 
-        $validator = Validator::make($request->all(),[
+        $this->validate($request, [
             'username'=>'required|regex:/[a-zA-Z0-9\s]+/|max:20',
+            'profile_image' => 'image|mimes:jpeg,png,jpg|nullable|max:1500000',
         ]);
 
-        if ($validator->fails()) {
-            return redirect('/home')->with('error', 'Incorrect values...');
-        }
+        // Handle File Upload
+        if($request->hasFile('profile_image')){
+            // Get filename with the extension
+            $filenameWithExt = $request->file('profile_image')->getClientOriginalName();
+            // Get just filename
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            // Get just text
+            $extension = $request->file('profile_image')->getClientOriginalExtension();
+            // Filename to store
+            $fileNameToStore= $filename.'_'.time().'.'.$extension;
+            // Upload Image
+            $path = $request->file('profile_image')->storeAs('public/avatars', $fileNameToStore);
+
+            if("blank-user-img.jpg" != $user->avatar){
+                Storage::delete('public/avatars/'.$user->avatar);
+            }
+
+            $user->avatar = $fileNameToStore;
+        } 
 
         $user->name = $request->input('username');
-
+        
         if(!$request->input('types')){
             $user->liked_sports = json_encode([]);
         }

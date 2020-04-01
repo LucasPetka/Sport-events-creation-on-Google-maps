@@ -49,7 +49,7 @@
                     'api_token' => $token,
                     'auth_id' => $auth_id,
                     'email'    => $getInfo->email,
-                    'liked_sports' => "[]",
+                    'liked_sports' => [],
                     'provider' => $provider,
                     'provider_id' => $getInfo->id,
                     'avatar' => $getInfo->avatar,

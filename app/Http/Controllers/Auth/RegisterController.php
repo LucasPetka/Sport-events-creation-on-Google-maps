@@ -79,7 +79,7 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'avatar' => "blank-user-img.jpg",
-            'liked_sports' => "[]",
+            'liked_sports' => [],
             'password' => Hash::make($data['password']),
             'auth_id' => $auth_id,
             'api_token' => $token,

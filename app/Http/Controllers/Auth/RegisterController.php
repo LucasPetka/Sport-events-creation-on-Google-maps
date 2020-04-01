@@ -75,13 +75,11 @@ class RegisterController extends Controller
             $auth_id = Str::random(10);
         }while(User::where('auth_id', $auth_id)->exists());
 
-        $emptyarray = array( );
-
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'avatar' => "blank-user-img.jpg",
-            'liked_sports' => $emptyarray,
+            'liked_sports' => json_encode([]),
             'password' => Hash::make($data['password']),
             'auth_id' => $auth_id,
             'api_token' => $token,

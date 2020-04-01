@@ -159,6 +159,19 @@
                                 </tbody>
                               </table>
                         </div>
+
+                        @if(json_decode($user->liked_sports) != [])
+                            <small class="text-muted ml-3">Sports you like:</small>
+                            @foreach ($types as $type)
+                                @if(in_array( $type->id, json_decode($user->liked_sports)))
+                                    <span class="badge badge-orange m-1">  {{$type->name}} </span>
+                                @endif
+                            @endforeach
+                            
+                        @else
+                            <small class="text-muted ml-3">Update profile and check the sports that you like the most</small>
+                        @endif
+                        
                 </div>
                 
                 </div>

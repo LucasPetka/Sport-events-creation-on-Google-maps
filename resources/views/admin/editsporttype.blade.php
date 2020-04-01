@@ -31,7 +31,7 @@
         {!! Form::close() !!}
 
     </div>
-    </d>        
+    </div>        
         
 
 

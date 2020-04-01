@@ -20,7 +20,7 @@
             <li class="list-group-item" v-for="user in people_going" :key="user.id">
                 <a class="nav-link m-0 p-0" target="_blank" :href="'/user/' + user.person_id.auth_id">
                     <span v-if="user.person_id.provider == null">
-                        <img class="rounded-circle" :src="'../../../images/avatars/'+user.person_id.avatar" width="30" height="30" alt="">
+                        <img class="rounded-circle" :src="'../../../storage/avatars/'+user.person_id.avatar" width="30" height="30" alt="">
                     </span>
                     <span v-else>
                         <img class="rounded-circle" :src="user.person_id.avatar" width="30" height="30" alt="">
@@ -45,10 +45,10 @@
             <editevent :user="user" v-on:fetchCreatedEvents="refresh" :acceptedOrDeclined="false" :event="event"></editevent>
         </div>
         <div v-if="ifJoined(event.place_id, event.id, user.id) == 0">
-            <button id="join_btn" type="button" class="btn btn-success float-right" :disabled="isLoading" v-on:click="addPerson(event.place_id, event.id, user.id, $event)"><i class="fas fa-user-plus"></i> Join</button>
+            <button id="join_btn" type="button" class="btn btn-success float-right" :disabled="isLoading_joinBtn" v-on:click="addPerson(event.place_id, event.id, user.id, $event)"><i class="fas fa-user-plus"></i> Join</button>
         </div>
         <div v-else>
-            <button type="button" class="btn btn-secondary float-right" :disabled="isLoading" v-on:click="deletePerson(event.place_id, event.id, user.id, $event)"><i class="fas fa-check"></i> Joined</button>
+            <button type="button" class="btn btn-secondary float-right" :disabled="isLoading_joinBtn" v-on:click="deletePerson(event.place_id, event.id, user.id, $event)"><i class="fas fa-check"></i> Joined</button>
         </div>
     </div>
 </div>
@@ -64,7 +64,7 @@
                     <li class="p-2" v-for="message in messages"  :key="message.id">
                         
                         <span v-if="message.user.provider == null">
-                            <img class="rounded-circle" :src="'../../../../images/avatars/'+message.user.avatar" width="30" height="30" alt="">
+                            <img class="rounded-circle" :src="'../../../../storage/avatars/'+message.user.avatar" width="30" height="30" alt="">
                         </span>
                         <span v-else>
                             <img class="rounded-circle" :src="message.user.avatar" width="30" height="30" alt="">
@@ -77,7 +77,7 @@
                 </ul>
             </div>
 
-            <input @keydown="sendTyping" @keyup.enter="sendMessage" v-model="newMessage" type="text" name="message" maxlength="400" placeholder="Enter your message..." :disabled="isLoading" class="form-control">
+            <input id="message_input" @keydown="sendTyping" @keyup.enter="sendMessage" v-model="newMessage" type="text" name="message" maxlength="400" placeholder="Enter your message..." :disabled="isLoading_chat" class="form-control">
         </div>
 
         <span class="text-muted" v-if="activeUser">{{ activeUser.name }} is typing...</span>
@@ -89,7 +89,7 @@
             <div class="card-body p-0">
                     <span v-for="user in users" :key="user.id">
                         <span v-if="user.provider == null">
-                            <a target="_blank" :href="'/user/' + user.auth_id"><img class="rounded-circle m-2" :src="'../../../../images/avatars/'+user.avatar" width="30" height="30" :alt="user.name" data-toggle="tooltip" data-placement="top" :title="user.name"></a>
+                            <a target="_blank" :href="'/user/' + user.auth_id"><img class="rounded-circle m-2" :src="'../../../../storage/avatars/'+user.avatar" width="30" height="30" :alt="user.name" data-toggle="tooltip" data-placement="top" :title="user.name"></a>
                         </span>
                         <span v-else>
                             <a target="_blank" :href="'/user/' + user.auth_id"><img class="rounded-circle m-2" :src="user.avatar" width="30" height="30" :alt="user.name" data-toggle="tooltip" data-placement="top" :title="user.name"></a>
@@ -119,7 +119,8 @@ export default {
             messages: [],
             newMessage: '',
             users: [],
-            isLoading:false,
+            isLoading_joinBtn:false,
+            isLoading_chat:false,
             people_going: [],
             activeUser: false,
             typeTime: false,
@@ -183,12 +184,18 @@ export default {
         sendMessage(){
             
             if(this.newMessage.length <= 400 && this.newMessage.length != 0 && this.newMessage.trim()){
-                this.isLoading = true
+                this.isLoading_chat = true
                 setTimeout(() => {
-                    this.isLoading = false
-                }, 1000);
+                    this.isLoading_chat = false;
+                    setTimeout(() => {
+                    this.$el.querySelector('#message_input').select();
+                    this.$el.querySelector('#message_input').focus();
+                    }, 100);
+                    
+                }, 900);
 
-                console.log(this.newMessage.length);
+                
+
                 this.messages.push({
                     user: this.user,
                     message: this.newMessage,
@@ -252,9 +259,9 @@ export default {
         //Add person to the event
         addPerson(place, event, person, but) {
             
-            this.isLoading = true
+            this.isLoading_joinBtn = true
             setTimeout(() => {
-                this.isLoading = false
+                this.isLoading_joinBtn = false
             }, 2000);
 
             this.person.place_id = place;
@@ -289,9 +296,9 @@ export default {
         //Delete person from event
         deletePerson: function(place, event, person, but) {
 
-            this.isLoading = true
+            this.isLoading = isLoading_joinBtn;
             setTimeout(() => {
-                this.isLoading = false
+                this.isLoading = isLoading_joinBtn;
             }, 2000);
 
             const first = this.people_going.filter( oneper => oneper.person_id.id == person);

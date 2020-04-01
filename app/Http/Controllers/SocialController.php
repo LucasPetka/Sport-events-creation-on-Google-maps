@@ -27,7 +27,11 @@
 
     function createUser($getInfo,$provider){
 
+        //Check if there is already user joined with facebook
         $user = User::where('provider_id', $getInfo->id)->first();
+
+        //Check if there is already user joined with this email
+        $userByEmail = User::where('email', $getInfo->email)->first();
 
         do{
             $minutes = 720;
@@ -39,31 +43,42 @@
         }while(User::where('auth_id', $auth_id)->exists());
 
 
-            if (!$user) {
+            if (!$user && !$userByEmail) { // if there is no user with facebook and no uses with same email create new user, else return user that already using that email
                 $user = User::create([
                     'name'     => $getInfo->name,
                     'api_token' => $token,
                     'auth_id' => $auth_id,
                     'email'    => $getInfo->email,
+                    'liked_sports' => [],
                     'provider' => $provider,
                     'provider_id' => $getInfo->id,
                     'avatar' => $getInfo->avatar,
                 ]);
             }
-            else{
-                $minutes = 720;
-                do{
-                    $token = Str::random(60);
+            else{                       
+                if(!$userByEmail){ 
+
                     $user->api_token = $token;
-        
-                 }while(User::where('api_token', $user->api_token)->exists());
-                 
-                Cookie::queue(Cookie::make('api_token', $token, $minutes, null, null, false, false));
-                $user->save();
+                    Cookie::queue(Cookie::make('api_token', $token, $minutes, null, null, false, false));
+                    $user->save();
+
+                }else{
+
+                    $userByEmail->api_token = $token;
+                    Cookie::queue(Cookie::make('api_token', $token, $minutes, null, null, false, false));
+                    $userByEmail->save();
+
+                }
+
             }
 
+        if(!$userByEmail){
+            return $user;
+        }else{
+            return $userByEmail;
+        }
 
-        return $user;
+
     }
 
  }

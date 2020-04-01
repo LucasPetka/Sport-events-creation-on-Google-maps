@@ -68,6 +68,10 @@ class EventController extends Controller
         $end =  $request->input('time_until');
         $place_id = $request->input('place_id');
 
+        if($start == $end){
+            return false;
+        }
+
         $validator = Validator::make($request->all(),[
             'place_id'=>'required',
             'title'=>'required|max:45',

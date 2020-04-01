@@ -132,6 +132,10 @@ class HomeController extends Controller
     function resubmitEvent(Request $request){
         $declinedEvent = DeclinedEvents::findOrFail($request->id);
 
+        if($request->time_from == $request->time_from){
+            return false;
+        }
+
         $validator = Validator::make($request->all(),[
             'place_id'=>'required',
             'title'=>'required|max:45',
@@ -192,7 +196,17 @@ class HomeController extends Controller
     function update_profile(Request $request){
 
         $user = Auth::user();
+
+        $validator = Validator::make($request->all(),[
+            'username'=>'required|regex:/[a-zA-Z0-9\s]+/|max:20',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect('/home')->with('error', 'Incorrect values...');
+        }
+
         $user->name = $request->input('username');
+
         if(!$request->input('types')){
             $user->liked_sports = json_encode([]);
         }

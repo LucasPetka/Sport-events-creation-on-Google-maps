@@ -2,6 +2,25 @@
 
 @section('content')
 
+    <!---------------Successful and Error messages------------------>
+        @if (session('success'))
+        <div class="position-absolute alert alert-success alert-dismissible fade show" style="left:50px;" role="alert">
+            {{ session('success') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        @endif
+        @if (session('error'))
+        <div class="position-absolute alert alert-danger alert-dismissible fade show" style="left:50px;" role="alert">
+            {{ session('error') }}
+
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        @endif
+
 <div class="container overflow-y-auto">
     <div class="row justify-content-center mt-4">
         <div class="col-lg-5 mb-4">
@@ -55,7 +74,7 @@
 
                                     <div class="form-group">
                                         <label for="username">Username</label>
-                                        <input type="text" name="username" class="form-control" id="username" placeholder="Username" value="{{ $user->name }}">
+                                        <input type="text" name="username" class="form-control" id="username" placeholder="Username" value="{{ $user->name }}" maxlength="20" required>
                                     </div>    
 
                                     <p class="mb-2 mt-5">Sports you like</p>

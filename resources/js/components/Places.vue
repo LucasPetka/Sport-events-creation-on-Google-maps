@@ -457,6 +457,7 @@ export default {
            $("#time_error_second").html("");
         });
 
+        this.openInfo();
 
     },
 
@@ -466,6 +467,20 @@ export default {
     methods: { 
 
     ...mapActions(['fetchPlacesx']),
+
+    openInfo: function(){
+
+        if(this.getCookie("visited") != "true"){
+            $('#infoModal').modal('show');
+            console.log("OPEN");
+        }
+        
+            var today = new Date();
+            var expire = new Date();
+            expire.setTime(today.getTime() + 3600000*24*7);
+            document.cookie = "visited=true; expires=" + expire.toGMTString();
+        
+    },
 
     fillArrayWithTimes: function(){
         const hours = 24;
@@ -616,8 +631,6 @@ export default {
 
     //---------------------------------------Deletes place-------------------------------------------------
     deletePlace: function(id) {
-
-        console.log(this.getCookie("api_token"));
 
         if(confirm('Are you sure?')){
             fetch('api/place/'+ id + '?api_token=' + this.getCookie("api_token"), {

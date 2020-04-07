@@ -4107,6 +4107,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
 var Datepicker = function Datepicker() {
   return __webpack_require__.e(/*! import() */ 0).then(__webpack_require__.bind(null, /*! vuejs-datepicker */ "./node_modules/vuejs-datepicker/dist/vuejs-datepicker.esm.js"));
 };
@@ -4131,6 +4137,7 @@ var Datepicker = function Datepicker() {
         lng: 0
       },
       user_loc_set: false,
+      loader_time_for_event_finder: false,
       formatter: '{value} km',
       format: 'yyyy-MM-dd',
       events: [],
@@ -4302,6 +4309,10 @@ var Datepicker = function Datepicker() {
     findEvents: function findEvents() {
       var _this3 = this;
 
+      this.loader_time_for_event_finder = true;
+      setTimeout(function () {
+        _this3.loader_time_for_event_finder = false;
+      }, 1000);
       this.rules.lat = this.user_location.lat;
       this.rules.lng = this.user_location.lng;
       this.rules.date_from = new Date(this.rules.date_from.setHours(0, 0, 0));
@@ -90575,113 +90586,130 @@ var render = function() {
               }
             },
             [
-              _vm.events.length != 0
-                ? _c(
-                    "div",
-                    _vm._l(_vm.pageOfItems, function(event) {
-                      return _c(
-                        "div",
-                        { key: event.id, staticClass: "card mb-2" },
-                        [
-                          _c("div", { staticClass: "card-body p-2" }, [
-                            _c(
-                              "a",
-                              {
-                                staticClass: "nav-link ml-2 p-0 extend",
-                                attrs: {
-                                  target: "_blank",
-                                  href: "/event/" + event.id + "/" + event.title
-                                }
-                              },
+              !_vm.loader_time_for_event_finder
+                ? _c("div", [
+                    _vm.events.length != 0
+                      ? _c(
+                          "div",
+                          _vm._l(_vm.pageOfItems, function(event) {
+                            return _c(
+                              "div",
+                              { key: event.id, staticClass: "card mb-2" },
                               [
-                                _c("img", {
-                                  attrs: {
-                                    src:
-                                      "../../../storage/sport_logo/" +
-                                      event.type.image,
-                                    alt: event.title
-                                  }
-                                }),
-                                _vm._v(
-                                  " " +
-                                    _vm._s(event.title) +
-                                    "\n                        "
-                                )
+                                _c("div", { staticClass: "card-body p-2" }, [
+                                  _c(
+                                    "a",
+                                    {
+                                      staticClass: "nav-link ml-2 p-0 extend",
+                                      attrs: {
+                                        target: "_blank",
+                                        href:
+                                          "/event/" +
+                                          event.id +
+                                          "/" +
+                                          event.title
+                                      }
+                                    },
+                                    [
+                                      _c("img", {
+                                        attrs: {
+                                          src:
+                                            "../../../storage/sport_logo/" +
+                                            event.type.image,
+                                          alt: event.title
+                                        }
+                                      }),
+                                      _vm._v(
+                                        " " +
+                                          _vm._s(event.title) +
+                                          "\n                            "
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c("hr", { staticClass: "m-2" }),
+                                  _vm._v(" "),
+                                  _c("div", { staticClass: "p-2" }, [
+                                    _vm._v(
+                                      _vm._s(event.about.slice(0, 140)) + "..."
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("hr", { staticClass: "m-2" }),
+                                  _vm._v(" "),
+                                  _c("div", { staticClass: "row p-2" }, [
+                                    _c("div", { staticClass: "col-3" }, [
+                                      _c("i", {
+                                        staticClass: "far fa-calendar-alt"
+                                      }),
+                                      _vm._v(
+                                        " " +
+                                          _vm._s(_vm.getDate(event.time_from)) +
+                                          "\n                                "
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("div", { staticClass: "col-3" }, [
+                                      _c("i", { staticClass: "far fa-clock" }),
+                                      _vm._v(
+                                        " " +
+                                          _vm._s(_vm.getTime(event.time_from)) +
+                                          "-" +
+                                          _vm._s(
+                                            _vm.getTime(event.time_until)
+                                          ) +
+                                          "\n                                "
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("div", { staticClass: "col-3" }, [
+                                      _c("i", { staticClass: "fas fa-users" }),
+                                      _vm._v(
+                                        " " +
+                                          _vm._s(event.people_going) +
+                                          " going\n                                "
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("div", { staticClass: "col-3" }, [
+                                      _c("i", { staticClass: "fas fa-road" }),
+                                      _vm._v(
+                                        " " +
+                                          _vm._s(
+                                            _vm.countDistance(
+                                              event.lat,
+                                              event.lng
+                                            )
+                                          ) +
+                                          " km\n                                "
+                                      )
+                                    ])
+                                  ])
+                                ])
                               ]
-                            ),
-                            _vm._v(" "),
-                            _c("hr", { staticClass: "m-2" }),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "p-2" }, [
-                              _vm._v(_vm._s(event.about.slice(0, 140)) + "...")
-                            ]),
-                            _vm._v(" "),
-                            _c("hr", { staticClass: "m-2" }),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "row p-2" }, [
-                              _c("div", { staticClass: "col-3" }, [
-                                _c("i", { staticClass: "far fa-calendar-alt" }),
-                                _vm._v(
-                                  " " +
-                                    _vm._s(_vm.getDate(event.time_from)) +
-                                    "\n                            "
-                                )
-                              ]),
-                              _vm._v(" "),
-                              _c("div", { staticClass: "col-3" }, [
-                                _c("i", { staticClass: "far fa-clock" }),
-                                _vm._v(
-                                  " " +
-                                    _vm._s(_vm.getTime(event.time_from)) +
-                                    "-" +
-                                    _vm._s(_vm.getTime(event.time_until)) +
-                                    "\n                            "
-                                )
-                              ]),
-                              _vm._v(" "),
-                              _c("div", { staticClass: "col-3" }, [
-                                _c("i", { staticClass: "fas fa-users" }),
-                                _vm._v(
-                                  " " +
-                                    _vm._s(event.people_going) +
-                                    " going\n                            "
-                                )
-                              ]),
-                              _vm._v(" "),
-                              _c("div", { staticClass: "col-3" }, [
-                                _c("i", { staticClass: "fas fa-road" }),
-                                _vm._v(
-                                  " " +
-                                    _vm._s(
-                                      _vm.countDistance(event.lat, event.lng)
-                                    ) +
-                                    " km\n                            "
-                                )
-                              ])
-                            ])
+                            )
+                          }),
+                          0
+                        )
+                      : _c("div", { staticClass: "text-center mb-4" }, [
+                          _c("span", { staticClass: "text-muted" }, [
+                            _vm._v("Sorry, no events found..")
                           ])
-                        ]
-                      )
-                    }),
-                    0
-                  )
-                : _c("div", { staticClass: "text-center mb-4" }, [
-                    _c("span", { staticClass: "text-muted" }, [
-                      _vm._v("Sorry, no events found..")
-                    ])
-                  ]),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "row justify-content-around" },
-                [
-                  _c("jw-pagination", {
-                    attrs: { pageSize: 4, items: _vm.events },
-                    on: { changePage: _vm.onChangePage }
-                  })
-                ],
-                1
-              )
+                        ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "row justify-content-around" },
+                      [
+                        _c("jw-pagination", {
+                          attrs: { pageSize: 4, items: _vm.events },
+                          on: { changePage: _vm.onChangePage }
+                        })
+                      ],
+                      1
+                    )
+                  ])
+                : _c("div", { staticClass: "row" }, [_vm._m(0)])
             ]
           ),
           _vm._v(" "),
@@ -90798,7 +90826,21 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass: "spinner-border mx-auto mt-5 text-secondary",
+        attrs: { role: "status" }
+      },
+      [_c("span", { staticClass: "sr-only" }, [_vm._v("Loading...")])]
+    )
+  }
+]
 render._withStripped = true
 
 

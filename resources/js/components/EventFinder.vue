@@ -80,44 +80,50 @@
 
                 <div id="accordion">
                     <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-                        <div v-if="events.length != 0">
-                        <div v-for="event in pageOfItems" :key="event.id" class="card mb-2">
-                            <div class="card-body p-2">
-                                <a target="_blank" :href="'/event/' + event.id +'/'+ event.title" class="nav-link ml-2 p-0 extend">
-                                    <img :src="'../../../storage/sport_logo/'+ event.type.image" :alt="event.title"> {{ event.title }}
-                                </a>
+                        <div v-if="!loader_time_for_event_finder">
+                            <div v-if="events.length != 0">
+                            <div v-for="event in pageOfItems" :key="event.id" class="card mb-2">
+                                <div class="card-body p-2">
+                                    <a target="_blank" :href="'/event/' + event.id +'/'+ event.title" class="nav-link ml-2 p-0 extend">
+                                        <img :src="'../../../storage/sport_logo/'+ event.type.image" :alt="event.title"> {{ event.title }}
+                                    </a>
 
-                                <hr class="m-2">
+                                    <hr class="m-2">
 
-                                <div class="p-2">{{ event.about.slice(0, 140) }}...</div>
+                                    <div class="p-2">{{ event.about.slice(0, 140) }}...</div>
 
-                                <hr class="m-2">
+                                    <hr class="m-2">
 
-                                <div class="row p-2">
-                                    <div class="col-3">
-                                        <i class="far fa-calendar-alt"></i> {{ getDate(event.time_from) }}
-                                    </div>
-                                    <div class="col-3">
-                                        <i class="far fa-clock"></i> {{ getTime(event.time_from) }}-{{ getTime(event.time_until) }}
-                                    </div>
-                                    <div class="col-3">
-                                        <i class="fas fa-users"></i> {{ event.people_going }} going
-                                    </div>
-                                    <div class="col-3">
-                                        <i class="fas fa-road"></i> {{ countDistance(event.lat, event.lng) }} km
+                                    <div class="row p-2">
+                                        <div class="col-3">
+                                            <i class="far fa-calendar-alt"></i> {{ getDate(event.time_from) }}
+                                        </div>
+                                        <div class="col-3">
+                                            <i class="far fa-clock"></i> {{ getTime(event.time_from) }}-{{ getTime(event.time_until) }}
+                                        </div>
+                                        <div class="col-3">
+                                            <i class="fas fa-users"></i> {{ event.people_going }} going
+                                        </div>
+                                        <div class="col-3">
+                                            <i class="fas fa-road"></i> {{ countDistance(event.lat, event.lng) }} km
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        </div>
-                        <div class="text-center mb-4" v-else>
-                            <span class="text-muted">Sorry, no events found..</span>
-                        </div>
+                            </div>
+                            <div class="text-center mb-4" v-else>
+                                <span class="text-muted">Sorry, no events found..</span>
+                            </div>
 
-                        <div class="row justify-content-around">
+                            <div class="row justify-content-around">
                             <jw-pagination :pageSize="4" :items="events" @changePage="onChangePage"></jw-pagination>
+                            </div>
                         </div>
-                        
+                        <div class="row" v-else>
+                            <div class="spinner-border mx-auto mt-5 text-secondary" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
 
                     </div>
                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
@@ -194,6 +200,7 @@ export default {
             center:{lat: 0, lng: 0},
             user_location: {lat: 0, lng: 0},
             user_loc_set: false,
+            loader_time_for_event_finder:false,
             formatter: '{value} km',
             format:'yyyy-MM-dd',
             events: [],
@@ -351,6 +358,11 @@ export default {
 
         //Get all people that going to events
         findEvents() {
+
+            this.loader_time_for_event_finder = true;
+            setTimeout(() => {
+                this.loader_time_for_event_finder = false;
+            }, 1000);
 
             this.rules.lat = this.user_location.lat;
             this.rules.lng = this.user_location.lng;

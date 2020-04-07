@@ -82,12 +82,9 @@ class PlaceController extends Controller
 
     public function destroy($id)
     {
-
         $place = Place::findOrFail($id);
 
-        if($place->delete()){
-            return new PlaceResource($place);
-        }
+        $place->delete();
     }
 
     public function update(Request $request)

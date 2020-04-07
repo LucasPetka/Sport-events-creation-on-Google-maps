@@ -65,6 +65,7 @@
                   </td>
                   <td>
                       <button type="button" class="btn btn-primary mr-4" data-toggle="modal" data-target="#placeid{{ $place->id }}"> Open </button>
+                      <a href ="/admin/deleteplace/{{ $place->id }}"  class="btn btn-outline-danger mr-2" data-toggle="tooltip" data-placement="top" title="Delete this place"><i class="fas fa-trash-alt"></i></a>
                   </td>
                 </tr>
                 @endforeach

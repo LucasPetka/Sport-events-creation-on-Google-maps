@@ -91,10 +91,19 @@ class AdminController extends Controller
 
     public function deleteUser($id)
     { 
-        $user = User::find($id);
+        $user = User::findOrFail($id);
         $user->delete();
 
         return redirect('admin/users');
+    }
+
+    public function deletePlace($id)
+    { 
+        $place = Place::findOrFail($id);
+
+        if($place->delete()){
+            return redirect('/admin/places')->with('error', 'Place has been deleted...');
+        }
     }
     
 
@@ -155,6 +164,17 @@ class AdminController extends Controller
         }
 
     }
+
+
+    public function destroyPlace($id)
+    {
+        $place = PlaceQueue::findOrFail($id);
+
+        if($place->delete()){
+            return redirect('/admin/places_to_confirm')->with('error', 'Place has been deleted...');
+        }
+    }
+
 
 
     public function acceptEvent($id)
@@ -220,6 +240,15 @@ class AdminController extends Controller
         }
         else{
             return redirect('/admin/events_to_confirm')->with('error', 'Event has not been declined...');
+        }
+    }
+
+    public function destroyEvent($id)
+    {
+        $event = EventQueue::findOrFail($id);
+
+        if($event->delete()){
+            return redirect('/admin/events_to_confirm')->with('error', 'Event has been deleted...');
         }
     }
 

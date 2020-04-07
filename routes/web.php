@@ -64,6 +64,7 @@ Route::get('/admin/places', 'AdminController@allPlaces')->middleware('admin');
 Route::get('/admin/users', 'AdminController@users')->middleware('admin');
 Route::get('/admin/sporttypes', 'AdminController@sportTypes')->middleware('admin');
 Route::put('/admin/updateplace', 'Places\PlaceController@update')->middleware('admin');
+Route::get('/admin/deleteplace/{id}', 'AdminController@deletePlace')->middleware('admin');
 
 
 //==============================Notification==========================================
@@ -86,6 +87,8 @@ Route::get('/admin/accplace/{id}', 'AdminController@acceptPlace')->middleware('a
 Route::get('/admin/decplace/{id}', 'AdminController@declinePlace')->middleware('admin');   //tested
 Route::get('/admin/accevent/{id}', 'AdminController@acceptEvent')->middleware('admin');    //tested
 Route::get('/admin/decevent/{id}', 'AdminController@declineEvent')->middleware('admin');   //tested
+Route::get('/admin/destroyplace/{id}', 'AdminController@destroyPlace')->middleware('admin');    
+Route::get('/admin/destroyevent/{id}', 'AdminController@destroyEvent')->middleware('admin');   
 
 
 //============================Social login/register profile================================

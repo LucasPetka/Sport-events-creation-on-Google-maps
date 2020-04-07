@@ -52,6 +52,7 @@
                         <button type="button" class="btn btn-primary mr-4" data-toggle="modal" data-target="#placeid{{ $event->id }}"> Open </button>
                         <a href ="/admin/accevent/{{ $event->id }}"  class="btn btn-success mr-2" data-toggle="tooltip" data-placement="top" title="Publish new event" ><i class="fas fa-check"></i></a>
                         <a href ="/admin/decevent/{{ $event->id }}"  class="btn btn-danger mr-2" data-toggle="tooltip" data-placement="top" title="Decline this event"><i class="fas fa-times"></i></a>
+                        <a href ="/admin/destroyevent/{{ $event->id }}"  class="btn btn-outline-danger ml-2 mr-2" data-toggle="tooltip" data-placement="top" title="Destroy this event"><i class="fas fa-trash-alt"></i></a>
                     </td>
                 </tr>
                 @endforeach

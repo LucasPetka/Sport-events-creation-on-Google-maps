@@ -42,7 +42,7 @@
                   <th scope="row">{{ ++$key }}</th>
                   <td>{{ $place->title }}</td>
                   <td><img src="../storage/sport_logo/{{ $place->typee->image }}" alt="{{ $place->typee->name }}"> {{ $place->typee->name }}</td>
-                  <td>{{ $place->user->name }}</td>
+                  <td>{{ $place->user['name'] }}</td>
                   <td>
                     @if($place->paid == "1")
                     <i class="fas fa-coins"></i>
@@ -54,6 +54,8 @@
                       <button type="button" class="btn btn-primary mr-4" data-toggle="modal" data-target="#placeid{{ $place->id }}"> Open </button>
                       <a href ="/admin/accplace/{{ $place->id }}"  class="btn btn-success mr-2" data-toggle="tooltip" data-placement="top" title="Publish new place" ><i class="fas fa-check"></i></a>
                       <a href ="/admin/decplace/{{ $place->id }}"  class="btn btn-danger mr-2" data-toggle="tooltip" data-placement="top" title="Decline this place"><i class="fas fa-times"></i></a>
+                      <a href ="/admin/destroyplace/{{ $place->id }}"  class="btn btn-outline-danger ml-2 mr-2" data-toggle="tooltip" data-placement="top" title="Destroy this place"><i class="fas fa-trash-alt"></i></a>
+                      
                   </td>
                 </tr>
                 @endforeach
@@ -94,7 +96,7 @@
                             <hr>
                               <small><img src="../storage/sport_logo/{{ $place->typee->image }}" alt="{{ $place->typee->name }}"> {{ $place->typee->name }}</small>
                             <br>
-                                <small>Created by: {{ $place->user->name }}</small>
+                                <small>Created by: {{ $place->user['name'] }}</small>
                             <hr>
                             <a href ="/admin/accplace/{{ $place->id }}"  class="btn btn-success mr-2"> Accept <i class="fas fa-check"></i></a>
                             <a href ="/admin/decplace/{{ $place->id }}"  class="btn btn-danger mr-2"> Decline <i class="fas fa-times"></i></a>

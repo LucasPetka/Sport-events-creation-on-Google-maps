@@ -33,8 +33,7 @@ Route::get('/validate_time', 'Events\EventController@check_time');
 
 //----------------------------PROFILE-------------------------------------------
 Route::post('/update_profile', 'HomeController@update_profile')->middleware('auth');
-Route::post('/resubmit/{id}', 'Places\DeclinedPlacesController@update')->middleware('auth');
-Route::delete('/decplace/{id}', 'Places\DeclinedPlacesController@destroy')->middleware('auth');
+
 Route::get('/returncreatedevents', 'HomeController@returnCreatedEvents')->middleware('auth');
 Route::get('/returngoingtoevents', 'HomeController@returnGoingToEvents')->middleware('auth');
 Route::get('/returnacceptedplaces', 'HomeController@returnAcceptedPlaces')->middleware('auth');
@@ -42,6 +41,10 @@ Route::get('/returndeclinedplaces', 'HomeController@returnDeclinedPlaces')->midd
 Route::get('/returnsubmitedplaces', 'HomeController@returnSubmitedPlaces')->middleware('auth');
 Route::get('/returnsubmitedevents', 'HomeController@returnSubmitedEvents')->middleware('auth');
 Route::get('/returndeclinedevents', 'HomeController@returnDeclinedEvents')->middleware('auth');
+
+Route::post('/resubmit/{id}', 'Places\DeclinedPlacesController@update')->middleware('auth');
+Route::delete('/decplace/{id}', 'Places\DeclinedPlacesController@destroy')->middleware('auth');
+
 Route::post('/resubmit_event', 'HomeController@resubmitEvent')->middleware('auth');
 Route::delete('/decevent/{id}', 'HomeController@deleteEvent')->middleware('auth');
 
@@ -62,24 +65,30 @@ Route::get('/admin/users', 'AdminController@users')->middleware('admin');
 Route::get('/admin/sporttypes', 'AdminController@sportTypes')->middleware('admin');
 Route::put('/admin/updateplace', 'Places\PlaceController@update')->middleware('admin');
 
-//====Notification
+
+//==============================Notification==========================================
 Route::get('/notifications/get', 'NotificationController@get')->middleware('auth');
 Route::post('/notification/read', 'NotificationController@read')->middleware('auth');
 Route::post('/notification/readall', 'NotificationController@readAll')->middleware('auth');
 
-//=======Types
+
+//===================================Types====================================================
 Route::post('/admin/sporttypes/add', 'TypeController@store')->middleware('admin');
 Route::get('/admin/sporttypes/edit/{id}', 'TypeController@openUpdate')->middleware('admin');
 Route::post('/admin/sporttypes/edit_type/{id}', 'TypeController@update')->middleware('admin');
 Route::delete('/admin/sporttypes/delete/{id}', 'TypeController@destroy')->middleware('admin');
 
 Route::get('/admin/deleteuser/{id}', 'AdminController@deleteUser')->middleware('admin');
-Route::get('/admin/accplace/{id}', 'AdminController@acceptPlace')->middleware('admin');
-Route::get('/admin/decplace/{id}', 'AdminController@declinePlace')->middleware('admin');
-Route::get('/admin/accevent/{id}', 'AdminController@acceptEvent')->middleware('admin');
-Route::get('/admin/decevent/{id}', 'AdminController@declineEvent')->middleware('admin');
 
 
+//=====================================Accept/Decline Events and Places=============================
+Route::get('/admin/accplace/{id}', 'AdminController@acceptPlace')->middleware('admin');    //tested
+Route::get('/admin/decplace/{id}', 'AdminController@declinePlace')->middleware('admin');   //tested
+Route::get('/admin/accevent/{id}', 'AdminController@acceptEvent')->middleware('admin');    //tested
+Route::get('/admin/decevent/{id}', 'AdminController@declineEvent')->middleware('admin');   //tested
+
+
+//============================Social login/register profile================================
 Route::get('/auth/redirect/{provider}', 'SocialController@redirect');
 Route::get('/callback/{provider}', 'SocialController@callback');
 Route::get('/user/{auth_id}', 'PagesController@show_profile');

@@ -21,6 +21,21 @@
           </div>
         @endif
 
+        @if ($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show">
+              <h5>Error!</h5>
+                <ul class="list-unstyled mb-0 ">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+        @endif
+
         <h3 class="mt-4"><i class="fas fa-map-marked-alt text-orange-secondary"></i> Places</h3>
         <div class="table-responsive">
           <table class="table table-striped">

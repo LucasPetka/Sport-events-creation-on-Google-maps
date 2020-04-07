@@ -296,9 +296,9 @@ export default {
         //Delete person from event
         deletePerson: function(place, event, person, but) {
 
-            this.isLoading = isLoading_joinBtn;
+            this.isLoading_joinBtn = true;
             setTimeout(() => {
-                this.isLoading = isLoading_joinBtn;
+                this.isLoading_joinBtn = false;
             }, 2000);
 
             const first = this.people_going.filter( oneper => oneper.person_id.id == person);

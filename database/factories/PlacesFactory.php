@@ -15,7 +15,7 @@ $factory->define(App\Place::class, function (Faker $faker) {
         'lng' => $faker->longitude($min = -2.3149357594216013, $max = 0.22153274643777365),
         'type' => $faker->randomElement([111, 222, 333, 444, 555, 666, 777, 888]),
         'paid' => $faker->randomElement([1, 0]),
-        'highlighted' => null, // 50% chance of FALSE
-        'highlight_valid' => null, // 50% chance of FALSE
+        'highlighted' => null,
+        'highlight_valid' => null,
     ];
 });

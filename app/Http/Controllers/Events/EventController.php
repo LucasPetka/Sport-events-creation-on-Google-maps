@@ -60,7 +60,27 @@ class EventController extends Controller
 
     public function store(Request $request)
     {
-        $event = $request->isMethod('put') ? Event::findOrFail($request->id) : new EventQueue;
+
+        $user = Auth::user();
+
+        if($user->isAdmin != '1'){
+
+            if($request->isMethod('put')) { 
+                $event = Event::findOrFail($request->id);
+                
+                if($user->id != $event->person_id){ 
+                    return false; 
+                }
+            }else{ 
+                $event = new EventQueue;
+            }
+            
+        }
+        else{
+            $event = $request->isMethod('put') ? Event::findOrFail($request->id) : new Event;
+        }
+
+
 
         //========================Validation==========START==========
 
@@ -72,7 +92,7 @@ class EventController extends Controller
             return false;
         }
 
-        $validator = Validator::make($request->all(),[
+        $this->validate($request, [
             'place_id'=>'required',
             'title'=>'required|max:45',
             'about'=>'required|max:350',
@@ -80,13 +100,6 @@ class EventController extends Controller
             'time_until'=>'required',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json(array(
-                'success' => false,
-                'message' => 'There was incorect values in the form!',
-                'errors' => $validator->getMessageBag()->toArray()
-            ), 200);
-        }
 
         if(isset($event->id)){
             $exists = Event::where('place_id', $place_id)
@@ -212,7 +225,12 @@ class EventController extends Controller
     {
         $event = Event::where('id',$id)->where('title', $title)->first();
 
-        return view('pages.event')->with(compact('event')); 
+        if($event){
+            return view('pages.event')->with(compact('event')); 
+        }else{
+            return abort(404);
+        }
+
     }
 
     public function fetchMessages($id)

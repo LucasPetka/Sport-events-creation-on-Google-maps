@@ -4,6 +4,7 @@
                     <gmap-marker :draggable="drag" @drag="updateCoordinates" :position="coords"></gmap-marker>
                 </gmap-map>
 
+                <a class="btn btn-orange btn-block" :href="'https://www.google.co.uk/maps/dir//'+coords.lat+','+coords.lng" target="_blank" role="button"><i class="fas fa-map-marker-alt"></i> Show directions</a>
                 <input type="hidden" id="lat" name="lat" :value="coords.lat">
                 <input type="hidden" id="lng" name="lng" :value="coords.lng">
     </div>

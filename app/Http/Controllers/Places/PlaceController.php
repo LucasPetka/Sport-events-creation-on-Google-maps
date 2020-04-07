@@ -11,14 +11,12 @@ use DB;
 use Auth;
 use App\Message;
 use App\Events\MessageSent;
+use Illuminate\Support\Facades\Validator;
 
 class PlaceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+
     public function index($nelat, $swlat, $nelng, $swlng, Request $request)
     {
 
@@ -75,38 +73,6 @@ class PlaceController extends Controller
         return PlaceResource::collection($places);
     }
 
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $place = $request->isMethod('put') ? Place::findOrFail($request->place_id) : new Place;
-
-
-        $place->id = $request->input('place_id');
-        $place->title = $request->input('title');
-        $place->about = $request->input('about');
-        $place->lat = $request->input('lat');
-        $place->lng = $request->input('lng');
-        $place->type = $request->input('type');
-
-        if($place->save()){
-            return new PlaceResource($place);
-        }
-
-
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         $place = Place::findOrFail($id);
@@ -114,13 +80,6 @@ class PlaceController extends Controller
         return new PlaceResource($place);
     }
 
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
 
@@ -131,10 +90,16 @@ class PlaceController extends Controller
         }
     }
 
-
     public function update(Request $request)
     {
         $place = Place::findOrFail($request->place_id);
+
+        $this->validate($request, [
+            'title'=>'required|max:45',
+            'about'=>'required|max:350',
+            'lat'=>'required',
+            'lng'=>'required',
+        ]);
 
         $place->id = $request->input('place_id');
         $place->title = $request->input('title');

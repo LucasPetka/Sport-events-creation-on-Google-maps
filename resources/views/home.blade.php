@@ -92,11 +92,12 @@
                                         <input type="text" name="username" class="form-control" id="username" placeholder="Username" value="{{ $user->name }}" maxlength="20" required>
                                     </div>    
 
-                                    <div class="mt-3">
+                                    <label for="profile_image">New Profile photo</label>
+                                    <div>
                                         <input type="file" name="profile_image" id="profile_image">
                                     </div>
 
-                                    <p class="mb-2 mt-5">Sports you like</p>
+                                    <p class="mb-2 mt-4">Sports you like</p>
 
                                     
                                     @foreach ($types as $type)

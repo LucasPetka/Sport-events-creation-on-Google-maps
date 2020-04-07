@@ -160,24 +160,43 @@ class AdminController extends Controller
     public function acceptEvent($id)
     { 
         $event = EventQueue::find($id);
+        $start = $event->time_from;
+        $end = $event->time_until;
+        $place_id =$event->place_id;
 
-        $newEvent = new Event;
-        $newEvent->place_id = $event->place_id;
-        $newEvent->title = $event->title;
-        $newEvent->about = $event->about;
-        $newEvent->time_from = $event->time_from;
-        $newEvent->time_until = $event->time_until;
-        $newEvent->person_id = $event->person_id;
 
-        if($newEvent->save() && $event->delete()){
+        $exists = Event::where('place_id', $place_id)
+            ->where(function ($query) use ($start, $end) {
+                $query->where([['time_from','<', $start],['time_until','>', $start],])
+                    ->orWhere([['time_from','<', $end],['time_until','>', $end],])
+                    ->orWhere([['time_from','>=', $start],['time_until','<=', $end],]);
+            })
+            ->exists();
 
-            User::find($newEvent->person_id)->notify(new EventAccept($newEvent));
 
-            return redirect('/admin/events_to_confirm')->with('success', 'Event has been accepted!');
+        if(!$exists){
+            $newEvent = new Event;
+            $newEvent->place_id = $event->place_id;
+            $newEvent->title = $event->title;
+            $newEvent->about = $event->about;
+            $newEvent->time_from = $event->time_from;
+            $newEvent->time_until = $event->time_until;
+            $newEvent->person_id = $event->person_id;
+
+            if($newEvent->save() && $event->delete()){
+                User::find($newEvent->person_id)->notify(new EventAccept($newEvent));
+                return redirect('/admin/events_to_confirm')->with('success', 'Event has been accepted!');
+            }
+            else{
+                return redirect('/admin/events_to_confirm')->with('error', 'Event has not been accepted...');
+            }
         }
         else{
-            return redirect('/admin/events_to_confirm')->with('error', 'Event has not been accepted...');
+            return redirect('/admin/events_to_confirm')->with('error', 'Event overlaping with other event');
         }
+
+
+
     }
 
     public function declineEvent($id)

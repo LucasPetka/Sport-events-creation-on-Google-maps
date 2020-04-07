@@ -11,3 +11,5 @@ Homestead.yaml
 npm-debug.log
 yarn-error.log
 config/broadcasting.php
+config/websockets.php
+resources/js/bootstrap.js

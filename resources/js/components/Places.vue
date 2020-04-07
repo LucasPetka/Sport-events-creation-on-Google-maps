@@ -755,7 +755,7 @@ export default {
                     group: 'foo',
                     title: 'Error!!',
                     type: 'error',
-                    text: 'There was incorect values in the form!'
+                    text: content.message
                 });  
             }
             

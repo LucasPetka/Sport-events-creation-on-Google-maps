@@ -24,12 +24,22 @@ class PeopleGoingController extends Controller
     {
         $person = new PeopleGoing;
 
-        $person->place_id = $request->input('place_id');
-        $person->event_id = $request->input('event_id');
-        $person->person_id = Auth::id();
+        $exists = PeopleGoing::where('place_id', $request->input('place_id'))
+            ->where('event_id', $request->input('event_id'))
+            ->where('person_id', Auth::id())
+            ->exists();
 
-        if($person->save()){
-            return new PeopleGoingResource($person);
+        if(!$exists){
+            $person->place_id = $request->input('place_id');
+            $person->event_id = $request->input('event_id');
+            $person->person_id = Auth::id();
+
+            if($person->save()){
+                return new PeopleGoingResource($person);
+            }
+        }
+        else{
+            return "false";
         }
     }
 

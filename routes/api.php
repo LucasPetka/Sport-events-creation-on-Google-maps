@@ -28,14 +28,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     //============================PLACES=======================================
     Route::group(['middleware' => 'auth:api'], function() {
         //Create new Place
-        Route::post('place', 'Places\PlaceController@store');
+        Route::post('placequeue', 'Places\PlaceQueueController@store');     //tested
         //Update place
-        Route::put('place', 'Places\PlaceController@store');
+        Route::put('place', 'Places\PlaceController@store');                //tested
         //Delete place
-        Route::delete('place/{id}', 'Places\PlaceController@destroy');
-        //Create new Place
-        Route::post('placequeue', 'Places\PlaceQueueController@store');
-
+        Route::delete('place/{id}', 'Places\PlaceController@destroy');      //tested
     });
 
 
@@ -62,11 +59,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
     Route::group(['middleware' => 'auth:api'], function() {
         //Create new Event
-        Route::post('event', 'Events\EventController@store');
+        Route::post('event', 'Events\EventController@store');           //tested
         //Update Event
-        Route::put('event', 'Events\EventController@store');
+        Route::put('event', 'Events\EventController@store');            //tested
         //Delete Event
-        Route::delete('event/{id}', 'Events\EventController@destroy');
+        Route::delete('event/{id}', 'Events\EventController@destroy');  //tested
     });
 
 
@@ -78,7 +75,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
     Route::group(['middleware' => 'auth:api'], function() {
         //Add person to event
-        Route::post('person', 'Events\PeopleGoingController@store');
+        Route::post('person', 'Events\PeopleGoingController@store');    //tested
         //Remove person from event
-        Route::delete('person/{id}', 'Events\PeopleGoingController@destroy');
+        Route::delete('person/{id}', 'Events\PeopleGoingController@destroy');   //tested
     });

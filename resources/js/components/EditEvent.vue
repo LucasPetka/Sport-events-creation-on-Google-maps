@@ -170,10 +170,10 @@ export default {
             var response = [];
 
             if(this.acceptedOrDeclined == false){
-                response = await axios.get('../api/event/'+ id);
+                response = await axios.get('../../api/event/'+ id);
             }
             else{
-                response = await axios.get('../api/declinedevent/'+ id);
+                response = await axios.get('../../api/declinedevent/'+ id);
             }
 
             var even = response.data.data;
@@ -218,7 +218,7 @@ export default {
         },
 
         fetchEvents(id, event_id, date){
-            fetch('../api/events/' + id + '/' + event_id + '/' + date)
+            fetch('../../api/events/' + id + '/' + event_id + '/' + date)
             .then(res => res.json())
             .then(res => {
 
@@ -289,7 +289,7 @@ export default {
             this.event_for_sending.time_until = this.date + " " + this.event_time[1];
 
             (async () => {
-                const Response = await fetch('../api/event?api_token=' + this.getCookie("api_token"), {
+                const Response = await fetch('../../api/event?api_token=' + this.getCookie("api_token"), {
                     method: 'put',
                         body: JSON.stringify(this.event_for_sending),
                         headers: {
@@ -375,7 +375,7 @@ export default {
         deleteEvent: function(eventId) {
 
             (async () => {
-            const Response = await fetch('api/event/'+ eventId + '?api_token=' + this.getCookie("api_token"), {
+            const Response = await fetch('../../api/event/'+ eventId + '?api_token=' + this.getCookie("api_token"), {
                 method: 'delete',
                     headers: {
                         'Accept': 'application/json',

@@ -24,7 +24,7 @@
 
                     <div v-if="status === 1">
                         <div v-if="ifJoined(event.place_id, event.id, currentUser.id) == 0">
-                            <button id="join_btn" type="button" class="btn btn-orange-secondary float-left" :disabled="isLoading" v-on:click="addPerson(event.place_id, event.id, currentUser.id, $event)"><i class="fas fa-user-plus"></i> Join</button>
+                            <button id="join_btn" type="button" class="btn btn-success float-left" :disabled="isLoading" v-on:click="addPerson(event.place_id, event.id, currentUser.id, $event)"><i class="fas fa-user-plus"></i> Join</button>
                         </div>
                         <div v-else>
                             <button type="button" class="btn btn-secondary float-left" :disabled="isLoading" v-on:click="deletePerson(event.place_id, event.id, currentUser.id, $event)"><i class="fas fa-check"></i> Joined</button>
@@ -152,7 +152,11 @@ export default {
         const foundEvents = this.events.filter( event => event.place_id == this.place_id);
         this.show_events = foundEvents.filter(event => this.getDate(event.time_from) == this.getDate(this.todays_date));
         this.$emit('getDate', {'date':this.todays_date.toISOString(), 'events':this.show_events});
-        if(this.getDate(this.todays_date) >= this.getDate(new Date())){
+
+        var newDate = new Date();
+        console.log(this.todays_date + " >=" + newDate);
+
+        if(this.todays_date >= newDate){
             this.laterThanYesterday = true;
         }
         else{

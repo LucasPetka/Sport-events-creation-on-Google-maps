@@ -2,6 +2,39 @@
 
 @section('content')
 
+    <!---------------Successful and Error messages------------------>
+    @if (session('success'))
+        <div class="position-absolute alert alert-success alert-dismissible fade show" style="left:50px;" role="alert">
+            {{ session('success') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+    @if (session('error'))
+        <div class="position-absolute alert alert-danger alert-dismissible fade show" style="left:50px;" role="alert">
+            {{ session('error') }}
+
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+
+    @if ($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show">
+            <h5>Error!</h5>
+            <ul class="list-unstyled mb-0 ">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
         
     
     <div class="row">
@@ -25,7 +58,7 @@
             </div>
             
             
-            {{Form::submit('Update', ['class'=>'btn btn-orange float-right'])}}
+            {{Form::submit('Update', ['class'=>'btn btn-orange float-right', 'dusk'=>'sport_type_btn_update'])}}
             <a class="btn btn-secondary float-right mr-2" href="/admin/sporttypes" role="button">Cancel</a>
 
         {!! Form::close() !!}

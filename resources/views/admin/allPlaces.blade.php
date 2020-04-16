@@ -64,8 +64,8 @@
                     @endif
                   </td>
                   <td>
-                      <button type="button" class="btn btn-primary mr-4" data-toggle="modal" data-target="#placeid{{ $place->id }}"> Open </button>
-                      <a href ="/admin/deleteplace/{{ $place->id }}"  class="btn btn-outline-danger mr-2" data-toggle="tooltip" data-placement="top" title="Delete this place"><i class="fas fa-trash-alt"></i></a>
+                      <button dusk="open_place_edit_modal" type="button" class="btn btn-primary mr-4" data-toggle="modal" data-target="#placeid{{ $place->id }}"> Open </button>
+                      <a dusk="place_delete_btn" href ="/admin/deleteplace/{{ $place->id }}"  class="btn btn-outline-danger mr-2" data-toggle="tooltip" data-placement="top" title="Delete this place"><i class="fas fa-trash-alt"></i></a>
                   </td>
                 </tr>
                 @endforeach
@@ -126,7 +126,7 @@
 
                             {{ Form::hidden('place_id', $place->id) }}
 
-                            {{Form::submit('Save', ['class'=>'btn btn-orange float-right btn-block mb-3'])}}
+                            {{Form::submit('Save', ['class'=>'btn btn-orange float-right btn-block mb-3', 'dusk'=>'place_edit_submit'])}}
                         </div>
                     </div>
                     {!! Form::close() !!}

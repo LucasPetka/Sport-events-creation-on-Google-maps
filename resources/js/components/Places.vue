@@ -61,7 +61,7 @@
 
             <div class="col-2"></div>
         </div>
-    </div>
+    </div> 
 
 
 
@@ -77,7 +77,7 @@
         <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title" id="infoModalLabel"><i class="fas fa-info fa-lg m-1"></i></h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button dusk="close_info_modal" type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
         </div>
@@ -182,12 +182,12 @@
                         <div class="modal-body">
                             <div class="form-group">
                                 <label for="add_event_title">Title</label>
-                                <input v-model="event.title" type="text" class="form-control" id="add_event_title" maxlength="45" placeholder="Enter title" required>
+                                <input name="title" v-model="event.title" type="text" class="form-control" id="add_event_title" maxlength="45" placeholder="Enter title" required>
                             </div>
 
                             <div class="form-group">
                                 <label for="add_event_about">About</label>
-                                <textarea v-model="event.about" class="form-control" id="add_event_about" maxlength="350" rows="6" required></textarea>
+                                <textarea name="about" v-model="event.about" class="form-control" id="add_event_about" maxlength="350" rows="6" required></textarea>
                             </div>
 
 
@@ -218,7 +218,7 @@
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button id="add_event_btn" type="submit" class="btn btn-orange float-right" :disabled="isLoading">Add <i class="fas fa-plus"></i></button>
+                            <button dusk="add_new_event_submit_button" id="add_event_btn" type="submit" class="btn btn-orange float-right" :disabled="isLoading">Add <i class="fas fa-plus"></i></button>
                         </div>
                     </div>
                 </div>
@@ -232,17 +232,17 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="addPlaceLongTitle">Add new sport spot</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <button dusk="close_addplace_modal" type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
                                 <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="Title" maxlength="45" v-model="place.title" required>
+                                    <input type="text" id="add_new_place_title" name="add_new_place_title" class="form-control" placeholder="Title" maxlength="45" v-model="place.title" required>
                                 </div>
 
                                 <div class="input-group mb-3">
-                                    <textarea class="form-control" rows="6" placeholder="About..." maxlength="350" v-model="place.about" required></textarea>
+                                    <textarea class="form-control" id="add_new_place_about"  name="add_new_place_about" rows="6" placeholder="About..." maxlength="350" v-model="place.about" required></textarea>
                                 </div>
 
                                 <div class="input-group mb-3">
@@ -250,7 +250,7 @@
                                         <label class="input-group-text" for="sport_type">Sport</label>
                                     </div>
                     
-                                    <select class="custom-select" id="sport_type" v-model="place.type" required>
+                                    <select name="sport_type" class="custom-select" id="sport_type" v-model="place.type" required>
                                         <option v-for="type in allTypes.data" :key="type.id" :value="type.id"> {{ type.name }}</option>
                                     </select>
                                 </div>
@@ -267,7 +267,7 @@
 
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-orange float-right" :disabled="isLoading">Add <i class="fas fa-plus"></i></button>
+                                <button id="add_new_place_btn"  type="submit" class="btn btn-orange float-right" :disabled="isLoading">Add <i class="fas fa-plus"></i></button>
                             </div>
                         </div>
                     </div>

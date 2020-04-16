@@ -1,9 +1,9 @@
 <template>
-  <div oncontextmenu="return false;">
+  <div id="press" oncontextmenu="return false;">
     
       <div id="geoloc_bar">
         <div class="input-group">
-          <gmap-autocomplete class="form-control" :select-first-on-enter="true" @place_changed="setPlace"></gmap-autocomplete> 
+          <gmap-autocomplete class="form-control" id="autocomplete_gmap" name="autocomplete_gmap" :select-first-on-enter="true" @place_changed="setPlace"></gmap-autocomplete> 
           <div class="input-group-append">
             <button class="btn btn-orange" @click="updateUserLocation_byCenter(center)">Set your location</button>
           </div>
@@ -17,7 +17,7 @@
     <gmap-map ref="gmapp" :map-type-id="mapType" v-on:rightclick="openMenu($event)" v-on:dragend="loadMarkers()" v-on:zoom_changed="updateZoom()" :center="center" v-on:bounds_changed="update_bounds($event)" :zoom="zoom_in" v-bind:options="mapStyle" style=" overflow:hidden; width:100%; height:94vh;">
       <gmap-cluster :zoom-on-click="true" :gridSize="20" :maxZoom="16">
 
-      <gmap-marker v-for="place in allPlaces.data" 
+      <gmap-marker v-for="place in allPlaces.data"
         :visible="place.visible" 
         :key="place.id" 
         :position="getPosition(place)" 
@@ -28,8 +28,6 @@
         v-on:mouseout="infoWindow.open = false, hovered = false" >
       </gmap-marker>
 
-     <!-- v-on:mouseout="infoWindow.open=false"-->
-      
       <gmap-info-window
           :options="{maxWidth:300, pixelOffset:{width:0, height:-25}}"
           :position="infoWindow.position"
@@ -42,9 +40,10 @@
       <gmap-marker :position="getPosition(user_location)"  @dragend="updateUserLocation($event.latLng)"  :draggable="true" :icon="{ url: require('../assets/google_maps/current_loc.png')}" ></gmap-marker>
     </gmap-map>
 
-    <div class="dropdown-menu dropdown-menu-sm" id="pointerMenu" style="display:none; position: absolute;">
-          <a class="dropdown-item" v-on:click="creatNewMarker()">Add Marker</a>
-          <a class="dropdown-item" v-on:click="closePointerMenu()">Close</a>
+    <div class="dropdown-menu dropdown-menu-sm pt-1 pb-1" id="pointerMenu" style="display:none; position: absolute;">
+          <a class="dropdown-item" dusk="add_new_place_button" href="#" v-on:click="creatNewMarker()"><i class="fas fa-map-marker-alt"></i> New place</a>
+          <div class="dropdown-divider m-0"></div>
+          <a class="dropdown-item" href="#" v-on:click="closePointerMenu()"><i class="fas fa-times"></i> Cancel</a>
     </div>
 
   </div>
@@ -399,6 +398,15 @@ export default {
 
 
 <style>
+
+.dropdown-item:hover{
+  color: rgb(228, 108, 9);
+}
+
+.dropdown-item:focus{
+  background-color: rgb(235, 235, 235);
+}
+
 
 #refresh_button{
   position: absolute;

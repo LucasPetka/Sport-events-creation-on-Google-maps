@@ -52,9 +52,9 @@
                   </td>
                   <td>
                       <button type="button" class="btn btn-primary mr-4" data-toggle="modal" data-target="#placeid{{ $place->id }}"> Open </button>
-                      <a href ="/admin/accplace/{{ $place->id }}"  class="btn btn-success mr-2" data-toggle="tooltip" data-placement="top" title="Publish new place" ><i class="fas fa-check"></i></a>
-                      <a href ="/admin/decplace/{{ $place->id }}"  class="btn btn-danger mr-2" data-toggle="tooltip" data-placement="top" title="Decline this place"><i class="fas fa-times"></i></a>
-                      <a href ="/admin/destroyplace/{{ $place->id }}"  class="btn btn-outline-danger ml-2 mr-2" data-toggle="tooltip" data-placement="top" title="Destroy this place"><i class="fas fa-trash-alt"></i></a>
+                      <a dusk="accept_submited_place" href ="/admin/accplace/{{ $place->id }}"  class="btn btn-success mr-2" data-toggle="tooltip" data-placement="top" title="Publish new place" ><i class="fas fa-check"></i></a>
+                      <a dusk="decline_submited_place" href ="/admin/decplace/{{ $place->id }}"  class="btn btn-danger mr-2" data-toggle="tooltip" data-placement="top" title="Decline this place"><i class="fas fa-times"></i></a>
+                      <a dusk="delete_submited_place" href ="/admin/destroyplace/{{ $place->id }}"  class="btn btn-outline-danger ml-2 mr-2" data-toggle="tooltip" data-placement="top" title="Destroy this place"><i class="fas fa-trash-alt"></i></a>
                       
                   </td>
                 </tr>

@@ -83,16 +83,18 @@ class TypeController extends Controller
     {
         $this->validate($request, [
             'sport_name' => 'required',
-            'sport_logo' => 'required|image|nullable|max:15000',
-            'sport_logo_highlighted' => 'required|image|nullable|max:15000'
+            'sport_logo' => 'image|nullable|max:15000',
+            'sport_logo_highlighted' => 'image|nullable|max:15000'
         ]);
 
         $type = Type::find($id);
-        Storage::delete('public/sport_logo/'.$type->image);
-        Storage::delete('public/sport_logo/'.$type->image_h);
 
         // Handle File Upload
         if($request->hasFile('sport_logo') && $request->hasFile('sport_logo_highlighted')){
+
+            Storage::delete('public/sport_logo/'.$type->image);
+            Storage::delete('public/sport_logo/'.$type->image_h);
+
             // Get filename with the extension
             $filenameWithExt = $request->file('sport_logo')->getClientOriginalName();
             $filenameWithExt2 = $request->file('sport_logo_highlighted')->getClientOriginalName();
@@ -108,15 +110,20 @@ class TypeController extends Controller
             // Upload Image
             $path = $request->file('sport_logo')->storeAs('public/sport_logo', $fileNameToStore);
             $path2 = $request->file('sport_logo_highlighted')->storeAs('public/sport_logo', $fileNameToStore2);
+
+            $type->name = $request->input('sport_name');
+            $type->image = $fileNameToStore;
+            $type->image_h = $fileNameToStore2;
+            $type->timestamps = false;
+            $type->update();
+
         } else {
-            $fileNameToStore = 'noimage.jpg';
+
+            $type->name = $request->input('sport_name');
+            $type->timestamps = false;
+            $type->save();
         }
 
-        $type->name = $request->input('sport_name');
-        $type->image = $fileNameToStore;
-        $type->image_h = $fileNameToStore2;
-        $type->timestamps = false;
-        $type->update();
 
         return redirect('/admin/sporttypes')->with('success', 'Sport Type has been succesfuly updated');
     }
@@ -128,13 +135,13 @@ class TypeController extends Controller
         //Check if type exists before deleting
         if (!isset($type)){
             return redirect('/posts')->with('error', 'No Type Found');
-        }
-        if($type->delete()){
-        // Delete Image
+        }else{
+            // Delete Image
             Storage::delete('public/sport_logo/'.$type->image);
+            Storage::delete('public/sport_logo/'.$type->image_h);
+            $type->delete();
         }
-        
-        $type->delete();
+
         return redirect('/admin/sporttypes')->with('success', 'Sport type deleted');
     }
 }

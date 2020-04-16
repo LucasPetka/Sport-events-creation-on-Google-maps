@@ -66,7 +66,7 @@
                 </div>
                 <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                {{Form::submit('Submit', ['class'=>'btn btn-orange'])}}
+                {{Form::submit('Submit', ['class'=>'btn btn-orange', 'dusk'=>'add_new_sport_type_btn_submit'])}}
                 </div>
             </div>
             </div>
@@ -82,7 +82,7 @@
                 <th scope="col">#</th>
                 <th scope="col">Sport ID</th>
                 <th scope="col">Sport name</th>
-                <th scope="col"> <button type="button" class="btn btn-success float-right" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> Sport Type</button> </th>
+                <th scope="col"> <button dusk="add_new_sport_type_btn" type="button" class="btn btn-success float-right" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> Sport Type</button> </th>
               </tr>
             </thead>
             <tbody>
@@ -99,7 +99,7 @@
                     
                     {!!Form::open(['action' => ['TypeController@destroy', $type->id], 'method' => 'POST', 'class' => 'float-left ml-2'])!!}
                         {{Form::hidden('_method', 'DELETE')}}
-                        {{Form::button('<i class="fas fa-trash-alt"></i>', ['type' => 'submit','class' => 'btn btn-danger'])}}
+                        {{Form::button('<i class="fas fa-trash-alt"></i>', ['type' => 'submit','class' => 'btn btn-danger', 'id'=> 'type_delete'])}}
                     {!!Form::close()!!}
                   </td>
                 </tr>

@@ -22,7 +22,7 @@
     <notifications group="foo" classes="my-style" position="top left" style="margin-top:55px;" />
 
     
-        <button type="button" class="btn btn-primary float-right ml-3 mb-2" v-on:click="editEvent(event.id)"> <i class="fas fa-edit"></i> </button>
+        <button dusk="edit_event_btn" type="button" class="btn btn-primary float-right ml-3 mb-2" v-on:click="editEvent(event.id)"> <i class="fas fa-edit"></i> </button>
         <button type="button" class="btn btn-danger float-right ml-3 mb-2" style="width:42.2px" v-on:click="openConfirmation(event)"> <i class="fas fa-trash-alt"></i></button>
 
 
@@ -42,13 +42,13 @@
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Title</label>
-                                <input v-model="event_for_sending.title" type="text" class="form-control" id="exampleInputEmail1" maxlength="45" aria-describedby="emailHelp" placeholder="Enter title" required>
+                                <label for="edit_event_title">Title</label>
+                                <input name="edit_event_title" v-model="event_for_sending.title" type="text" class="form-control" id="edit_event_title" maxlength="45" aria-describedby="emailHelp" placeholder="Enter title" required>
                             </div>
 
                             <div class="form-group">
-                                <label for="exampleFormControlTextarea1">About</label>
-                                <textarea v-model="event_for_sending.about" class="form-control" id="exampleFormControlTextarea1" maxlength="350" rows="6" required></textarea>
+                                <label for="edit_event_about">About</label>
+                                <textarea name="edit_event_about" v-model="event_for_sending.about" class="form-control" id="edit_event_about" maxlength="350" rows="6" required></textarea>
                             </div>
 
                         <div class="row">
@@ -77,7 +77,7 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             <button v-if="acceptedOrDeclined" :id="'add_event_btn'  + event.id" v-on:click="resubmitEvent" class="btn btn-success float-right" :disabled="isLoading"> Re-submit </button>
-                            <button v-else :id="'add_event_btn'  + event.id" v-on:click="addEvent" class="btn btn-success float-right" :disabled="isLoading"> Update </button>
+                            <button dusk="edit_event_submit_btn" v-else :id="'add_event_btn'  + event.id" v-on:click="addEvent" class="btn btn-success float-right" :disabled="isLoading"> Update </button>
                         </div>
                     </div>
                 </div>

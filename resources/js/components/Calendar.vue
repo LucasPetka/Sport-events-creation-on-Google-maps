@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="col-12 m-2" id="calendar">
                         <datepicker placeholder="Select Date" :highlighted="highlighted" :format="format" :value="todays_date" v-model="todays_date" @closed="showEvents()"></datepicker>
-                        <button v-if="laterThanYesterday && status == 1" v-on:click="$emit('openAddEvent')" class="btn btn-outline-success pt-2 pb-2 ml-3 float-left">Add Event <i class="fas fa-plus"></i></button>
+                        <button dusk="add_new_event_btn" v-if="laterThanYesterday && status == 1" v-on:click="$emit('openAddEvent')" class="btn btn-outline-success pt-2 pb-2 ml-3 float-left">Add Event <i class="fas fa-plus"></i></button>
                 </div>
             </div>
             
@@ -24,10 +24,10 @@
 
                     <div v-if="status === 1">
                         <div v-if="ifJoined(event.place_id, event.id, currentUser.id) == 0">
-                            <button id="join_btn" type="button" class="btn btn-success float-left" :disabled="isLoading" v-on:click="addPerson(event.place_id, event.id, currentUser.id, $event)"><i class="fas fa-user-plus"></i> Join</button>
+                            <button dusk="join_an_event_btn" id="join_btn" type="button" class="btn btn-success float-left" :disabled="isLoading" v-on:click="addPerson(event.place_id, event.id, currentUser.id, $event)"><i class="fas fa-user-plus"></i> Join</button>
                         </div>
                         <div v-else>
-                            <button type="button" class="btn btn-secondary float-left" :disabled="isLoading" v-on:click="deletePerson(event.place_id, event.id, currentUser.id, $event)"><i class="fas fa-check"></i> Joined</button>
+                            <button dusk="leave_an_event_btn" type="button" class="btn btn-secondary float-left" :disabled="isLoading" v-on:click="deletePerson(event.place_id, event.id, currentUser.id, $event)"><i class="fas fa-check"></i> Joined</button>
                         </div>
                     
                         <div v-if="currentUser.id == event.person_id.id">
@@ -154,7 +154,7 @@ export default {
         this.$emit('getDate', {'date':this.todays_date.toISOString(), 'events':this.show_events});
 
         var newDate = new Date();
-        console.log(this.todays_date + " >=" + newDate);
+        newDate.setDate(newDate.getDate() - 1);
 
         if(this.todays_date >= newDate){
             this.laterThanYesterday = true;

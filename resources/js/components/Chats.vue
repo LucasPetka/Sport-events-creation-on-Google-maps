@@ -45,10 +45,10 @@
             <editevent :user="user" v-on:fetchCreatedEvents="refresh" :acceptedOrDeclined="false" :event="event"></editevent>
         </div>
         <div v-if="ifJoined(event.place_id, event.id, user.id) == 0">
-            <button id="join_btn" type="button" class="btn btn-success float-right" :disabled="isLoading_joinBtn" v-on:click="addPerson(event.place_id, event.id, user.id, $event)"><i class="fas fa-user-plus"></i> Join</button>
+            <button dusk="join_an_event_btn_in_event" id="join_btn" type="button" class="btn btn-success float-right" :disabled="isLoading_joinBtn" v-on:click="addPerson(event.place_id, event.id, user.id, $event)"><i class="fas fa-user-plus"></i> Join</button>
         </div>
         <div v-else>
-            <button type="button" class="btn btn-secondary float-right" :disabled="isLoading_joinBtn" v-on:click="deletePerson(event.place_id, event.id, user.id, $event)"><i class="fas fa-check"></i> Joined</button>
+            <button dusk="leave_an_event_btn_in_event" type="button" class="btn btn-secondary float-right" :disabled="isLoading_joinBtn" v-on:click="deletePerson(event.place_id, event.id, user.id, $event)"><i class="fas fa-check"></i> Joined</button>
         </div>
     </div>
 </div>
@@ -77,7 +77,7 @@
                 </ul>
             </div>
 
-            <input id="message_input" @keydown="sendTyping" @keyup.enter="sendMessage" v-model="newMessage" type="text" name="message" maxlength="400" placeholder="Enter your message..." :disabled="isLoading_chat" class="form-control">
+            <input id="message_input" name="message_input" @keydown="sendTyping" @keyup.enter="sendMessage" v-model="newMessage" type="text" maxlength="400" placeholder="Enter your message..." :disabled="isLoading_chat" class="form-control">
         </div>
 
         <span class="text-muted" v-if="activeUser">{{ activeUser.name }} is typing...</span>

@@ -15,9 +15,9 @@
 
         <div id="app">
                 @if(!empty(Auth::check()))         
-                    <Places v-bind:ip='{!! $location !!}' v-bind:status='1' v-bind:current-user='{!! Auth::user()->toJson() !!}'></Places>         
+                    <Places dusk="places-component" v-bind:ip='{!! $location !!}' v-bind:status='1' v-bind:current-user='{!! Auth::user()->toJson() !!}'></Places>         
                 @else
-                    <Places v-bind:ip='{!! $location !!}' v-bind:status='0'></Places>     
+                    <Places dusk="places-component" v-bind:ip='{!! $location !!}' v-bind:status='0'></Places>     
                 @endif
         </div>
 

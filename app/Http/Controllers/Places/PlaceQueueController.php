@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\PlaceQueue;
 use App\Place;
+use App\AcceptedPlaces;
 use App\Http\Resources\PlaceQueue as PlaceResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -58,7 +59,16 @@ class PlaceQueueController extends Controller
         $place->lng = $request->input('lng');
         $place->type = $request->input('type');
 
+        
         if($place->save()){
+
+            if($user->isAdmin == '1'){
+                $accepted_place = new AcceptedPlaces;
+                $accepted_place->person_id = $user->id;
+                $accepted_place->place_id = $place->id;
+                $accepted_place->save();
+            }
+
             return "true";
         }
         else{

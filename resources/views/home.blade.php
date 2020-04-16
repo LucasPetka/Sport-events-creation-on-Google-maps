@@ -68,7 +68,7 @@
                                 @else
                                     <figcaption class="figure-caption">User</figcaption>
                                 @endif
-                                    <figcaption> <button class="badge badge-orange-secondary" data-toggle="modal" data-target="#editProfile"><i class="fas fa-user-edit"></i> Update profile </button> </figcaption>
+                                    <figcaption> <button dusk="update-profile-button" class="badge badge-orange-secondary" data-toggle="modal" data-target="#editProfile"><i class="fas fa-user-edit"></i> Update profile </button> </figcaption>
 
                             </figure>
                         </div>
@@ -105,18 +105,18 @@
                                             @if(in_array( $type->id, json_decode($user->liked_sports)))
                                             <div class="custom-control custom-checkbox float-left mr-4">
                                                 <input type="checkbox" name="types[]" value="{{ $type->id }}" class="custom-control-input" id="{{  $type->id  }}" checked>
-                                                <label class="custom-control-label" for="{{  $type->id  }}">{{  $type->name  }}</label>
+                                                <label id="sport-checkbox" class="custom-control-label" for="{{  $type->id  }}">{{  $type->name  }}</label>
                                             </div>
                                             @else
                                             <div class="custom-control custom-checkbox float-left mr-4">
                                                 <input type="checkbox" name="types[]" value="{{ $type->id }}" class="custom-control-input" id="{{  $type->id  }}">
-                                                <label class="custom-control-label" for="{{  $type->id  }}">{{  $type->name  }}</label>
+                                                <label id="sport-checkbox" class="custom-control-label" for="{{  $type->id  }}">{{  $type->name  }}</label>
                                             </div>
                                             @endif
                                         @else
                                             <div class="custom-control custom-checkbox float-left mr-4">
                                                 <input type="checkbox" name="types[]" value="{{ $type->id }}" class="custom-control-input" id="{{  $type->id  }}">
-                                                <label class="custom-control-label" for="{{  $type->id  }}">{{  $type->name  }}</label>
+                                                <label id="sport-checkbox" class="custom-control-label" for="{{  $type->id  }}">{{  $type->name  }}</label>
                                             </div>
                                         @endif
                                     @endforeach
@@ -125,7 +125,7 @@
                                     </div>
                                     <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-orange">Save changes</button>
+                                    <button dusk="update_profile_submit_btn" type="submit" class="btn btn-orange">Save changes</button>
                                     </div>
                                 </div>
                                 </div>

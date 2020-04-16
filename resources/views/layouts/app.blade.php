@@ -58,15 +58,15 @@
                         @else
                             
                             <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle white" style="text-transform: capitalize;" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                <a id="navbarDropdown" dusk="profile_dropdown" class="nav-link dropdown-toggle white" style="text-transform: capitalize;" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" style="z-index: 100;">
 
-                                    <a class="dropdown-item" href="/home"><i class="fas fa-user-alt"></i> Profile</a>
+                                    <a class="dropdown-item" dusk="profile_nav" href="/home"><i class="fas fa-user-alt"></i> Profile</a>
 
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                    <a class="dropdown-item" dusk="logout" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                         <i class="fas fa-sign-out-alt"></i> {{ __('Logout') }}

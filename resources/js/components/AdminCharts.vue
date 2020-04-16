@@ -20,7 +20,7 @@ export default {
     },
 
     mounted () {
-        this.renderChart(data, options)
+        
     },
 
 
@@ -33,14 +33,6 @@ export default {
 
     methods: {
 
-        markAsRead(notification){
-            var data = {
-                id: notification.id
-            };
-            axios.post('notification/read', data).then(response =>{
-                window.location.href = "/home";
-            });
-        },
         
         
 

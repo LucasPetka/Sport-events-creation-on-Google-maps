@@ -65,7 +65,7 @@
                       </a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link active" href="/admin/places_to_confirm">
+                      <a class="nav-link active" dusk="places_to_confirm_btn" href="/admin/places_to_confirm">
                         <i class="fas fa-map-marked-alt"></i>
                         @if(is_countable($places))
                           Places to confirm ({{ $places_count }}) <span class="sr-only">(current)</span>

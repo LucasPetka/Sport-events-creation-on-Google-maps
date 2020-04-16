@@ -2719,20 +2719,9 @@ __webpack_require__.r(__webpack_exports__);
       notifications: []
     };
   },
-  mounted: function mounted() {
-    this.renderChart(data, options);
-  },
+  mounted: function mounted() {},
   created: function created() {},
-  methods: {
-    markAsRead: function markAsRead(notification) {
-      var data = {
-        id: notification.id
-      };
-      axios.post('notification/read', data).then(function (response) {
-        window.location.href = "/home";
-      });
-    }
-  }
+  methods: {}
 });
 
 /***/ }),
@@ -2897,7 +2886,7 @@ var editevent = function editevent() {
         'events': this.show_events
       });
       var newDate = new Date();
-      console.log(this.todays_date + " >=" + newDate);
+      newDate.setDate(newDate.getDate() - 1);
 
       if (this.todays_date >= newDate) {
         this.laterThanYesterday = true;
@@ -4416,7 +4405,6 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-//
 //
 //
 //
@@ -29745,7 +29733,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n#refresh_button{\r\n  position: absolute;\r\n  bottom:20px;\r\n  left: 49%;\r\n  -webkit-transform: translate(-49%, -40%);\r\n  transform: translate(-49%, -40%);\r\n  z-index: 5;\n}\n#geoloc_bar{\r\n  position: absolute;\r\n  top:130px;\r\n  left: 49%;\r\n  -webkit-transform: translate(-49%, -40%);\r\n  transform: translate(-49%, -40%);\r\n  z-index: 1;\r\n  background-color: white;\r\n  padding: 10px 15px;\r\n  border-radius: 8px;\r\n  width: 500px;\n}\n#marker {\r\n display: none;\n}\n@media only screen and (max-width: 540px) {\n#geoloc_bar{\r\n    width: 95%;\n}\n}\r\n\r\n\r\n", ""]);
+exports.push([module.i, "\n.dropdown-item:hover{\r\n  color: rgb(228, 108, 9);\n}\n.dropdown-item:focus{\r\n  background-color: rgb(235, 235, 235);\n}\n#refresh_button{\r\n  position: absolute;\r\n  bottom:20px;\r\n  left: 49%;\r\n  -webkit-transform: translate(-49%, -40%);\r\n  transform: translate(-49%, -40%);\r\n  z-index: 5;\n}\n#geoloc_bar{\r\n  position: absolute;\r\n  top:130px;\r\n  left: 49%;\r\n  -webkit-transform: translate(-49%, -40%);\r\n  transform: translate(-49%, -40%);\r\n  z-index: 1;\r\n  background-color: white;\r\n  padding: 10px 15px;\r\n  border-radius: 8px;\r\n  width: 500px;\n}\n#marker {\r\n display: none;\n}\n@media only screen and (max-width: 540px) {\n#geoloc_bar{\r\n    width: 95%;\n}\n}\r\n\r\n\r\n", ""]);
 
 // exports
 
@@ -89046,6 +89034,7 @@ var render = function() {
                 {
                   staticClass:
                     "btn btn-outline-success pt-2 pb-2 ml-3 float-left",
+                  attrs: { dusk: "add_new_event_btn" },
                   on: {
                     click: function($event) {
                       return _vm.$emit("openAddEvent")
@@ -89146,6 +89135,7 @@ var render = function() {
                               {
                                 staticClass: "btn btn-success float-left",
                                 attrs: {
+                                  dusk: "join_an_event_btn",
                                   id: "join_btn",
                                   type: "button",
                                   disabled: _vm.isLoading
@@ -89173,6 +89163,7 @@ var render = function() {
                               {
                                 staticClass: "btn btn-secondary float-left",
                                 attrs: {
+                                  dusk: "leave_an_event_btn",
                                   type: "button",
                                   disabled: _vm.isLoading
                                 },
@@ -89401,6 +89392,7 @@ var render = function() {
                   {
                     staticClass: "btn btn-success float-right",
                     attrs: {
+                      dusk: "join_an_event_btn_in_event",
                       id: "join_btn",
                       type: "button",
                       disabled: _vm.isLoading_joinBtn
@@ -89427,7 +89419,11 @@ var render = function() {
                   "button",
                   {
                     staticClass: "btn btn-secondary float-right",
-                    attrs: { type: "button", disabled: _vm.isLoading_joinBtn },
+                    attrs: {
+                      dusk: "leave_an_event_btn_in_event",
+                      type: "button",
+                      disabled: _vm.isLoading_joinBtn
+                    },
                     on: {
                       click: function($event) {
                         return _vm.deletePerson(
@@ -89523,8 +89519,8 @@ var render = function() {
               staticClass: "form-control",
               attrs: {
                 id: "message_input",
+                name: "message_input",
                 type: "text",
-                name: "message",
                 maxlength: "400",
                 placeholder: "Enter your message...",
                 disabled: _vm.isLoading_chat
@@ -89772,7 +89768,7 @@ var render = function() {
         "button",
         {
           staticClass: "btn btn-primary float-right ml-3 mb-2",
-          attrs: { type: "button" },
+          attrs: { dusk: "edit_event_btn", type: "button" },
           on: {
             click: function($event) {
               return _vm.editEvent(_vm.event.id)
@@ -89856,11 +89852,9 @@ var render = function() {
                       { staticClass: "modal-body" },
                       [
                         _c("div", { staticClass: "form-group" }, [
-                          _c(
-                            "label",
-                            { attrs: { for: "exampleInputEmail1" } },
-                            [_vm._v("Title")]
-                          ),
+                          _c("label", { attrs: { for: "edit_event_title" } }, [
+                            _vm._v("Title")
+                          ]),
                           _vm._v(" "),
                           _c("input", {
                             directives: [
@@ -89873,8 +89867,9 @@ var render = function() {
                             ],
                             staticClass: "form-control",
                             attrs: {
+                              name: "edit_event_title",
                               type: "text",
-                              id: "exampleInputEmail1",
+                              id: "edit_event_title",
                               maxlength: "45",
                               "aria-describedby": "emailHelp",
                               placeholder: "Enter title",
@@ -89897,11 +89892,9 @@ var render = function() {
                         ]),
                         _vm._v(" "),
                         _c("div", { staticClass: "form-group" }, [
-                          _c(
-                            "label",
-                            { attrs: { for: "exampleFormControlTextarea1" } },
-                            [_vm._v("About")]
-                          ),
+                          _c("label", { attrs: { for: "edit_event_about" } }, [
+                            _vm._v("About")
+                          ]),
                           _vm._v(" "),
                           _c("textarea", {
                             directives: [
@@ -89914,7 +89907,8 @@ var render = function() {
                             ],
                             staticClass: "form-control",
                             attrs: {
-                              id: "exampleFormControlTextarea1",
+                              name: "edit_event_about",
+                              id: "edit_event_about",
                               maxlength: "350",
                               rows: "6",
                               required: ""
@@ -90070,6 +90064,7 @@ var render = function() {
                             {
                               staticClass: "btn btn-success float-right",
                               attrs: {
+                                dusk: "edit_event_submit_btn",
                                 id: "add_event_btn" + _vm.event.id,
                                 disabled: _vm.isLoading
                               },
@@ -90864,7 +90859,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { attrs: { oncontextmenu: "return false;" } },
+    { attrs: { id: "press", oncontextmenu: "return false;" } },
     [
       _c("div", { attrs: { id: "geoloc_bar" } }, [
         _c(
@@ -90873,7 +90868,11 @@ var render = function() {
           [
             _c("gmap-autocomplete", {
               staticClass: "form-control",
-              attrs: { "select-first-on-enter": true },
+              attrs: {
+                id: "autocomplete_gmap",
+                name: "autocomplete_gmap",
+                "select-first-on-enter": true
+              },
               on: { place_changed: _vm.setPlace }
             }),
             _vm._v(" "),
@@ -91024,7 +91023,7 @@ var render = function() {
       _c(
         "div",
         {
-          staticClass: "dropdown-menu dropdown-menu-sm",
+          staticClass: "dropdown-menu dropdown-menu-sm pt-1 pb-1",
           staticStyle: { display: "none", position: "absolute" },
           attrs: { id: "pointerMenu" }
         },
@@ -91033,26 +91032,33 @@ var render = function() {
             "a",
             {
               staticClass: "dropdown-item",
+              attrs: { dusk: "add_new_place_button", href: "#" },
               on: {
                 click: function($event) {
                   return _vm.creatNewMarker()
                 }
               }
             },
-            [_vm._v("Add Marker")]
+            [
+              _c("i", { staticClass: "fas fa-map-marker-alt" }),
+              _vm._v(" New place")
+            ]
           ),
+          _vm._v(" "),
+          _c("div", { staticClass: "dropdown-divider m-0" }),
           _vm._v(" "),
           _c(
             "a",
             {
               staticClass: "dropdown-item",
+              attrs: { href: "#" },
               on: {
                 click: function($event) {
                   return _vm.closePointerMenu()
                 }
               }
             },
-            [_vm._v("Close")]
+            [_c("i", { staticClass: "fas fa-times" }), _vm._v(" Cancel")]
           )
         ]
       )
@@ -91727,6 +91733,7 @@ var render = function() {
                             ],
                             staticClass: "form-control",
                             attrs: {
+                              name: "title",
                               type: "text",
                               id: "add_event_title",
                               maxlength: "45",
@@ -91765,6 +91772,7 @@ var render = function() {
                             ],
                             staticClass: "form-control",
                             attrs: {
+                              name: "about",
                               id: "add_event_about",
                               maxlength: "350",
                               rows: "6",
@@ -91892,6 +91900,7 @@ var render = function() {
                         {
                           staticClass: "btn btn-orange float-right",
                           attrs: {
+                            dusk: "add_new_event_submit_button",
                             id: "add_event_btn",
                             type: "submit",
                             disabled: _vm.isLoading
@@ -91959,6 +91968,8 @@ var render = function() {
                           staticClass: "form-control",
                           attrs: {
                             type: "text",
+                            id: "add_new_place_title",
+                            name: "add_new_place_title",
                             placeholder: "Title",
                             maxlength: "45",
                             required: ""
@@ -91987,6 +91998,8 @@ var render = function() {
                           ],
                           staticClass: "form-control",
                           attrs: {
+                            id: "add_new_place_about",
+                            name: "add_new_place_about",
                             rows: "6",
                             placeholder: "About...",
                             maxlength: "350",
@@ -92019,7 +92032,11 @@ var render = function() {
                               }
                             ],
                             staticClass: "custom-select",
-                            attrs: { id: "sport_type", required: "" },
+                            attrs: {
+                              name: "sport_type",
+                              id: "sport_type",
+                              required: ""
+                            },
                             on: {
                               change: function($event) {
                                 var $$selectedVal = Array.prototype.filter
@@ -92136,7 +92153,11 @@ var render = function() {
                         "button",
                         {
                           staticClass: "btn btn-orange float-right",
-                          attrs: { type: "submit", disabled: _vm.isLoading }
+                          attrs: {
+                            id: "add_new_place_btn",
+                            type: "submit",
+                            disabled: _vm.isLoading
+                          }
                         },
                         [
                           _vm._v("Add "),
@@ -92475,6 +92496,7 @@ var staticRenderFns = [
                   {
                     staticClass: "close",
                     attrs: {
+                      dusk: "close_info_modal",
                       type: "button",
                       "data-dismiss": "modal",
                       "aria-label": "Close"
@@ -92738,6 +92760,7 @@ var staticRenderFns = [
         {
           staticClass: "close",
           attrs: {
+            dusk: "close_addplace_modal",
             type: "button",
             "data-dismiss": "modal",
             "aria-label": "Close"
@@ -93203,6 +93226,7 @@ var render = function() {
               staticClass:
                 "btn btn-orange-secondary m-1 float-right profile_nav",
               attrs: {
+                dusk: "events_navigation_profile",
                 type: "button",
                 id: "ab1",
                 "data-toggle": "collapse",
@@ -93228,6 +93252,7 @@ var render = function() {
               staticClass:
                 "btn btn-orange-secondary m-1 float-right profile_nav",
               attrs: {
+                dusk: "places_navigation_profile",
                 type: "button",
                 id: "ab2",
                 "data-toggle": "collapse",
@@ -93252,6 +93277,7 @@ var render = function() {
             {
               staticClass: "btn btn-orange m-1 float-right profile_nav",
               attrs: {
+                dusk: "participating_navigation_profile",
                 type: "button",
                 id: "ab3",
                 "data-toggle": "collapse",
@@ -93306,6 +93332,7 @@ var render = function() {
                             {
                               staticClass: "nav-item nav-link active mr-1",
                               attrs: {
+                                dusk: "places_submited",
                                 id: "nav-home-tab",
                                 "data-toggle": "tab",
                                 href: "#nav-home",
@@ -93333,6 +93360,7 @@ var render = function() {
                             {
                               staticClass: "nav-item nav-link mr-1",
                               attrs: {
+                                dusk: "places_accepted",
                                 id: "nav-profile-tab",
                                 "data-toggle": "tab",
                                 href: "#nav-profile",
@@ -93357,6 +93385,7 @@ var render = function() {
                             {
                               staticClass: "nav-item nav-link",
                               attrs: {
+                                dusk: "places_declined",
                                 id: "nav-contact-tab",
                                 "data-toggle": "tab",
                                 href: "#nav-contact",
@@ -94368,6 +94397,7 @@ var render = function() {
                             {
                               staticClass: "nav-item nav-link active mr-1",
                               attrs: {
+                                dusk: "events_submited",
                                 id: "nav-submited-tab",
                                 "data-toggle": "tab",
                                 href: "#nav-submited",
@@ -94392,6 +94422,7 @@ var render = function() {
                             {
                               staticClass: "nav-item nav-link mr-1",
                               attrs: {
+                                dusk: "events_accepted",
                                 id: "nav-accepted-tab",
                                 "data-toggle": "tab",
                                 href: "#nav-accepted",
@@ -94416,6 +94447,7 @@ var render = function() {
                             {
                               staticClass: "nav-item nav-link",
                               attrs: {
+                                dusk: "events_declined",
                                 id: "nav-declined-tab",
                                 "data-toggle": "tab",
                                 href: "#nav-declined",
@@ -94452,6 +94484,7 @@ var render = function() {
                             {
                               staticClass: "nav-item nav-link active mr-1",
                               attrs: {
+                                dusk: "events_submited",
                                 id: "nav-submited-tab",
                                 "data-toggle": "tab",
                                 href: "#nav-submited",
@@ -94475,6 +94508,7 @@ var render = function() {
                             {
                               staticClass: "nav-item nav-link mr-1",
                               attrs: {
+                                dusk: "events_accepted",
                                 id: "nav-accepted-tab",
                                 "data-toggle": "tab",
                                 href: "#nav-accepted",
@@ -94498,6 +94532,7 @@ var render = function() {
                             {
                               staticClass: "nav-item nav-link",
                               attrs: {
+                                dusk: "events_declined",
                                 id: "nav-declined-tab",
                                 "data-toggle": "tab",
                                 href: "#nav-declined",
@@ -112796,6 +112831,124 @@ var map = {
 	"./pingpong_1585326705.png": "./storage/app/public/sport_logo/pingpong_1585326705.png",
 	"./rugby-h_1582992877.png": "./storage/app/public/sport_logo/rugby-h_1582992877.png",
 	"./rugby_1582992877.png": "./storage/app/public/sport_logo/rugby_1582992877.png",
+	"./rugby_1586957100.png": "./storage/app/public/sport_logo/rugby_1586957100.png",
+	"./rugby_1586957187.png": "./storage/app/public/sport_logo/rugby_1586957187.png",
+	"./rugby_1586957460.png": "./storage/app/public/sport_logo/rugby_1586957460.png",
+	"./rugby_1586963425.png": "./storage/app/public/sport_logo/rugby_1586963425.png",
+	"./rugby_1586964052.png": "./storage/app/public/sport_logo/rugby_1586964052.png",
+	"./rugby_1586964290.png": "./storage/app/public/sport_logo/rugby_1586964290.png",
+	"./rugby_1586975576.png": "./storage/app/public/sport_logo/rugby_1586975576.png",
+	"./rugby_1586976842.png": "./storage/app/public/sport_logo/rugby_1586976842.png",
+	"./rugby_1586977388.png": "./storage/app/public/sport_logo/rugby_1586977388.png",
+	"./rugby_1586977445.png": "./storage/app/public/sport_logo/rugby_1586977445.png",
+	"./rugby_1586978086.png": "./storage/app/public/sport_logo/rugby_1586978086.png",
+	"./rugby_1586978222.png": "./storage/app/public/sport_logo/rugby_1586978222.png",
+	"./rugby_1586978314.png": "./storage/app/public/sport_logo/rugby_1586978314.png",
+	"./rugby_1586980588.png": "./storage/app/public/sport_logo/rugby_1586980588.png",
+	"./rugby_1587019225.png": "./storage/app/public/sport_logo/rugby_1587019225.png",
+	"./rugby_1587019683.png": "./storage/app/public/sport_logo/rugby_1587019683.png",
+	"./rugby_1587020043.png": "./storage/app/public/sport_logo/rugby_1587020043.png",
+	"./rugby_1587020279.png": "./storage/app/public/sport_logo/rugby_1587020279.png",
+	"./rugby_1587031306.png": "./storage/app/public/sport_logo/rugby_1587031306.png",
+	"./rugby_1587031507.png": "./storage/app/public/sport_logo/rugby_1587031507.png",
+	"./rugby_1587031774.png": "./storage/app/public/sport_logo/rugby_1587031774.png",
+	"./rugby_1587031891.png": "./storage/app/public/sport_logo/rugby_1587031891.png",
+	"./rugby_1587032017.png": "./storage/app/public/sport_logo/rugby_1587032017.png",
+	"./rugby_1587032133.png": "./storage/app/public/sport_logo/rugby_1587032133.png",
+	"./rugby_1587032246.png": "./storage/app/public/sport_logo/rugby_1587032246.png",
+	"./rugby_1587032461.png": "./storage/app/public/sport_logo/rugby_1587032461.png",
+	"./rugby_1587032555.png": "./storage/app/public/sport_logo/rugby_1587032555.png",
+	"./rugby_1587032635.png": "./storage/app/public/sport_logo/rugby_1587032635.png",
+	"./rugby_1587032780.png": "./storage/app/public/sport_logo/rugby_1587032780.png",
+	"./rugby_1587032896.png": "./storage/app/public/sport_logo/rugby_1587032896.png",
+	"./rugby_1587033001.png": "./storage/app/public/sport_logo/rugby_1587033001.png",
+	"./rugby_1587033094.png": "./storage/app/public/sport_logo/rugby_1587033094.png",
+	"./rugby_1587033166.png": "./storage/app/public/sport_logo/rugby_1587033166.png",
+	"./rugby_1587033390.png": "./storage/app/public/sport_logo/rugby_1587033390.png",
+	"./rugby_1587033458.png": "./storage/app/public/sport_logo/rugby_1587033458.png",
+	"./rugby_1587033560.png": "./storage/app/public/sport_logo/rugby_1587033560.png",
+	"./rugby_1587033615.png": "./storage/app/public/sport_logo/rugby_1587033615.png",
+	"./rugby_1587033680.png": "./storage/app/public/sport_logo/rugby_1587033680.png",
+	"./rugby_1587033884.png": "./storage/app/public/sport_logo/rugby_1587033884.png",
+	"./rugby_1587034023.png": "./storage/app/public/sport_logo/rugby_1587034023.png",
+	"./rugby_1587034288.png": "./storage/app/public/sport_logo/rugby_1587034288.png",
+	"./rugby_1587034418.png": "./storage/app/public/sport_logo/rugby_1587034418.png",
+	"./rugby_1587034523.png": "./storage/app/public/sport_logo/rugby_1587034523.png",
+	"./rugby_1587034738.png": "./storage/app/public/sport_logo/rugby_1587034738.png",
+	"./rugby_1587034889.png": "./storage/app/public/sport_logo/rugby_1587034889.png",
+	"./rugby_1587035497.png": "./storage/app/public/sport_logo/rugby_1587035497.png",
+	"./rugby_1587035646.png": "./storage/app/public/sport_logo/rugby_1587035646.png",
+	"./rugby_1587035963.png": "./storage/app/public/sport_logo/rugby_1587035963.png",
+	"./rugby_1587036028.png": "./storage/app/public/sport_logo/rugby_1587036028.png",
+	"./rugby_1587036184.png": "./storage/app/public/sport_logo/rugby_1587036184.png",
+	"./rugby_1587036525.png": "./storage/app/public/sport_logo/rugby_1587036525.png",
+	"./rugby_1587036666.png": "./storage/app/public/sport_logo/rugby_1587036666.png",
+	"./rugby_1587036892.png": "./storage/app/public/sport_logo/rugby_1587036892.png",
+	"./rugby_1587037120.png": "./storage/app/public/sport_logo/rugby_1587037120.png",
+	"./rugby_1587037307.png": "./storage/app/public/sport_logo/rugby_1587037307.png",
+	"./rugby_1587037445.png": "./storage/app/public/sport_logo/rugby_1587037445.png",
+	"./rugby_1587037724.png": "./storage/app/public/sport_logo/rugby_1587037724.png",
+	"./rugby_1587037974.png": "./storage/app/public/sport_logo/rugby_1587037974.png",
+	"./rugby_1587038312.png": "./storage/app/public/sport_logo/rugby_1587038312.png",
+	"./rugby_h_1586957100.png": "./storage/app/public/sport_logo/rugby_h_1586957100.png",
+	"./rugby_h_1586957187.png": "./storage/app/public/sport_logo/rugby_h_1586957187.png",
+	"./rugby_h_1586957460.png": "./storage/app/public/sport_logo/rugby_h_1586957460.png",
+	"./rugby_h_1586963425.png": "./storage/app/public/sport_logo/rugby_h_1586963425.png",
+	"./rugby_h_1586964052.png": "./storage/app/public/sport_logo/rugby_h_1586964052.png",
+	"./rugby_h_1586964290.png": "./storage/app/public/sport_logo/rugby_h_1586964290.png",
+	"./rugby_h_1586975576.png": "./storage/app/public/sport_logo/rugby_h_1586975576.png",
+	"./rugby_h_1586976842.png": "./storage/app/public/sport_logo/rugby_h_1586976842.png",
+	"./rugby_h_1586977388.png": "./storage/app/public/sport_logo/rugby_h_1586977388.png",
+	"./rugby_h_1586977445.png": "./storage/app/public/sport_logo/rugby_h_1586977445.png",
+	"./rugby_h_1586978086.png": "./storage/app/public/sport_logo/rugby_h_1586978086.png",
+	"./rugby_h_1586978222.png": "./storage/app/public/sport_logo/rugby_h_1586978222.png",
+	"./rugby_h_1586978314.png": "./storage/app/public/sport_logo/rugby_h_1586978314.png",
+	"./rugby_h_1586980588.png": "./storage/app/public/sport_logo/rugby_h_1586980588.png",
+	"./rugby_h_1587019225.png": "./storage/app/public/sport_logo/rugby_h_1587019225.png",
+	"./rugby_h_1587019683.png": "./storage/app/public/sport_logo/rugby_h_1587019683.png",
+	"./rugby_h_1587020043.png": "./storage/app/public/sport_logo/rugby_h_1587020043.png",
+	"./rugby_h_1587020279.png": "./storage/app/public/sport_logo/rugby_h_1587020279.png",
+	"./rugby_h_1587031306.png": "./storage/app/public/sport_logo/rugby_h_1587031306.png",
+	"./rugby_h_1587031507.png": "./storage/app/public/sport_logo/rugby_h_1587031507.png",
+	"./rugby_h_1587031774.png": "./storage/app/public/sport_logo/rugby_h_1587031774.png",
+	"./rugby_h_1587031891.png": "./storage/app/public/sport_logo/rugby_h_1587031891.png",
+	"./rugby_h_1587032017.png": "./storage/app/public/sport_logo/rugby_h_1587032017.png",
+	"./rugby_h_1587032133.png": "./storage/app/public/sport_logo/rugby_h_1587032133.png",
+	"./rugby_h_1587032246.png": "./storage/app/public/sport_logo/rugby_h_1587032246.png",
+	"./rugby_h_1587032461.png": "./storage/app/public/sport_logo/rugby_h_1587032461.png",
+	"./rugby_h_1587032555.png": "./storage/app/public/sport_logo/rugby_h_1587032555.png",
+	"./rugby_h_1587032635.png": "./storage/app/public/sport_logo/rugby_h_1587032635.png",
+	"./rugby_h_1587032780.png": "./storage/app/public/sport_logo/rugby_h_1587032780.png",
+	"./rugby_h_1587032896.png": "./storage/app/public/sport_logo/rugby_h_1587032896.png",
+	"./rugby_h_1587033001.png": "./storage/app/public/sport_logo/rugby_h_1587033001.png",
+	"./rugby_h_1587033094.png": "./storage/app/public/sport_logo/rugby_h_1587033094.png",
+	"./rugby_h_1587033166.png": "./storage/app/public/sport_logo/rugby_h_1587033166.png",
+	"./rugby_h_1587033390.png": "./storage/app/public/sport_logo/rugby_h_1587033390.png",
+	"./rugby_h_1587033458.png": "./storage/app/public/sport_logo/rugby_h_1587033458.png",
+	"./rugby_h_1587033560.png": "./storage/app/public/sport_logo/rugby_h_1587033560.png",
+	"./rugby_h_1587033615.png": "./storage/app/public/sport_logo/rugby_h_1587033615.png",
+	"./rugby_h_1587033680.png": "./storage/app/public/sport_logo/rugby_h_1587033680.png",
+	"./rugby_h_1587033884.png": "./storage/app/public/sport_logo/rugby_h_1587033884.png",
+	"./rugby_h_1587034023.png": "./storage/app/public/sport_logo/rugby_h_1587034023.png",
+	"./rugby_h_1587034288.png": "./storage/app/public/sport_logo/rugby_h_1587034288.png",
+	"./rugby_h_1587034418.png": "./storage/app/public/sport_logo/rugby_h_1587034418.png",
+	"./rugby_h_1587034523.png": "./storage/app/public/sport_logo/rugby_h_1587034523.png",
+	"./rugby_h_1587034738.png": "./storage/app/public/sport_logo/rugby_h_1587034738.png",
+	"./rugby_h_1587034889.png": "./storage/app/public/sport_logo/rugby_h_1587034889.png",
+	"./rugby_h_1587035497.png": "./storage/app/public/sport_logo/rugby_h_1587035497.png",
+	"./rugby_h_1587035646.png": "./storage/app/public/sport_logo/rugby_h_1587035646.png",
+	"./rugby_h_1587035963.png": "./storage/app/public/sport_logo/rugby_h_1587035963.png",
+	"./rugby_h_1587036028.png": "./storage/app/public/sport_logo/rugby_h_1587036028.png",
+	"./rugby_h_1587036184.png": "./storage/app/public/sport_logo/rugby_h_1587036184.png",
+	"./rugby_h_1587036525.png": "./storage/app/public/sport_logo/rugby_h_1587036525.png",
+	"./rugby_h_1587036666.png": "./storage/app/public/sport_logo/rugby_h_1587036666.png",
+	"./rugby_h_1587036892.png": "./storage/app/public/sport_logo/rugby_h_1587036892.png",
+	"./rugby_h_1587037120.png": "./storage/app/public/sport_logo/rugby_h_1587037120.png",
+	"./rugby_h_1587037307.png": "./storage/app/public/sport_logo/rugby_h_1587037307.png",
+	"./rugby_h_1587037445.png": "./storage/app/public/sport_logo/rugby_h_1587037445.png",
+	"./rugby_h_1587037724.png": "./storage/app/public/sport_logo/rugby_h_1587037724.png",
+	"./rugby_h_1587037974.png": "./storage/app/public/sport_logo/rugby_h_1587037974.png",
+	"./rugby_h_1587038312.png": "./storage/app/public/sport_logo/rugby_h_1587038312.png",
 	"./soccerball-h_1582989356.png": "./storage/app/public/sport_logo/soccerball-h_1582989356.png",
 	"./soccerball_1582989356.png": "./storage/app/public/sport_logo/soccerball_1582989356.png",
 	"./tennis-h_1582992842.png": "./storage/app/public/sport_logo/tennis-h_1582992842.png",
@@ -114261,6 +114414,1304 @@ module.exports = "/images/rugby-h_1582992877.png?e399a581f38a1e3df3e4ae137375e1a
 /***/ (function(module, exports) {
 
 module.exports = "/images/rugby_1582992877.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1586957100.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1586957100.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1586957100.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1586957187.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1586957187.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1586957187.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1586957460.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1586957460.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1586957460.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1586963425.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1586963425.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1586963425.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1586964052.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1586964052.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1586964052.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1586964290.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1586964290.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1586964290.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1586975576.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1586975576.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1586975576.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1586976842.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1586976842.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1586976842.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1586977388.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1586977388.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1586977388.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1586977445.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1586977445.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1586977445.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1586978086.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1586978086.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1586978086.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1586978222.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1586978222.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1586978222.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1586978314.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1586978314.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1586978314.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1586980588.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1586980588.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1586980588.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587019225.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587019225.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587019225.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587019683.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587019683.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587019683.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587020043.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587020043.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587020043.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587020279.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587020279.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587020279.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587031306.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587031306.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587031306.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587031507.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587031507.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587031507.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587031774.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587031774.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587031774.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587031891.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587031891.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587031891.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587032017.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587032017.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587032017.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587032133.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587032133.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587032133.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587032246.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587032246.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587032246.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587032461.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587032461.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587032461.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587032555.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587032555.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587032555.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587032635.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587032635.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587032635.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587032780.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587032780.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587032780.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587032896.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587032896.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587032896.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587033001.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587033001.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587033001.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587033094.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587033094.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587033094.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587033166.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587033166.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587033166.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587033390.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587033390.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587033390.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587033458.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587033458.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587033458.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587033560.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587033560.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587033560.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587033615.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587033615.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587033615.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587033680.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587033680.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587033680.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587033884.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587033884.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587033884.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587034023.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587034023.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587034023.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587034288.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587034288.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587034288.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587034418.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587034418.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587034418.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587034523.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587034523.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587034523.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587034738.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587034738.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587034738.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587034889.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587034889.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587034889.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587035497.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587035497.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587035497.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587035646.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587035646.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587035646.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587035963.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587035963.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587035963.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587036028.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587036028.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587036028.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587036184.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587036184.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587036184.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587036525.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587036525.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587036525.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587036666.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587036666.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587036666.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587036892.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587036892.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587036892.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587037120.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587037120.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587037120.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587037307.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587037307.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587037307.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587037445.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587037445.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587037445.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587037724.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587037724.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587037724.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587037974.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587037974.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587037974.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_1587038312.png":
+/*!************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_1587038312.png ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_1587038312.png?f833e17eea80a75768afc4dac66af217";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1586957100.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1586957100.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1586957100.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1586957187.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1586957187.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1586957187.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1586957460.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1586957460.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1586957460.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1586963425.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1586963425.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1586963425.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1586964052.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1586964052.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1586964052.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1586964290.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1586964290.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1586964290.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1586975576.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1586975576.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1586975576.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1586976842.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1586976842.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1586976842.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1586977388.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1586977388.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1586977388.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1586977445.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1586977445.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1586977445.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1586978086.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1586978086.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1586978086.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1586978222.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1586978222.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1586978222.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1586978314.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1586978314.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1586978314.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1586980588.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1586980588.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1586980588.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587019225.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587019225.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587019225.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587019683.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587019683.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587019683.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587020043.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587020043.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587020043.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587020279.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587020279.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587020279.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587031306.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587031306.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587031306.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587031507.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587031507.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587031507.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587031774.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587031774.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587031774.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587031891.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587031891.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587031891.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587032017.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587032017.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587032017.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587032133.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587032133.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587032133.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587032246.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587032246.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587032246.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587032461.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587032461.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587032461.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587032555.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587032555.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587032555.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587032635.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587032635.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587032635.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587032780.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587032780.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587032780.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587032896.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587032896.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587032896.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587033001.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587033001.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587033001.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587033094.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587033094.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587033094.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587033166.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587033166.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587033166.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587033390.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587033390.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587033390.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587033458.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587033458.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587033458.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587033560.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587033560.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587033560.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587033615.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587033615.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587033615.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587033680.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587033680.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587033680.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587033884.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587033884.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587033884.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587034023.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587034023.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587034023.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587034288.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587034288.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587034288.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587034418.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587034418.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587034418.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587034523.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587034523.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587034523.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587034738.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587034738.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587034738.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587034889.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587034889.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587034889.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587035497.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587035497.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587035497.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587035646.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587035646.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587035646.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587035963.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587035963.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587035963.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587036028.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587036028.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587036028.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587036184.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587036184.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587036184.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587036525.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587036525.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587036525.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587036666.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587036666.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587036666.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587036892.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587036892.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587036892.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587037120.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587037120.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587037120.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587037307.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587037307.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587037307.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587037445.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587037445.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587037445.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587037724.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587037724.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587037724.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587037974.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587037974.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587037974.png?e399a581f38a1e3df3e4ae137375e1a6";
+
+/***/ }),
+
+/***/ "./storage/app/public/sport_logo/rugby_h_1587038312.png":
+/*!**************************************************************!*\
+  !*** ./storage/app/public/sport_logo/rugby_h_1587038312.png ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/rugby_h_1587038312.png?e399a581f38a1e3df3e4ae137375e1a6";
 
 /***/ }),
 

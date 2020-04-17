@@ -287,45 +287,57 @@
             <div id="show" class="show col-lg-4 col-sm-12 position-fixed" style="display:none; z-index:50;">
             
             <div class="card shadow-lg mt-4" style="height:85vh;">
-            <div class="card-body overflow-auto overflow-x-hidden p-2">
+            <div class="card-body overflow-auto p-2" style="overflow-x: hidden !important;">
 
-                <div class="d-flex flex-column bd-highlight mb-3">
-                    <div class="p-4 bd-highlight">
-                        <button type="button" id="close_show" v-on:click="closeShow()" class="close" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                <div class="d-flex flex-column bd-highlight">
+                    <div>
+                        <button type="button" id="close_show" v-on:click="closeShow()" class="close p-3" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
                         
                         <div v-if="this.type.image">
-                            <h3> <img :src="'../../../storage/sport_logo/'+ this.type.image"> {{ show.title }} </h3>
+                            <h3 class="m-3"> <img :src="'../../../storage/sport_logo/'+ this.type.image"> {{ show.title }} </h3>
                         </div>
 
-                        <hr>
+                        <hr class="mt-2 mb-2">
 
-                        <div class="card-body">
-                            <p class="card-text">{{ show.about }}</p>
+                        <div class="card-body p-1">
+                           
+                            <div class="row">
+
+                                <div class="col-lg-9"> {{ show.about }} </div>
+                                <div class="col-lg-3 mt-2"> 
+
+                                    <p class="float-left ml-0 mt-0 mb-0 mr-2" v-if="show.paid == 1">
+                                        <i class="fas fa-coins"></i> <small>Paid</small> <br>
+                                    </p>
+                                    <p class="float-right"> 
+                                        <i class="fas fa-road"></i> 
+                                        <small class="mr-3"> {{ measured_distance }} km</small>
+                                        <a :href="'https://www.google.co.uk/maps/dir//'+show.lat+','+show.lng" target="_blank" class="badge badge-dark mt-2"><i class="fas fa-map-marker-alt"></i> Show directions</a>
+                                    </p>
+
+                                    <span v-if="currentUser">
+                                        <button v-if="currentUser.isAdmin == 1" v-on:click="deletePlace(show.id)" class="btn btn-sm btn-danger"> <i class="fas fa-trash"></i> Place</button>
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        <p class="float-lef mt-1 ml-1 mb-0" v-if="show.paid == 1">
+                            <a class="nav-link pl-0" :href="'place_owner/'+show.id">Are you the owner of this place?</a>
+                        </p>
+
                         </div>
-
-                        <hr class="mt-4">
-                            <p class="float-left m-0" v-if="show.paid == 1">
-                                <i class="fas fa-coins"></i> <small>Paid</small> <br>
-                               <a class="nav-link pl-0" :href="'place_owner/'+show.id">Are you the owner?</a>
-                            </p>
-                            <p class="float-right"> 
-                                <i class="fas fa-road"></i> 
-                                <small class="mr-3">This place is {{ measured_distance }} km from you</small>
-                                <a :href="'https://www.google.co.uk/maps/dir//'+show.lat+','+show.lng" target="_blank" class="badge badge-dark"><i class="fas fa-map-marker-alt"></i> Show directions</a>
-                            </p>
-
-                        <span v-if="currentUser">
-                            <button v-if="currentUser.isAdmin == 1" v-on:click="deletePlace(show.id)" class="btn btn-danger m-2"> <i class="fas fa-times"></i> Delete place</button>
-                        </span>
                     </div>
                 </div>
                 
-                
-                <div class="card m-3 width:100%; height:100%;">
-                    <div class="card-header ">
-                        <h6>Events</h6>  
+
+                <div class="row mt-2" style="background: linear-gradient(0deg, rgb(243, 148, 72) 0%, rgb(255, 179, 118) 100%);">
+                    <div class="col-12 text-center text-xs font-weight-bold text-uppercase m-1" style="color: #29403f;">
+                        Events
                     </div>
-                    <div class="card-body p-0">
+                </div>
+                    
                         <Calendar v-bind:status='status' v-on:openAddEvent="openAddEvent()" v-bind:currentUser='currentUser' v-on:editEvent="editEvent($event)" v-on:getDate="getDate($event)" v-on:closeAdd="closeAddEvent()" ref="calendar"> </Calendar>
                         <div v-if="this.status === 0">
                             <div class="alert alert-warning mt-3 pb-1 text center" role="alert">
@@ -338,8 +350,8 @@
                             </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    
+      
 
                 
             </div>
@@ -880,6 +892,10 @@ export default {
 
 
 @media only screen and (max-width: 900px) {
+
+::-webkit-scrollbar {
+  width: 4px;
+}
 
 #map {
     width: 100% !important; 

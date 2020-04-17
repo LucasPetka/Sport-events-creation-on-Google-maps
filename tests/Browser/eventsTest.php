@@ -286,8 +286,6 @@ class eventsTest extends DuskTestCase
             $browser->visit('/event/1/New%20event%20test%20admin%20edited')
                     ->type('message_input', "")
                     ->keys('#message_input', ['{ENTER}'])
-                    ->pause('500')
-                    ->assertSee('Incorrect message !')
                     ->pause('1000');
 
             $browser2->loginAs(User::find(1))

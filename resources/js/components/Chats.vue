@@ -205,12 +205,7 @@ export default {
                 this.newMessage = '';
             }
             else{
-                Vue.notify({
-                    group: 'foo',
-                    title: 'Error!',
-                    type: 'error',
-                    text: 'Incorrect message !'
-                });
+                
             }
         },
 

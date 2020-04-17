@@ -23,6 +23,14 @@ class profileAndAdminTest extends DuskTestCase
     public function testProfileUpdate()
     {
 
+        // $user = factory(User::class)->create([
+        //     'email' => 'taylor@laravel.com', 'isAdmin' => null
+        // ]);
+
+        // $admin = factory(User::class)->create([
+        //     'email' => 'john@laravel.com', 'isAdmin' => '1'
+        // ]);
+
         factory(Type::class)->create([
             'id'=>'111', 'name' => 'Football', 'image' => 'soccerball_1582989356.png' , 'image_h' => 'soccerball-h_1582989356.png'
         ]);
@@ -142,54 +150,61 @@ class profileAndAdminTest extends DuskTestCase
     //Admin can decline place
     // public function testSubmitedPlaceDecline()
     // {
-    //     $submited_place = factory(PlaceQueue::class,5)->create(['type'=>'111', 'personid'=>'1']);
+    //     $submited_place = factory(PlaceQueue::class)->create(['type'=>'111', 'personid'=>'1']);
 
     //     $this->browse(function ($browser) use ($submited_place) {
     //         $browser->visit('/admin/places_to_confirm')
-    //                 //->click('@decline_submited_place')
+    //                 ->click('@decline_submited_place')
     //                 ->pause('1000')
     //                 ->assertSee('bryak');
 
-    //         // $this->assertDatabaseHas('declined_places', [
-    //         //     'title' =>  $submited_place->title,
-    //         // ]);
-
+    //         $this->assertDatabaseHas('declined_places', [
+    //             'title' =>  $submited_place->title,
+    //         ]);
     //     });
+
     // }
 
     // //Admin can accept place
     // public function testSubmitedPlaceAccept()
     // {
 
+    //     $submited_place = factory(PlaceQueue::class)->create(['type'=>'111', 'personid'=>'1']);
+
     //     $this->browse(function ($browser) {
     //         $browser->visit('/admin/places_to_confirm')
-    //                 //->click('@accept_submited_place')
+    //                 ->click('@accept_submited_place')
     //                 ->pause('1000')
     //                 ->assertSee('bryak');
 
-    //         // $this->assertDatabaseMissing('placequeue', [
-    //         //     'title' => $submited_place->title
-    //         // ]);
+    //          $this->assertDatabaseMissing('placequeue', [
+    //              'title' => $submited_place->title
+    //          ]);
 
     //     });
 
     // }
 
 
-    // //Admin can delete place
-    // public function testSubmitedPlaceDelete()
-    // {
-    //     $this->browse(function ($browser) {
-    //         $browser->visit('/admin/places_to_confirm')
-    //                 ->click('@delete_submited_place')
-    //                 ->pause('1000');
+    //Admin can delete place
+    public function testSubmitedPlaceDelete()
+    {
 
-    //             $this->assertDatabaseMissing('places', [
-    //                 'title' => 'New place title',
-    //                 'about' => 'New place text about',
-    //             ]);
-    //     });
-    // }
+        $submited_place = factory(PlaceQueue::class)->create(['title' => 'Place to delete', 'type'=>'111', 'personid'=>'1']);
+
+        $this->browse(function ($browser) use($submited_place) {
+            $browser->visit('/admin/places_to_confirm')
+                    ->click('@delete_submited_place')
+                    ->pause('1000')
+                    ->click('@delete_submited_place')
+                    ->pause('1000');
+
+                $this->assertDatabaseMissing('placequeue', [
+                    'title' => $submited_place->title,
+                    'about' => $submited_place->about,
+                ]);
+        });
+    }
     
 
 

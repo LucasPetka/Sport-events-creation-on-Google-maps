@@ -69,7 +69,7 @@
             </div>
             </div>  
 
-            <div class="col-lg-6 mb-5">
+            <div id="event_search_results" class="col-lg-6 mb-5">
 
                 <div class="btn-toolbar justify-content-center mb-3" role="toolbar" aria-label="Toolbar with button groups">
                     <div class="btn-group mr-2" role="group" aria-label="First group">
@@ -358,6 +358,10 @@ export default {
 
         //Get all people that going to events
         findEvents() {
+
+            $('html, body').animate({
+                    scrollTop: $("#event_search_results").offset().top
+                }, 'fast');
 
             this.loader_time_for_event_finder = true;
             setTimeout(() => {

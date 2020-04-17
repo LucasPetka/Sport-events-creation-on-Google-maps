@@ -15,7 +15,7 @@
       </div>
 
     <gmap-map ref="gmapp" :map-type-id="mapType" v-on:rightclick="openMenu($event)" v-on:dragend="loadMarkers()" v-on:zoom_changed="updateZoom()" :center="center" v-on:bounds_changed="update_bounds($event)" :zoom="zoom_in" v-bind:options="mapStyle" style=" overflow:hidden; width:100%; height:94vh;">
-      <gmap-cluster :zoom-on-click="true" :gridSize="20" :maxZoom="16">
+      <gmap-cluster :zoom-on-click="true" :gridSize="20" :maxZoom="15">
 
       <gmap-marker v-for="place in allPlaces.data"
         :visible="place.visible" 
@@ -372,7 +372,7 @@ export default {
       const foundPlace = this.allPlaces.data.find( place => place.id == key);
       this.place = foundPlace;
       var arg = [key, this.measure_distance(this.place,this.user_location)];
-      this.smoothZoom(18, this.zoom_in);
+      this.smoothZoom(17, this.zoom_in);
       this.$emit('showSpot', arg);
     },
 

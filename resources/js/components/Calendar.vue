@@ -3,8 +3,8 @@
 
             <div class="row">
                 <div class="col-12 m-2" id="calendar">
-                        <datepicker placeholder="Select Date" :highlighted="highlighted" :format="format" :value="todays_date" v-model="todays_date" @closed="showEvents()"></datepicker>
-                        <button dusk="add_new_event_btn" v-if="laterThanYesterday && status == 1" v-on:click="$emit('openAddEvent')" class="btn btn-outline-success pt-2 pb-2 ml-3 float-left">Add Event <i class="fas fa-plus"></i></button>
+                        <datepicker placeholder="Select Date" :monday-first="true" :highlighted="highlighted" :format="format" :value="todays_date" v-model="todays_date" @showCalendar="calendarOpened()" @closed="showEvents()"></datepicker>
+                        <button dusk="add_new_event_btn" v-if="laterThanYesterday && status == 1" v-on:click="$emit('openAddEvent')" class="btn btn-orange pt-2 pb-2 ml-3 float-left" >Add Event <i class="fas fa-plus"></i></button>
                 </div>
             </div>
             
@@ -12,14 +12,15 @@
         
             <div>
 
-                <div v-for="event in show_events" v-bind:key="event.id" class="card mb-3"  style="width: 90%; margin-left:auto; margin-right:auto;">
-                <div class="card-body">
-                    <h5 class="card-title"> <a target="_blank" :href="'event/' + event.id +'/'+ event.title"> {{ event.title }} </a></h5>
+                <div v-for="event in show_events" v-bind:key="event.id" class="card mb-3" style="width: 95%; margin-left:auto; margin-right:auto;">
+                <div class="card-body p-3">
+                    <h5 class="card-title"> <a class="orange" target="_blank" :href="'event/' + event.id +'/'+ event.title"> {{ event.title }} </a></h5>
                     <h6 class="card-subtitle mb-3 text-muted">{{ countPeopleGoing(event.id) }} people going</h6>
-                    <p class="card-text">{{ event.about }}</p>
+                    <p class="card-text mb-2">{{ event.about }}</p>
+                    <hr class="mt-2 mb-1">
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Start: {{ returnTime(event.time_from)  }} <br> End: {{ returnTime(event.time_until) }}</li>
-                        <li class="list-group-item card-subtitle mb-2 text-muted">Event created by <a target="_blank" :href="'/user/' + event.person_id.auth_id">{{ event.person_id.name }}</a></li>
+                        <li class="list-group-item p-1"><i class="far fa-clock"></i> {{ returnTime(event.time_from)  }} - {{ returnTime(event.time_until) }}</li>
+                        <li class="list-group-item card-subtitle mb-2 p-1 text-muted">Event created by <a target="_blank" :href="'/user/' + event.person_id.auth_id">{{ event.person_id.name }}</a></li>
                     </ul>
 
                     <div v-if="status === 1">
@@ -282,6 +283,11 @@ export default {
 
         },
 
+        calendarOpened: function(){
+            console.log('Calendar Opened');
+
+        },
+
         
         //Delete person from event
         deletePerson: function(place, event, person, but) {
@@ -330,6 +336,11 @@ export default {
     padding: 8px;
     float: left;
     outline: none !important;
+}
+
+.vdp-datepicker__calendar {
+
+    margin-bottom: 60px;
 }
 
 </style>

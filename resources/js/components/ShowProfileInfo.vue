@@ -69,25 +69,13 @@
         <div class="collapse" id="createdPlaces" data-parent="#accordionExample">
             <p class="h4 ml-5 mb-0 pb-0 text-right">Places</p>
 
-            <div v-if="!isMobile()">
             <nav class="mt-2">
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <a dusk="places_submited" class="nav-item nav-link active mr-1" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true"><i class="far fa-paper-plane"></i> Submited <span class="badge badge-pill badge-dark active">{{ submitedPlaces.length }}</span></a>
-                    <a dusk="places_accepted" class="nav-item nav-link mr-1" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false"><i class="far fa-check-circle"></i> Accepted <span class="badge badge-pill badge-dark">{{ acceptedPlaces.length }}</span></a>
-                    <a dusk="places_declined" class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false"><i class="far fa-times-circle"></i> Declined <span class="badge badge-pill badge-dark">{{ declinedPlaces.length }}</span></a>
+                    <a dusk="places_submited" class="nav-item nav-link active mr-1" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true"><i class="far fa-paper-plane d-none d-lg-block"></i> Submited <span class="badge badge-pill badge-dark active">{{ submitedPlaces.length }}</span></a>
+                    <a dusk="places_accepted" class="nav-item nav-link mr-1" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false"><i class="far fa-check-circle d-none d-lg-block"></i> Accepted <span class="badge badge-pill badge-dark">{{ acceptedPlaces.length }}</span></a>
+                    <a dusk="places_declined" class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false"><i class="far fa-times-circle d-none d-lg-block"></i> Declined <span class="badge badge-pill badge-dark">{{ declinedPlaces.length }}</span></a>
                 </div>
             </nav>
-            </div>
-            <div v-else> 
-            <nav class="mt-2">
-                <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <a class="nav-item nav-link active mr-1" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true"> Submited <span class="badge badge-pill badge-dark active">{{ submitedPlaces.length }}</span></a>
-                    <a class="nav-item nav-link mr-1" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false"> Accepted <span class="badge badge-pill badge-dark">{{ acceptedPlaces.length }}</span></a>
-                    <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false"> Declined <span class="badge badge-pill badge-dark">{{ declinedPlaces.length }}</span></a>
-                </div>
-            </nav>
-            </div>
-
 
             <div class="tab-content" id="nav-tabContent">
 
@@ -320,25 +308,13 @@
         <div class="collapse" id="createdEvents" data-parent="#accordionExample">
             <p class="h4 ml-5 mb-0 pb-0 text-right">Events</p>
 
-            <div v-if="!isMobile()">
             <nav class="mt-2 mb-2">
                 <div class="nav nav-tabs" id="nav-tab2" role="tablist">
-                    <a dusk="events_submited" class="nav-item nav-link active mr-1" id="nav-submited-tab" data-toggle="tab" href="#nav-submited" role="tab" aria-controls="nav-submited" aria-selected="true"><i class="far fa-paper-plane"></i> Submited <span class="badge badge-pill badge-dark">{{ submitedEvents.length }}</span></a>
-                    <a dusk="events_accepted" class="nav-item nav-link mr-1" id="nav-accepted-tab" data-toggle="tab" href="#nav-accepted" role="tab" aria-controls="nav-accepted" aria-selected="false"><i class="far fa-check-circle"></i> Accepted <span class="badge badge-pill badge-dark">{{ createdEvents.length }}</span></a>
-                    <a dusk="events_declined" class="nav-item nav-link" id="nav-declined-tab" data-toggle="tab" href="#nav-declined" role="tab" aria-controls="nav-declined" aria-selected="false"><i class="far fa-times-circle"></i> Declined <span class="badge badge-pill badge-dark">{{ declinedEvents.length }}</span></a>
+                    <a dusk="events_submited" class="nav-item nav-link active mr-1" id="nav-submited-tab" data-toggle="tab" href="#nav-submited" role="tab" aria-controls="nav-submited" aria-selected="true"><i class="far fa-paper-plane d-none d-lg-block"></i> Submited <span class="badge badge-pill badge-dark">{{ submitedEvents.length }}</span></a>
+                    <a dusk="events_accepted" class="nav-item nav-link mr-1" id="nav-accepted-tab" data-toggle="tab" href="#nav-accepted" role="tab" aria-controls="nav-accepted" aria-selected="false"><i class="far fa-check-circle d-none d-lg-block"></i> Accepted <span class="badge badge-pill badge-dark">{{ createdEvents.length }}</span></a>
+                    <a dusk="events_declined" class="nav-item nav-link" id="nav-declined-tab" data-toggle="tab" href="#nav-declined" role="tab" aria-controls="nav-declined" aria-selected="false"><i class="far fa-times-circle d-none d-lg-block"></i> Declined <span class="badge badge-pill badge-dark">{{ declinedEvents.length }}</span></a>
                 </div>
             </nav>
-            </div>
-
-            <div v-else>
-            <nav class="mt-2 mb-2">
-                <div class="nav nav-tabs" id="nav-tab2" role="tablist">
-                    <a dusk="events_submited" class="nav-item nav-link active mr-1" id="nav-submited-tab" data-toggle="tab" href="#nav-submited" role="tab" aria-controls="nav-submited" aria-selected="true"> Submited <span class="badge badge-pill badge-dark">{{ submitedEvents.length }}</span></a>
-                    <a dusk="events_accepted" class="nav-item nav-link mr-1" id="nav-accepted-tab" data-toggle="tab" href="#nav-accepted" role="tab" aria-controls="nav-accepted" aria-selected="false"> Accepted <span class="badge badge-pill badge-dark">{{ createdEvents.length }}</span></a>
-                    <a dusk="events_declined" class="nav-item nav-link" id="nav-declined-tab" data-toggle="tab" href="#nav-declined" role="tab" aria-controls="nav-declined" aria-selected="false"> Declined <span class="badge badge-pill badge-dark">{{ declinedEvents.length }}</span></a>
-                </div>
-            </nav>
-            </div>
 
             <div class="tab-content" id="nav-tabContent2">
 
@@ -840,17 +816,6 @@ export default {
         submited_places_onChangePage(pageOfItems) {
             this.submited_places_pageOfItems = pageOfItems;
         },
-
-        isMobile() {
-            if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-                return true
-            } else {
-                return false
-            }
-        }
-
-
-
 
     }
 

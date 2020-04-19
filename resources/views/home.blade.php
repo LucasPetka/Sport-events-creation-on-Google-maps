@@ -22,7 +22,7 @@
         @endif
 
         @if ($errors->any())
-            <div class="alert alert-danger alert-dismissible fade show">
+            <div class="position-absolute alert alert-danger alert-dismissible fade show" style="left:50px; z-index:100;">
                 <h5>Error!</h5>
                 <ul class="list-unstyled mb-0 ">
                     @foreach ($errors->all() as $error)

@@ -116,7 +116,7 @@
                             </div>
 
                             <div class="row justify-content-around">
-                            <jw-pagination :pageSize="4" :items="events" @changePage="onChangePage"></jw-pagination>
+                            <jw-pagination :pageSize="4" :maxPages="3" :items="events" @changePage="onChangePage"></jw-pagination>
                             </div>
                         </div>
                         <div class="row" v-else>

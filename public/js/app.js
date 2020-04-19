@@ -5508,6 +5508,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 var Calendar = function Calendar() {
   return Promise.resolve(/*! import() */).then(__webpack_require__.bind(null, /*! ../components/Calendar.vue */ "./resources/js/components/Calendar.vue"));
 };
@@ -5530,6 +5538,7 @@ var Gmap = function Gmap() {
       process: function process(dotsPos) {
         return [];
       },
+      showBackground: false,
       search_expanded: false,
       isLoading: null,
       event_time: ['', ''],
@@ -5614,7 +5623,6 @@ var Gmap = function Gmap() {
     openInfo: function openInfo() {
       if (this.getCookie("visited") != "true") {
         $('#infoModal').modal('show');
-        console.log("OPEN");
       }
 
       var today = new Date();
@@ -5636,6 +5644,7 @@ var Gmap = function Gmap() {
     //Closes sidebar
     closeShow: function closeShow() {
       $("#show").slideUp("slow");
+      this.showBackground = false;
     },
     //------------------------Opens PLACE ADD label-----------------------------
     openAdd: function openAdd(cord) {
@@ -5745,6 +5754,10 @@ var Gmap = function Gmap() {
 
       if (show.style.display === 'none') {
         $("#show").slideDown("slow");
+      }
+
+      if ($(window).width() < 900) {
+        this.showBackground = true;
       }
 
       this.closeAddEvent();
@@ -29870,7 +29883,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.dropdown-item:hover{\r\n  color: rgb(228, 108, 9);\n}\n.dropdown-item:focus{\r\n  background-color: rgb(235, 235, 235);\n}\n#refresh_button{\r\n  position: absolute;\r\n  bottom:20px;\r\n  left: 49%;\r\n  -webkit-transform: translate(-49%, -40%);\r\n  transform: translate(-49%, -40%);\r\n  z-index: 5;\n}\n#geoloc_bar{\r\n  position: absolute;\r\n  top:130px;\r\n  left: 49%;\r\n  -webkit-transform: translate(-49%, -40%);\r\n  transform: translate(-49%, -40%);\r\n  z-index: 1;\r\n  background-color: white;\r\n  padding: 10px 15px;\r\n  border-radius: 8px;\r\n  width: 500px;\n}\n#marker {\r\n display: none;\n}\n@media only screen and (max-width: 540px) {\n#geoloc_bar{\r\n    width: 95%;\n}\n}\r\n\r\n\r\n", ""]);
+exports.push([module.i, "\n.dropdown-item:hover{\r\n  color: rgb(228, 108, 9);\n}\n.dropdown-item:focus{\r\n  background-color: rgb(235, 235, 235);\n}\n#refresh_button{\r\n  position: absolute;\r\n  bottom:20px;\r\n  left: 49%;\r\n  -webkit-transform: translate(-49%, -40%);\r\n  transform: translate(-49%, -40%);\r\n  z-index: 5;\n}\n#geoloc_bar{\r\n  position: absolute;\r\n  top:130px;\r\n  left: 49%;\r\n  -webkit-transform: translate(-49%, -40%);\r\n  transform: translate(-49%, -40%);\r\n  z-index: 1;\r\n  background-color: white;\r\n  padding: 10px 15px;\r\n  border-radius: 8px;\r\n  width: 500px;\n}\n#marker {\r\n display: none;\n}\n@media only screen and (max-width: 1670px) {\n#geoloc_bar{\r\n    width: 400px;\n}\n}\n@media only screen and (max-width: 540px) {\n#geoloc_bar{\r\n    width: 95%;\n}\n}\r\n\r\n\r\n", ""]);
 
 // exports
 
@@ -90179,7 +90192,7 @@ var render = function() {
                         ? _c(
                             "button",
                             {
-                              staticClass: "btn btn-success float-right",
+                              staticClass: "btn btn-orange float-right",
                               attrs: {
                                 id: "add_event_btn" + _vm.event.id,
                                 disabled: _vm.isLoading
@@ -90191,7 +90204,7 @@ var render = function() {
                         : _c(
                             "button",
                             {
-                              staticClass: "btn btn-success float-right",
+                              staticClass: "btn btn-orange float-right",
                               attrs: {
                                 dusk: "edit_event_submit_btn",
                                 id: "add_event_btn" + _vm.event.id,
@@ -90841,7 +90854,11 @@ var render = function() {
                         { staticClass: "row justify-content-around" },
                         [
                           _c("jw-pagination", {
-                            attrs: { pageSize: 4, items: _vm.events },
+                            attrs: {
+                              pageSize: 4,
+                              maxPages: 3,
+                              items: _vm.events
+                            },
                             on: { changePage: _vm.onChangePage }
                           })
                         ],
@@ -91031,6 +91048,11 @@ var render = function() {
                 "button",
                 {
                   staticClass: "btn btn-orange",
+                  attrs: {
+                    "data-toggle": "tooltip",
+                    "data-placement": "bottom",
+                    title: "Firstly input your address"
+                  },
                   on: {
                     click: function($event) {
                       return _vm.updateUserLocation_byCenter(_vm.center)
@@ -91887,7 +91909,7 @@ var render = function() {
                               type: "text",
                               id: "add_event_title",
                               maxlength: "45",
-                              placeholder: "Enter title",
+                              placeholder: "Enter title of the event",
                               required: ""
                             },
                             domProps: { value: _vm.event.title },
@@ -91923,6 +91945,7 @@ var render = function() {
                             staticClass: "form-control",
                             attrs: {
                               name: "about",
+                              placeholder: "Write some info about the event...",
                               id: "add_event_about",
                               maxlength: "350",
                               rows: "6",
@@ -91978,7 +92001,7 @@ var render = function() {
                         _vm._v(" "),
                         _vm.event_time != ""
                           ? _c("vue-slider", {
-                              staticClass: "mr-3 ml-3 mb-5",
+                              staticClass: "mr-3 ml-3 mb-4",
                               attrs: {
                                 "tooltip-style": {
                                   backgroundColor: "#313638",
@@ -92030,7 +92053,9 @@ var render = function() {
                         _vm._v(" "),
                         _vm._m(5),
                         _vm._v(" "),
-                        _vm._m(6)
+                        _vm._m(6),
+                        _vm._v(" "),
+                        _vm._m(7)
                       ],
                       1
                     ),
@@ -92102,7 +92127,7 @@ var render = function() {
                 },
                 [
                   _c("div", { staticClass: "modal-content" }, [
-                    _vm._m(7),
+                    _vm._m(8),
                     _vm._v(" "),
                     _c("div", { staticClass: "modal-body" }, [
                       _c("div", { staticClass: "input-group mb-3" }, [
@@ -92120,7 +92145,7 @@ var render = function() {
                             type: "text",
                             id: "add_new_place_title",
                             name: "add_new_place_title",
-                            placeholder: "Title",
+                            placeholder: "Title of the place",
                             maxlength: "45",
                             required: ""
                           },
@@ -92151,7 +92176,7 @@ var render = function() {
                             id: "add_new_place_about",
                             name: "add_new_place_about",
                             rows: "6",
-                            placeholder: "About...",
+                            placeholder: "Some text about the place...",
                             maxlength: "350",
                             required: ""
                           },
@@ -92168,7 +92193,7 @@ var render = function() {
                       ]),
                       _vm._v(" "),
                       _c("div", { staticClass: "input-group mb-3" }, [
-                        _vm._m(8),
+                        _vm._m(9),
                         _vm._v(" "),
                         _c(
                           "select",
@@ -92284,7 +92309,15 @@ var render = function() {
                               attrs: { for: "paidpp" }
                             },
                             [_vm._v("Paid")]
-                          )
+                          ),
+                          _vm._v(" "),
+                          _c("br"),
+                          _vm._v(" "),
+                          _c("small", { staticClass: "text-muted" }, [
+                            _vm._v(
+                              " Check this checkbox if you have to pay to play in this place "
+                            )
+                          ])
                         ]
                       )
                     ]),
@@ -92354,6 +92387,20 @@ var render = function() {
             ],
             1
           ),
+          _vm._v(" "),
+          _vm.showBackground
+            ? _c("div", {
+                staticStyle: {
+                  height: "100%",
+                  width: "100%",
+                  position: "absolute",
+                  top: "0",
+                  left: "0",
+                  "background-color": "rgba(0, 0, 0, 0.48)",
+                  "z-index": "45"
+                }
+              })
+            : _vm._e(),
           _vm._v(" "),
           _c(
             "div",
@@ -92538,7 +92585,7 @@ var render = function() {
                         ]
                       ),
                       _vm._v(" "),
-                      _vm._m(9),
+                      _vm._m(10),
                       _vm._v(" "),
                       _c("Calendar", {
                         ref: "calendar",
@@ -92562,7 +92609,7 @@ var render = function() {
                         }
                       }),
                       _vm._v(" "),
-                      this.status === 0 ? _c("div", [_vm._m(10)]) : _vm._e()
+                      this.status === 0 ? _c("div", [_vm._m(11)]) : _vm._e()
                     ],
                     1
                   )
@@ -92849,7 +92896,7 @@ var staticRenderFns = [
                       [
                         _c("div", { staticClass: "card-body" }, [
                           _vm._v(
-                            "\r\n                        For adding a new event firstly you have to sign-in or sign-up\r\n                        if you're still not registered. Then by clicking right-click \r\n                        the mouse context-menu will pop-up and there you can choose \r\n                        option to add a new Place/Marker.\r\n                    "
+                            "\r\n                        For adding a new place firstly you have to sign-in or sign-up\r\n                        if you're still not registered. Then by clicking right-click \r\n                        the mouse context-menu will pop-up and there you can choose \r\n                        option to add a new Place/Marker.\r\n                    "
                           )
                         ])
                       ]
@@ -92886,6 +92933,16 @@ var staticRenderFns = [
         },
         [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
       )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "text-center" }, [
+      _c("small", { staticClass: "text-muted" }, [
+        _vm._v(" Select time when event starts and when ends. ")
+      ])
     ])
   },
   function() {
@@ -92938,7 +92995,7 @@ var staticRenderFns = [
       _c(
         "label",
         { staticClass: "input-group-text", attrs: { for: "sport_type" } },
-        [_vm._v("Sport")]
+        [_vm._v("Sport type")]
       )
     ])
   },
@@ -93782,6 +93839,7 @@ var render = function() {
                                   _c("jw-pagination", {
                                     attrs: {
                                       pageSize: 3,
+                                      maxPages: 3,
                                       items: _vm.submitedPlaces
                                     },
                                     on: {
@@ -93994,6 +94052,7 @@ var render = function() {
                                   _c("jw-pagination", {
                                     attrs: {
                                       pageSize: 3,
+                                      maxPages: 3,
                                       items: _vm.acceptedPlaces
                                     },
                                     on: {
@@ -94093,7 +94152,8 @@ var render = function() {
                                             "button",
                                             {
                                               staticClass:
-                                                "btn btn-outline-danger float-right m-1",
+                                                "btn btn-danger float-right m-1",
+                                              staticStyle: { width: "42.2px" },
                                               attrs: { type: "button" },
                                               on: {
                                                 click: function($event) {
@@ -94114,7 +94174,7 @@ var render = function() {
                                             "button",
                                             {
                                               staticClass:
-                                                "btn btn-outline-primary float-right m-1",
+                                                "btn btn-primary float-right m-1",
                                               attrs: { type: "button" },
                                               on: {
                                                 click: function($event) {
@@ -94144,6 +94204,7 @@ var render = function() {
                                   _c("jw-pagination", {
                                     attrs: {
                                       pageSize: 3,
+                                      maxPages: 3,
                                       items: _vm.declinedPlaces
                                     },
                                     on: {
@@ -94316,7 +94377,7 @@ var render = function() {
                                       _vm._v(" "),
                                       _c(
                                         "div",
-                                        { staticClass: "col-lg-1 pl-1" },
+                                        { staticClass: "col-lg-1 pl-1 mt-2" },
                                         [
                                           _c(
                                             "button",
@@ -94444,6 +94505,7 @@ var render = function() {
                                 _c("jw-pagination", {
                                   attrs: {
                                     pageSize: 3,
+                                    maxPages: 3,
                                     items: _vm.goingToEvents
                                   },
                                   on: {
@@ -94689,7 +94751,7 @@ var render = function() {
                                         _vm._v(" "),
                                         _c(
                                           "div",
-                                          { staticClass: "col-lg-1 pl-1" },
+                                          { staticClass: "col-lg-1 pl-1 mt-2" },
                                           [
                                             _c(
                                               "button",
@@ -94817,6 +94879,7 @@ var render = function() {
                                   _c("jw-pagination", {
                                     attrs: {
                                       pageSize: 3,
+                                      maxPages: 3,
                                       items: _vm.submitedEvents
                                     },
                                     on: {
@@ -95295,7 +95358,7 @@ var render = function() {
                                         _vm._v(" "),
                                         _c(
                                           "div",
-                                          { staticClass: "col-lg-2 pl-1" },
+                                          { staticClass: "col-lg-2 pl-1 mt-2" },
                                           [
                                             _vm.user.id == event.person_id
                                               ? _c(
@@ -95447,6 +95510,7 @@ var render = function() {
                                   _c("jw-pagination", {
                                     attrs: {
                                       pageSize: 3,
+                                      maxPages: 3,
                                       items: _vm.declinedEvents
                                     },
                                     on: {
@@ -113059,7 +113123,6 @@ window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
   key: "anyKey",
   wsHost: window.location.hostname,
   wsPort: 6001,
-  wssPort: 6001,
   disableStats: true,
   enabledTransports: ['ws', 'wss'] // <- added this param
 

@@ -76,8 +76,8 @@
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button v-if="acceptedOrDeclined" :id="'add_event_btn'  + event.id" v-on:click="resubmitEvent" class="btn btn-success float-right" :disabled="isLoading"> Re-submit </button>
-                            <button dusk="edit_event_submit_btn" v-else :id="'add_event_btn'  + event.id" v-on:click="addEvent" class="btn btn-success float-right" :disabled="isLoading"> Update </button>
+                            <button v-if="acceptedOrDeclined" :id="'add_event_btn'  + event.id" v-on:click="resubmitEvent" class="btn btn-orange float-right" :disabled="isLoading"> Re-submit </button>
+                            <button dusk="edit_event_submit_btn" v-else :id="'add_event_btn'  + event.id" v-on:click="addEvent" class="btn btn-orange float-right" :disabled="isLoading"> Update </button>
                         </div>
                     </div>
                 </div>

@@ -122,7 +122,7 @@
                                 </div>
                             </div>
                             <div class="row justify-content-around mb-5">
-                                <jw-pagination :pageSize="3"  :items="submitedPlaces" @changePage="submited_places_onChangePage"></jw-pagination>
+                                <jw-pagination :pageSize="3"  :maxPages="3" :items="submitedPlaces" @changePage="submited_places_onChangePage"></jw-pagination>
                             </div>
                         </div>
                         <p v-else class="text-center mt-4 text-muted"> You haven't submited any places.. </p> 
@@ -172,7 +172,7 @@
                                 </div>
                             </div>
                             <div class="row justify-content-around mb-5">
-                                <jw-pagination :pageSize="3"  :items="acceptedPlaces" @changePage="accepted_places_onChangePage"></jw-pagination>
+                                <jw-pagination :pageSize="3" :maxPages="3"  :items="acceptedPlaces" @changePage="accepted_places_onChangePage"></jw-pagination>
                             </div>
                         </div>
                         <p v-else class="text-center mt-4 text-muted"> No places added.. </p> 
@@ -201,10 +201,10 @@
 
 
                                     <div class="col-4">
-                                        <button type="button" v-on:click="deletePlace(place.id)" class="btn btn-outline-danger float-right m-1" >
+                                        <button type="button" style="width: 42.2px;" v-on:click="deletePlace(place.id)" class="btn btn-danger float-right m-1" >
                                             <i class="fas fa-times"></i>
                                         </button>
-                                        <button type="button" v-on:click="openResubmit(place)" class="btn btn-outline-primary float-right m-1">
+                                        <button type="button" v-on:click="openResubmit(place)" class="btn btn-primary float-right m-1">
                                             <i class="far fa-edit"></i>
                                         </button>
                                     </div>
@@ -214,7 +214,7 @@
                             </div>
                         </div>
                         <div class="row justify-content-around mb-5">
-                            <jw-pagination :pageSize="3"  :items="declinedPlaces" @changePage="declined_places_onChangePage"></jw-pagination>
+                            <jw-pagination :pageSize="3" :maxPages="3" :items="declinedPlaces" @changePage="declined_places_onChangePage"></jw-pagination>
                         </div>
                     </div> 
                     <p v-else class="text-center mt-4 text-muted"> No declined places.. </p> 
@@ -269,7 +269,7 @@
                                 <hr class="mb-0">
                             </div>
 
-                            <div class="col-lg-1 pl-1"> 
+                            <div class="col-lg-1 pl-1 mt-2"> 
                                 
                                 <button type="button" class="btn btn-outline-success float-right" data-toggle="modal" :data-target="'#created_map' + event.id">
                                     <i class="fas fa-map-marked-alt"></i>
@@ -296,7 +296,7 @@
                     </div>
                 </div>
                 <div class="row justify-content-around mb-5">
-                    <jw-pagination :pageSize="3"  :items="goingToEvents" @changePage="goingto_events_onChangePage"></jw-pagination>
+                    <jw-pagination :pageSize="3" :maxPages="3"  :items="goingToEvents" @changePage="goingto_events_onChangePage"></jw-pagination>
                 </div>
             </div>
         <p v-else class="text-center mt-4 text-muted"> You haven't joined any events.. </p>   
@@ -347,7 +347,7 @@
                                             <hr class="mb-0">
                                         </div>
 
-                                        <div class="col-lg-1 pl-1"> 
+                                        <div class="col-lg-1 pl-1 mt-2"> 
                                             <button type="button" class="btn btn-success float-right" data-toggle="modal" :data-target="'#created_mappp' + event.id">
                                                 <i class="fas fa-map-marked-alt"></i>
                                             </button>
@@ -373,7 +373,7 @@
                                 </div>
                             </div>
                             <div class="row justify-content-around mb-5">
-                                <jw-pagination :pageSize="3"  :items="submitedEvents" @changePage="submited_events_onChangePage"></jw-pagination>
+                                <jw-pagination :pageSize="3" :maxPages="3"  :items="submitedEvents" @changePage="submited_events_onChangePage"></jw-pagination>
                             </div>
                         </div>
                     <p v-else class="text-center mt-4 text-muted"> No events submited.. </p>  
@@ -480,7 +480,7 @@
                                             <hr class="mb-0">
                                         </div>
 
-                                        <div class="col-lg-2 pl-1"> 
+                                        <div class="col-lg-2 pl-1 mt-2"> 
                                             <div v-if="user.id == event.person_id">
                                                 <editevent :user="user" v-on:fetch="fetchDeclinedEvents(), fetchSubmitedEvents()" :acceptedOrDeclined="true" :event="event"></editevent>
                                             </div>
@@ -510,7 +510,7 @@
                             </div>
 
                         <div class="row justify-content-around mb-5">
-                            <jw-pagination :pageSize="3"  :items="declinedEvents" @changePage="declined_events_onChangePage"></jw-pagination>
+                            <jw-pagination :pageSize="3" :maxPages="3" :items="declinedEvents" @changePage="declined_events_onChangePage"></jw-pagination>
                         </div>
                         </div>
                     <p v-else class="text-center mt-4 text-muted"> No events declined.. </p>  

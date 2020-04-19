@@ -148,7 +148,7 @@
                     </div>
                     <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
                     <div class="card-body">
-                        For adding a new event firstly you have to sign-in or sign-up
+                        For adding a new place firstly you have to sign-in or sign-up
                         if you're still not registered. Then by clicking right-click 
                         the mouse context-menu will pop-up and there you can choose 
                         option to add a new Place/Marker.
@@ -182,12 +182,12 @@
                         <div class="modal-body">
                             <div class="form-group">
                                 <label for="add_event_title">Title</label>
-                                <input name="title" v-model="event.title" type="text" class="form-control" id="add_event_title" maxlength="45" placeholder="Enter title" required>
+                                <input name="title" v-model="event.title" type="text" class="form-control" id="add_event_title" maxlength="45" placeholder="Enter title of the event" required>
                             </div>
 
                             <div class="form-group">
                                 <label for="add_event_about">About</label>
-                                <textarea name="about" v-model="event.about" class="form-control" id="add_event_about" maxlength="350" rows="6" required></textarea>
+                                <textarea name="about" v-model="event.about" placeholder="Write some info about the event..." class="form-control" id="add_event_about" maxlength="350" rows="6" required></textarea>
                             </div>
 
 
@@ -200,12 +200,16 @@
                             </div>
                                
 
-                            <vue-slider :tooltip-style="{ backgroundColor: '#313638', borderColor: '#313638' }"  :adsorb="true" v-if="event_time != ''" :process="process" :tooltip="'always'" v-on:drag-end="parseDate()" class="mr-3 ml-3 mb-5" v-model="event_time" :data="data" :marks="marks" :enable-cross="false">
+                            <vue-slider :tooltip-style="{ backgroundColor: '#313638', borderColor: '#313638' }"  :adsorb="true" v-if="event_time != ''" :process="process" :tooltip="'always'" v-on:drag-end="parseDate()" class="mr-3 ml-3 mb-4" v-model="event_time" :data="data" :marks="marks" :enable-cross="false">
 
                                  <template v-slot:dot="{ value, focus }">
                                     <div :class="['custom-dot', { focus }]"></div>
                                 </template>
                             </vue-slider>
+
+                            <div class="text-center">
+                            <small class="text-muted"> Select time when event starts and when ends. </small>
+                            </div>
 
                             <div class="row">
                                 <div id="time_error" class="mx-auto"></div>
@@ -238,16 +242,16 @@
                             </div>
                             <div class="modal-body">
                                 <div class="input-group mb-3">
-                                    <input type="text" id="add_new_place_title" name="add_new_place_title" class="form-control" placeholder="Title" maxlength="45" v-model="place.title" required>
+                                    <input type="text" id="add_new_place_title" name="add_new_place_title" class="form-control" placeholder="Title of the place" maxlength="45" v-model="place.title" required>
                                 </div>
 
                                 <div class="input-group mb-3">
-                                    <textarea class="form-control" id="add_new_place_about"  name="add_new_place_about" rows="6" placeholder="About..." maxlength="350" v-model="place.about" required></textarea>
+                                    <textarea class="form-control" id="add_new_place_about"  name="add_new_place_about" rows="6" placeholder="Some text about the place..." maxlength="350" v-model="place.about" required></textarea>
                                 </div>
 
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
-                                        <label class="input-group-text" for="sport_type">Sport</label>
+                                        <label class="input-group-text" for="sport_type">Sport type</label>
                                     </div>
                     
                                     <select name="sport_type" class="custom-select" id="sport_type" v-model="place.type" required>
@@ -258,6 +262,8 @@
                                 <div class="custom-control custom-checkbox float-left mr-4">
                                     <input v-model="place.paid" type="checkbox" name="paid" class="custom-control-input" id="paidpp">
                                     <label class="custom-control-label" for="paidpp" >Paid</label>
+                                    <br>
+                                    <small class="text-muted"> Check this checkbox if you have to pay to play in this place </small>
                                 </div>
 
 
@@ -282,7 +288,9 @@
             </div>
 
             <!-- ==========================================SHOW SPOT INFO========================================================= -->
-    
+
+            <div v-if="showBackground" style="height:100%;width:100%;position:absolute;top:0;left:0;background-color:rgba(0, 0, 0, 0.48);z-index:45;">
+            </div>
 
             <div id="show" class="show col-lg-4 col-sm-12 position-fixed" style="display:none; z-index:50;">
             
@@ -390,6 +398,7 @@ export default {
         return{
             weekDays:['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday',],
             process: dotsPos => [],
+            showBackground: false,
             search_expanded:false,
             isLoading: null,
             event_time:['', ''],
@@ -484,7 +493,6 @@ export default {
 
         if(this.getCookie("visited") != "true"){
             $('#infoModal').modal('show');
-            console.log("OPEN");
         }
         
             var today = new Date();
@@ -507,6 +515,8 @@ export default {
     //Closes sidebar
     closeShow: function(){
         $("#show").slideUp("slow");
+
+        this.showBackground = false;
     },
 
     //------------------------Opens PLACE ADD label-----------------------------
@@ -628,6 +638,10 @@ export default {
 
         if (show.style.display === 'none') {
             $("#show").slideDown("slow");
+        }
+
+        if($(window).width() < 900){
+            this.showBackground = true;
         }
 
         this.closeAddEvent();
@@ -785,6 +799,7 @@ export default {
     sort_places() {
         this.$refs.gmapp.fetchPlaces_sort(this.rules);
     },
+
 
     }
 }

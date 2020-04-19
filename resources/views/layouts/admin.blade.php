@@ -26,7 +26,7 @@
   
     <div id="app">
         
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="background: linear-gradient(0deg, rgba(37,57,48,1) 0%, rgba(50,69,68,1) 100%);">
           <div class="container">
             <a class="navbar-brand" href="/">
               <img src="/images/logonotext.png" height="30px" weight="100%"> MoSi</a>

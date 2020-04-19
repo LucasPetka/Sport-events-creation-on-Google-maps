@@ -5,7 +5,7 @@
         <div class="input-group">
           <gmap-autocomplete class="form-control" id="autocomplete_gmap" name="autocomplete_gmap" :select-first-on-enter="true" @place_changed="setPlace"></gmap-autocomplete> 
           <div class="input-group-append">
-            <button class="btn btn-orange" @click="updateUserLocation_byCenter(center)">Set your location</button>
+            <button class="btn btn-orange" data-toggle="tooltip" data-placement="bottom" title="Firstly input your address" @click="updateUserLocation_byCenter(center)">Set your location</button>
           </div>
         </div>
       </div>
@@ -433,6 +433,14 @@ export default {
 #marker {
  display: none;
 }
+
+@media only screen and (max-width: 1670px) {
+  #geoloc_bar{
+    width: 400px;
+  }
+}
+
+
 
 @media only screen and (max-width: 540px) {
   #geoloc_bar{

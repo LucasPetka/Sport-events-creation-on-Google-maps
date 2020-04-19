@@ -22,7 +22,7 @@
 </head>
 <body style="background-image: url('https://www.transparenttextures.com/patterns/diagmonds-light.png'); height: 100%;">
     <div id="app" class="mh-100">
-        <nav class="navbar navbar-expand-md navbar-dark shadow-lg" style="background-color: #253938; z-index:100;">
+        <nav class="navbar navbar-expand-md navbar-dark shadow-lg" style="background: linear-gradient(0deg, rgba(37,57,48,1) 0%, rgba(50,69,68,1) 100%); z-index:100;">
             <div class="container">
                 <a class="navbar-brand white font-weight-bold" href="{{ url('/') }}">
                     <img src="/images/logonotext.png" height="25px" weight="100%">

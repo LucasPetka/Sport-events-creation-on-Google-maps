@@ -13,3 +13,6 @@ yarn-error.log
 config/broadcasting.php
 config/websockets.php
 resources/js/bootstrap.js
+config/broadcasting.php
+public/js/app.js.gz
+public/js/app.js

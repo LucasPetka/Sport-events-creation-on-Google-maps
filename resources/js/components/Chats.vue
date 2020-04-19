@@ -67,7 +67,7 @@
                             <img class="rounded-circle" :src="'../../../../storage/avatars/'+message.user.avatar" width="30" height="30" alt="">
                         </span>
                         <span v-else>
-                            <img class="rounded-circle" :src="message.user.avatar" width="30" height="30" alt="">
+                            <img class="rounded-circle" :src="'http://graph.facebook.com/'+ message.user.provider_id +'/picture?type=small'" width="30" height="30" alt="">
                         </span>
     
                         <strong>{{ message.user.name }}</strong>
@@ -92,7 +92,7 @@
                             <a target="_blank" :href="'/user/' + user.auth_id"><img class="rounded-circle m-2" :src="'../../../../storage/avatars/'+user.avatar" width="30" height="30" :alt="user.name" data-toggle="tooltip" data-placement="top" :title="user.name"></a>
                         </span>
                         <span v-else>
-                            <a target="_blank" :href="'/user/' + user.auth_id"><img class="rounded-circle m-2" :src="user.avatar" width="30" height="30" :alt="user.name" data-toggle="tooltip" data-placement="top" :title="user.name"></a>
+                            <a target="_blank" :href="'/user/' + user.auth_id"><img class="rounded-circle m-2" :src="'http://graph.facebook.com/'+ user.provider_id +'/picture?type=small'" width="30" height="30" :alt="user.name" data-toggle="tooltip" data-placement="top" :title="user.name"></a>
                         </span>
                     </span>
             </div>

@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
 
-            <h3><img class="mb-4 ml-5" src="/images/logo.png" alt=""> Login</h3>
+            <h3><img class="mb-4 ml-5" src="/images/logo.png" height="200" alt=""> Login</h3>
 
                 
                     <form method="POST" action="{{ route('login') }}">

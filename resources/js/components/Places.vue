@@ -295,7 +295,7 @@
             <div id="show" class="show col-lg-4 col-sm-12 position-fixed" style="display:none; z-index:50;">
             
             <div class="card shadow-lg mt-4" style="height:85vh;">
-            <div class="card-body overflow-auto p-2" style="overflow-x: hidden !important;">
+            <div class="card-body p-2" style="overflow: hidden !important;">
 
                 <div class="d-flex flex-column bd-highlight">
                     <div>

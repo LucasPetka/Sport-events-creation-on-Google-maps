@@ -6,11 +6,12 @@
                         <datepicker placeholder="Select Date" :monday-first="true" :highlighted="highlighted" :format="format" :value="todays_date" v-model="todays_date" @showCalendar="calendarOpened()" @closed="showEvents()"></datepicker>
                         <button dusk="add_new_event_btn" v-if="laterThanYesterday && status == 1" v-on:click="$emit('openAddEvent')" class="btn btn-orange pt-2 pb-2 ml-3 float-left" >Add Event <i class="fas fa-plus"></i></button>
                 </div>
+                <small class="text-muted pl-4">Firstly choose the day on which you want to add an event.</small>
             </div>
             
-            <hr class="mt-0">
+            <hr class="mt-0 mb-0">
         
-            <div>
+            <div class="overflow-auto pt-3" style="height:48vh;">
 
                 <div v-for="event in show_events" v-bind:key="event.id" class="card mb-3" style="width: 95%; margin-left:auto; margin-right:auto;">
                 <div class="card-body p-3">
@@ -40,7 +41,7 @@
                 </div>    
 
                 <div v-if="show_events.length === 0" class="alert text-center alert-light mt-3" role="alert">
-                Sorry, but there are no events on this day... 
+                    <i class="far fa-frown"></i> Sorry, but there are no events on this day... 
                 </div>
 
 
@@ -336,6 +337,7 @@ export default {
     padding: 8px;
     float: left;
     outline: none !important;
+    cursor: pointer;
 }
 
 .vdp-datepicker__calendar {

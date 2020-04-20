@@ -11,7 +11,7 @@
             
             <hr class="mt-0 mb-0">
         
-            <div class="overflow-auto pt-3" style="height:48vh;">
+            <div class="pt-3">
 
                 <div v-for="event in show_events" v-bind:key="event.id" class="card mb-3" style="width: 95%; margin-left:auto; margin-right:auto;">
                 <div class="card-body p-3">

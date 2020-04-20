@@ -289,13 +289,13 @@
 
             <!-- ==========================================SHOW SPOT INFO========================================================= -->
 
-            <div v-if="showBackground" style="height:100%;width:100%;position:absolute;top:0;left:0;background-color:rgba(0, 0, 0, 0.48);z-index:45;">
+            <div v-if="showBackground" style="height:100vh;width:100%;position:absolute;top:0;left:0;background-color:rgba(0, 0, 0, 0.48);z-index:45;">
             </div>
 
             <div id="show" class="show col-lg-4 col-sm-12 position-fixed" style="display:none; z-index:50;">
             
             <div class="card shadow-lg mt-4" style="height:85vh;">
-            <div class="card-body p-2" style="overflow: hidden !important;">
+            <div class="card-body p-2" style="overflow-x: hidden !important;">
 
                 <div class="d-flex flex-column bd-highlight">
                     <div>

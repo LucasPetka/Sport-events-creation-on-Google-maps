@@ -60,13 +60,13 @@ class EventFindController extends Controller
             $places = DB::table('places')->select('*')
             ->whereRaw('? > ( 6371 * acos ( cos ( radians( ? ) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians( ? ) ) + sin ( radians( ? ) ) * sin( radians( lat ) ) ) )', [$distance, $lat, $lng, $lat])
             ->whereIn('type', $sportTypes)
-            ->where('paid', $paid)
+            //->where('paid', $paid)
             ->get();
         }
         else{
             $places = DB::table('places')->select('*')
             ->whereRaw('? > ( 6371 * acos ( cos ( radians( ? ) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians( ? ) ) + sin ( radians( ? ) ) * sin( radians( lat ) ) ) )', [$distance, $lat, $lng, $lat])
-            ->where('paid', $paid)
+            //->where('paid', $paid)
             ->get();
         }
 

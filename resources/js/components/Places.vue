@@ -193,8 +193,8 @@
 
                             <div class="row">
                                 <ul class="list-group list-group-horizontal mb-5 mx-auto">
-                                    <li class="list-group-item"><i class="far fa-calendar-alt"></i> {{ date }}</li>
-                                    <li class="list-group-item"> {{ getWeekDay(date) }} </li>
+                                    <li class="list-group-item"><datepicker placeholder="Select Date" :monday-first="true" :format="format" :value="dateObj" v-model="dateObj"></datepicker></li>
+                                    <li class="list-group-item"> {{ getWeekDay(dateObj) }} </li>
                                     <li class="list-group-item"><i class="far fa-clock"></i> {{ event_time[0] }} -  {{ event_time[1] }}</li>
                                 </ul>
                             </div>
@@ -346,7 +346,7 @@
                     </div>
                 </div>
                     
-                        <Calendar v-bind:status='status' v-on:openAddEvent="openAddEvent()" v-bind:currentUser='currentUser' v-on:editEvent="editEvent($event)" v-on:getDate="getDate($event)" v-on:closeAdd="closeAddEvent()" ref="calendar"> </Calendar>
+                        <Calendar v-bind:status='status' v-on:openAddEvent="openAddEvent($event)" v-bind:currentUser='currentUser' v-on:editEvent="editEvent($event)" v-on:getDate="getDate($event)" v-on:closeAdd="closeAddEvent()" ref="calendar"> </Calendar>
                         <div v-if="this.status === 0">
                             <div class="alert alert-warning mt-3 pb-1 text center" role="alert">
                             <p class="text-center"> If you want to join or add events you need to login / register. </p>
@@ -382,13 +382,16 @@
 <script>
 const Calendar = () => import("../components/Calendar.vue");
 const Gmap = () => import("../components/Gmap.vue");
+const Datepicker = () => import("vuejs-datepicker");
 
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
-        components: {
+
+    components: {
         'Gmap': Gmap,
         'Calendar': Calendar,
+        Datepicker
     },
 
     props: ['status','currentUser','ip'], //checks if someone loged in and gets all information about user
@@ -396,8 +399,9 @@ export default {
 
     data(){
         return{
-            weekDays:['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday',],
+            weekDays:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
             process: dotsPos => [],
+            format:'yyyy-MM-dd',
             showBackground: false,
             search_expanded:false,
             isLoading: null,
@@ -450,6 +454,7 @@ export default {
             },
             measured_distance:null,
             date:'',
+            dateObj:'',
             start:'08:30',
             end:'08:30',
             edit: false,
@@ -533,8 +538,10 @@ export default {
     },
 
     //------------------------Opens add event creation label-------------------
-    openAddEvent: function(){
-
+    openAddEvent: function(date){
+        
+        this.dateObj = new Date(date);
+        this.date = this.dateObj.getFullYear() + "-" + (this.dateObj.getMonth() + 1) + "-" + this.dateObj.getDate()
         this.edit = false;
         this.event.place_id = this.show.id;
         this.event.person_id = this.currentUser.id;
@@ -567,8 +574,6 @@ export default {
             type: "GET",
             url: "/validate_time?start="+ this.date +" "+ this.event_time[0]+"&end="+ this.date +" "+ this.event_time[1]+"&place_id="+this.event.place_id+"&event_id="+this.event.id,     
             success: function(result){
-
-                console.log(result);
 
                 if(!result.found){
                     $("#time_error_second").html("");
@@ -751,6 +756,8 @@ export default {
             this.isLoading = false
         }, 2000);
 
+            var dateObject = new Date(this.dateObj);
+            this.date =  dateObject.getFullYear() + "-" + (dateObject.getMonth() + 1) + "-" + dateObject.getDate();
             this.event.time_from = this.date + " " + this.event_time[0]
             this.event.time_until = this.date + " " + this.event_time[1];
 
@@ -807,6 +814,18 @@ export default {
 
 
 <style>
+
+li .vdp-datepicker input{
+    width: 100px;
+    padding: 0px !important;
+    margin: 0px;
+    box-shadow: none !important;
+    border: 0px;
+    padding: 8px;
+    float: left;
+    outline: none !important;
+    cursor: pointer;
+}
 
 .btn-link {
     font-weight: 800 !important;

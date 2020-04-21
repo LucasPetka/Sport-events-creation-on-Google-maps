@@ -42,12 +42,13 @@
                         </div>
                         
 
-                        <div class="custom-control custom-checkbox mt-3 mb-3">
+                        <!-- Paid or Not -->
+                        <!-- <div class="custom-control custom-checkbox mt-3 mb-3">
                             <input type="checkbox" name="paid" class="custom-control-input" v-model="rules.paid" id="paid">
                             <label class="custom-control-label" for="paid" >Paid</label>
-                        </div>
+                        </div> -->
 
-                        <div class="form-group">
+                        <div class="form-group mt-2">
                             <label for="exampleFormControlSelect2">People going</label>
                             <select v-model="rules.people_going" class="form-control" id="exampleFormControlSelect2">
                                 <option 
@@ -208,7 +209,7 @@ export default {
             pageOfItems: [],
             data: ['1', '2', '3', '5', '10', '20'],
             rules:{
-                lat: 0, lng: 0, distance: 1, types: [], date_from: new Date(), date_until: new Date(), paid: false, people_going: -1
+                lat: 0, lng: 0, distance: 19, types: [], date_from: new Date(), date_until: new Date(new Date().setDate(new Date().getDate()+10)), paid: false, people_going: -1
             },
             recommended_rules:{lat: 0, lng: 0, status: '', liked_sports:[], date: new Date(), user_id: ''},
             PeopleGoingList: [
@@ -331,7 +332,7 @@ export default {
 
                     this.findEvents();
                     this.findRecommendedEvents();
-                    console.log("trackingON");
+                    //console.log("trackingON");
 
                 }, err =>{    //if something goes wrong when locating just set map center
                     
@@ -340,7 +341,7 @@ export default {
                     this.user_loc_set = true;
                     this.findEvents();
                     this.findRecommendedEvents();
-                    console.log("somtehing wrong: " + err.message);
+                    //console.log("somtehing wrong: " + err.message);
                 });
                 }
                 else{           //if tracking is OFF when just locate set map center
@@ -349,7 +350,7 @@ export default {
                     this.user_loc_set = true;
                     this.findEvents();
                     this.findRecommendedEvents();
-                    console.log("tracking OFF");
+                   // console.log("tracking OFF");
                 }
             }
 

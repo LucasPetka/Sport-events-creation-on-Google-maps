@@ -4,9 +4,9 @@
             <div class="row">
                 <div class="col-12 m-2" id="calendar">
                         <datepicker placeholder="Select Date" :monday-first="true" :highlighted="highlighted" :format="format" :value="todays_date" v-model="todays_date" @showCalendar="calendarOpened()" @closed="showEvents()"></datepicker>
-                        <button dusk="add_new_event_btn" v-if="laterThanYesterday && status == 1" v-on:click="$emit('openAddEvent')" class="btn btn-orange pt-2 pb-2 ml-3 float-left" >Add Event <i class="fas fa-plus"></i></button>
+                        <button dusk="add_new_event_btn" v-if="laterThanYesterday && status == 1" v-on:click="$emit('openAddEvent', todays_date)" class="btn btn-orange pt-2 pb-2 ml-3 float-left" >Add Event <i class="fas fa-plus"></i></button>
                 </div>
-                <small class="text-muted pl-4">Firstly choose the day on which you want to add an event.</small>
+                <small class="text-muted pl-4">Highlighted days on calendar shows that there are events on that day.</small>
             </div>
             
             <hr class="mt-0 mb-0">
@@ -286,7 +286,6 @@ export default {
 
         calendarOpened: function(){
             console.log('Calendar Opened');
-
         },
 
         

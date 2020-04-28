@@ -13,12 +13,12 @@
 
     public function redirect($provider)
     {
-        return Socialite::driver($provider)->redirect();
+        return Socialite::with($provider)->redirect();
     }
 
     public function callback($provider)
     {
-        $getInfo = Socialite::driver($provider)->user(); 
+        $getInfo = Socialite::with($provider)->user(); 
         $user = $this->createUser($getInfo,$provider); 
         auth()->login($user); 
 

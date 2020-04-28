@@ -259,8 +259,6 @@ export default {
                 url: "/validate_time?start="+ this.date +" "+ this.event_time[0]+"&end="+ this.date +" "+ this.event_time[1]+"&place_id="+this.event.place_id+"&event_id="+this.event.id,     
                 success: function(result){
 
-                    console.log(result.found);
-
                     if(!result.found){
                         $("#time_error_second" + event_id).html("");
                         $('#add_event_btn').removeAttr("disabled");

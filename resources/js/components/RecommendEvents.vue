@@ -112,46 +112,64 @@ export default {
                 new google.maps.LatLng(this.getPosition(event_location))
             );
             var distanceInKilometers = distanceInMeters * 0.001;
-            console.log(distanceInKilometers);
             return  distanceInKilometers.toFixed(2);
         },
 
         //sets map center, main location LITHUANIA, but if person has location ON then it shows person location
         geolocation : function() {
+            if(this.getCookie("lat") != null && this.getCookie("lng") != null){
 
-        if(!this.user_loc_set){
-            if (navigator.geolocation) { //if location tracking is ON
-            navigator.geolocation.getCurrentPosition((position) => {
+                var lat = parseFloat(this.getCookie("lat"));
+                var lng = parseFloat(this.getCookie("lng"));
 
-                this.center = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude
-                };
+                this.center = {lat: lat, lng: lng};
+                this.user_location = {lat: lat, lng: lng};
 
-                this.user_location = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude
-                };
                 this.user_loc_set = true;
 
+                this.findEvents();
                 this.findRecommendedEvents();
+            }else{
 
-            }, err =>{    //if something goes wrong when locating just set map center
-                this.user_location = this.ip;
-                this.center = this.ip;
-                this.user_loc_set = true;
+                if(!this.user_loc_set){
+                    if (navigator.geolocation) { //if location tracking is ON
+                    navigator.geolocation.getCurrentPosition((position) => {
 
-                this.findRecommendedEvents();
-            });
+                        this.center = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                        };
+
+                        this.user_location = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                        };
+                        this.user_loc_set = true;
+
+                        this.findEvents();
+                        this.findRecommendedEvents();
+                        //console.log("trackingON");
+
+                    }, err =>{    //if something goes wrong when locating just set map center
+                        
+                        this.user_location = this.ip;
+                        this.center = this.ip;
+                        this.user_loc_set = true;
+                        this.findEvents();
+                        this.findRecommendedEvents();
+                        //console.log("somtehing wrong: " + err.message);
+                    });
+                    }
+                    else{           //if tracking is OFF when just locate set map center
+                        this.user_location = this.ip;
+                        this.center = this.ip;
+                        this.user_loc_set = true;
+                        this.findEvents();
+                        this.findRecommendedEvents();
+                    // console.log("tracking OFF");
+                    }
+                }
             }
-            else{           //if tracking is OFF when just locate set map center
-                this.user_location = this.ip;
-                this.center = this.ip;
-                this.user_loc_set = true;
-
-                this.findRecommendedEvents();
-            }
-        }
         },
 
         findRecommendedEvents(){

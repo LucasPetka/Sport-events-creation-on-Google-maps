@@ -58,7 +58,6 @@ export default {
 
         Echo.private('App.User.' + this.user.id).notification((notification) => {
             this.notifications.push(notification);
-            console.log(notification);
         });
 
     },

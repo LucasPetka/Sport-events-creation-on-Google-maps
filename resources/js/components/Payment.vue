@@ -77,7 +77,6 @@ export default {
 
       changeOrder: function(value){
 
-        console.log(value);
       },
 
 

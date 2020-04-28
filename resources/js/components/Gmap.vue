@@ -122,7 +122,6 @@ export default {
     //Opens info window above marker and sets the position and text
      openInfoWindowTemplate: async function(place) {
        
-
         var res = "";
 
           if(place.about.length > 100){
@@ -287,7 +286,7 @@ export default {
         new google.maps.LatLng(this.getPosition(to))
     );
     var distanceInKilometers = distanceInMeters * 0.001;
-    console.log(distanceInKilometers);
+
     return  distanceInKilometers.toFixed(2);
     },
 

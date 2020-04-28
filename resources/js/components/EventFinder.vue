@@ -294,7 +294,7 @@ export default {
                 new google.maps.LatLng(this.getPosition(event_location))
             );
             var distanceInKilometers = distanceInMeters * 0.001;
-            console.log(distanceInKilometers);
+            
             return  distanceInKilometers.toFixed(2);
         },
 
@@ -444,7 +444,6 @@ export default {
 
         updateNavingation(event){
 
-            console.log(event.currentTarget.id);
             $.each($('.profile_nav'), function() {
                 if(this.id == event.currentTarget.id){
                     $('#'+this.id).removeClass("btn-orange-secondary");

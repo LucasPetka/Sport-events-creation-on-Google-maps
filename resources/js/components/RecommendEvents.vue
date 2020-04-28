@@ -3,7 +3,7 @@
 
             <h4 class="mt-4">Recommended</h4>
 
-            <div v-if="loaded == false" class="row">
+            <div v-if="loaded_data == false" class="row">
                 <div class="spinner-border text-dark mt-4 mx-auto" role="status">
                     <span class="sr-only">Loading...</span>
                 </div>
@@ -49,7 +49,6 @@
 
 import { mapGetters, mapActions } from 'vuex';
 import mapstyle from '../assets/options.json';
-import {loaded} from 'vue2-google-maps';
 
 export default {
 
@@ -66,7 +65,7 @@ export default {
             recommended_events:[],
             pageOfItems: [],
             recommended_rules:{lat: 0, lng: 0, status: '', liked_sports:[], date: new Date(), user_id: ''},
-            loaded: false
+            loaded_data: false
         }
     },
 
@@ -108,14 +107,16 @@ export default {
                 lng: lng
             };
 
-            loaded.then(() => {
+            this.$gmapApiPromiseLazy().then(() => { 
                 var distanceInMeters = google.maps.geometry.spherical.computeDistanceBetween(
                     new google.maps.LatLng(this.getPosition(this.user_location)),
                     new google.maps.LatLng(this.getPosition(event_location))
                 );
-            })
-            var distanceInKilometers = distanceInMeters * 0.001;
-            return  distanceInKilometers.toFixed(2);
+
+                var distanceInKilometers = distanceInMeters * 0.001;
+                return  distanceInKilometers.toFixed(2);
+            });
+
         },
 
         //sets map center, main location LITHUANIA, but if person has location ON then it shows person location
@@ -192,7 +193,7 @@ export default {
                 .then(res => res.json())
                 .then(res => {
                     this.recommended_events = res.data;
-                    this.loaded = true;
+                    this.loaded_data = true;
                 })
 
         },

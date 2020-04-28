@@ -127,7 +127,6 @@ export default {
 
                 this.user_loc_set = true;
 
-                this.findEvents();
                 this.findRecommendedEvents();
             }else{
 
@@ -146,7 +145,6 @@ export default {
                         };
                         this.user_loc_set = true;
 
-                        this.findEvents();
                         this.findRecommendedEvents();
                         //console.log("trackingON");
 
@@ -155,7 +153,6 @@ export default {
                         this.user_location = this.ip;
                         this.center = this.ip;
                         this.user_loc_set = true;
-                        this.findEvents();
                         this.findRecommendedEvents();
                         //console.log("somtehing wrong: " + err.message);
                     });
@@ -164,7 +161,6 @@ export default {
                         this.user_location = this.ip;
                         this.center = this.ip;
                         this.user_loc_set = true;
-                        this.findEvents();
                         this.findRecommendedEvents();
                     // console.log("tracking OFF");
                     }
@@ -204,6 +200,11 @@ export default {
                 lat: parseFloat(place.lat),
                 lng: parseFloat(place.lng)
             }
+        },
+
+        getCookie(name) {
+            var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+            return v ? v[2] : null;
         },
 
         

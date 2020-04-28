@@ -48,7 +48,8 @@
 <script>
 
 import { mapGetters, mapActions } from 'vuex';
-import mapstyle from '../assets/options.json'
+import mapstyle from '../assets/options.json';
+import {loaded} from 'vue2-google-maps';
 
 export default {
 
@@ -107,10 +108,12 @@ export default {
                 lng: lng
             };
 
-            var distanceInMeters = google.maps.geometry.spherical.computeDistanceBetween(
-                new google.maps.LatLng(this.getPosition(this.user_location)),
-                new google.maps.LatLng(this.getPosition(event_location))
-            );
+            loaded.then(() => {
+                var distanceInMeters = google.maps.geometry.spherical.computeDistanceBetween(
+                    new google.maps.LatLng(this.getPosition(this.user_location)),
+                    new google.maps.LatLng(this.getPosition(event_location))
+                );
+            })
             var distanceInKilometers = distanceInMeters * 0.001;
             return  distanceInKilometers.toFixed(2);
         },

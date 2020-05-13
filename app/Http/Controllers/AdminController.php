@@ -13,6 +13,7 @@ use App\DeclinedEvents;
 use App\Type;
 use App\User;
 use Auth;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
 use App\Notifications\PlaceAccept;
@@ -194,7 +195,7 @@ class AdminController extends Controller
             ->exists();
 
 
-        if($start < Carbon\Carbon::now()){
+        if($start < Carbon::now()){
             if(!$exists){
                 $newEvent = new Event;
                 $newEvent->place_id = $event->place_id;

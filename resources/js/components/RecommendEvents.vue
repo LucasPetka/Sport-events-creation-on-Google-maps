@@ -50,19 +50,13 @@
 
 import { mapGetters, mapActions } from 'vuex';
 import mapstyle from '../assets/options.json';
-import * as VueGoogleMaps from 'vue2-google-maps'
 
 export default {
 
     props: ['status', 'currentUser', 'ip'], //checks if someone loged in and gets all information about user
 
-    computed: mapGetters(['allTypes']),
+    computed:mapGetters(['allTypes']),
 
-    computed: {
-        google: VueGoogleMaps.gmapApi
-    },
-    
-    
     data(){
         return{
             center:{lat: 0, lng: 0},
@@ -114,22 +108,19 @@ export default {
                 lng: lng
             };
             
-            var distanceInKilometers = -1;
-            
-
             // this.$gmapApiPromiseLazy().then(() => { 
             // }).then(() => {
             // });
-            
-            var distanceInMeters = google.maps.geometry.spherical.computeDistanceBetween(
-                new google.maps.LatLng(this.getPosition(this.user_location)),
-                new google.maps.LatLng(this.getPosition(event_location))
-            );
-            distanceInKilometers = distanceInMeters * 0.001;  
-            return distanceInKilometers.toFixed(2);
 
-            
-    
+           // VueGoogleMaps.loaded.then(() => {
+                var distanceInMeters = google.maps.geometry.spherical.computeDistanceBetween(
+                    new google.maps.LatLng(this.getPosition(this.user_location)),
+                    new google.maps.LatLng(this.getPosition(event_location))
+                );
+                var distanceInKilometers = distanceInMeters * 0.001;  
+                return distanceInKilometers.toFixed(2);
+            //})
+
         },
 
         //sets map center, main location LITHUANIA, but if person has location ON then it shows person location
@@ -206,7 +197,9 @@ export default {
                 .then(res => res.json())
                 .then(res => {
                     this.recommended_events = res.data;
-                    this.loaded_data = true;
+                    setTimeout(() => {
+                        this.loaded_data = true;
+                    }, 1000);
                 })
 
         },

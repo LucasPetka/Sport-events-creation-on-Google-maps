@@ -1,7 +1,7 @@
 <template>
 
-<div>
-LABUKAS
+<div class="text-muted">
+    "Admin info charts" COMING SOON...
 </div>
 
 </template>
@@ -23,29 +23,14 @@ export default {
         
     },
 
-
     created(){
-
-        
 
     },
 
 
     methods: {
-
-        
-        
-
-        
+  
     }
-
-
 
 }
 </script>
-<style scoped>
-
-
-
-
-</style>

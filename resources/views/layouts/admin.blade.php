@@ -112,12 +112,6 @@
                         Sport Types
                       </a>
                     </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="#">
-                        <i class="fas fa-stream"></i>
-                        Users streams
-                      </a>
-                    </li>
                   </ul>
                 </div>
               </nav>

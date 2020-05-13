@@ -28,9 +28,10 @@
                             <div class="col-4">
                                 <i class="far fa-clock"></i> {{ getTime(event.time_from) }}-{{ getTime(event.time_until) }}
                             </div>
+                        
                             <div class="col-4">
                                 <i class="fas fa-road"></i> {{ countDistance(event.lat, event.lng) }} km
-                            </div>
+                            </div> 
                         </div>
                     </div>
                 </div>
@@ -101,22 +102,28 @@ export default {
             return formatted_Time;
         },
 
-        countDistance(lat, lng){
+         countDistance(lat, lng){
             const event_location = {
                 lat: lat,
                 lng: lng
             };
+            
+            var distanceInKilometers = -1;
+            
 
-            this.$gmapApiPromiseLazy().then(() => { 
+           // this.$gmapApiPromiseLazy().then(() => { 
                 var distanceInMeters = google.maps.geometry.spherical.computeDistanceBetween(
                     new google.maps.LatLng(this.getPosition(this.user_location)),
                     new google.maps.LatLng(this.getPosition(event_location))
                 );
 
-                var distanceInKilometers = distanceInMeters * 0.001;
-                return  distanceInKilometers.toFixed(2);
-            });
+                distanceInKilometers = distanceInMeters * 0.001;  
+           // }).then(() => {
+                
+                return distanceInKilometers.toFixed(2);
+           // });
 
+            
         },
 
         //sets map center, main location LITHUANIA, but if person has location ON then it shows person location

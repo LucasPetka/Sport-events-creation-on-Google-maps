@@ -195,7 +195,7 @@ class AdminController extends Controller
             ->exists();
 
 
-        if($start < Carbon::now()){
+        if(Carbon::parse($start) < Carbon::now()){
             if(!$exists){
                 $newEvent = new Event;
                 $newEvent->place_id = $event->place_id;

@@ -16,6 +16,7 @@
         return Socialite::with($provider)->redirect();
     }
 
+    //callback function for FACEBOOK
     public function callback($provider)
     {
         $getInfo = Socialite::with($provider)->user(); 
@@ -25,6 +26,7 @@
         return redirect()->to('/home');
     }
 
+    //create new user for sign in with facebook
     function createUser($getInfo,$provider){
 
         //Check if there is already user joined with facebook

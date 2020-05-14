@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Validator;
 class PlaceQueueController extends Controller
 {
 
-    
+    //get all places from QUEUE
     public function index()
     {
         //Get places
@@ -24,7 +24,7 @@ class PlaceQueueController extends Controller
         return PlaceResource::collection($places);
     }
 
-
+    //submit a place
     public function store(Request $request)
     {
         $user = Auth::user();
@@ -77,7 +77,7 @@ class PlaceQueueController extends Controller
 
     }
 
-
+    //get info about single submited place by ID
     public function show($id)
     {
         $place = PlaceQueue::findOrFail($id);
@@ -86,10 +86,9 @@ class PlaceQueueController extends Controller
     }
 
 
-
+    //delete submited place by ID
     public function destroy($id)
     {
-
         $place = PlaceQueue::findOrFail($id);
 
         if($place->delete()){

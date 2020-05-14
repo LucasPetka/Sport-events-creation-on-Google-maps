@@ -148,13 +148,14 @@ export default {
 
 
     methods: {
-
+        //opens confirmation modal
         openConfirmation: function(event){
             this.event_mod = event;
             $('#confirmation_modal' + event.id).appendTo("body").modal('show');
         },
 
-         fillArrayWithTimes: function(){
+        //fill array with times for time slider
+        fillArrayWithTimes: function(){
             const hours = 24;
             var times_arr = [];
             for (let i = 6; i <= 23; i++) {

@@ -50,7 +50,9 @@ class HomeController extends Controller
         return view('home')->with(compact('user','types','location','places_uploaded'));
     }
 
-    
+    //===================================================================================
+    //                      ALL DATA RETURN FOR USER PROFILE                  ***START***
+    //===================================================================================
     function returnCreatedEvents(){
         $user = Auth::user();
         $createdevents = DB::table('events')->where('events.person_id','=',$user->id)
@@ -129,7 +131,12 @@ class HomeController extends Controller
         return $submited_events->toJson();
     }
 
+    //===================================================================================
+    //                      ALL DATA RETURN FOR USER PROFILE                  ***END***
+    //===================================================================================
 
+
+    //Event resubmition from user profile
     function resubmitEvent(Request $request){
         $declinedEvent = DeclinedEvents::findOrFail($request->id);
 
@@ -180,6 +187,7 @@ class HomeController extends Controller
 
     }
 
+    //Delete event from declined events in user profile
     function deleteEvent($id){
 
         $declinedEvent = DeclinedEvents::find($id);
@@ -193,7 +201,7 @@ class HomeController extends Controller
     }
 
 
-
+    //Profile update    USERNAME|PHOTO|LIKED SPORTS
     function update_profile(Request $request){
 
         $user = Auth::user();

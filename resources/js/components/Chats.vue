@@ -165,22 +165,26 @@ export default {
 
     methods: {
 
+        //get all messages of this event by ID
         fetchMessages(){
             axios.get('../../messages/' + this.event.id).then(response =>{
                 this.messages = response.data;
             })
         },
 
+        //refresh the page
         refresh(){
             window.location.reload();
         },
 
+        //parse time from data object
         getTime(date){
             let current_datetime = new Date(date)
             let formatted_Time = ('0' + current_datetime.getHours()).slice(-2) + ":" + ('0' + current_datetime.getMinutes()).slice(-2)
             return formatted_Time;
         },
 
+        //sends message to data base and websocket channel
         sendMessage(){
             
             if(this.newMessage.length <= 400 && this.newMessage.length != 0 && this.newMessage.trim()){

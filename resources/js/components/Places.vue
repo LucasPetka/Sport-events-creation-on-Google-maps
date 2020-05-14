@@ -346,35 +346,23 @@
                     </div>
                 </div>
                     
-                        <Calendar v-bind:status='status' v-on:openAddEvent="openAddEvent($event)" v-bind:currentUser='currentUser' v-on:editEvent="editEvent($event)" v-on:getDate="getDate($event)" v-on:closeAdd="closeAddEvent()" ref="calendar"> </Calendar>
-                        <div v-if="this.status === 0">
-                            <div class="alert alert-warning mt-3 pb-1 text center" role="alert">
-                            <p class="text-center"> If you want to join or add events you need to login / register. </p>
-                            <div class="form-group">
-                                <div class="col-sm-12 col-sm-offset-2 text-center">
-                                    <a href ="/login"  class="btn btn-outline-secondary mr-2">Login</a>
-                                    <a href ="/register" class="btn btn-outline-secondary ml-2">Register</a>
-                                </div>
-                            </div>
-                            </div>
+                <Calendar v-bind:status='status' v-on:openAddEvent="openAddEvent($event)" v-bind:currentUser='currentUser' v-on:editEvent="editEvent($event)" v-on:getDate="getDate($event)" v-on:closeAdd="closeAddEvent()" ref="calendar"> </Calendar>
+                <div v-if="this.status === 0">
+                    <div class="alert alert-warning mt-3 pb-1 text center" role="alert">
+                    <p class="text-center"> If you want to join or add events you need to login / register. </p>
+                    <div class="form-group">
+                        <div class="col-sm-12 col-sm-offset-2 text-center">
+                            <a href ="/login"  class="btn btn-outline-secondary mr-2">Login</a>
+                            <a href ="/register" class="btn btn-outline-secondary ml-2">Register</a>
                         </div>
-                    
-      
+                    </div>
+                    </div>
+                </div> 
 
-                
             </div>
             </div>
-
-
         </div>
-
-
-
-            
-
         </div>
-
-   
     </div>
 </template>
 
@@ -803,6 +791,7 @@ export default {
         this.event.person_id = '';
     },
 
+    //sort places on the map by rules
     sort_places() {
         this.$refs.gmapp.fetchPlaces_sort(this.rules);
     },

@@ -239,6 +239,7 @@ export default {
                 })
         },
 
+        //get cookie by name from cookie string
         getCookie(name) {
             var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
             return v ? v[2] : null;
@@ -284,11 +285,11 @@ export default {
 
         },
 
+        //checks if calendar has been opened | listening for an event
         calendarOpened: function(){
             console.log('Calendar Opened');
         },
-
-        
+ 
         //Delete person from event
         deletePerson: function(place, event, person, but) {
 

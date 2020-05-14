@@ -222,6 +222,7 @@ export default {
 
     },
 
+    //updates user location and writes coordinates in users browser cookies
     updateUserLocation(location) {
         this.user_location = {
             lat: location.lat(),

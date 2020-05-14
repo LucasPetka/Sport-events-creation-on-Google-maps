@@ -10,31 +10,28 @@
             </div>
             <div v-else>
                 <div v-if="recommended_events.length != 0" style="height:340px; overflow: hidden; overflow-y: auto;">
-                <div v-for="event in recommended_events" :key="event.id" class="card mb-2">
-                    <div class="card-header p-2 shadow">
-                        <a target="_blank" :href="'/event/' + event.id +'/'+ event.title" class="nav-link m-0 p-0 float-left extend">
-                            <img :src="'../../../storage/sport_logo/'+ event.type.image" :alt="event.title"> {{ event.title }}
-                        </a>
-
-                    
-
-                        <div class="float-right"><i class="fas fa-users "></i> {{ event.people_going }}</div>
-                    </div>
-                    <div class="card-body p-2">
-                        <div class="row p-2">
-                            <div class="col-4">
-                                <i class="far fa-calendar-alt"></i> {{ getDate(event.time_from) }}
+                    <div v-for="event in recommended_events" :key="event.id" class="card mb-2">
+                        <div class="card-header p-2 shadow">
+                            <a target="_blank" :href="'/event/' + event.id +'/'+ event.title" class="nav-link m-0 p-0 float-left extend">
+                                <img :src="'../../../storage/sport_logo/'+ event.type.image" :alt="event.title"> {{ event.title }}
+                            </a>
+                            <div class="float-right"><i class="fas fa-users "></i> {{ event.people_going }}</div>
+                        </div>
+                        <div class="card-body p-2">
+                            <div class="row p-2">
+                                <div class="col-4">
+                                    <i class="far fa-calendar-alt"></i> {{ getDate(event.time_from) }}
+                                </div>
+                                <div class="col-4">
+                                    <i class="far fa-clock"></i> {{ getTime(event.time_from) }}-{{ getTime(event.time_until) }}
+                                </div>
+                            
+                                <div class="col-4">
+                                    <i class="fas fa-road"></i> {{ countDistance(event.lat, event.lng) }} km
+                                </div> 
                             </div>
-                            <div class="col-4">
-                                <i class="far fa-clock"></i> {{ getTime(event.time_from) }}-{{ getTime(event.time_until) }}
-                            </div>
-                        
-                            <div class="col-4">
-                                <i class="fas fa-road"></i> {{ countDistance(event.lat, event.lng) }} km
-                            </div> 
                         </div>
                     </div>
-                </div>
                 </div>
                 <div class="text-center mb-4 mt-3" v-else>
                     <span class="text-muted">Sorry, no events to recommend..</span>
@@ -90,37 +87,35 @@ export default {
             this.pageOfItems = pageOfItems;
         },
 
+        //parses date from date object
         getDate(date){
             let current_datetime = new Date(date)
             let formatted_date = current_datetime.getFullYear() + "-" + ('0' + (current_datetime.getMonth()+1)).slice(-2) + "-" + ('0' + current_datetime.getDate()).slice(-2)
             return formatted_date;
         },
 
+        //parses time from date object
         getTime(date){
             let current_datetime = new Date(date)
             let formatted_Time = ('0' + current_datetime.getHours()).slice(-2) + ":" + ('0' + current_datetime.getMinutes()).slice(-2)
             return formatted_Time;
         },
 
-         countDistance(lat, lng){
+        //counts distance between user and event place
+        countDistance(lat, lng){
             const event_location = {
                 lat: lat,
                 lng: lng
             };
             
-            // this.$gmapApiPromiseLazy().then(() => { 
-            // }).then(() => {
-            // });
+            var distanceInMeters = google.maps.geometry.spherical.computeDistanceBetween(
+                new google.maps.LatLng(this.getPosition(this.user_location)),
+                new google.maps.LatLng(this.getPosition(event_location))
+            );
+            
+            var distanceInKilometers = distanceInMeters * 0.001;  
 
-           // VueGoogleMaps.loaded.then(() => {
-                var distanceInMeters = google.maps.geometry.spherical.computeDistanceBetween(
-                    new google.maps.LatLng(this.getPosition(this.user_location)),
-                    new google.maps.LatLng(this.getPosition(event_location))
-                );
-                var distanceInKilometers = distanceInMeters * 0.001;  
-                return distanceInKilometers.toFixed(2);
-            //})
-
+            return distanceInKilometers.toFixed(2);
         },
 
         //sets map center, main location LITHUANIA, but if person has location ON then it shows person location
@@ -176,6 +171,7 @@ export default {
             }
         },
 
+        //returns recommended events from database by rules that user set
         findRecommendedEvents(){
             this.recommended_rules.lat = this.user_location.lat;
             this.recommended_rules.lng = this.user_location.lng;
@@ -212,6 +208,7 @@ export default {
             }
         },
 
+        //parses cookie from cookie string
         getCookie(name) {
             var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
             return v ? v[2] : null;

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 class DeclinedPlacesController extends Controller
 {
 
+    //Resubmit of a declined place
     public function update(Request $request, $id)
     {
         $declinedPlace = DeclinedPlaces::findOrFail($request->id);
@@ -52,6 +53,7 @@ class DeclinedPlacesController extends Controller
 
     }
 
+    //delete declined place
     public function destroy($id)
     {
         $declinedPlace = DeclinedPlaces::find($id);

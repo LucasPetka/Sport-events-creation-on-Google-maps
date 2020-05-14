@@ -58,12 +58,13 @@ class EventController extends Controller
     }
 
 
+    //---Event addition
     public function store(Request $request)
     {
 
         $user = Auth::user();
 
-        if($user->isAdmin != '1'){
+        if($user->isAdmin != '1'){ // if user tries to add an event it will automaticaly will be stored in main DB without verification needed
 
             if($request->isMethod('put')) { 
                 $event = Event::findOrFail($request->id);
@@ -74,12 +75,10 @@ class EventController extends Controller
             }else{ 
                 $event = new EventQueue;
             }
-            
         }
         else{
             $event = $request->isMethod('put') ? Event::findOrFail($request->id) : new Event;
         }
-
 
 
         //========================Validation==========START==========
@@ -139,11 +138,9 @@ class EventController extends Controller
         else{
             return "false";
         }
-
-
     }
 
-
+    //returns all information about selected event ID
     public function show($id)
     {
         $event = Event::findOrFail($id);
@@ -151,6 +148,7 @@ class EventController extends Controller
         return new EventResource($event);
     }
 
+    //Return declined events
     public function getDeclinedEvent($id)
     {
         $declinedEvent = DeclinedEvents::findOrFail($id);
@@ -158,7 +156,7 @@ class EventController extends Controller
         return new EventResource($declinedEvent);
     }
 
-
+    //Checks if there is a LIVE event happening on place
     public function closestEvent($id)
     {
         $mytime = Carbon::now();
@@ -215,10 +213,8 @@ class EventController extends Controller
         }
      }
 
-
-
     //===================================================================================================
-    //----------------------------------Event page and messaging controllers-----------------------------
+    //----------------------------------EVENT PAGE and messaging controllers-----------------------------
     //===================================================================================================
 
     public function show_event_page($id, $title)

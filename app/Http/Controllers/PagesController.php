@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Auth;
 
 class PagesController extends Controller
 {
+
+    // LOADING MAIN PAGE
     public function index(Request $request){
 
         $geoip = geoip()->getClientIP();
@@ -29,6 +31,7 @@ class PagesController extends Controller
         return view('index')->with(compact('location'));
     }
 
+    //user page view for other users
     function show_profile($auth_id){
 
         $user = User::select('*')->where('auth_id', $auth_id)->get();
@@ -36,6 +39,7 @@ class PagesController extends Controller
         return view('pages.user')->with(compact('user'));
     }
 
+    //PAYMENT PAGE load up
     function payment_page($id){
 
         $user = Auth::user();
@@ -45,8 +49,7 @@ class PagesController extends Controller
         return view('pages.place_payment')->with(compact('user', 'place'));
     }
 
-
-
+    //Successful payment, storing all payment information
     function payment_successful(Request $request){
 
         $place = Place::findOrFail($request->place_id);
@@ -71,7 +74,6 @@ class PagesController extends Controller
         else{
             return ["error"];
         }
-
 
     }
 

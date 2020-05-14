@@ -21,6 +21,7 @@ use Torann\GeoIP\Facades\GeoIP;
 
 class EventFindController extends Controller
 {
+    //Returns event finder page
     public function index()
     {
         $geoip = geoip()->getClientIP();
@@ -37,7 +38,7 @@ class EventFindController extends Controller
         return view('pages.event_finder')->with(compact('location'));
     }
 
-
+    //Event finder will return events by user set filters
     public function findEvents(Request $request){
 
         $distance = $request->distance;
@@ -54,7 +55,6 @@ class EventFindController extends Controller
         else{
             $paid = '0';
         }
-
 
         if(count($sportTypes) != 0){
             $places = DB::table('places')->select('*')
@@ -90,6 +90,7 @@ class EventFindController extends Controller
         return EventResource::collection($events);
     }
 
+    //Returns reccommended events for the user
     public function recommendedEvents(Request $request){
 
         $status = $request->status;
@@ -128,9 +129,6 @@ class EventFindController extends Controller
         ->orderBy('events.time_from', 'asc')
         ->orderBy('count', 'desc')
         ->get();
-
-
-
 
         return EventResource::collection($events);
     }

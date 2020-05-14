@@ -16,15 +16,16 @@ use Illuminate\Support\Facades\Validator;
 class PlaceController extends Controller
 {
 
-
+    //Returns list of a places to show on a map
     public function index($nelat, $swlat, $nelng, $swlng, Request $request)
     {
 
         $distance = $request->input('distance');
         $lat = $request->input('lat');
         $lng = $request->input('lng');
-        $paid = $request->input('paid');
+        $paid = $request->input('paid'); //if paid or not
 
+        //return by the block that you looking at using coordinates
         $places = DB::table('places')->select('*')->where('lat','<',$nelat)->where('lat','>',$swlat)->where('lng','<',$nelng)->where('lng','>',$swlng);
 
         if(null !== $request->input('paid') && $request->input('paid') != "Any"){
@@ -73,6 +74,7 @@ class PlaceController extends Controller
         return PlaceResource::collection($places);
     }
 
+    //return single place information by ID
     public function show($id)
     {
         $place = Place::findOrFail($id);
@@ -80,6 +82,7 @@ class PlaceController extends Controller
         return new PlaceResource($place);
     }
 
+    //delete place by ID
     public function destroy($id)
     {
         $place = Place::findOrFail($id);
@@ -87,6 +90,7 @@ class PlaceController extends Controller
         $place->delete();
     }
 
+    //update place data
     public function update(Request $request)
     {
         $place = Place::findOrFail($request->place_id);

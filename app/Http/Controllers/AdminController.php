@@ -29,7 +29,7 @@ class AdminController extends Controller
         $this->middleware(['auth']);
     }
 
-
+    //returns main information numbers for admin index page | ADMIN INDEX PAGE
     public function index()
     { 
         $places = PlaceQueue::count();
@@ -42,6 +42,7 @@ class AdminController extends Controller
         return view('admin')->with(compact('places','events','eventsOnMap','placesOnMap','registeredUsers', 'confirmations'));
     }
 
+    //return all places that are in the QUEUE (includes pagination) | PLACES QUEUE PAGE
     public function places()
     { 
         $places = PlaceQueue::paginate(10);
@@ -51,6 +52,7 @@ class AdminController extends Controller
         return view('admin.places')->with(compact('places', 'places_count', 'events'));
     }
 
+    //return all places that already accepted (includes pagination) | PLACES ON MAP PAGE
     public function allPlaces()
     { 
         $places = Place::paginate(10);
@@ -60,6 +62,7 @@ class AdminController extends Controller
         return view('admin.allPlaces')->with(compact('places', 'places_count', 'events'));
     }
 
+    //return all events that are in a QUEUE | EVENTS QUEUE PAGE
     public function events()
     { 
         $places = PlaceQueue::count();
@@ -69,17 +72,17 @@ class AdminController extends Controller
         return view('admin.events')->with(compact('places', 'events_count', 'events'));
     }
 
+    //return all sport types | SPORT TYPES PAGE
     public function sportTypes()
     { 
         $types = Type::all();
         $places = PlaceQueue::count();
         $events = EventQueue::count();
 
-
         return view('admin.sportTypes')->with(compact('types','places','events'));
     }
 
-
+    //displays all registered users | USERS LIST PAGE
     public function users()
     { 
         $users = User::paginate(10);
@@ -90,6 +93,7 @@ class AdminController extends Controller
         return view('admin.users')->with(compact('users', 'places','events'));
     }
 
+    //delete user
     public function deleteUser($id)
     { 
         $user = User::findOrFail($id);
@@ -98,6 +102,7 @@ class AdminController extends Controller
         return redirect('admin/users');
     }
 
+    //delete place
     public function deletePlace($id)
     { 
         $place = Place::findOrFail($id);
@@ -107,7 +112,7 @@ class AdminController extends Controller
         }
     }
     
-
+    //accept submited place
     public function acceptPlace($id)
     { 
         $place = PlaceQueue::find($id);
@@ -127,9 +132,6 @@ class AdminController extends Controller
         $accepted_place->person_id = $place->personid;
         $accepted_place->place_id = $newPlace->id;
 
-
-
-        
         if($accepted_place->save()){
 
             User::find($place->personid)->notify(new PlaceAccept($newPlace));
@@ -141,6 +143,7 @@ class AdminController extends Controller
         }
     }
 
+    //decline submited place
     public function declinePlace($id)
     { 
         $place = PlaceQueue::find($id);
@@ -166,7 +169,7 @@ class AdminController extends Controller
 
     }
 
-
+    //delete submited place
     public function destroyPlace($id)
     {
         $place = PlaceQueue::findOrFail($id);
@@ -177,7 +180,7 @@ class AdminController extends Controller
     }
 
 
-
+    //accept submited event
     public function acceptEvent($id)
     { 
         $event = EventQueue::find($id);
@@ -185,8 +188,7 @@ class AdminController extends Controller
         $end = $event->time_until;
         $place_id =$event->place_id;
 
-
-        $exists = Event::where('place_id', $place_id)
+        $exists = Event::where('place_id', $place_id) //search for events at this time to avoid overlaping
             ->where(function ($query) use ($start, $end) {
                 $query->where([['time_from','<', $start],['time_until','>', $start],])
                     ->orWhere([['time_from','<', $end],['time_until','>', $end],])
@@ -194,8 +196,7 @@ class AdminController extends Controller
             })
             ->exists();
 
-
-        if(Carbon::parse($start) > Carbon::now()){
+        if(Carbon::parse($start) > Carbon::now()){ //if event time is erlier than now decline
             if(!$exists){
                 $newEvent = new Event;
                 $newEvent->place_id = $event->place_id;
@@ -220,11 +221,10 @@ class AdminController extends Controller
         else{
             return redirect('/admin/events_to_confirm')->with('error', 'Cannot add event to past');
         }
-
-
-
     }
 
+
+    //decline submited event
     public function declineEvent($id)
     { 
         $event = EventQueue::find($id);
@@ -249,6 +249,7 @@ class AdminController extends Controller
         }
     }
 
+    //delete submited event
     public function destroyEvent($id)
     {
         $event = EventQueue::findOrFail($id);

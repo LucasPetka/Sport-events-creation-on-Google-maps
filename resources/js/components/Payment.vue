@@ -27,7 +27,7 @@
 
 
     <div v-if="paidFor">
-      <h1>Nice, you bought a advertisment!</h1>
+      <h1>Advertisment has been ordered!</h1>
     </div>
 
     
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-// import image from "../assets/lamp.png"
+
 export default {
 
     props:['user', 'place'],

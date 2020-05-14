@@ -51,11 +51,12 @@ export default {
 
 
     created(){
-
+        //get all notifications
         axios.get('/notifications/get').then(response => {
             this.notifications = response.data;
         });
 
+        //submiting notification to user
         Echo.private('App.User.' + this.user.id).notification((notification) => {
             this.notifications.push(notification);
         });
@@ -65,6 +66,7 @@ export default {
 
     methods: {
 
+        //mark notification as read
         markAsRead(notification){
             var data = {
                 id: notification.id
@@ -74,6 +76,7 @@ export default {
             });
         },
         
+        //read all notifications
         markAsReadAll(){
             axios.post('notification/readall').then(response =>{
             });

@@ -13,6 +13,7 @@ use App\EventQueue;
 class TypeController extends Controller
 {
 
+    //return all sport types
     public function index()
     {
         //Get places
@@ -22,6 +23,7 @@ class TypeController extends Controller
         return TypesResource::collection($types);
     }
 
+    //new sport type upload
     public function store(Request $request)
     {
         $this->validate($request, [
@@ -51,6 +53,7 @@ class TypeController extends Controller
             $fileNameToStore = 'noimage.jpg';
         }
 
+        //creating new
         $type = new Type;
         $type->id = $request->input('sport_id');
         $type->name = $request->input('sport_name');
@@ -63,12 +66,13 @@ class TypeController extends Controller
     }
 
 
+    //return information about sport type by ID
     public function show($id)
     {
         $type = Type::findOrFail($id);
-
         return new TypesResource($type);
     }
+
 
     public function openUpdate($id){
 
@@ -79,6 +83,7 @@ class TypeController extends Controller
         return view('admin.editsporttype')->with(compact('type','places','events'));
     }
 
+    // update/edit sport type
     public function update(Request $request, $id)
     {
         $this->validate($request, [
@@ -124,10 +129,10 @@ class TypeController extends Controller
             $type->save();
         }
 
-
         return redirect('/admin/sporttypes')->with('success', 'Sport Type has been succesfuly updated');
     }
 
+    //delete sport type
     public function destroy($id)
     {
         $type = Type::find($id);
